@@ -94,7 +94,7 @@ export default function PasswordGenerator() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 font-mono text-sm">
+      <div className="flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 dark:bg-gray-800/50 px-4 py-3 dark:border-gray-700 font-mono text-sm">
         <span className="flex-1 break-all" aria-live="polite">
           {password || "Click Generate to create a password"}
         </span>
@@ -102,18 +102,18 @@ export default function PasswordGenerator() {
           type="button"
           onClick={copy}
           disabled={!password}
-          className="shrink-0 rounded p-1.5 text-gray-500 hover:bg-gray-200 hover:text-gray-700 disabled:opacity-40"
+          className="shrink-0 rounded p-1.5 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600 hover:text-gray-700 dark:hover:text-gray-300 disabled:opacity-40"
           aria-label="Copy password"
         >
-          {copied ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4" />}
+          {copied ? <Check className="h-4 w-4 text-green-600 dark:text-green-400" /> : <Copy className="h-4 w-4" />}
         </button>
       </div>
 
       {strength && (
         <div>
           <div className="flex items-center justify-between text-sm">
-            <span className="text-gray-500">Strength</span>
-            <span className="font-medium text-gray-700">{strengthLabels[strength]}</span>
+            <span className="text-gray-500 dark:text-gray-400">Strength</span>
+            <span className="font-medium text-gray-700 dark:text-gray-300">{strengthLabels[strength]}</span>
           </div>
           <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-gray-200">
             <div
@@ -134,7 +134,7 @@ export default function PasswordGenerator() {
       )}
 
       <div>
-        <label htmlFor="pw-length" className="text-sm font-medium text-gray-700">
+        <label htmlFor="pw-length" className="text-sm font-medium text-gray-700 dark:text-gray-300">
           Length: {length}
         </label>
         <input
@@ -149,19 +149,19 @@ export default function PasswordGenerator() {
       </div>
 
       <fieldset className="space-y-2">
-        <legend className="text-sm font-medium text-gray-700">Character types</legend>
+        <legend className="text-sm font-medium text-gray-700 dark:text-gray-300">Character types</legend>
         {[
           { label: "Uppercase (A-Z)", checked: upper, set: setUpper },
           { label: "Lowercase (a-z)", checked: lower, set: setLower },
           { label: "Numbers (0-9)", checked: numbers, set: setNumbers },
           { label: "Symbols (!@#…)", checked: symbols, set: setSymbols },
         ].map((opt) => (
-          <label key={opt.label} className="flex items-center gap-2 text-sm text-gray-600">
+          <label key={opt.label} className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
             <input
               type="checkbox"
               checked={opt.checked}
               onChange={(e) => opt.set(e.target.checked)}
-              className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+              className="h-4 w-4 rounded border-gray-300 text-primary-600 dark:text-primary-400 focus:ring-primary-500"
             />
             {opt.label}
           </label>
@@ -169,7 +169,7 @@ export default function PasswordGenerator() {
       </fieldset>
 
       {error && (
-        <p className="text-sm text-red-600" role="alert">
+        <p className="text-sm text-red-600 dark:text-red-400" role="alert">
           {error}
         </p>
       )}

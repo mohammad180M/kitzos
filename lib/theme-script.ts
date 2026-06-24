@@ -1,0 +1,2 @@
+/** Inline script to set the theme class before paint (prevents FOUC). */
+export const themeInitScript = `(function(){try{var d=document.documentElement,s='kitzos-theme',t=localStorage.getItem(s);if(t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches)){d.classList.add('dark');d.style.colorScheme='dark'}else{d.classList.remove('dark');d.style.colorScheme='light'}}catch(e){}})();`;

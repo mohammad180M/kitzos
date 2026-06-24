@@ -109,7 +109,7 @@ function LineHighlightOverlay({
     >
       {previousLine !== null && (
         <div
-          className="absolute inset-x-0 bg-amber-50/90"
+          className="absolute inset-x-0 bg-amber-50/90 dark:bg-amber-950/50"
           style={{
             top: paddingTop + (previousLine - 1) * LINE_HEIGHT_PX,
             height: LINE_HEIGHT_PX,
@@ -117,7 +117,7 @@ function LineHighlightOverlay({
         />
       )}
       <div
-        className="absolute inset-x-0 bg-red-100/90"
+        className="absolute inset-x-0 bg-red-100/90 dark:bg-red-950/50"
         style={{
           top: paddingTop + (errorLine - 1) * LINE_HEIGHT_PX,
           height: LINE_HEIGHT_PX,
@@ -186,7 +186,7 @@ export default function JsonFormatter() {
   return (
     <div className="space-y-4">
       <div>
-        <label htmlFor="json-input" className="text-sm font-medium text-gray-700">
+        <label htmlFor="json-input" className="text-sm font-medium text-gray-700 dark:text-gray-300">
           JSON input
         </label>
         <div
@@ -231,7 +231,7 @@ export default function JsonFormatter() {
       </div>
 
       {error && (
-        <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
+        <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300" role="alert">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
               <p className="font-medium">Invalid JSON</p>
@@ -240,7 +240,7 @@ export default function JsonFormatter() {
             <button
               type="button"
               onClick={goToError}
-              className="btn-secondary shrink-0 border-red-200 bg-white text-red-700 hover:bg-red-100"
+              className="btn-secondary shrink-0 border-red-200 bg-white text-red-700 hover:bg-red-100 dark:border-red-800 dark:bg-gray-800 dark:text-red-300 dark:hover:bg-red-950/40"
             >
               <MapPin className="h-4 w-4" />
               Go to error
@@ -251,7 +251,7 @@ export default function JsonFormatter() {
 
       {output && (
         <div>
-          <label htmlFor="json-output" className="text-sm font-medium text-gray-700">
+          <label htmlFor="json-output" className="text-sm font-medium text-gray-700 dark:text-gray-300">
             Output
           </label>
           <textarea
@@ -259,7 +259,7 @@ export default function JsonFormatter() {
             value={output}
             readOnly
             rows={8}
-            className="input-field mt-1 resize-y font-mono text-sm bg-gray-50"
+            className="input-field mt-1 resize-y font-mono text-sm bg-gray-50 dark:bg-gray-800/50 dark:bg-gray-800/80"
           />
           <button type="button" onClick={copy} className="btn-secondary mt-2">
             {copied ? (

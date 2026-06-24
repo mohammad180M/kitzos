@@ -96,6 +96,29 @@ export function getCategoryMetadata(
   };
 }
 
+export function getInfoPageMetadata(
+  title: string,
+  description: string,
+  path: string
+): Metadata {
+  const canonical = `${SITE_URL}${path}/`;
+  return {
+    title,
+    description,
+    alternates: { canonical },
+    openGraph: {
+      title: `${title} | ${SITE_NAME}`,
+      description,
+      url: canonical,
+      type: "website",
+    },
+    twitter: {
+      title: `${title} | ${SITE_NAME}`,
+      description,
+    },
+  };
+}
+
 export function generateSoftwareApplicationSchema(tool: Tool): object {
   return {
     "@context": "https://schema.org",

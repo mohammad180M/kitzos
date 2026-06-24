@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState, type DragEvent } from "react";
 import { PDFDocument } from "pdf-lib";
 import {
   Download,
@@ -54,7 +54,7 @@ export default function MergePdf() {
   }, []);
 
   const handleDrop = useCallback(
-    (e: React.DragEvent) => {
+    (e: DragEvent) => {
       e.preventDefault();
       if (e.dataTransfer.files.length > 0) {
         addFiles(e.dataTransfer.files);
@@ -72,12 +72,12 @@ export default function MergePdf() {
     setDragIndex(index);
   };
 
-  const handleDragOver = (e: React.DragEvent, index: number) => {
+  const handleDragOver = (e: DragEvent, index: number) => {
     e.preventDefault();
     setDragOverIndex(index);
   };
 
-  const handleDropReorder = (e: React.DragEvent, dropIndex: number) => {
+  const handleDropReorder = (e: DragEvent, dropIndex: number) => {
     e.preventDefault();
     e.stopPropagation();
     if (dragIndex === null || dragIndex === dropIndex) {
@@ -145,13 +145,13 @@ export default function MergePdf() {
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") inputRef.current?.click();
         }}
-        className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 px-6 py-10 transition-colors hover:border-primary-400 hover:bg-primary-50/50"
+        className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 dark:bg-gray-800/50 dark:border-gray-600 px-6 py-10 transition-colors hover:border-primary-400 hover:bg-primary-50/50 dark:hover:border-primary-500 dark:hover:bg-primary-950/30"
       >
-        <Upload className="h-8 w-8 text-gray-400" aria-hidden="true" />
-        <p className="mt-2 text-sm font-medium text-gray-700">
+        <Upload className="h-8 w-8 text-gray-400 dark:text-gray-500" aria-hidden="true" />
+        <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">
           Drop PDF files here or click to upload
         </p>
-        <p className="mt-1 text-xs text-gray-400">Multiple files supported</p>
+        <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">Multiple files supported</p>
         <input
           ref={inputRef}
           type="file"
@@ -166,7 +166,7 @@ export default function MergePdf() {
       </div>
 
       {error && (
-        <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
+        <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300" role="alert">
           {error}
         </p>
       )}
@@ -184,25 +184,25 @@ export default function MergePdf() {
                 setDragIndex(null);
                 setDragOverIndex(null);
               }}
-              className={`flex items-center gap-3 rounded-lg border bg-white px-3 py-2.5 ${
+              className={`flex items-center gap-3 rounded-lg border bg-white px-3 py-2.5 dark:bg-gray-800 ${
                 dragOverIndex === index
-                  ? "border-primary-400 bg-primary-50"
-                  : "border-gray-200"
+                  ? "border-primary-400 bg-primary-50 dark:border-primary-500 dark:bg-primary-950/40"
+                  : "border-gray-200 dark:border-gray-700"
               }`}
             >
               <GripVertical
-                className="h-4 w-4 shrink-0 cursor-grab text-gray-400"
+                className="h-4 w-4 shrink-0 cursor-grab text-gray-400 dark:text-gray-500"
                 aria-hidden="true"
               />
-              <FileText className="h-5 w-5 shrink-0 text-primary-600" aria-hidden="true" />
+              <FileText className="h-5 w-5 shrink-0 text-primary-600 dark:text-primary-400" aria-hidden="true" />
               <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium text-gray-900">{pdf.name}</p>
-                <p className="text-xs text-gray-400">{formatBytes(pdf.size)}</p>
+                <p className="truncate text-sm font-medium text-gray-900 dark:text-gray-100">{pdf.name}</p>
+                <p className="text-xs text-gray-400 dark:text-gray-500">{formatBytes(pdf.size)}</p>
               </div>
               <button
                 type="button"
                 onClick={() => removeFile(pdf.id)}
-                className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-red-600"
+                className="rounded p-1 text-gray-400 dark:text-gray-500 hover:bg-gray-100 hover:text-red-600 dark:hover:bg-gray-700"
                 aria-label={`Remove ${pdf.name}`}
               >
                 <Trash2 className="h-4 w-4" />

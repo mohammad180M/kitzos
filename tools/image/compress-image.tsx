@@ -127,10 +127,10 @@ export default function CompressImage() {
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") inputRef.current?.click();
         }}
-        className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 px-6 py-10 transition-colors hover:border-primary-400 hover:bg-primary-50/50"
+        className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 dark:bg-gray-800/50 dark:border-gray-600 px-6 py-10 transition-colors hover:border-primary-400 hover:bg-primary-50/50 dark:hover:border-primary-500 dark:hover:bg-primary-950/30"
       >
-        <Upload className="h-8 w-8 text-gray-400" aria-hidden="true" />
-        <p className="mt-2 text-sm font-medium text-gray-700">
+        <Upload className="h-8 w-8 text-gray-400 dark:text-gray-500" aria-hidden="true" />
+        <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">
           Upload JPG or PNG image
         </p>
         <input
@@ -147,7 +147,7 @@ export default function CompressImage() {
       </div>
 
       {error && (
-        <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
+        <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300" role="alert">
           {error}
         </p>
       )}
@@ -156,9 +156,9 @@ export default function CompressImage() {
         <>
           <div className="flex flex-col gap-4 sm:flex-row">
             <div className="flex-1">
-              <p className="mb-2 text-sm font-medium text-gray-700">Preview</p>
+              <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">Preview</p>
               <div
-                className="overflow-hidden rounded-lg border border-gray-200"
+                className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700"
                 style={{
                   backgroundImage: isPng
                     ? "linear-gradient(45deg, #e5e7eb 25%, transparent 25%), linear-gradient(-45deg, #e5e7eb 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e5e7eb 75%), linear-gradient(-45deg, transparent 75%, #e5e7eb 75%)"
@@ -177,28 +177,28 @@ export default function CompressImage() {
               </div>
             </div>
             <div className="flex-1 space-y-3">
-              <div className="rounded-lg bg-gray-50 p-4">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
+              <div className="rounded-lg bg-gray-50 dark:bg-gray-800/50 p-4">
+                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                   <ImageIcon className="h-4 w-4" aria-hidden="true" />
                   <span className="truncate">{originalFile.name}</span>
                 </div>
                 <dl className="mt-3 space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <dt className="text-gray-500">Original size</dt>
+                    <dt className="text-gray-500 dark:text-gray-400">Original size</dt>
                     <dd className="font-medium">{formatBytes(originalFile.size)}</dd>
                   </div>
                   {outputSize !== null && (
                     <>
                       <div className="flex justify-between">
-                        <dt className="text-gray-500">Output size</dt>
-                        <dd className="font-medium text-primary-600">
+                        <dt className="text-gray-500 dark:text-gray-400">Output size</dt>
+                        <dd className="font-medium text-primary-600 dark:text-primary-400">
                           {formatBytes(outputSize)}
                         </dd>
                       </div>
                       {usingOriginal ? (
                         <div className="flex justify-between">
-                          <dt className="text-gray-500">Status</dt>
-                          <dd className="font-medium text-amber-700">
+                          <dt className="text-gray-500 dark:text-gray-400">Status</dt>
+                          <dd className="font-medium text-amber-700 dark:text-amber-300">
                             Already optimized — original kept
                           </dd>
                         </div>
@@ -206,8 +206,8 @@ export default function CompressImage() {
                         savingsPercent !== null &&
                         savingsPercent > 0 && (
                           <div className="flex justify-between">
-                            <dt className="text-gray-500">Saved</dt>
-                            <dd className="font-medium text-green-600">
+                            <dt className="text-gray-500 dark:text-gray-400">Saved</dt>
+                            <dd className="font-medium text-green-600 dark:text-green-400">
                               {savingsPercent}%
                             </dd>
                           </div>
@@ -220,7 +220,7 @@ export default function CompressImage() {
 
               {!isPng && (
                 <div>
-                  <label htmlFor="quality" className="text-sm font-medium text-gray-700">
+                  <label htmlFor="quality" className="text-sm font-medium text-gray-700 dark:text-gray-300">
                     Quality: {quality}%
                   </label>
                   <input
@@ -232,14 +232,14 @@ export default function CompressImage() {
                     onChange={(e) => handleQualityChange(Number(e.target.value))}
                     className="mt-2 w-full accent-primary-600"
                   />
-                  <p className="mt-1 text-xs text-gray-400">
+                  <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
                     Quality applies to JPEG only. PNG files keep their original format.
                   </p>
                 </div>
               )}
 
               {isPng && (
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-gray-500 dark:text-gray-400">
                   PNG is lossless — output stays PNG with transparency preserved. If
                   re-encoding cannot reduce size, the original file is kept.
                 </p>

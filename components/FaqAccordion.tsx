@@ -25,11 +25,11 @@ export default function FaqAccordion({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
-      <h2 id="faq-heading" className="text-xl font-semibold text-gray-900">
+      <h2 id="faq-heading" className="text-xl font-semibold text-gray-900 dark:text-gray-100">
         {title}
       </h2>
 
-      <div className="mt-4 divide-y divide-gray-200 rounded-xl border border-gray-200 bg-white">
+      <div className="mt-4 divide-y divide-gray-200 rounded-xl border border-gray-200 bg-white dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-900">
         {faqs.map((faq, index) => {
           const isOpen = openIndex === index;
 
@@ -43,11 +43,9 @@ export default function FaqAccordion({
                 aria-controls={`faq-panel-${index}`}
                 onClick={() => setOpenIndex(isOpen ? null : index)}
               >
-                <span className="font-medium text-gray-900">{faq.question}</span>
+                <span className="font-medium text-gray-900 dark:text-gray-100">{faq.question}</span>
                 <ChevronDown
-                  className={`h-5 w-5 shrink-0 text-gray-400 transition-transform ${
-                    isOpen ? "rotate-180" : ""
-                  }`}
+                  className={`h-5 w-5 shrink-0 text-gray-400 transition-transform dark:text-gray-500 ${ isOpen ? "rotate-180" : "" }`}
                   aria-hidden="true"
                 />
               </button>
@@ -58,7 +56,7 @@ export default function FaqAccordion({
                 hidden={!isOpen}
                 className="px-5 pb-4"
               >
-                <p className="text-sm leading-relaxed text-gray-600">
+                <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">
                   {faq.answer}
                 </p>
               </div>

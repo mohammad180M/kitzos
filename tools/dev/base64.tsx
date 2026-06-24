@@ -96,11 +96,7 @@ export default function Base64Tool() {
                 setOutput("");
                 setError(null);
               }}
-              className={`rounded-md px-3 py-1.5 text-sm font-medium capitalize ${
-                mode === m
-                  ? "bg-primary-600 text-white"
-                  : "text-gray-600 hover:bg-gray-100"
-              }`}
+              className={`rounded-md px-3 py-1.5 text-sm font-medium capitalize ${ mode === m ? "bg-primary-600 text-white" : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700" }`}
             >
               {m}
             </button>
@@ -119,11 +115,7 @@ export default function Base64Tool() {
                   setOutput("");
                   setError(null);
                 }}
-                className={`rounded-md px-3 py-1.5 text-sm font-medium capitalize ${
-                  inputMode === m
-                    ? "bg-primary-600 text-white"
-                    : "text-gray-600 hover:bg-gray-100"
-                }`}
+                className={`rounded-md px-3 py-1.5 text-sm font-medium capitalize ${ inputMode === m ? "bg-primary-600 text-white" : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700" }`}
               >
                 {m}
               </button>
@@ -133,9 +125,9 @@ export default function Base64Tool() {
       </div>
 
       {mode === "encode" && inputMode === "image" ? (
-        <label className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 px-6 py-8 transition-colors hover:border-primary-400">
-          <Upload className="h-6 w-6 text-gray-400" aria-hidden="true" />
-          <span className="mt-2 text-sm text-gray-600">Upload image to encode</span>
+        <label className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 dark:bg-gray-800/50 dark:border-gray-600 px-6 py-8 transition-colors hover:border-primary-400">
+          <Upload className="h-6 w-6 text-gray-400 dark:text-gray-500" aria-hidden="true" />
+          <span className="mt-2 text-sm text-gray-600 dark:text-gray-400">Upload image to encode</span>
           <input
             type="file"
             accept="image/*"
@@ -163,14 +155,14 @@ export default function Base64Tool() {
       )}
 
       {error && (
-        <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
+        <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300" role="alert">
           {error}
         </p>
       )}
 
       {output && (
         <div>
-          <label htmlFor="base64-output" className="text-sm font-medium text-gray-700">
+          <label htmlFor="base64-output" className="text-sm font-medium text-gray-700 dark:text-gray-300">
             Output
           </label>
           <textarea
@@ -178,7 +170,7 @@ export default function Base64Tool() {
             value={output}
             readOnly
             rows={5}
-            className="input-field mt-1 resize-y font-mono text-sm bg-gray-50"
+            className="input-field mt-1 resize-y font-mono text-sm bg-gray-50 dark:bg-gray-800/50 dark:bg-gray-800/80"
           />
           <button type="button" onClick={copy} className="btn-secondary mt-2">
             {copied ? (

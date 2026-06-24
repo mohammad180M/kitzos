@@ -66,10 +66,10 @@ export default function WordCounter() {
         {statItems.map((item) => (
           <div
             key={item.label}
-            className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-center"
+            className="rounded-lg border border-gray-200 bg-gray-50 dark:bg-gray-800/50 px-4 py-3 dark:border-gray-700 text-center"
           >
-            <p className="text-2xl font-bold text-primary-600">{item.value}</p>
-            <p className="mt-0.5 text-xs text-gray-500">{item.label}</p>
+            <p className="text-2xl font-bold text-primary-600 dark:text-primary-400">{item.value}</p>
+            <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">{item.label}</p>
           </div>
         ))}
       </div>

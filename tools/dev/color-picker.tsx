@@ -249,7 +249,7 @@ export default function ColorPicker() {
       </div>
 
       <div>
-        <label htmlFor="hex-input" className="text-sm font-medium text-gray-700">
+        <label htmlFor="hex-input" className="text-sm font-medium text-gray-700 dark:text-gray-300">
           HEX
         </label>
         <input
@@ -264,34 +264,34 @@ export default function ColorPicker() {
       </div>
 
       <div>
-        <h3 className="text-sm font-medium text-gray-700">Color spaces</h3>
-        <div className="mt-2 overflow-hidden rounded-lg border border-gray-200">
+        <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">Color spaces</h3>
+        <div className="mt-2 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-gray-200 bg-gray-50 text-left">
-                <th className="px-4 py-2.5 font-medium text-gray-500">Space</th>
-                <th className="px-4 py-2.5 font-medium text-gray-500">Value</th>
+              <tr className="border-b border-gray-200 bg-gray-50 dark:bg-gray-800/50 dark:border-gray-700 text-left">
+                <th className="px-4 py-2.5 font-medium text-gray-500 dark:text-gray-400">Space</th>
+                <th className="px-4 py-2.5 font-medium text-gray-500 dark:text-gray-400">Value</th>
                 <th className="w-12 px-2 py-2.5" aria-hidden="true" />
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100 bg-white">
+            <tbody className="divide-y divide-gray-100 bg-white dark:divide-gray-800 dark:bg-gray-900">
               {colorSpaceRows.map((row) => (
                 <tr key={row.key}>
-                  <td className="whitespace-nowrap px-4 py-3 font-medium text-gray-600">
+                  <td className="whitespace-nowrap px-4 py-3 font-medium text-gray-600 dark:text-gray-400">
                     {row.label}
                   </td>
-                  <td className="px-4 py-3 font-mono text-gray-900 break-all">
+                  <td className="px-4 py-3 font-mono text-gray-900 dark:text-gray-100 break-all">
                     {row.value}
                   </td>
                   <td className="px-2 py-3 text-right">
                     <button
                       type="button"
                       onClick={() => copy(row.key, row.value)}
-                      className="rounded p-1.5 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                      className="rounded p-1.5 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-700 dark:hover:text-gray-300 dark:hover:text-gray-200"
                       aria-label={`Copy ${row.label}`}
                     >
                       {copiedField === row.key ? (
-                        <Check className="h-4 w-4 text-green-600" />
+                        <Check className="h-4 w-4 text-green-600 dark:text-green-400" />
                       ) : (
                         <Copy className="h-4 w-4" />
                       )}
@@ -305,7 +305,7 @@ export default function ColorPicker() {
       </div>
 
       <div>
-        <h3 className="text-sm font-medium text-gray-700">Quick palette</h3>
+        <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">Quick palette</h3>
         <div className="mt-2 grid grid-cols-7 gap-2 sm:grid-cols-9">
           {PRESET_COLORS.map((preset) => (
             <button
@@ -326,7 +326,7 @@ export default function ColorPicker() {
       </div>
 
       <div>
-        <h3 className="text-sm font-medium text-gray-700">Shades &amp; tints</h3>
+        <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">Shades &amp; tints</h3>
         <div className="mt-2 flex gap-1.5 overflow-x-auto pb-1">
           {shades.map((shade, index) => (
             <button

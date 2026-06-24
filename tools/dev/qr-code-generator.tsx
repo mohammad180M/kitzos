@@ -116,7 +116,7 @@ export default function QrCodeGenerator() {
   return (
     <div className="space-y-4">
       <div>
-        <label htmlFor="qr-text" className="text-sm font-medium text-gray-700">
+        <label htmlFor="qr-text" className="text-sm font-medium text-gray-700 dark:text-gray-300">
           Text or URL
         </label>
         <input
@@ -129,10 +129,10 @@ export default function QrCodeGenerator() {
         />
       </div>
 
-      <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 space-y-4">
+      <div className="rounded-lg border border-gray-200 bg-gray-50 dark:bg-gray-800/50 p-4 dark:border-gray-700 space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label htmlFor="qr-fg" className="text-sm font-medium text-gray-700">
+            <label htmlFor="qr-fg" className="text-sm font-medium text-gray-700 dark:text-gray-300">
               Foreground
             </label>
             <div className="mt-1 flex items-center gap-2">
@@ -141,7 +141,7 @@ export default function QrCodeGenerator() {
                 type="color"
                 value={foreground}
                 onChange={(e) => setForeground(e.target.value)}
-                className="h-10 w-10 shrink-0 cursor-pointer rounded-lg border border-gray-300"
+                className="h-10 w-10 shrink-0 cursor-pointer rounded-lg border border-gray-300 dark:border-gray-600"
               />
               <input
                 type="text"
@@ -153,7 +153,7 @@ export default function QrCodeGenerator() {
             </div>
           </div>
           <div>
-            <label htmlFor="qr-bg" className="text-sm font-medium text-gray-700">
+            <label htmlFor="qr-bg" className="text-sm font-medium text-gray-700 dark:text-gray-300">
               Background
             </label>
             <div className="mt-1 flex items-center gap-2">
@@ -162,7 +162,7 @@ export default function QrCodeGenerator() {
                 type="color"
                 value={background}
                 onChange={(e) => setBackground(e.target.value)}
-                className="h-10 w-10 shrink-0 cursor-pointer rounded-lg border border-gray-300"
+                className="h-10 w-10 shrink-0 cursor-pointer rounded-lg border border-gray-300 dark:border-gray-600"
               />
               <input
                 type="text"
@@ -176,28 +176,24 @@ export default function QrCodeGenerator() {
         </div>
 
         {lowContrast && (
-          <p className="flex items-start gap-2 text-sm text-amber-700" role="status">
+          <p className="flex items-start gap-2 text-sm text-amber-700 dark:text-amber-300" role="status">
             <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
             Low contrast between foreground and background may make this QR harder to scan.
           </p>
         )}
 
         <div>
-          <label className="text-sm font-medium text-gray-700">Error correction</label>
-          <p className="mt-0.5 text-xs text-gray-500">
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Error correction</label>
+          <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
             Higher = more scan-resistant but denser
           </p>
-          <div className="mt-2 inline-flex rounded-lg border border-gray-300 bg-white p-0.5">
+          <div className="mt-2 inline-flex rounded-lg border border-gray-300 bg-white dark:border-gray-600 dark:bg-gray-800 p-0.5">
             {ERROR_LEVELS.map((level) => (
               <button
                 key={level}
                 type="button"
                 onClick={() => setErrorLevel(level)}
-                className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-                  errorLevel === level
-                    ? "bg-primary-600 text-white"
-                    : "text-gray-600 hover:bg-gray-100"
-                }`}
+                className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${ errorLevel === level ? "bg-primary-600 text-white" : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700" }`}
                 aria-pressed={errorLevel === level}
               >
                 {level}
@@ -207,7 +203,7 @@ export default function QrCodeGenerator() {
         </div>
 
         <div>
-          <label htmlFor="qr-size" className="text-sm font-medium text-gray-700">
+          <label htmlFor="qr-size" className="text-sm font-medium text-gray-700 dark:text-gray-300">
             Size: {size}px
           </label>
           <input
@@ -220,7 +216,7 @@ export default function QrCodeGenerator() {
             onChange={(e) => setSize(Number(e.target.value))}
             className="mt-2 w-full accent-primary-600"
           />
-          <div className="mt-1 flex justify-between text-xs text-gray-400">
+          <div className="mt-1 flex justify-between text-xs text-gray-400 dark:text-gray-500">
             <span>128px</span>
             <span>512px</span>
           </div>
@@ -228,12 +224,12 @@ export default function QrCodeGenerator() {
       </div>
 
       {error && (
-        <p className="text-sm text-red-600" role="alert">
+        <p className="text-sm text-red-600 dark:text-red-400" role="alert">
           {error}
         </p>
       )}
 
-      <div className="flex justify-center rounded-lg border border-gray-200 bg-white p-6">
+      <div className="flex justify-center rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900 p-6">
         {qrDataUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -246,7 +242,7 @@ export default function QrCodeGenerator() {
           />
         ) : (
           <div
-            className="flex items-center justify-center text-sm text-gray-400"
+            className="flex items-center justify-center text-sm text-gray-400 dark:text-gray-500"
             style={{ width: size, height: size, maxWidth: "100%" }}
           >
             QR code preview

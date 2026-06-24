@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { categories } from "@/lib/categories";
 import { tools } from "@/lib/registry";
+import { INFO_PAGES } from "@/lib/site-config";
 import { getSiteUrl } from "@/lib/seo";
 
 export const dynamic = "force-static";
@@ -31,5 +32,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.9,
   }));
 
-  return [...staticPages, ...categoryPages, ...toolPages];
+  const infoPages: MetadataRoute.Sitemap = INFO_PAGES.map((page) => ({
+    url: `${siteUrl}${page.path}/`,
+    lastModified: new Date(),
+    changeFrequency: "yearly" as const,
+    priority: 0.5,
+  }));
+
+  return [...staticPages, ...categoryPages, ...toolPages, ...infoPages];
 }

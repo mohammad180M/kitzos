@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import type { Tool } from "@/lib/registry";
@@ -17,7 +18,7 @@ interface ToolLayoutProps {
   howTo: HowToStep[];
   faqs: FaqItem[];
   relatedTools: Tool[];
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export default function ToolLayout({
@@ -44,20 +45,20 @@ export default function ToolLayout({
 
       <article className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
         <nav aria-label="Breadcrumb" className="mb-6">
-          <ol className="flex flex-wrap items-center gap-1 text-sm text-gray-500">
+          <ol className="flex flex-wrap items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
             {breadcrumbs.map((crumb, index) => (
               <li key={crumb.url} className="flex items-center gap-1">
                 {index > 0 && (
                   <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
                 )}
                 {index === breadcrumbs.length - 1 ? (
-                  <span className="font-medium text-gray-900" aria-current="page">
+                  <span className="font-medium text-gray-900 dark:text-gray-100" aria-current="page">
                     {crumb.name}
                   </span>
                 ) : (
                   <Link
                     href={crumb.url.replace("https://kitzos.com", "")}
-                    className="hover:text-primary-600"
+                    className="hover:text-primary-600 dark:hover:text-primary-400"
                   >
                     {crumb.name}
                   </Link>
@@ -68,10 +69,10 @@ export default function ToolLayout({
         </nav>
 
         <header className="mb-6">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl">
             {tool.title}
           </h1>
-          <p className="mt-2 text-lg text-gray-600">{tool.description}</p>
+          <p className="mt-2 text-lg text-gray-600 dark:text-gray-400">{tool.description}</p>
         </header>
 
         <div className="card mb-8">{children}</div>
@@ -79,18 +80,18 @@ export default function ToolLayout({
         <AdSlot className="mb-10" />
 
         <section className="mb-10" aria-labelledby="how-to-heading">
-          <h2 id="how-to-heading" className="text-xl font-semibold text-gray-900">
+          <h2 id="how-to-heading" className="text-xl font-semibold text-gray-900 dark:text-gray-100">
             How to use
           </h2>
           <ol className="mt-4 space-y-4">
             {howTo.map((step, index) => (
               <li key={step.title} className="flex gap-4">
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary-100 text-sm font-semibold text-primary-700">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary-100 text-sm font-semibold text-primary-700 dark:bg-primary-950/60 dark:text-primary-300">
                   {index + 1}
                 </span>
                 <div>
-                  <h3 className="font-medium text-gray-900">{step.title}</h3>
-                  <p className="mt-1 text-sm leading-relaxed text-gray-600">
+                  <h3 className="font-medium text-gray-900 dark:text-gray-100">{step.title}</h3>
+                  <p className="mt-1 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
                     {step.description}
                   </p>
                 </div>
@@ -105,7 +106,7 @@ export default function ToolLayout({
 
         {relatedTools.length > 0 && (
           <section className="mb-10" aria-labelledby="related-heading">
-            <h2 id="related-heading" className="text-xl font-semibold text-gray-900">
+            <h2 id="related-heading" className="text-xl font-semibold text-gray-900 dark:text-gray-100">
               Related tools
             </h2>
             <div className="mt-4 grid gap-3 sm:grid-cols-2">

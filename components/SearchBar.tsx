@@ -34,7 +34,7 @@ export default function SearchBar({
     <div className={className}>
       <div className="relative">
         <Search
-          className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400"
+          className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 dark:text-gray-500"
           aria-hidden="true"
         />
         <input
@@ -49,7 +49,7 @@ export default function SearchBar({
           <button
             type="button"
             onClick={() => setQuery("")}
-            className="absolute right-3 top-1/2 -translate-y-1/2 rounded p-0.5 text-gray-400 hover:text-gray-600"
+            className="absolute right-3 top-1/2 -translate-y-1/2 rounded p-0.5 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
             aria-label="Clear search"
           >
             <X className="h-4 w-4" />
@@ -60,12 +60,14 @@ export default function SearchBar({
       {showResults && query && (
         <div className="mt-4">
           {displayTools.length > 0 ? (
-            <p className="mb-3 text-sm text-gray-500">
+            <p className="mb-3 text-sm text-gray-500 dark:text-gray-400">
               {displayTools.length} tool{displayTools.length !== 1 ? "s" : ""}{" "}
               found
             </p>
           ) : (
-            <p className="text-sm text-gray-500">No tools found for &quot;{query}&quot;</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              No tools found for &quot;{query}&quot;
+            </p>
           )}
           <div className="grid gap-3 sm:grid-cols-2">
             {displayTools.map((tool) => (

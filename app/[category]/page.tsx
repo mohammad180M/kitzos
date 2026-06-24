@@ -36,14 +36,14 @@ export default function CategoryPage({ params }: CategoryPageProps) {
     <>
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
         <div className="mb-8 flex items-start gap-4">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary-50 text-primary-600">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary-50 text-primary-600 dark:bg-primary-950/60 dark:text-primary-400">
             <Icon className="h-6 w-6" aria-hidden="true" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+            <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
               {category.name}
             </h1>
-            <p className="mt-2 text-gray-600">{category.description}</p>
+            <p className="mt-2 text-gray-600 dark:text-gray-400">{category.description}</p>
           </div>
         </div>
 

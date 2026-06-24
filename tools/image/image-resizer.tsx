@@ -103,10 +103,10 @@ export default function ImageResizer() {
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") inputRef.current?.click();
         }}
-        className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 px-6 py-10 transition-colors hover:border-primary-400 hover:bg-primary-50/50"
+        className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 dark:bg-gray-800/50 dark:border-gray-600 px-6 py-10 transition-colors hover:border-primary-400 hover:bg-primary-50/50 dark:hover:border-primary-500 dark:hover:bg-primary-950/30"
       >
-        <Upload className="h-8 w-8 text-gray-400" aria-hidden="true" />
-        <p className="mt-2 text-sm font-medium text-gray-700">Upload an image</p>
+        <Upload className="h-8 w-8 text-gray-400 dark:text-gray-500" aria-hidden="true" />
+        <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">Upload an image</p>
         <input
           ref={inputRef}
           type="file"
@@ -121,14 +121,14 @@ export default function ImageResizer() {
       </div>
 
       {error && (
-        <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
+        <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300" role="alert">
           {error}
         </p>
       )}
 
       {previewUrl && (
         <>
-          <div className="overflow-hidden rounded-lg border border-gray-200 bg-gray-100">
+          <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={previewUrl}
@@ -137,13 +137,13 @@ export default function ImageResizer() {
             />
           </div>
 
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
             Original: {originalWidth} × {originalHeight} px
           </p>
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label htmlFor="width" className="text-sm font-medium text-gray-700">
+              <label htmlFor="width" className="text-sm font-medium text-gray-700 dark:text-gray-300">
                 Width (px)
               </label>
               <input
@@ -156,7 +156,7 @@ export default function ImageResizer() {
               />
             </div>
             <div>
-              <label htmlFor="height" className="text-sm font-medium text-gray-700">
+              <label htmlFor="height" className="text-sm font-medium text-gray-700 dark:text-gray-300">
                 Height (px)
               </label>
               <input
