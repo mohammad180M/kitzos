@@ -2,6 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { Check, Copy, RefreshCw } from "lucide-react";
+import { useCommonLabels } from "@/lib/i18n/use-common-labels";
 
 const UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const LOWER = "abcdefghijklmnopqrstuvwxyz";
@@ -53,6 +54,7 @@ const strengthLabels: Record<Strength, string> = {
 };
 
 export default function PasswordGenerator() {
+  const labels = useCommonLabels();
   const [length, setLength] = useState(16);
   const [upper, setUpper] = useState(true);
   const [lower, setLower] = useState(true);
@@ -176,7 +178,7 @@ export default function PasswordGenerator() {
 
       <button type="button" onClick={generate} className="btn-primary">
         <RefreshCw className="h-4 w-4" />
-        Generate
+        {labels.generate}
       </button>
     </div>
   );

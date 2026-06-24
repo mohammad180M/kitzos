@@ -1,0 +1,60 @@
+{
+  "common": {
+    "home": "Home",
+    "new": "New",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "download": "Download",
+    "clear": "Clear",
+    "generate": "Generate",
+    "search": "Search",
+    "viewAll": "View all",
+    "ad": "Ad",
+    "notFound": "Page not found",
+    "notFoundDescription": "The page you are looking for does not exist or has been moved.",
+    "pageNotFound": "404 — Page not found",
+    "backHome": "Back to home"
+  },
+  "header": {
+    "categoriesAria": "Categories",
+    "switchToArabic": "Switch to Arabic",
+    "switchToEnglish": "Switch to English"
+  },
+  "home": {
+    "title": "Free online tools",
+    "subtitle": "Fast, private tools that run in your browser. No signup required.",
+    "searchPlaceholder": "Search tools…",
+    "searchAria": "Search tools",
+    "clearSearch": "Clear search",
+    "noResults": "No tools found for \"{query}\""
+  },
+  "tool": {
+    "howToUse": "How to use",
+    "relatedTools": "Related tools",
+    "faq": "Frequently Asked Questions",
+    "breadcrumbAria": "Breadcrumb"
+  },
+  "footer": {
+    "tagline": "Free online tools that run in your browser. No signup, no uploads to our servers — your files stay private.",
+    "company": "Company",
+    "legal": "Legal",
+    "about": "About",
+    "contact": "Contact",
+    "privacy": "Privacy Policy",
+    "privacyShort": "Privacy",
+    "terms": "Terms of Service",
+    "termsShort": "Terms",
+    "copyright": "Free online tools"
+  },
+  "legal": {
+    "privacyTitle": "Privacy Policy",
+    "privacyDescription": "How we handle your data when you use kitzos.com.",
+    "termsTitle": "Terms of Service",
+    "termsDescription": "Please read these terms before using kitzos.com.",
+    "aboutTitle": "About kitzos",
+    "aboutDescription": "Free tools that respect your privacy and your time.",
+    "contactTitle": "Contact",
+    "contactDescription": "We'd love to hear from you.",
+    "lastUpdated": "Last updated"
+  }
+}

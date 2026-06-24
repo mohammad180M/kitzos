@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { Check, Copy } from "lucide-react";
+import { useCommonLabels } from "@/lib/i18n/use-common-labels";
 
 export default function MarkdownToHtml() {
+  const labels = useCommonLabels();
   const [markdown, setMarkdown] = useState("# Hello\n\nWrite **Markdown** here.");
   const [html, setHtml] = useState("");
   const [copied, setCopied] = useState(false);
@@ -76,7 +78,7 @@ export default function MarkdownToHtml() {
         {copied ? (
           <>
             <Check className="h-4 w-4" />
-            Copied!
+            {labels.copied}
           </>
         ) : (
           <>

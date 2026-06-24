@@ -1,4 +1,4 @@
-export type CategoryId = "pdf" | "image" | "text" | "dev";
+export type CategoryId = "pdf" | "image" | "text" | "dev" | "calculators" | "converters" | "misc";
 
 export interface Category {
   id: CategoryId;
@@ -31,6 +31,24 @@ export const categories: Category[] = [
     name: "Developer Tools",
     icon: "Code",
     description: "Format JSON, encode Base64, generate QR codes, and more.",
+  },
+  {
+    id: "calculators",
+    name: "Calculators",
+    icon: "Calculator",
+    description: "Free online calculators for health, finance, dates, and more.",
+  },
+  {
+    id: "converters",
+    name: "Converters",
+    icon: "ArrowLeftRight",
+    description: "Convert units, measurements, and values instantly.",
+  },
+  {
+    id: "misc",
+    name: "Tools & Utilities",
+    icon: "Sparkles",
+    description: "Handy everyday utilities and productivity tools.",
   },
 ];
 

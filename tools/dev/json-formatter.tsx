@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { Check, Copy, MapPin, Minimize2, Wand2 } from "lucide-react";
+import { useCommonLabels } from "@/lib/i18n/use-common-labels";
 
 const LINE_HEIGHT_PX = 20;
 
@@ -128,6 +129,7 @@ function LineHighlightOverlay({
 }
 
 export default function JsonFormatter() {
+  const labels = useCommonLabels();
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [error, setError] = useState<JsonError | null>(null);
@@ -265,12 +267,12 @@ export default function JsonFormatter() {
             {copied ? (
               <>
                 <Check className="h-4 w-4" />
-                Copied!
+                {labels.copied}
               </>
             ) : (
               <>
                 <Copy className="h-4 w-4" />
-                Copy
+                {labels.copy}
               </>
             )}
           </button>

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Check, Copy, Upload } from "lucide-react";
+import { useCommonLabels } from "@/lib/i18n/use-common-labels";
 
 type Mode = "encode" | "decode";
 type InputMode = "text" | "image";
@@ -25,6 +26,7 @@ function decodeText(base64: string): string {
 }
 
 export default function Base64Tool() {
+  const labels = useCommonLabels();
   const [mode, setMode] = useState<Mode>("encode");
   const [inputMode, setInputMode] = useState<InputMode>("text");
   const [input, setInput] = useState("");
@@ -176,12 +178,12 @@ export default function Base64Tool() {
             {copied ? (
               <>
                 <Check className="h-4 w-4" />
-                Copied!
+                {labels.copied}
               </>
             ) : (
               <>
                 <Copy className="h-4 w-4" />
-                Copy
+                {labels.copy}
               </>
             )}
           </button>

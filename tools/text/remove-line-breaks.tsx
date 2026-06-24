@@ -2,10 +2,12 @@
 
 import { useMemo, useState } from "react";
 import { Check, Copy } from "lucide-react";
+import { useCommonLabels } from "@/lib/i18n/use-common-labels";
 
 type CleanMode = "remove-breaks" | "remove-extra-spaces" | "breaks-to-spaces";
 
 export default function RemoveLineBreaks() {
+  const labels = useCommonLabels();
   const [input, setInput] = useState("");
   const [mode, setMode] = useState<CleanMode>("remove-breaks");
   const [copied, setCopied] = useState(false);
@@ -91,12 +93,12 @@ export default function RemoveLineBreaks() {
             {copied ? (
               <>
                 <Check className="h-4 w-4" />
-                Copied!
+                {labels.copied}
               </>
             ) : (
               <>
                 <Copy className="h-4 w-4" />
-                Copy
+                {labels.copy}
               </>
             )}
           </button>

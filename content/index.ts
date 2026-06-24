@@ -1,4 +1,6 @@
 import type { FaqItem, HowToStep } from "@/lib/seo";
+import type { Locale } from "@/lib/i18n/types";
+import contentAr from "@/locales/content.ar.json";
 
 import * as mergePdf from "./merge-pdf";
 import * as splitPdf from "./split-pdf";
@@ -7,6 +9,7 @@ import * as compressImage from "./compress-image";
 import * as imageResizer from "./image-resizer";
 import * as cropImage from "./crop-image";
 import * as imageConverter from "./image-converter";
+import * as gradientGenerator from "./gradient-generator";
 import * as wordCounter from "./word-counter";
 import * as caseConverter from "./case-converter";
 import * as passwordGenerator from "./password-generator";
@@ -20,6 +23,17 @@ import * as base64 from "./base64";
 import * as colorPicker from "./color-picker";
 import * as timestampConverter from "./timestamp-converter";
 import * as hashGenerator from "./hash-generator";
+import * as bmiCalculator from "./bmi-calculator";
+import * as calorieCalculator from "./calorie-calculator";
+import * as percentageCalculator from "./percentage-calculator";
+import * as loanCalculator from "./loan-calculator";
+import * as dueDateCalculator from "./due-date-calculator";
+import * as dateDifference from "./date-difference";
+import * as unitConverter from "./unit-converter";
+import * as pomodoroTimer from "./pomodoro-timer";
+import * as randomPicker from "./random-picker";
+import * as typingSpeedTest from "./typing-speed-test";
+import * as onlineNotepad from "./online-notepad";
 
 export interface ToolContent {
   howTo: HowToStep[];
@@ -34,6 +48,7 @@ const contentMap: Record<string, ToolContent> = {
   "image-resizer": imageResizer,
   "crop-image": cropImage,
   "image-converter": imageConverter,
+  "gradient-generator": gradientGenerator,
   "word-counter": wordCounter,
   "case-converter": caseConverter,
   "password-generator": passwordGenerator,
@@ -47,9 +62,24 @@ const contentMap: Record<string, ToolContent> = {
   "color-picker": colorPicker,
   "timestamp-converter": timestampConverter,
   "hash-generator": hashGenerator,
+  "bmi-calculator": bmiCalculator,
+  "calorie-calculator": calorieCalculator,
+  "percentage-calculator": percentageCalculator,
+  "loan-calculator": loanCalculator,
+  "due-date-calculator": dueDateCalculator,
+  "date-difference": dateDifference,
+  "unit-converter": unitConverter,
+  "pomodoro-timer": pomodoroTimer,
+  "random-picker": randomPicker,
+  "typing-speed-test": typingSpeedTest,
+  "online-notepad": onlineNotepad,
 };
 
-export function getToolContent(slug: string): ToolContent {
+export function getToolContent(slug: string, locale: Locale = "en"): ToolContent {
+  if (locale === "ar") {
+    const ar = (contentAr as Record<string, ToolContent>)[slug];
+    if (ar) return ar;
+  }
   return (
     contentMap[slug] ?? {
       howTo: [],

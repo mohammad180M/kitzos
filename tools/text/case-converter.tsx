@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Check, Copy } from "lucide-react";
+import { useCommonLabels } from "@/lib/i18n/use-common-labels";
 
 type CaseType =
   | "upper"
@@ -49,6 +50,7 @@ const buttons: { type: CaseType; label: string }[] = [
 ];
 
 export default function CaseConverter() {
+  const labels = useCommonLabels();
   const [text, setText] = useState("");
   const [copied, setCopied] = useState(false);
 
@@ -118,12 +120,12 @@ export default function CaseConverter() {
         {copied ? (
           <>
             <Check className="h-4 w-4" />
-            Copied!
+            {labels.copied}
           </>
         ) : (
           <>
             <Copy className="h-4 w-4" />
-            Copy
+            {labels.copy}
           </>
         )}
       </button>

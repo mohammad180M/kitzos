@@ -1,0 +1,60 @@
+{
+  "common": {
+    "home": "الرئيسية",
+    "new": "جديد",
+    "copy": "نسخ",
+    "copied": "تم النسخ!",
+    "download": "تنزيل",
+    "clear": "مسح",
+    "generate": "إنشاء",
+    "search": "بحث",
+    "viewAll": "عرض الكل",
+    "ad": "إعلان",
+    "notFound": "الصفحة غير موجودة",
+    "notFoundDescription": "الصفحة التي تبحث عنها غير موجودة أو تم نقلها.",
+    "pageNotFound": "404 — الصفحة غير موجودة",
+    "backHome": "العودة للرئيسية"
+  },
+  "header": {
+    "categoriesAria": "الفئات",
+    "switchToArabic": "التبديل إلى العربية",
+    "switchToEnglish": "التبديل إلى الإنجليزية"
+  },
+  "home": {
+    "title": "أدوات مجانية على الإنترنت",
+    "subtitle": "أدوات سريعة وخاصة تعمل في متصفحك. لا حاجة للتسجيل.",
+    "searchPlaceholder": "ابحث عن الأدوات…",
+    "searchAria": "البحث في الأدوات",
+    "clearSearch": "مسح البحث",
+    "noResults": "لم يتم العثور على أدوات لـ \"{query}\""
+  },
+  "tool": {
+    "howToUse": "طريقة الاستخدام",
+    "relatedTools": "أدوات ذات صلة",
+    "faq": "الأسئلة الشائعة",
+    "breadcrumbAria": "مسار التنقل"
+  },
+  "footer": {
+    "tagline": "أدوات مجانية تعمل في متصفحك. بدون تسجيل وبدون رفع ملفات إلى خوادمنا — ملفاتك تبقى خاصة.",
+    "company": "الشركة",
+    "legal": "قانوني",
+    "about": "من نحن",
+    "contact": "اتصل بنا",
+    "privacy": "سياسة الخصوصية",
+    "privacyShort": "الخصوصية",
+    "terms": "شروط الخدمة",
+    "termsShort": "الشروط",
+    "copyright": "أدوات مجانية على الإنترنت"
+  },
+  "legal": {
+    "privacyTitle": "سياسة الخصوصية",
+    "privacyDescription": "كيف نتعامل مع بياناتك عند استخدام kitzos.com.",
+    "termsTitle": "شروط الخدمة",
+    "termsDescription": "يرجى قراءة هذه الشروط قبل استخدام kitzos.com.",
+    "aboutTitle": "عن kitzos",
+    "aboutDescription": "أدوات مجانية تحترم خصوصيتك ووقتك.",
+    "contactTitle": "اتصل بنا",
+    "contactDescription": "يسعدنا سماع رأيك.",
+    "lastUpdated": "آخر تحديث"
+  }
+}

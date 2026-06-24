@@ -191,13 +191,13 @@ function DiffLine({ row }: { row: DiffRow }) {
   return (
     <div className={`flex min-w-0 ${rowBackground(row.kind)}`}>
       <div
-        className="w-10 shrink-0 select-none border-r border-gray-200 py-0.5 pr-2 text-right text-xs text-gray-400 dark:border-gray-700 dark:text-gray-500"
+        className="w-10 shrink-0 select-none border-e border-gray-200 py-0.5 pr-2 text-right text-xs text-gray-400 dark:border-gray-700 dark:text-gray-500"
         aria-hidden="true"
       >
         {row.originalLineNum ?? ""}
       </div>
       <div
-        className="w-10 shrink-0 select-none border-r border-gray-200 py-0.5 pr-2 text-right text-xs text-gray-400 dark:border-gray-700 dark:text-gray-500"
+        className="w-10 shrink-0 select-none border-e border-gray-200 py-0.5 pr-2 text-right text-xs text-gray-400 dark:border-gray-700 dark:text-gray-500"
         aria-hidden="true"
       >
         {row.changedLineNum ?? ""}
@@ -278,10 +278,10 @@ export default function TextDiffChecker() {
           ) : (
             <div>
               <div className="flex border-b border-gray-200 bg-gray-50 text-xs font-medium text-gray-500 dark:border-gray-700 dark:bg-gray-800/50 dark:text-gray-400">
-                <div className="w-10 shrink-0 border-r border-gray-200 py-1.5 pr-2 text-right dark:border-gray-700">
+                <div className="w-10 shrink-0 border-e border-gray-200 py-1.5 pr-2 text-right dark:border-gray-700">
                   #
                 </div>
-                <div className="w-10 shrink-0 border-r border-gray-200 py-1.5 pr-2 text-right dark:border-gray-700">
+                <div className="w-10 shrink-0 border-e border-gray-200 py-1.5 pr-2 text-right dark:border-gray-700">
                   #
                 </div>
                 <div className="flex-1 px-3 py-1.5">Line</div>

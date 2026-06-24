@@ -81,7 +81,31 @@
 
   .info-prose ul,
   .info-prose ol {
-    @apply ml-5 space-y-2;
+    @apply ms-5 space-y-2;
+  }
+
+  /* Technical output stays LTR even in RTL layout */
+  .ltr {
+    direction: ltr;
+    unicode-bidi: isolate;
+  }
+
+  .ltr-input {
+    direction: ltr;
+    text-align: left;
+    unicode-bidi: isolate;
+  }
+
+  /* Keep numbers, code, and technical output LTR in Arabic layout */
+  [dir="rtl"] .font-mono,
+  [dir="rtl"] code,
+  [dir="rtl"] pre,
+  [dir="rtl"] textarea.font-mono,
+  [dir="rtl"] .input-field.font-mono,
+  [dir="rtl"] .tabular-nums {
+    direction: ltr;
+    text-align: left;
+    unicode-bidi: isolate;
   }
 
   .info-prose ul {

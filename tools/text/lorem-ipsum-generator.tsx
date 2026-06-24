@@ -2,6 +2,7 @@
 
 import React, { useCallback, useState } from "react";
 import { Check, Copy, Download, RefreshCw } from "lucide-react";
+import { useCommonLabels } from "@/lib/i18n/use-common-labels";
 
 type Unit = "paragraphs" | "sentences" | "words";
 
@@ -62,6 +63,7 @@ function generateWords(count: number, includeOpening: boolean): string {
 }
 
 export default function LoremIpsumGenerator() {
+  const labels = useCommonLabels();
   const [unit, setUnit] = useState<Unit>("paragraphs");
   const [count, setCount] = useState(3);
   const [startWithCanonical, setStartWithCanonical] = useState(true);
@@ -160,7 +162,7 @@ export default function LoremIpsumGenerator() {
 
       <button type="button" onClick={generate} className="btn-primary">
         <RefreshCw className="h-4 w-4" />
-        Generate
+        {labels.generate}
       </button>
 
       {output && (
@@ -180,12 +182,12 @@ export default function LoremIpsumGenerator() {
               {copied ? (
                 <>
                   <Check className="h-4 w-4" />
-                  Copied!
+                  {labels.copied}
                 </>
               ) : (
                 <>
                   <Copy className="h-4 w-4" />
-                  Copy
+                  {labels.copy}
                 </>
               )}
             </button>

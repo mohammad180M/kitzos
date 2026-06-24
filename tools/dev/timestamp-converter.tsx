@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { Check, Copy } from "lucide-react";
+import { useCommonLabels } from "@/lib/i18n/use-common-labels";
 
 type CopiedField = "seconds" | "ms" | "date" | null;
 
@@ -30,6 +31,7 @@ function parseTimestampInput(value: string): { seconds: number; ms: number } | n
 }
 
 export default function TimestampConverter() {
+  const labels = useCommonLabels();
   const [timestampInput, setTimestampInput] = useState("");
   const [dateInput, setDateInput] = useState("");
   const [now, setNow] = useState(() => Date.now());
@@ -140,10 +142,10 @@ export default function TimestampConverter() {
               <button
                 type="button"
                 onClick={() => copy("date", String(Math.floor(validDate.getTime() / 1000)))}
-                className="ml-2 inline-flex items-center gap-1 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+                className="ms-2 inline-flex items-center gap-1 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
               >
                 {copied === "date" ? <Check className="h-3.5 w-3.5 text-green-600 dark:text-green-400" /> : <Copy className="h-3.5 w-3.5" />}
-                Copy
+                {labels.copy}
               </button>
             </p>
           )}

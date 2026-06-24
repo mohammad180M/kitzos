@@ -4,8 +4,10 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import ThemeProvider from "@/components/ThemeProvider";
+import { LocaleProvider } from "@/lib/i18n/LocaleProvider";
 import { getBaseMetadata } from "@/lib/seo";
 import { themeInitScript } from "@/lib/theme-script";
+import { localeInitScript } from "@/lib/i18n/locale-script";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -32,14 +34,17 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" dir="ltr" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        <script dangerouslySetInnerHTML={{ __html: localeInitScript }} />
       </head>
       <body className={`${inter.className} min-h-screen flex flex-col`}>
         <ThemeProvider>
-          <Header />
-          <main className="flex-1">{children}</main>
+          <LocaleProvider>
+            <Header />
+            <main className="flex-1">{children}</main>
+          </LocaleProvider>
         </ThemeProvider>
       </body>
     </html>
