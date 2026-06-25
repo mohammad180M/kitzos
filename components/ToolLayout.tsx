@@ -13,7 +13,6 @@ import {
 import { getToolContent } from "@/content";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { getLocalizedCategory, getLocalizedTool } from "@/lib/i18n/localized-data";
-import AdSlot from "./AdSlot";
 import FaqAccordion from "./FaqAccordion";
 import ToolCard from "./ToolCard";
 import Footer from "./Footer";
@@ -93,8 +92,6 @@ export default function ToolLayout({ tool, relatedTools, children }: ToolLayoutP
         </header>
 
         <div className="card mb-8">{children}</div>
-
-        <AdSlot className="mb-10" />
 
         {howTo.length > 0 && (
           <section className="mb-10" aria-labelledby="how-to-heading">
