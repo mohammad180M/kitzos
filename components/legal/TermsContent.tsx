@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { CONTACT_EMAIL, LEGAL_LAST_UPDATED } from "@/lib/site-config";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
+import { localizedPath } from "@/lib/i18n/routing";
 
 export default function TermsContent() {
   const { locale, t } = useLocale();
@@ -91,7 +92,7 @@ export default function TermsContent() {
         <h2>الخصوصية</h2>
         <p>
           يخضع استخدامك للخدمة أيضاً لـ{" "}
-          <Link href="/privacy/">سياسة الخصوصية</Link>، التي توضّح كيفية التعامل مع المعلومات
+          <Link href={localizedPath(locale, "/privacy")}>سياسة الخصوصية</Link>، التي توضّح كيفية التعامل مع المعلومات
           عند زيارة kitzos.com، بما في ذلك خدمات الأطراف الثالثة مثل الإعلان والاستضافة.
         </p>
 
@@ -209,7 +210,7 @@ export default function TermsContent() {
       <h2>Privacy</h2>
       <p>
         Your use of the Service is also governed by our{" "}
-        <Link href="/privacy/">Privacy Policy</Link>, which explains how information is handled when
+        <Link href={localizedPath(locale, "/privacy")}>Privacy Policy</Link>, which explains how information is handled when
         you visit kitzos.com, including third-party services such as advertising and hosting.
       </p>
 

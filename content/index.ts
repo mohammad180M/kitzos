@@ -1,6 +1,8 @@
 import type { FaqItem, HowToStep } from "@/lib/seo";
 import type { Locale } from "@/lib/i18n/types";
 import contentAr from "@/locales/content.ar.json";
+import extraContentAr from "@/locales/extra-content.ar.json";
+import { extraToolContent } from "./extra-tools";
 
 import * as mergePdf from "./merge-pdf";
 import * as splitPdf from "./split-pdf";
@@ -73,11 +75,14 @@ const contentMap: Record<string, ToolContent> = {
   "random-picker": randomPicker,
   "typing-speed-test": typingSpeedTest,
   "online-notepad": onlineNotepad,
+  ...extraToolContent,
 };
 
 export function getToolContent(slug: string, locale: Locale = "en"): ToolContent {
   if (locale === "ar") {
-    const ar = (contentAr as Record<string, ToolContent>)[slug];
+    const ar =
+      (contentAr as Record<string, ToolContent>)[slug] ??
+      (extraContentAr as Record<string, ToolContent>)[slug];
     if (ar) return ar;
   }
   return (

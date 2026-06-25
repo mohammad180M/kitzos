@@ -1,0 +1,200 @@
+{
+  "mp3-cutter": {
+    "howTo": [
+      { "title": "ارفع ملفاً صوتياً", "description": "اختر MP3 أو WAV أو أي صيغة يدعمها متصفحك." },
+      { "title": "حدد نطاق القص", "description": "استخدم المنزلقات أو الحقول لاختيار البداية والنهاية." },
+      { "title": "نزّل المقطع", "description": "اختر MP3 أو WAV وحمّل المقطع المقصوص فوراً." }
+    ],
+    "faq": [
+      { "question": "هل يُرفع الصوت إلى خادم؟", "answer": "لا. الفك والتصدير يتمان محلياً في متصفحك." },
+      { "question": "ما الصيغ المدعومة؟", "answer": "معظم الصيغ التي يفكها المتصفح مثل MP3 وWAV وM4A وOGG." }
+    ]
+  },
+  "audio-converter": {
+    "howTo": [
+      { "title": "اختر صيغة الإخراج", "description": "حدد MP3 أو WAV قبل الرفع." },
+      { "title": "ارفع الملف", "description": "اختر الملف المراد تحويله." },
+      { "title": "التنزيل", "description": "يُنزَّل الملف المحوّل تلقائياً عند الانتهاء." }
+    ],
+    "faq": [
+      { "question": "كيف يعمل تحويل WAV إلى MP3؟", "answer": "يُفك الصوت عبر Web Audio ثم يُعاد ترميزه MP3 بمكتبة lamejs محلياً." },
+      { "question": "هل الجودة بدون فقد؟", "answer": "WAV بدون فقد. MP3 بضغط 128 كيلوبت." }
+    ]
+  },
+  "audio-merger": {
+    "howTo": [
+      { "title": "أضف المقاطع", "description": "ارفع ملفين أو أكثر بالترتيب المطلوب." },
+      { "title": "اختر الصيغة", "description": "MP3 أو WAV للملف المدمج." },
+      { "title": "ادمج ونزّل", "description": "اضغط دمج للحصول على ملف واحد." }
+    ],
+    "faq": [
+      { "question": "هل يمكن إعادة الترتيب؟", "answer": "احذف الملفات وأعد إضافتها بالترتيب الصحيح قبل الدمج." },
+      { "question": "هل يجب توحيد معدل العينات؟", "answer": "تُربط المقاطع كما فُكّت؛ للمصادر المختلطة جداً جرّب WAV." }
+    ]
+  },
+  "voice-recorder": {
+    "howTo": [
+      { "title": "اسمح بالميكروفون", "description": "اضغط بدء ووافق على صلاحية الميكروفون." },
+      { "title": "سجّل", "description": "تحدث ثم اضغط إيقاف." },
+      { "title": "استمع ونزّل", "description": "شغّل التسجيل ونزّله بصيغة WebM." }
+    ],
+    "faq": [
+      { "question": "أين يُخزَّن التسجيل؟", "answer": "في ذاكرة المتصفح فقط حتى التنزيل. لا يُرسل إلى خوادم kitzos." },
+      { "question": "أي المتصفحات تعمل؟", "answer": "Chrome وFirefox وSafari وEdge الحديثة مع MediaRecorder." }
+    ]
+  },
+  "image-to-text": {
+    "howTo": [
+      { "title": "اختر لغة OCR", "description": "إنجليزي أو عربي أو كلاهما للمستندات ثنائية اللغة." },
+      { "title": "ارفع الصورة", "description": "استخدم صورة أو مسحاً واضحاً." },
+      { "title": "انسخ النص", "description": "راجع النص المستخرج وانسخه." }
+    ],
+    "faq": [
+      { "question": "هل يعمل دون إنترنت؟", "answer": "Tesseract.js يُحمَّل عند الطلب وقد يُخزَّن مؤقتاً بعد أول استخدام." },
+      { "question": "دقة العربية؟", "answer": "تعتمد على جودة الصورة. الصور عالية التباين تعطي أفضل نتيجة." }
+    ]
+  },
+  "pdf-sign": {
+    "howTo": [
+      { "title": "ارفع PDF", "description": "اختر المستند المراد توقيعه." },
+      { "title": "ارسم التوقيع", "description": "استخدم الماوس أو اللمس على اللوحة." },
+      { "title": "نزّل PDF الموقّع", "description": "يُختم التوقيع على الصفحة الأولى." }
+    ],
+    "faq": [
+      { "question": "هل يُرفع PDF؟", "answer": "لا. التوقيع محلي عبر pdf-lib." },
+      { "question": "هل يمكن تغيير موضع التوقيع؟", "answer": "يُوضَع افتراضياً أسفل يمين الصفحة الأولى." }
+    ]
+  },
+  "pdf-watermark": {
+    "howTo": [
+      { "title": "ارفع PDF", "description": "اختر المستند." },
+      { "title": "خصّص النص", "description": "أدخل نص العلامة المائية وعدّل الشفافية." },
+      { "title": "نزّل", "description": "احصل على نسخة بعلامة على كل صفحة." }
+    ],
+    "faq": [
+      { "question": "هل تدعم صورة كعلامة؟", "answer": "هذه النسخة تدعم النص فقط." },
+      { "question": "هل تُسطَّح الصفحات؟", "answer": "تُرسم العلامة عند التصدير على كل صفحة." }
+    ]
+  },
+  "pdf-protect": {
+    "howTo": [
+      { "title": "ارفع PDF", "description": "اختر ملفاً غير محمي." },
+      { "title": "أدخل كلمة المرور", "description": "كلمة المرور لفتح الملف." },
+      { "title": "نزّل النسخة المقفلة", "description": "احفظ PDF المشفّر محلياً." }
+    ],
+    "faq": [
+      { "question": "هل التشفير محلي؟", "answer": "نعم. pdf-lib يشفّر في متصفحك." },
+      { "question": "هل يمكن إزالة كلمة المرور هنا؟", "answer": "هذه الأداة للحماية فقط." }
+    ]
+  },
+  "exif-remover": {
+    "howTo": [
+      { "title": "ارفع صورة", "description": "JPG أو PNG أو WebP." },
+      { "title": "المعالجة", "description": "تُعاد رسم الصورة على canvas لإسقاط الميتاداتا." },
+      { "title": "نزّل", "description": "احفظ JPEG نظيفاً بدون EXIF." }
+    ],
+    "faq": [
+      { "question": "ما الذي يُزال؟", "answer": "GPS وطراز الكاميرا والطوابع الزمنية وغيرها من EXIF." },
+      { "question": "هل تتأثر الجودة؟", "answer": "الإخراج JPEG بجودة 92% بصرياً قريب من الأصل." }
+    ]
+  },
+  "og-image-generator": {
+    "howTo": [
+      { "title": "عدّل النص والألوان", "description": "العنوان والعنوان الفرعي والخلفية." },
+      { "title": "معاينة", "description": "شاهد تخطيط 1200×630 مباشرة." },
+      { "title": "صدّر PNG", "description": "للمعاينات على الشبكات الاجتماعية." }
+    ],
+    "faq": [
+      { "question": "ما الحجم القياسي؟", "answer": "1200×630 بكسل لصور Open Graph." },
+      { "question": "خطوط مخصصة؟", "answer": "تُستخدم خطوط النظام لسرعة وموثوقية العرض." }
+    ]
+  },
+  "favicon-generator": {
+    "howTo": [
+      { "title": "ارفع الصورة", "description": "شعار مربع يعطي أفضل نتيجة." },
+      { "title": "توليد تلقائي", "description": "أحجام 16 و32 و48 و192 و512 بكسل." },
+      { "title": "نزّل ZIP", "description": "أضف الأيقونات لموقعك أو PWA." }
+    ],
+    "faq": [
+      { "question": "ما الأحجام المضمنة؟", "answer": "16 و32 و48 و192 و512 بكسل PNG." },
+      { "question": "هل يلزم صورة مربعة؟", "answer": "مربعة أفضل؛ غير المربع يُقصّ ليناسب." }
+    ]
+  },
+  "svg-pattern-generator": {
+    "howTo": [
+      { "title": "اختر النمط", "description": "نقاط أو خطوط أو شبكة." },
+      { "title": "عدّل الألوان والحجم", "description": "لون النمط والخلفية وحجم البلاطة." },
+      { "title": "انسخ CSS", "description": "الصق في مشروعك." }
+    ],
+    "faq": [
+      { "question": "هل النمط SVG؟", "answer": "نعم، مضمّن كـ data-URI في خلفية CSS." },
+      { "question": "استخدام تجاري؟", "answer": "الأنماط التي تولّدها ملكك." }
+    ]
+  },
+  "box-shadow-generator": {
+    "howTo": [
+      { "title": "اضبط الظل", "description": "إزاحة وضبابية وانتشار ولون وinset." },
+      { "title": "معاينة", "description": "شاهد الظل على بطاقة حية." },
+      { "title": "انسخ CSS", "description": "الصق قاعدة box-shadow." }
+    ],
+    "faq": [
+      { "question": "ظلال متعددة؟", "answer": "هذه الأداة تولّد ظلاً واحداً. كرّر القاعدة للتكديس." },
+      { "question": "صيغ الألوان؟", "answer": "أي لون CSS صالح بما فيها hex مع شفافية." }
+    ]
+  },
+  "meme-generator": {
+    "howTo": [
+      { "title": "ارفع صورة", "description": "اختر صورة الميم." },
+      { "title": "أضف نصاً", "description": "نص علوي وسفلي بأسلوب الميم الكلاسيكي." },
+      { "title": "نزّل PNG", "description": "شارك ميمك." }
+    ],
+    "faq": [
+      { "question": "أي خط يُستخدم؟", "answer": "أسلوب Impact بأحرف كبيرة وحدّ خارجي." },
+      { "question": "هل المعالجة محلية؟", "answer": "نعم، عبر canvas في متصفحك." }
+    ]
+  },
+  "signature-pad": {
+    "howTo": [
+      { "title": "ارسم", "description": "وقّع بالماوس أو الإصبع." },
+      { "title": "امسح إن لزم", "description": "أعد الرسم حتى ترضى." },
+      { "title": "نزّل PNG", "description": "توقيع بخلفية شفافة." }
+    ],
+    "faq": [
+      { "question": "خلفية شفافة؟", "answer": "نعم، PNG يحافظ على الشفافية خارج الحبر." },
+      { "question": "يعمل على الجوال؟", "answer": "نعم، Pointer Events مع touch-action: none." }
+    ]
+  },
+  "color-palette-generator": {
+    "howTo": [
+      { "title": "اختر لوناً أساسياً", "description": "نقطة البداية." },
+      { "title": "اختر التناسق", "description": "مكمّل أو متجاور أو ثلاثي." },
+      { "title": "انسخ الألوان", "description": "اضغط أي لون لنسخ hex." }
+    ],
+    "faq": [
+      { "question": "الفرق عن منتقي الألوان؟", "answer": "هنا تُولَّد لوحات متناسقة كاملة." },
+      { "question": "إمكانية الوصول؟", "answer": "تحقق من التباين يدوياً قبل الاستخدام في الواجهات." }
+    ]
+  },
+  "glassmorphism-generator": {
+    "howTo": [
+      { "title": "اضبط التأثير", "description": "ضبابية وشفافية وحد." },
+      { "title": "معاينة", "description": "بطاقة زجاجية على خلفية متدرجة." },
+      { "title": "انسخ CSS", "description": "backdrop-filter والخلفية." }
+    ],
+    "faq": [
+      { "question": "دعم المتصفحات؟", "answer": "backdrop-filter في Chromium وSafari وFirefox الحديثة." },
+      { "question": "أي عنصر؟", "answer": "البطاقات والقوائم والنوافذ فوق خلفيات ملونة." }
+    ]
+  },
+  "interaction-fx": {
+    "howTo": [
+      { "title": "عاين ripple", "description": "اضغط منطقة العرض." },
+      { "title": "خصّص", "description": "اللون والمدة والحجم." },
+      { "title": "صدّر الكود", "description": "CSS وJS بـ Pointer Events." }
+    ],
+    "faq": [
+      { "question": "يعمل باللمس؟", "answer": "نعم، pointerdown للنقر واللمس." },
+      { "question": "ربطه بزر؟", "answer": "استدعِ attachRipple(العنصر) من الكود المُصدَّر." }
+    ]
+  }
+}

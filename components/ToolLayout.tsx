@@ -13,6 +13,7 @@ import {
 import { getToolContent } from "@/content";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { getLocalizedCategory, getLocalizedTool } from "@/lib/i18n/localized-data";
+import { localizedPath } from "@/lib/i18n/routing";
 import FaqAccordion from "./FaqAccordion";
 import ToolCard from "./ToolCard";
 import Footer from "./Footer";
@@ -32,14 +33,14 @@ export default function ToolLayout({ tool, relatedTools, children }: ToolLayoutP
     ? getLocalizedCategory(category, locale).name
     : tool.category;
 
-  const breadcrumbs = generateToolBreadcrumbs(tool);
+  const breadcrumbs = generateToolBreadcrumbs(tool, locale);
   const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs);
-  const softwareSchema = generateSoftwareApplicationSchema(tool);
+  const softwareSchema = generateSoftwareApplicationSchema(tool, locale);
 
   const displayCrumbs = [
-    { name: t.common.home, href: "/" },
-    { name: categoryLabel, href: `/${tool.category}/` },
-    { name: title, href: `/tools/${tool.slug}/` },
+    { name: t.common.home, href: localizedPath(locale, "/") },
+    { name: categoryLabel, href: localizedPath(locale, `/${tool.category}`) },
+    { name: title, href: localizedPath(locale, `/tools/${tool.slug}`) },
   ];
 
   return (

@@ -4,6 +4,7 @@ import type { FaqItem, HowToStep } from "@/lib/seo";
 import type { Locale } from "./types";
 import categoriesAr from "@/locales/categories.ar.json";
 import toolsAr from "@/locales/tools.ar.json";
+import extraToolsAr from "@/locales/extra-tools.ar.json";
 import contentAr from "@/locales/content.ar.json";
 
 type CategoryAr = { name: string; description: string };
@@ -11,7 +12,7 @@ type ToolAr = { title: string; description: string; keywords?: string[] };
 type ToolContentAr = { howTo: HowToStep[]; faq: FaqItem[] };
 
 const categoriesArMap = categoriesAr as Record<CategoryId, CategoryAr>;
-const toolsArMap = toolsAr as Record<string, ToolAr>;
+const toolsArMap = { ...(toolsAr as Record<string, ToolAr>), ...(extraToolsAr as Record<string, ToolAr>) };
 const contentArMap = contentAr as Record<string, ToolContentAr>;
 
 export function getLocalizedCategory(

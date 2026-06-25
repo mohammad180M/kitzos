@@ -4,22 +4,27 @@ import { getToolComponent } from "@/lib/tool-components";
 import { tools, getToolBySlug, getToolsByCategory } from "@/lib/registry";
 import { getToolMetadata } from "@/lib/seo";
 import type { Metadata } from "next";
+import { LOCALES, type Locale } from "@/lib/i18n/types";
+import { isValidLocale } from "@/lib/i18n/routing";
 
 interface ToolPageProps {
-  params: { slug: string };
+  params: { lang: string; slug: string };
 }
 
 export const dynamic = "force-static";
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return tools.map((t) => ({ slug: t.slug }));
+  return tools.flatMap((tool) =>
+    LOCALES.map((lang) => ({ lang, slug: tool.slug }))
+  );
 }
 
 export function generateMetadata({ params }: ToolPageProps): Metadata {
+  if (!isValidLocale(params.lang)) return {};
   const tool = getToolBySlug(params.slug);
   if (!tool) return {};
-  return getToolMetadata(tool);
+  return getToolMetadata(tool, params.lang as Locale);
 }
 
 export default function ToolPage({ params }: ToolPageProps) {

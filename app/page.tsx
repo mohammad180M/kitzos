@@ -1,5 +1,5 @@
-import HomeContent from "@/components/HomeContent";
+import RootRedirect from "@/components/RootRedirect";
 
-export default function HomePage() {
-  return <HomeContent />;
+export default function RootPage() {
+  return <RootRedirect />;
 }

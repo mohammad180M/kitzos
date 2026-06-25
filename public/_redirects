@@ -1,0 +1,40 @@
+# Cloudflare Pages — 301 redirects for legacy URLs (pre /en/ + /ar/ structure)
+# Every old indexed URL must map to its English equivalent.
+
+/  /en/  301
+
+# Tools (all slugs — catch-all to /en/tools/:slug/)
+/tools/:slug  /en/tools/:slug/  301
+/tools/:slug/  /en/tools/:slug/  301
+
+# Categories
+/pdf  /en/pdf/  301
+/pdf/  /en/pdf/  301
+/image  /en/image/  301
+/image/  /en/image/  301
+/text  /en/text/  301
+/text/  /en/text/  301
+/dev  /en/dev/  301
+/dev/  /en/dev/  301
+/calculators  /en/calculators/  301
+/calculators/  /en/calculators/  301
+/converters  /en/converters/  301
+/converters/  /en/converters/  301
+/misc  /en/misc/  301
+/misc/  /en/misc/  301
+
+# Legal / info pages
+/about  /en/about/  301
+/about/  /en/about/  301
+/privacy  /en/privacy/  301
+/privacy/  /en/privacy/  301
+/terms  /en/terms/  301
+/terms/  /en/terms/  301
+/contact  /en/contact/  301
+/contact/  /en/contact/  301
+
+# New categories
+/audio  /en/audio/  301
+/audio/  /en/audio/  301
+/vision  /en/vision/  301
+/vision/  /en/vision/  301

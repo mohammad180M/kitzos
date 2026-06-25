@@ -1,13 +1,11 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import Script from "next/script";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
 import ThemeProvider from "@/components/ThemeProvider";
-import { LocaleProvider } from "@/lib/i18n/LocaleProvider";
 import { getBaseMetadata } from "@/lib/seo";
 import { themeInitScript } from "@/lib/theme-script";
-import { localeInitScript } from "@/lib/i18n/locale-script";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -41,16 +39,12 @@ export default function RootLayout({
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2890911389961532"
           crossOrigin="anonymous"
         />
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-        <script dangerouslySetInnerHTML={{ __html: localeInitScript }} />
+        <Script id="kitzos-theme-init" strategy="beforeInteractive">
+          {themeInitScript}
+        </Script>
       </head>
       <body className={`${inter.className} min-h-screen flex flex-col`}>
-        <ThemeProvider>
-          <LocaleProvider>
-            <Header />
-            <main className="flex-1">{children}</main>
-          </LocaleProvider>
-        </ThemeProvider>
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );

@@ -7,6 +7,7 @@ import { categories } from "@/lib/categories";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { getLocalizedCategory } from "@/lib/i18n/localized-data";
 import { searchToolsLocalized } from "@/lib/i18n/search";
+import { localizedPath } from "@/lib/i18n/routing";
 import ToolCard from "@/components/ToolCard";
 import Footer from "@/components/Footer";
 
@@ -71,7 +72,7 @@ export default function HomeContent() {
               return (
                 <Link
                   key={category.id}
-                  href={`/${category.id}`}
+                  href={localizedPath(locale, `/${category.id}`)}
                   className="rounded-full border border-gray-200 bg-white px-4 py-1.5 text-sm font-medium text-gray-600 transition-colors hover:border-primary-300 hover:text-primary-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-primary-600 dark:hover:text-primary-400"
                 >
                   {name}
@@ -100,14 +101,14 @@ export default function HomeContent() {
                     className="text-xl font-semibold text-gray-900 dark:text-gray-100"
                   >
                     <Link
-                      href={`/${category.id}`}
+                      href={localizedPath(locale, `/${category.id}`)}
                       className="hover:text-primary-600 dark:hover:text-primary-400"
                     >
                       {name}
                     </Link>
                   </h2>
                   <Link
-                    href={`/${category.id}`}
+                    href={localizedPath(locale, `/${category.id}`)}
                     className="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
                   >
                     {t.common.viewAll}

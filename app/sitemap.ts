@@ -2,42 +2,66 @@ import type { MetadataRoute } from "next";
 import { categories } from "@/lib/categories";
 import { tools } from "@/lib/registry";
 import { INFO_PAGES } from "@/lib/site-config";
-import { getSiteUrl } from "@/lib/seo";
+import { buildSitemapLanguageAlternates, getSiteUrl } from "@/lib/seo";
+import { localizedPath } from "@/lib/i18n/routing";
+import { LOCALES, type Locale } from "@/lib/i18n/types";
 
 export const dynamic = "force-static";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+function localizedSitemapEntry(
+  locale: Locale,
+  path: string,
+  options: {
+    changeFrequency: MetadataRoute.Sitemap[0]["changeFrequency"];
+    priority: number;
+  }
+): MetadataRoute.Sitemap[0] {
   const siteUrl = getSiteUrl();
+  return {
+    url: `${siteUrl}${localizedPath(locale, path)}`,
+    lastModified: new Date(),
+    changeFrequency: options.changeFrequency,
+    priority: options.priority,
+    alternates: {
+      languages: buildSitemapLanguageAlternates(path),
+    },
+  };
+}
 
-  const staticPages: MetadataRoute.Sitemap = [
-    {
-      url: `${siteUrl}/`,
-      lastModified: new Date(),
+export default function sitemap(): MetadataRoute.Sitemap {
+  const homePages: MetadataRoute.Sitemap = LOCALES.map((locale) =>
+    localizedSitemapEntry(locale, "/", {
       changeFrequency: "weekly",
       priority: 1,
-    },
-  ];
+    })
+  );
 
-  const categoryPages: MetadataRoute.Sitemap = categories.map((category) => ({
-    url: `${siteUrl}/${category.id}/`,
-    lastModified: new Date(),
-    changeFrequency: "weekly" as const,
-    priority: 0.8,
-  }));
+  const categoryPages: MetadataRoute.Sitemap = categories.flatMap((category) =>
+    LOCALES.map((locale) =>
+      localizedSitemapEntry(locale, `/${category.id}`, {
+        changeFrequency: "weekly",
+        priority: 0.8,
+      })
+    )
+  );
 
-  const toolPages: MetadataRoute.Sitemap = tools.map((tool) => ({
-    url: `${siteUrl}/tools/${tool.slug}/`,
-    lastModified: new Date(),
-    changeFrequency: "monthly" as const,
-    priority: 0.9,
-  }));
+  const toolPages: MetadataRoute.Sitemap = tools.flatMap((tool) =>
+    LOCALES.map((locale) =>
+      localizedSitemapEntry(locale, `/tools/${tool.slug}`, {
+        changeFrequency: "monthly",
+        priority: 0.9,
+      })
+    )
+  );
 
-  const infoPages: MetadataRoute.Sitemap = INFO_PAGES.map((page) => ({
-    url: `${siteUrl}${page.path}/`,
-    lastModified: new Date(),
-    changeFrequency: "yearly" as const,
-    priority: 0.5,
-  }));
+  const infoPages: MetadataRoute.Sitemap = INFO_PAGES.flatMap((page) =>
+    LOCALES.map((locale) =>
+      localizedSitemapEntry(locale, page.path, {
+        changeFrequency: "yearly",
+        priority: 0.5,
+      })
+    )
+  );
 
-  return [...staticPages, ...categoryPages, ...toolPages, ...infoPages];
+  return [...homePages, ...categoryPages, ...toolPages, ...infoPages];
 }

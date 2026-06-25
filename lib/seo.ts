@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
-import type { Tool } from "./registry";
+import type { Category } from "./categories";
 import { getCategoryById } from "./categories";
+import { getDictionary } from "./i18n/dictionaries";
+import { getLocalizedCategory, getLocalizedTool, getArabicKeywords } from "./i18n/localized-data";
+import { localizedPath } from "./i18n/routing";
+import { DEFAULT_LOCALE, LOCALES, type Locale } from "./i18n/types";
+import type { Tool } from "./registry";
 
 const SITE_NAME = "kitzos";
 const SITE_URL = "https://kitzos.com";
@@ -17,6 +22,26 @@ export interface HowToStep {
 
 export function getSiteUrl(): string {
   return SITE_URL;
+}
+
+export function buildLocalizedUrl(locale: Locale, path: string): string {
+  return `${SITE_URL}${localizedPath(locale, path)}`;
+}
+
+export function buildLanguageAlternates(path: string): Record<string, string> {
+  const languages: Record<string, string> = {};
+  for (const locale of LOCALES) {
+    languages[locale] = buildLocalizedUrl(locale, path);
+  }
+  languages["x-default"] = buildLocalizedUrl(DEFAULT_LOCALE, path);
+  return languages;
+}
+
+function buildCanonicalAlternates(locale: Locale, path: string) {
+  return {
+    canonical: buildLocalizedUrl(locale, path),
+    languages: buildLanguageAlternates(path),
+  };
 }
 
 export function getBaseMetadata(): Metadata {
@@ -51,23 +76,22 @@ export function getBaseMetadata(): Metadata {
   };
 }
 
-export function getToolMetadata(tool: Tool): Metadata {
-  const category = getCategoryById(tool.category);
-  const title = tool.title;
-  const description = tool.description;
+export function getHomeMetadata(locale: Locale): Metadata {
+  const t = getDictionary(locale);
+  const title = t.home.title;
+  const description = t.home.subtitle;
+  const path = "/";
 
   return {
     title,
     description,
-    keywords: tool.keywords,
-    alternates: {
-      canonical: `${SITE_URL}/tools/${tool.slug}/`,
-    },
+    alternates: buildCanonicalAlternates(locale, path),
     openGraph: {
       title: `${title} | ${SITE_NAME}`,
       description,
-      url: `${SITE_URL}/tools/${tool.slug}/`,
+      url: buildLocalizedUrl(locale, path),
       type: "website",
+      locale: locale === "ar" ? "ar_SA" : "en_US",
     },
     twitter: {
       title: `${title} | ${SITE_NAME}`,
@@ -76,41 +100,67 @@ export function getToolMetadata(tool: Tool): Metadata {
   };
 }
 
-export function getCategoryMetadata(
-  categoryId: string,
-  categoryName: string,
-  description: string
-): Metadata {
+export function getToolMetadata(tool: Tool, locale: Locale): Metadata {
+  const { title, description } = getLocalizedTool(tool, locale);
+  const keywords =
+    locale === "ar" && getArabicKeywords(tool.slug).length > 0
+      ? getArabicKeywords(tool.slug)
+      : tool.keywords;
+  const path = `/tools/${tool.slug}`;
+
   return {
-    title: categoryName,
+    title,
     description,
-    alternates: {
-      canonical: `${SITE_URL}/${categoryId}/`,
-    },
+    keywords,
+    alternates: buildCanonicalAlternates(locale, path),
     openGraph: {
-      title: `${categoryName} | ${SITE_NAME}`,
+      title: `${title} | ${SITE_NAME}`,
       description,
-      url: `${SITE_URL}/${categoryId}/`,
+      url: buildLocalizedUrl(locale, path),
       type: "website",
+      locale: locale === "ar" ? "ar_SA" : "en_US",
+    },
+    twitter: {
+      title: `${title} | ${SITE_NAME}`,
+      description,
+    },
+  };
+}
+
+export function getCategoryMetadata(category: Category, locale: Locale): Metadata {
+  const { name, description } = getLocalizedCategory(category, locale);
+  const path = `/${category.id}`;
+
+  return {
+    title: name,
+    description,
+    alternates: buildCanonicalAlternates(locale, path),
+    openGraph: {
+      title: `${name} | ${SITE_NAME}`,
+      description,
+      url: buildLocalizedUrl(locale, path),
+      type: "website",
+      locale: locale === "ar" ? "ar_SA" : "en_US",
     },
   };
 }
 
 export function getInfoPageMetadata(
+  locale: Locale,
   title: string,
   description: string,
   path: string
 ): Metadata {
-  const canonical = `${SITE_URL}${path}/`;
   return {
     title,
     description,
-    alternates: { canonical },
+    alternates: buildCanonicalAlternates(locale, path),
     openGraph: {
       title: `${title} | ${SITE_NAME}`,
       description,
-      url: canonical,
+      url: buildLocalizedUrl(locale, path),
       type: "website",
+      locale: locale === "ar" ? "ar_SA" : "en_US",
     },
     twitter: {
       title: `${title} | ${SITE_NAME}`,
@@ -119,12 +169,49 @@ export function getInfoPageMetadata(
   };
 }
 
-export function generateSoftwareApplicationSchema(tool: Tool): object {
+export type LegalPageKey = "privacy" | "terms" | "about" | "contact";
+
+export function getLegalPageMetadata(locale: Locale, page: LegalPageKey): Metadata {
+  const t = getDictionary(locale);
+  const pages: Record<
+    LegalPageKey,
+    { title: string; description: string; path: string }
+  > = {
+    privacy: {
+      title: t.legal.privacyTitle,
+      description: t.legal.privacyDescription,
+      path: "/privacy",
+    },
+    terms: {
+      title: t.legal.termsTitle,
+      description: t.legal.termsDescription,
+      path: "/terms",
+    },
+    about: {
+      title: t.legal.aboutTitle,
+      description: t.legal.aboutDescription,
+      path: "/about",
+    },
+    contact: {
+      title: t.legal.contactTitle,
+      description: t.legal.contactDescription,
+      path: "/contact",
+    },
+  };
+  const config = pages[page];
+  return getInfoPageMetadata(locale, config.title, config.description, config.path);
+}
+
+export function generateSoftwareApplicationSchema(tool: Tool, locale: Locale): object {
+  const { title, description } = getLocalizedTool(tool, locale);
+  const path = `/tools/${tool.slug}`;
+
   return {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    name: tool.title,
-    description: tool.description,
+    name: title,
+    description,
+    inLanguage: locale === "ar" ? "ar" : "en",
     applicationCategory: "UtilitiesApplication",
     operatingSystem: "Any",
     offers: {
@@ -132,7 +219,7 @@ export function generateSoftwareApplicationSchema(tool: Tool): object {
       price: "0",
       priceCurrency: "USD",
     },
-    url: `${SITE_URL}/tools/${tool.slug}/`,
+    url: buildLocalizedUrl(locale, path),
   };
 }
 
@@ -166,17 +253,32 @@ export function generateFaqSchema(faqs: FaqItem[]): object {
   };
 }
 
-export function generateToolBreadcrumbs(tool: Tool): {
-  name: string;
-  url: string;
-}[] {
+export function generateToolBreadcrumbs(
+  tool: Tool,
+  locale: Locale
+): { name: string; url: string }[] {
+  const t = getDictionary(locale);
   const category = getCategoryById(tool.category);
+  const { title } = getLocalizedTool(tool, locale);
+  const categoryLabel = category
+    ? getLocalizedCategory(category, locale).name
+    : tool.category;
+
   return [
-    { name: "Home", url: `${SITE_URL}/` },
+    { name: t.common.home, url: buildLocalizedUrl(locale, "/") },
     {
-      name: category?.name ?? tool.category,
-      url: `${SITE_URL}/${tool.category}/`,
+      name: categoryLabel,
+      url: buildLocalizedUrl(locale, `/${tool.category}`),
     },
-    { name: tool.title, url: `${SITE_URL}/tools/${tool.slug}/` },
+    { name: title, url: buildLocalizedUrl(locale, `/tools/${tool.slug}`) },
   ];
+}
+
+/** Build sitemap hreflang alternates (en + ar, no x-default — Next.js sitemap format). */
+export function buildSitemapLanguageAlternates(
+  path: string
+): Record<string, string> {
+  return Object.fromEntries(
+    LOCALES.map((locale) => [locale, buildLocalizedUrl(locale, path)])
+  );
 }

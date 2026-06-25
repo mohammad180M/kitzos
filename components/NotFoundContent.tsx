@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
+import { localizedPath } from "@/lib/i18n/routing";
 import Footer from "@/components/Footer";
 
 export default function NotFoundContent() {
-  const { t } = useLocale();
+  const { locale, t } = useLocale();
 
   return (
     <>
@@ -17,7 +18,7 @@ export default function NotFoundContent() {
           {t.common.notFound}
         </h1>
         <p className="mt-3 text-gray-600 dark:text-gray-400">{t.common.notFoundDescription}</p>
-        <Link href="/" className="btn-primary mt-8">
+        <Link href={localizedPath(locale, "/")} className="btn-primary mt-8">
           {t.common.backHome}
         </Link>
       </div>

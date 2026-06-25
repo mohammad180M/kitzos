@@ -5,6 +5,7 @@ import { getIcon } from "@/lib/icons";
 import type { Tool } from "@/lib/registry";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { getLocalizedTool } from "@/lib/i18n/localized-data";
+import { localizedPath } from "@/lib/i18n/routing";
 
 interface ToolCardProps {
   tool: Tool;
@@ -17,7 +18,7 @@ export default function ToolCard({ tool }: ToolCardProps) {
 
   return (
     <Link
-      href={`/tools/${tool.slug}`}
+      href={localizedPath(locale, `/tools/${tool.slug}`)}
       className="group flex items-start gap-3 rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition-all hover:border-primary-200 hover:shadow-md dark:border-gray-700 dark:bg-gray-900 dark:hover:border-primary-700 dark:hover:shadow-lg dark:hover:shadow-black/20"
     >
       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-primary-600 transition-colors group-hover:bg-primary-100 dark:bg-primary-950/60 dark:text-primary-400 dark:group-hover:bg-primary-900/60">

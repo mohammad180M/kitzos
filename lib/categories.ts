@@ -1,4 +1,13 @@
-export type CategoryId = "pdf" | "image" | "text" | "dev" | "calculators" | "converters" | "misc";
+export type CategoryId =
+  | "pdf"
+  | "image"
+  | "text"
+  | "dev"
+  | "calculators"
+  | "converters"
+  | "misc"
+  | "audio"
+  | "vision";
 
 export interface Category {
   id: CategoryId;
@@ -49,6 +58,18 @@ export const categories: Category[] = [
     name: "Tools & Utilities",
     icon: "Sparkles",
     description: "Handy everyday utilities and productivity tools.",
+  },
+  {
+    id: "audio",
+    name: "Audio Tools",
+    icon: "Mic",
+    description: "Cut, convert, merge, and record audio entirely in your browser.",
+  },
+  {
+    id: "vision",
+    name: "Vision & OCR",
+    icon: "ScanLine",
+    description: "Extract text from images with optical character recognition.",
   },
 ];
 

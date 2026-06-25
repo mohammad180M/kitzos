@@ -5,6 +5,7 @@ import { categories } from "@/lib/categories";
 import { getToolsByCategory } from "@/lib/registry";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { getLocalizedCategory, getLocalizedTool } from "@/lib/i18n/localized-data";
+import { localizedPath } from "@/lib/i18n/routing";
 
 export default function Footer() {
   const { locale, t } = useLocale();
@@ -14,7 +15,7 @@ export default function Footer() {
     <footer className="border-t border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
         <div className="mb-8">
-          <Link href="/" className="text-lg font-bold text-gray-900 dark:text-gray-100">
+          <Link href={localizedPath(locale, "/")} className="text-lg font-bold text-gray-900 dark:text-gray-100">
             kitzos
           </Link>
           <p className="mt-2 max-w-md text-sm text-gray-500 dark:text-gray-400">{t.footer.tagline}</p>
@@ -29,7 +30,7 @@ export default function Footer() {
               <div key={category.id}>
                 <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                   <Link
-                    href={`/${category.id}`}
+                    href={localizedPath(locale, `/${category.id}`)}
                     className="hover:text-primary-600 dark:hover:text-primary-400"
                   >
                     {name}
@@ -41,7 +42,7 @@ export default function Footer() {
                     return (
                       <li key={tool.slug}>
                         <Link
-                          href={`/tools/${tool.slug}`}
+                          href={localizedPath(locale, `/tools/${tool.slug}`)}
                           className="text-sm text-gray-500 transition-colors hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400"
                         >
                           {title}
@@ -61,7 +62,7 @@ export default function Footer() {
             <ul className="mt-3 space-y-2">
               <li>
                 <Link
-                  href="/about/"
+                  href={localizedPath(locale, "/about")}
                   className="text-sm text-gray-500 transition-colors hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400"
                 >
                   {t.footer.about}
@@ -69,7 +70,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/contact/"
+                  href={localizedPath(locale, "/contact")}
                   className="text-sm text-gray-500 transition-colors hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400"
                 >
                   {t.footer.contact}
@@ -82,7 +83,7 @@ export default function Footer() {
             <ul className="mt-3 space-y-2">
               <li>
                 <Link
-                  href="/privacy/"
+                  href={localizedPath(locale, "/privacy")}
                   className="text-sm text-gray-500 transition-colors hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400"
                 >
                   {t.footer.privacy}
@@ -90,7 +91,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/terms/"
+                  href={localizedPath(locale, "/terms")}
                   className="text-sm text-gray-500 transition-colors hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400"
                 >
                   {t.footer.terms}
@@ -105,16 +106,16 @@ export default function Footer() {
             © {year} kitzos.com — {t.footer.copyright}
           </p>
           <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
-            <Link href="/privacy/" className="hover:text-primary-600 dark:hover:text-primary-400">
+            <Link href={localizedPath(locale, "/privacy")} className="hover:text-primary-600 dark:hover:text-primary-400">
               {t.footer.privacyShort}
             </Link>
-            <Link href="/terms/" className="hover:text-primary-600 dark:hover:text-primary-400">
+            <Link href={localizedPath(locale, "/terms")} className="hover:text-primary-600 dark:hover:text-primary-400">
               {t.footer.termsShort}
             </Link>
-            <Link href="/about/" className="hover:text-primary-600 dark:hover:text-primary-400">
+            <Link href={localizedPath(locale, "/about")} className="hover:text-primary-600 dark:hover:text-primary-400">
               {t.footer.about}
             </Link>
-            <Link href="/contact/" className="hover:text-primary-600 dark:hover:text-primary-400">
+            <Link href={localizedPath(locale, "/contact")} className="hover:text-primary-600 dark:hover:text-primary-400">
               {t.footer.contact}
             </Link>
           </div>

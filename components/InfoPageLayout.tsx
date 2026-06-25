@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
+import { localizedPath } from "@/lib/i18n/routing";
 import Footer from "./Footer";
 
 interface InfoPageLayoutProps {
@@ -17,7 +18,7 @@ export default function InfoPageLayout({
   description,
   children,
 }: InfoPageLayoutProps) {
-  const { t } = useLocale();
+  const { locale, t } = useLocale();
 
   return (
     <>
@@ -26,7 +27,7 @@ export default function InfoPageLayout({
           <ol className="flex flex-wrap items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
             <li className="flex items-center gap-1">
               <Link
-                href="/"
+                href={localizedPath(locale, "/")}
                 className="hover:text-primary-600 dark:hover:text-primary-400"
               >
                 {t.common.home}

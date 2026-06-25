@@ -11,7 +11,6 @@ import {
 } from "react";
 import { getDictionary } from "./dictionaries";
 import {
-  DEFAULT_LOCALE,
   LOCALE_STORAGE_KEY,
   type Dictionary,
   type Locale,
@@ -20,35 +19,23 @@ import {
 interface LocaleContextValue {
   locale: Locale;
   setLocale: (locale: Locale) => void;
-  toggleLocale: () => void;
   t: Dictionary;
   dir: "ltr" | "rtl";
 }
 
 const LocaleContext = createContext<LocaleContextValue | null>(null);
 
-function applyLocaleToDocument(locale: Locale) {
-  const root = document.documentElement;
-  root.setAttribute("lang", locale);
-  root.setAttribute("dir", locale === "ar" ? "rtl" : "ltr");
+interface LocaleProviderProps {
+  children: ReactNode;
+  initialLocale: Locale;
 }
 
-export function LocaleProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>(DEFAULT_LOCALE);
-  const [mounted, setMounted] = useState(false);
+export function LocaleProvider({ children, initialLocale }: LocaleProviderProps) {
+  const [locale, setLocaleState] = useState<Locale>(initialLocale);
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem(LOCALE_STORAGE_KEY);
-      if (stored === "ar" || stored === "en") {
-        setLocaleState(stored);
-        applyLocaleToDocument(stored);
-      }
-    } catch {
-      // ignored
-    }
-    setMounted(true);
-  }, []);
+    setLocaleState(initialLocale);
+  }, [initialLocale]);
 
   const setLocale = useCallback((next: Locale) => {
     setLocaleState(next);
@@ -57,31 +44,16 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
     } catch {
       // ignored
     }
-    applyLocaleToDocument(next);
-  }, []);
-
-  const toggleLocale = useCallback(() => {
-    setLocaleState((prev) => {
-      const next: Locale = prev === "en" ? "ar" : "en";
-      try {
-        localStorage.setItem(LOCALE_STORAGE_KEY, next);
-      } catch {
-        // ignored
-      }
-      applyLocaleToDocument(next);
-      return next;
-    });
   }, []);
 
   const value = useMemo<LocaleContextValue>(
     () => ({
-      locale: mounted ? locale : DEFAULT_LOCALE,
+      locale,
       setLocale,
-      toggleLocale,
-      t: getDictionary(mounted ? locale : DEFAULT_LOCALE),
-      dir: (mounted ? locale : DEFAULT_LOCALE) === "ar" ? "rtl" : "ltr",
+      t: getDictionary(locale),
+      dir: locale === "ar" ? "rtl" : "ltr",
     }),
-    [locale, mounted, setLocale, toggleLocale]
+    [locale, setLocale]
   );
 
   return <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>;

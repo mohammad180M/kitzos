@@ -15,7 +15,6 @@ export interface Dictionary {
     generate: string;
     search: string;
     viewAll: string;
-    ad: string;
     notFound: string;
     notFoundDescription: string;
     pageNotFound: string;
@@ -23,6 +22,7 @@ export interface Dictionary {
   };
   header: {
     categoriesAria: string;
+    categoriesMenu: string;
     switchToArabic: string;
     switchToEnglish: string;
   };

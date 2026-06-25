@@ -1,0 +1,154 @@
+"use client";
+
+import { useRef, useState } from "react";
+import { Download, GripVertical, Loader2, Trash2, Upload } from "lucide-react";
+import {
+  concatBuffers,
+  decodeAudioFile,
+  downloadBlob,
+  encodeMp3,
+  encodeWav,
+  isAudioFile,
+} from "@/lib/audio-utils";
+import { useCommonLabels } from "@/lib/i18n/use-common-labels";
+
+interface AudioItem {
+  id: string;
+  name: string;
+  file: File;
+}
+
+export default function AudioMerger() {
+  const labels = useCommonLabels();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [items, setItems] = useState<AudioItem[]>([]);
+  const [format, setFormat] = useState<"mp3" | "wav">("mp3");
+  const [processing, setProcessing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const addFiles = (files: FileList | File[]) => {
+    const audioFiles = Array.from(files).filter(isAudioFile);
+    if (audioFiles.length === 0) {
+      setError("Please select audio files (MP3, WAV, M4A, OGG, WebM…).");
+      return;
+    }
+    setError(null);
+    setItems((prev) => [
+      ...prev,
+      ...audioFiles.map((file) => ({
+        id: `${file.name}-${Date.now()}-${Math.random()}`,
+        name: file.name,
+        file,
+      })),
+    ]);
+  };
+
+  const merge = async () => {
+    if (items.length < 2) {
+      setError("Add at least two audio files to merge.");
+      return;
+    }
+    setProcessing(true);
+    setError(null);
+    try {
+      const buffers = [];
+      for (const item of items) {
+        const { buffer } = await decodeAudioFile(item.file);
+        buffers.push(buffer);
+      }
+      const merged = concatBuffers(buffers);
+      const blob =
+        format === "mp3" ? await encodeMp3(merged) : encodeWav(merged);
+      downloadBlob(blob, `merged-audio.${format}`);
+    } catch {
+      setError("Merge failed. Try WAV output or fewer files.");
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <input
+        ref={inputRef}
+        type="file"
+        accept="audio/*,video/webm,.webm,.mp3,.wav,.m4a,.ogg,.opus,.flac"
+        multiple
+        className="hidden"
+        onChange={(e) => {
+          if (e.target.files) addFiles(e.target.files);
+          e.target.value = "";
+        }}
+      />
+
+      <button
+        type="button"
+        onClick={() => inputRef.current?.click()}
+        className="btn-secondary inline-flex items-center gap-2"
+      >
+        <Upload className="h-4 w-4" />
+        Add audio files
+      </button>
+
+      {items.length > 0 && (
+        <ul className="space-y-2">
+          {items.map((item, index) => (
+            <li
+              key={item.id}
+              className="flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 dark:border-gray-700 dark:bg-gray-800/50"
+            >
+              <GripVertical className="h-4 w-4 text-gray-400" aria-hidden />
+              <span className="flex-1 truncate text-sm">{index + 1}. {item.name}</span>
+              <button
+                type="button"
+                onClick={() => setItems((prev) => prev.filter((i) => i.id !== item.id))}
+                className="text-gray-400 hover:text-red-500"
+                aria-label="Remove"
+              >
+                <Trash2 className="h-4 w-4" />
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <div>
+        <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Output format</p>
+        <div className="mt-2 inline-flex rounded-lg border border-gray-300 p-0.5 dark:border-gray-600">
+          {(["mp3", "wav"] as const).map((f) => (
+            <button
+              key={f}
+              type="button"
+              onClick={() => setFormat(f)}
+              className={`rounded-md px-3 py-1.5 text-sm font-medium uppercase ${
+                format === f ? "bg-primary-600 text-white" : "text-gray-600 dark:text-gray-400"
+              }`}
+            >
+              {f}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {error && (
+        <p className="text-sm text-red-600 dark:text-red-400" role="alert">
+          {error}
+        </p>
+      )}
+
+      <button
+        type="button"
+        onClick={() => void merge()}
+        disabled={processing || items.length < 2}
+        className="btn-primary inline-flex items-center gap-2"
+      >
+        {processing ? (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        ) : (
+          <Download className="h-4 w-4" />
+        )}
+        Merge & {labels.download}
+      </button>
+    </div>
+  );
+}

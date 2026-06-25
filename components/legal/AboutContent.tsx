@@ -5,6 +5,7 @@ import { categories } from "@/lib/categories";
 import { getToolsByCategory } from "@/lib/registry";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { getLocalizedCategory, getLocalizedTool } from "@/lib/i18n/localized-data";
+import { localizedPath } from "@/lib/i18n/routing";
 
 export default function AboutContent() {
   const { locale } = useLocale();
@@ -34,7 +35,7 @@ export default function AboutContent() {
         <p>
           قد يعرض الموقع إعلانات لإبقاء الأدوات مجانية. الإعلان من أطراف ثالثة (مثل Google
           AdSense) منفصل عن عمل الأدوات نفسها. راجع{" "}
-          <Link href="/privacy/">سياسة الخصوصية</Link> للتفاصيل.
+          <Link href={localizedPath(locale, "/privacy")}>سياسة الخصوصية</Link> للتفاصيل.
         </p>
 
         <h2>ما نقدّمه</h2>
@@ -53,7 +54,7 @@ export default function AboutContent() {
               >
                 <h3 className="!pt-0 text-lg font-semibold text-gray-900 dark:text-gray-100">
                   <Link
-                    href={`/${category.id}/`}
+                    href={localizedPath(locale, `/${category.id}`)}
                     className="hover:text-primary-600 dark:hover:text-primary-400"
                   >
                     {name}
@@ -66,7 +67,7 @@ export default function AboutContent() {
                     return (
                       <li key={tool.slug} className="list-none">
                         <Link
-                          href={`/tools/${tool.slug}/`}
+                          href={localizedPath(locale, `/tools/${tool.slug}`)}
                           className="text-sm text-primary-600 hover:underline dark:text-primary-400"
                         >
                           {title}
@@ -90,7 +91,7 @@ export default function AboutContent() {
         <h2>تواصل معنا</h2>
         <p>
           لديك ملاحظة أو بلاغ خطأ أو فكرة لأداة جديدة؟ يسعدنا سماعك عبر صفحة{" "}
-          <Link href="/contact/">اتصل بنا</Link>.
+          <Link href={localizedPath(locale, "/contact")}>اتصل بنا</Link>.
         </p>
       </>
     );
@@ -121,7 +122,7 @@ export default function AboutContent() {
       <p>
         The site may show ads to help keep the tools free. Advertising is provided by third parties
         (such as Google AdSense) and is separate from how the tools themselves work. See our{" "}
-        <Link href="/privacy/">Privacy Policy</Link> for details.
+        <Link href={localizedPath(locale, "/privacy")}>Privacy Policy</Link> for details.
       </p>
 
       <h2>What we offer</h2>
@@ -140,7 +141,7 @@ export default function AboutContent() {
             >
               <h3 className="!pt-0 text-lg font-semibold text-gray-900 dark:text-gray-100">
                 <Link
-                  href={`/${category.id}/`}
+                  href={localizedPath(locale, `/${category.id}`)}
                   className="hover:text-primary-600 dark:hover:text-primary-400"
                 >
                   {category.name}
@@ -151,7 +152,7 @@ export default function AboutContent() {
                 {categoryTools.map((tool) => (
                   <li key={tool.slug} className="list-none">
                     <Link
-                      href={`/tools/${tool.slug}/`}
+                      href={localizedPath(locale, `/tools/${tool.slug}`)}
                       className="text-sm text-primary-600 hover:underline dark:text-primary-400"
                     >
                       {tool.title}
@@ -174,7 +175,7 @@ export default function AboutContent() {
       <h2>Get in touch</h2>
       <p>
         Have feedback, a bug report, or an idea for a new tool? We&apos;d like to hear from you on
-        our <Link href="/contact/">Contact</Link> page.
+        our <Link href={localizedPath(locale, "/contact")}>Contact</Link> page.
       </p>
     </>
   );
