@@ -1,13 +1,23 @@
-# Cloudflare Pages — 301 redirects for legacy URLs (pre /en/ + /ar/ structure)
-# Every old indexed URL must map to its English equivalent.
+# Cloudflare Pages — 301 redirects for LEGACY URLs only
+# (الروابط القديمة قبل هيكلة /en/ و /ar/ — ليست قائمة كل لغات الموقع)
+#
+# قبل التحديث كانت الروابط بدون لغة: /tools/merge-pdf ، /pdf ، /
+# لم يكن هناك /ar/ قديم — لذلك نوجّه القديم → /en/ كـ x-default لجوجل والروابط المحفوظة.
+#
+# العربي مفهرس بالكامل عبر:
+#   • https://kitzos.com/ar/...  (64+ صفحة في sitemap.xml)
+#   • hreflang على كل صفحة en + ar
+#   • لا يوجد أي redirect يمنع /ar/ — هذه المسارات تُخدم مباشرة
+#
+# لا تضف هنا /ar/ → شيء — العربي يعمل أصلاً بدون تحويل.
 
 /  /en/  301
 
-# Tools (all slugs — catch-all to /en/tools/:slug/)
+# Tools (legacy → English default)
 /tools/:slug  /en/tools/:slug/  301
 /tools/:slug/  /en/tools/:slug/  301
 
-# Categories
+# Categories (legacy)
 /pdf  /en/pdf/  301
 /pdf/  /en/pdf/  301
 /image  /en/image/  301
@@ -22,8 +32,12 @@
 /converters/  /en/converters/  301
 /misc  /en/misc/  301
 /misc/  /en/misc/  301
+/audio  /en/audio/  301
+/audio/  /en/audio/  301
+/vision  /en/vision/  301
+/vision/  /en/vision/  301
 
-# Legal / info pages
+# Legal / info (legacy)
 /about  /en/about/  301
 /about/  /en/about/  301
 /privacy  /en/privacy/  301
@@ -32,9 +46,3 @@
 /terms/  /en/terms/  301
 /contact  /en/contact/  301
 /contact/  /en/contact/  301
-
-# New categories
-/audio  /en/audio/  301
-/audio/  /en/audio/  301
-/vision  /en/vision/  301
-/vision/  /en/vision/  301
