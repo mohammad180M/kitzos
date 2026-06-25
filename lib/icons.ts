@@ -1,4 +1,5 @@
 import {
+  AppWindow,
   ArrowLeftRight,
   Binary,
   Blend,
@@ -20,7 +21,6 @@ import {
   Fingerprint,
   Flame,
   GitCompare,
-  Grid3x3,
   Hash,
   Image,
   Keyboard,
@@ -41,6 +41,7 @@ import {
   Scaling,
   ScanLine,
   Scissors,
+  Shapes,
   Share2,
   Shuffle,
   Smile,
@@ -53,6 +54,7 @@ import {
 } from "lucide-react";
 
 const iconMap: Record<string, LucideIcon> = {
+  AppWindow,
   ArrowLeftRight,
   Binary,
   Blend,
@@ -74,7 +76,6 @@ const iconMap: Record<string, LucideIcon> = {
   Fingerprint,
   Flame,
   GitCompare,
-  Grid3x3,
   Hash,
   Image,
   Keyboard,
@@ -95,6 +96,7 @@ const iconMap: Record<string, LucideIcon> = {
   Scaling,
   ScanLine,
   Scissors,
+  Shapes,
   Share2,
   Shuffle,
   Smile,
