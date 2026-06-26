@@ -172,6 +172,10 @@ export default function CompressImage() {
                 <img
                   src={previewUrl}
                   alt="Image preview"
+                  loading="lazy"
+                  decoding="async"
+                  width={800}
+                  height={512}
                   className="max-h-64 w-full object-contain"
                 />
               </div>

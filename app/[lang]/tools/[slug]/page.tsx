@@ -34,9 +34,9 @@ export default function ToolPage({ params }: ToolPageProps) {
   const ToolComponent = getToolComponent(tool.slug);
   if (!ToolComponent) notFound();
 
-  const relatedTools = getToolsByCategory(tool.category).filter(
-    (t) => t.slug !== tool.slug
-  );
+  const relatedTools = getToolsByCategory(tool.category)
+    .filter((t) => t.slug !== tool.slug)
+    .slice(0, 4);
 
   return (
     <ToolLayout tool={tool} relatedTools={relatedTools}>

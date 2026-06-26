@@ -19,6 +19,9 @@ export interface Dictionary {
     notFoundDescription: string;
     pageNotFound: string;
     backHome: string;
+    popularTools: string;
+    emptyStateHint: string;
+    keyboardHint: string;
   };
   header: {
     categoriesAria: string;
@@ -62,5 +65,67 @@ export interface Dictionary {
     contactTitle: string;
     contactDescription: string;
     lastUpdated: string;
+  };
+  jwtDecoder: {
+    tokenLabel: string;
+    tokenPlaceholder: string;
+    header: string;
+    payload: string;
+    signature: string;
+    copyHeader: string;
+    copyPayload: string;
+    expired: string;
+    securityNoticeTitle: string;
+    securityNotice: string;
+    claimExp: string;
+    claimIat: string;
+    claimNbf: string;
+    errors: {
+      INVALID_PARTS: string;
+      INVALID_BASE64: string;
+      INVALID_JSON: string;
+    };
+  };
+  csvJsonConverter: {
+    csvToJson: string;
+    jsonToCsv: string;
+    delimiter: string;
+    delimiterComma: string;
+    delimiterSemicolon: string;
+    delimiterTab: string;
+    inputCsv: string;
+    inputJson: string;
+    outputJson: string;
+    outputCsv: string;
+    csvPlaceholder: string;
+    jsonPlaceholder: string;
+    uploadFile: string;
+    errors: {
+      EMPTY_CSV: string;
+      INVALID_JSON: string;
+      NOT_ARRAY: string;
+      NOT_OBJECTS: string;
+    };
+  };
+  regexTester: {
+    patternLabel: string;
+    patternPlaceholder: string;
+    copyPattern: string;
+    flags: string;
+    testTextLabel: string;
+    testTextPlaceholder: string;
+    matchCount: string;
+    matchesTitle: string;
+    atIndex: string;
+    group: string;
+    namedGroup: string;
+    emptyGroup: string;
+    examplesTitle: string;
+    examples: Array<{
+      label: string;
+      pattern: string;
+      text: string;
+      caseInsensitive: boolean;
+    }>;
   };
 }

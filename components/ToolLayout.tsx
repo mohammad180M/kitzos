@@ -7,6 +7,7 @@ import type { Tool } from "@/lib/registry";
 import { getCategoryById } from "@/lib/categories";
 import {
   generateBreadcrumbSchema,
+  generateHowToSchema,
   generateSoftwareApplicationSchema,
   generateToolBreadcrumbs,
 } from "@/lib/seo";
@@ -15,6 +16,7 @@ import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { getLocalizedCategory, getLocalizedTool } from "@/lib/i18n/localized-data";
 import { localizedPath } from "@/lib/i18n/routing";
 import FaqAccordion from "./FaqAccordion";
+import JsonLd from "./JsonLd";
 import ToolCard from "./ToolCard";
 import Footer from "./Footer";
 
@@ -36,6 +38,8 @@ export default function ToolLayout({ tool, relatedTools, children }: ToolLayoutP
   const breadcrumbs = generateToolBreadcrumbs(tool, locale);
   const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs);
   const softwareSchema = generateSoftwareApplicationSchema(tool, locale);
+  const howToSchema = generateHowToSchema(tool, locale, howTo);
+  const jsonLd = [breadcrumbSchema, softwareSchema, ...(howToSchema ? [howToSchema] : [])];
 
   const displayCrumbs = [
     { name: t.common.home, href: localizedPath(locale, "/") },
@@ -45,14 +49,7 @@ export default function ToolLayout({ tool, relatedTools, children }: ToolLayoutP
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }}
-      />
+      <JsonLd data={jsonLd} />
 
       <article className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
         <nav aria-label={t.tool.breadcrumbAria} className="mb-6">
@@ -129,7 +126,7 @@ export default function ToolLayout({ tool, relatedTools, children }: ToolLayoutP
               {t.tool.relatedTools}
             </h2>
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
-              {relatedTools.map((related) => (
+              {relatedTools.slice(0, 4).map((related) => (
                 <ToolCard key={related.slug} tool={related} />
               ))}
             </div>

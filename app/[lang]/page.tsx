@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import HomeContent from "@/components/HomeContent";
-import { getHomeMetadata } from "@/lib/seo";
+import JsonLd from "@/components/JsonLd";
+import { getHomeMetadata, generateWebSiteSchema } from "@/lib/seo";
 import { isValidLocale } from "@/lib/i18n/routing";
 import type { Locale } from "@/lib/i18n/types";
 
@@ -13,6 +15,14 @@ export function generateMetadata({ params }: HomePageProps): Metadata {
   return getHomeMetadata(params.lang as Locale);
 }
 
-export default function HomePage() {
-  return <HomeContent />;
+export default function HomePage({ params }: HomePageProps) {
+  const locale = isValidLocale(params.lang) ? (params.lang as Locale) : "en";
+  return (
+    <>
+      <JsonLd data={generateWebSiteSchema(locale)} />
+      <Suspense fallback={null}>
+        <HomeContent />
+      </Suspense>
+    </>
+  );
 }

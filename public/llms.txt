@@ -1,0 +1,73 @@
+# kitzos
+> Free browser-based tools — no sign-up, no server uploads. Privacy-first.
+> Available in English and Arabic.
+
+## Tools
+- [Merge PDF](https://kitzos.com/en/tools/merge-pdf/): Combine multiple PDF files into one document. Drag to reorder pages.
+- [Split PDF](https://kitzos.com/en/tools/split-pdf/): Split a PDF into separate files by page ranges or individual pages.
+- [PDF to JPG](https://kitzos.com/en/tools/pdf-to-jpg/): Convert PDF pages to JPG images. Download a single page or all pages as a zip.
+- [Sign PDF Online](https://kitzos.com/en/tools/pdf-sign/): Draw your signature and stamp it on a PDF document. No account or upload to servers.
+- [Add Watermark to PDF](https://kitzos.com/en/tools/pdf-watermark/): Add a text watermark to every page of your PDF. Adjust opacity before downloading.
+- [Password Protect PDF](https://kitzos.com/en/tools/pdf-protect/): Encrypt a PDF with a password. Lock your document before sharing.
+- [Compress Image](https://kitzos.com/en/tools/compress-image/): Reduce JPG and PNG file size with adjustable quality. No upload required.
+- [Image Resizer](https://kitzos.com/en/tools/image-resizer/): Resize images to exact pixel dimensions with optional aspect ratio lock.
+- [Crop Image](https://kitzos.com/en/tools/crop-image/): Crop images with a draggable selection and optional fixed aspect ratios.
+- [Image Converter](https://kitzos.com/en/tools/image-converter/): Convert images between PNG, JPG, and WebP formats in your browser.
+- [CSS Gradient Generator](https://kitzos.com/en/tools/gradient-generator/): Create linear and radial CSS gradients with a live preview and copy-ready code.
+- [Remove EXIF Data](https://kitzos.com/en/tools/exif-remover/): Strip GPS, camera, and metadata from photos by re-exporting through canvas.
+- [Meme Generator](https://kitzos.com/en/tools/meme-generator/): Add top and bottom text to any image. Classic meme layout, export as PNG.
+- [Word Counter](https://kitzos.com/en/tools/word-counter/): Count words, characters, sentences, paragraphs, and estimated reading time.
+- [Case Converter](https://kitzos.com/en/tools/case-converter/): Convert text to uppercase, lowercase, title case, camelCase, and more.
+- [Password Generator](https://kitzos.com/en/tools/password-generator/): Create strong random passwords with customizable length and character sets.
+- [Markdown to HTML](https://kitzos.com/en/tools/markdown-to-html/): Convert Markdown to HTML with a live preview and copy-ready output.
+- [Lorem Ipsum Generator](https://kitzos.com/en/tools/lorem-ipsum-generator/): Generate placeholder paragraphs, sentences, or words for mockups and drafts.
+- [Text Diff Checker](https://kitzos.com/en/tools/text-diff-checker/): Compare two texts side by side with highlighted additions and deletions.
+- [Remove Line Breaks](https://kitzos.com/en/tools/remove-line-breaks/): Clean up text by removing line breaks, extra spaces, or converting breaks to spaces.
+- [QR Code Generator](https://kitzos.com/en/tools/qr-code-generator/): Generate QR codes from text or URLs. Download as PNG or SVG.
+- [JSON Formatter](https://kitzos.com/en/tools/json-formatter/): Format, validate, and minify JSON with clear error messages.
+- [Base64 Encoder / Decoder](https://kitzos.com/en/tools/base64/): Encode and decode text or images to Base64. Works entirely offline.
+- [Color Picker](https://kitzos.com/en/tools/color-picker/): Pick a color and convert between HEX, RGB, and HSL formats.
+- [Timestamp Converter](https://kitzos.com/en/tools/timestamp-converter/): Convert Unix timestamps to dates and back. Supports seconds and milliseconds.
+- [Hash Generator](https://kitzos.com/en/tools/hash-generator/): Generate MD5, SHA-1, SHA-256, and SHA-512 hashes from any text.
+- [JWT Decoder](https://kitzos.com/en/tools/jwt-decoder/): Decode and inspect JSON Web Tokens. View header, payload, and signature instantly in your browser. No data leaves your device.
+- [CSV ↔ JSON Converter](https://kitzos.com/en/tools/csv-json-converter/): Convert CSV to JSON and JSON to CSV instantly in your browser. Paste data or upload a file. Nothing is uploaded to a server.
+- [Regex Tester](https://kitzos.com/en/tools/regex-tester/): Test and debug regular expressions with live highlighting. See matches and groups as you type. Runs entirely in your browser.
+- [Open Graph Image Generator](https://kitzos.com/en/tools/og-image-generator/): Create 1200×630 OG images for social sharing with custom title and colors.
+- [Favicon Generator](https://kitzos.com/en/tools/favicon-generator/): Generate favicon PNGs in multiple sizes from one image and download as ZIP.
+- [SVG Pattern Generator](https://kitzos.com/en/tools/svg-pattern-generator/): Create repeating SVG background patterns and copy the CSS code.
+- [Box Shadow Generator](https://kitzos.com/en/tools/box-shadow-generator/): Design CSS box shadows with live preview and copy ready-to-use code.
+- [Signature Generator PNG](https://kitzos.com/en/tools/signature-pad/): Draw a transparent signature and download as PNG for documents and forms.
+- [Color Palette Generator](https://kitzos.com/en/tools/color-palette-generator/): Generate complementary, analogous, and triadic color palettes from a base color.
+- [Glassmorphism Generator](https://kitzos.com/en/tools/glassmorphism-generator/): Design frosted-glass CSS effects with live preview. Copy blur, border, and background code.
+- [BMI Calculator](https://kitzos.com/en/tools/bmi-calculator/): Calculate your Body Mass Index from height and weight. Supports metric and imperial units.
+- [Calorie Calculator](https://kitzos.com/en/tools/calorie-calculator/): Estimate daily calories using the Mifflin-St Jeor equation. BMR and TDEE for maintain, lose, or gain.
+- [Percentage Calculator](https://kitzos.com/en/tools/percentage-calculator/): Find percentages, percent of a number, and percentage increase or decrease between values.
+- [Loan Calculator](https://kitzos.com/en/tools/loan-calculator/): Calculate monthly payments, total interest, and total cost for fixed-rate loans.
+- [Due Date Calculator](https://kitzos.com/en/tools/due-date-calculator/): Estimate pregnancy due date from your last menstrual period and see current pregnancy week.
+- [Date Difference Calculator](https://kitzos.com/en/tools/date-difference/): Find the difference between two dates in days, weeks, months, and years. Count days until or since a date.
+- [Unit Converter](https://kitzos.com/en/tools/unit-converter/): Convert length, weight, temperature, area, and volume between common units instantly.
+- [Pomodoro Timer](https://kitzos.com/en/tools/pomodoro-timer/): Focus timer with work and break cycles. Customizable durations, cycle counter, and sound alerts.
+- [Random Picker & Number Generator](https://kitzos.com/en/tools/random-picker/): Pick a random name or option from a list, or generate a random number in any range.
+- [Typing Speed Test](https://kitzos.com/en/tools/typing-speed-test/): Measure your typing speed in WPM and accuracy with a live typing test.
+- [Online Notepad](https://kitzos.com/en/tools/online-notepad/): A simple notepad that auto-saves to your browser. Word and character count included.
+- [Click Ripple Effect Generator](https://kitzos.com/en/tools/interaction-fx/): Preview material-style ripple clicks and export CSS + JS using Pointer Events.
+- [MP3 Cutter Online](https://kitzos.com/en/tools/mp3-cutter/): Cut and trim audio files in your browser. Export as MP3 or WAV — no upload required.
+- [Audio Converter](https://kitzos.com/en/tools/audio-converter/): Convert WAV to MP3 and other audio formats locally using Web Audio API.
+- [Audio Merger](https://kitzos.com/en/tools/audio-merger/): Merge multiple audio files into one track. Combine clips in order and download.
+- [Online Voice Recorder](https://kitzos.com/en/tools/voice-recorder/): Record voice from your microphone and download instantly. Private browser recording.
+- [Image to Text (OCR)](https://kitzos.com/en/tools/image-to-text/): Extract text from images with OCR. Supports English and Arabic — runs entirely in your browser.
+
+## Categories
+- [PDF Tools](https://kitzos.com/en/pdf/): Merge, split, and work with PDF files entirely in your browser.
+- [Image Tools](https://kitzos.com/en/image/): Compress, resize, and optimize images without uploading to a server.
+- [Text Tools](https://kitzos.com/en/text/): Count words, convert case, and transform text instantly.
+- [Developer Tools](https://kitzos.com/en/dev/): Format JSON, encode Base64, generate QR codes, and more.
+- [Calculators](https://kitzos.com/en/calculators/): Free online calculators for health, finance, dates, and more.
+- [Converters](https://kitzos.com/en/converters/): Convert units, measurements, and values instantly.
+- [Tools & Utilities](https://kitzos.com/en/misc/): Handy everyday utilities and productivity tools.
+- [Audio Tools](https://kitzos.com/en/audio/): Cut, convert, merge, and record audio entirely in your browser.
+- [Vision & OCR](https://kitzos.com/en/vision/): Extract text from images with optical character recognition.
+
+## About
+- [About](https://kitzos.com/en/about/)
+- [Privacy](https://kitzos.com/en/privacy/)

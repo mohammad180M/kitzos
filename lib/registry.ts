@@ -1,4 +1,5 @@
 import type { CategoryId } from "./categories";
+import { sortToolsByCategory } from "./tool-order";
 
 export interface Tool {
   slug: string;
@@ -10,7 +11,7 @@ export interface Tool {
   isNew?: boolean;
 }
 
-export const tools: Tool[] = [
+const toolDefinitions: Tool[] = [
   {
     slug: "merge-pdf",
     title: "Merge PDF",
@@ -172,6 +173,36 @@ export const tools: Tool[] = [
     keywords: ["hash generator", "md5 hash", "sha256", "sha512", "checksum"],
   },
   {
+    slug: "jwt-decoder",
+    title: "JWT Decoder",
+    description:
+      "Decode and inspect JSON Web Tokens. View header, payload, and signature instantly in your browser. No data leaves your device.",
+    category: "dev",
+    icon: "FileKey",
+    keywords: ["jwt decoder", "decode jwt", "jwt parser", "json web token decoder"],
+    isNew: true,
+  },
+  {
+    slug: "csv-json-converter",
+    title: "CSV ↔ JSON Converter",
+    description:
+      "Convert CSV to JSON and JSON to CSV instantly in your browser. Paste data or upload a file. Nothing is uploaded to a server.",
+    category: "dev",
+    icon: "Table2",
+    keywords: ["csv to json", "json to csv", "csv json converter", "convert csv"],
+    isNew: true,
+  },
+  {
+    slug: "regex-tester",
+    title: "Regex Tester",
+    description:
+      "Test and debug regular expressions with live highlighting. See matches and groups as you type. Runs entirely in your browser.",
+    category: "dev",
+    icon: "Regex",
+    keywords: ["regex tester", "regular expression tester", "regex debugger", "test regex online"],
+    isNew: true,
+  },
+  {
     slug: "bmi-calculator",
     title: "BMI Calculator",
     description: "Calculate your Body Mass Index from height and weight. Supports metric and imperial units.",
@@ -274,7 +305,6 @@ export const tools: Tool[] = [
     category: "audio",
     icon: "Scissors",
     keywords: ["mp3 cutter online", "cut mp3", "trim audio", "audio trimmer", "mp3 editor"],
-    isNew: true,
   },
   {
     slug: "audio-converter",
@@ -283,7 +313,6 @@ export const tools: Tool[] = [
     category: "audio",
     icon: "ArrowLeftRight",
     keywords: ["wav to mp3 converter", "audio converter", "convert wav to mp3", "mp3 converter online"],
-    isNew: true,
   },
   {
     slug: "audio-merger",
@@ -292,7 +321,6 @@ export const tools: Tool[] = [
     category: "audio",
     icon: "Files",
     keywords: ["merge audio files", "combine audio", "join mp3 files", "audio joiner online"],
-    isNew: true,
   },
   {
     slug: "voice-recorder",
@@ -301,7 +329,6 @@ export const tools: Tool[] = [
     category: "audio",
     icon: "Mic",
     keywords: ["online voice recorder", "record audio online", "microphone recorder", "voice memo online"],
-    isNew: true,
   },
   {
     slug: "image-to-text",
@@ -310,7 +337,6 @@ export const tools: Tool[] = [
     category: "vision",
     icon: "ScanLine",
     keywords: ["image to text ocr", "ocr online", "extract text from image", "arabic ocr"],
-    isNew: true,
   },
   {
     slug: "pdf-sign",
@@ -319,7 +345,6 @@ export const tools: Tool[] = [
     category: "pdf",
     icon: "PenLine",
     keywords: ["sign pdf online", "pdf signature", "electronic signature pdf", "e-sign pdf"],
-    isNew: true,
   },
   {
     slug: "pdf-watermark",
@@ -328,7 +353,6 @@ export const tools: Tool[] = [
     category: "pdf",
     icon: "Droplets",
     keywords: ["add watermark to pdf", "pdf watermark", "stamp pdf", "watermark pdf online"],
-    isNew: true,
   },
   {
     slug: "pdf-protect",
@@ -337,7 +361,6 @@ export const tools: Tool[] = [
     category: "pdf",
     icon: "Lock",
     keywords: ["password protect pdf", "encrypt pdf", "lock pdf", "pdf password online"],
-    isNew: true,
   },
   {
     slug: "exif-remover",
@@ -346,7 +369,6 @@ export const tools: Tool[] = [
     category: "image",
     icon: "Eraser",
     keywords: ["remove exif data", "strip metadata", "remove photo metadata", "exif remover"],
-    isNew: true,
   },
   {
     slug: "og-image-generator",
@@ -355,7 +377,6 @@ export const tools: Tool[] = [
     category: "dev",
     icon: "Share2",
     keywords: ["open graph image generator", "og image maker", "social preview image", "og card generator"],
-    isNew: true,
   },
   {
     slug: "favicon-generator",
@@ -364,7 +385,6 @@ export const tools: Tool[] = [
     category: "dev",
     icon: "AppWindow",
     keywords: ["favicon generator", "favicon maker", "icon generator", "site icon generator"],
-    isNew: true,
   },
   {
     slug: "svg-pattern-generator",
@@ -373,7 +393,6 @@ export const tools: Tool[] = [
     category: "dev",
     icon: "Shapes",
     keywords: ["svg pattern generator", "css background pattern", "repeating pattern svg"],
-    isNew: true,
   },
   {
     slug: "box-shadow-generator",
@@ -382,7 +401,6 @@ export const tools: Tool[] = [
     category: "dev",
     icon: "Box",
     keywords: ["box shadow generator", "css shadow generator", "drop shadow css"],
-    isNew: true,
   },
   {
     slug: "meme-generator",
@@ -391,7 +409,6 @@ export const tools: Tool[] = [
     category: "image",
     icon: "Smile",
     keywords: ["meme generator", "meme maker", "add text to image meme", "meme creator online"],
-    isNew: true,
   },
   {
     slug: "signature-pad",
@@ -400,7 +417,6 @@ export const tools: Tool[] = [
     category: "dev",
     icon: "PenLine",
     keywords: ["signature generator png", "draw signature online", "transparent signature", "signature pad"],
-    isNew: true,
   },
   {
     slug: "color-palette-generator",
@@ -409,7 +425,6 @@ export const tools: Tool[] = [
     category: "dev",
     icon: "Paintbrush",
     keywords: ["color palette generator", "color scheme generator", "complementary colors", "palette maker"],
-    isNew: true,
   },
   {
     slug: "glassmorphism-generator",
@@ -418,7 +433,6 @@ export const tools: Tool[] = [
     category: "dev",
     icon: "Sparkles",
     keywords: ["glassmorphism generator", "glass effect css", "frosted glass css", "glassmorphism css"],
-    isNew: true,
   },
   {
     slug: "interaction-fx",
@@ -427,9 +441,10 @@ export const tools: Tool[] = [
     category: "misc",
     icon: "MousePointer",
     keywords: ["click ripple effect", "ripple animation css", "material ripple", "button click effect"],
-    isNew: true,
   },
 ];
+
+export const tools = sortToolsByCategory(toolDefinitions);
 
 export function getToolBySlug(slug: string): Tool | undefined {
   return tools.find((t) => t.slug === slug);

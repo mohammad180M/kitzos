@@ -1,26 +1,78 @@
 "use client";
 
 import Link from "next/link";
+import { useMemo, useState } from "react";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
+import { getLocalizedTool } from "@/lib/i18n/localized-data";
 import { localizedPath } from "@/lib/i18n/routing";
+import { getToolBySlug } from "@/lib/registry";
+import { POPULAR_TOOL_SLUGS } from "@/lib/popular-tools";
+import ToolSearch from "@/components/ToolSearch";
+import ToolCard from "@/components/ToolCard";
 import Footer from "@/components/Footer";
 
 export default function NotFoundContent() {
   const { locale, t } = useLocale();
+  const [query, setQuery] = useState("");
+
+  const popularTools = useMemo(
+    () =>
+      POPULAR_TOOL_SLUGS.map((slug) => getToolBySlug(slug)).filter(
+        (tool): tool is NonNullable<typeof tool> => tool != null
+      ),
+    []
+  );
+
+  const filteredPopular = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return popularTools;
+    return popularTools.filter((tool) => {
+      const { title, description } = getLocalizedTool(tool, locale);
+      return `${title} ${description} ${tool.slug}`.toLowerCase().includes(q);
+    });
+  }, [popularTools, query, locale]);
 
   return (
     <>
-      <div className="mx-auto flex max-w-lg flex-col items-center px-4 py-24 text-center sm:px-6">
-        <p className="text-sm font-medium text-primary-600 dark:text-primary-400">
-          {t.common.pageNotFound}
-        </p>
-        <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
-          {t.common.notFound}
-        </h1>
-        <p className="mt-3 text-gray-600 dark:text-gray-400">{t.common.notFoundDescription}</p>
-        <Link href={localizedPath(locale, "/")} className="btn-primary mt-8">
-          {t.common.backHome}
-        </Link>
+      <div className="mx-auto w-full max-w-3xl px-4 py-16 sm:px-6 sm:py-20">
+        <div className="text-center">
+          <p className="text-sm font-medium text-primary-600 dark:text-primary-400">
+            {t.common.pageNotFound}
+          </p>
+          <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+            {t.common.notFound}
+          </h1>
+          <p className="mt-3 text-gray-600 dark:text-gray-400">{t.common.notFoundDescription}</p>
+        </div>
+
+        <div className="mt-8">
+          <ToolSearch value={query} onChange={setQuery} autoFocus />
+        </div>
+
+        <section className="mt-10" aria-labelledby="popular-tools-heading">
+          <h2
+            id="popular-tools-heading"
+            className="text-lg font-semibold text-gray-900 dark:text-gray-100"
+          >
+            {t.common.popularTools}
+          </h2>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            {filteredPopular.map((tool) => (
+              <ToolCard key={tool.slug} tool={tool} />
+            ))}
+          </div>
+          {filteredPopular.length === 0 && (
+            <p className="mt-4 text-center text-sm text-gray-500 dark:text-gray-400">
+              {t.home.noResults.replace("{query}", query)}
+            </p>
+          )}
+        </section>
+
+        <div className="mt-10 text-center">
+          <Link href={localizedPath(locale, "/")} className="btn-primary">
+            {t.common.backHome}
+          </Link>
+        </div>
       </div>
       <Footer />
     </>

@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>kitzos — Free Online Tools</title>
+    <link>https://kitzos.com/en/</link>
+    <description>Latest free browser-based tools on kitzos.</description>
+    <language>en</language>
+    <item>
+      <title>Merge PDF</title>
+      <link>https://kitzos.com/en/tools/merge-pdf/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/merge-pdf/</guid>
+      <description>Combine multiple PDF files into one document. Drag to reorder pages.</description>
+    </item>
+    <item>
+      <title>Split PDF</title>
+      <link>https://kitzos.com/en/tools/split-pdf/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/split-pdf/</guid>
+      <description>Split a PDF into separate files by page ranges or individual pages.</description>
+    </item>
+    <item>
+      <title>PDF to JPG</title>
+      <link>https://kitzos.com/en/tools/pdf-to-jpg/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/pdf-to-jpg/</guid>
+      <description>Convert PDF pages to JPG images. Download a single page or all pages as a zip.</description>
+    </item>
+    <item>
+      <title>Sign PDF Online</title>
+      <link>https://kitzos.com/en/tools/pdf-sign/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/pdf-sign/</guid>
+      <description>Draw your signature and stamp it on a PDF document. No account or upload to servers.</description>
+    </item>
+    <item>
+      <title>Add Watermark to PDF</title>
+      <link>https://kitzos.com/en/tools/pdf-watermark/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/pdf-watermark/</guid>
+      <description>Add a text watermark to every page of your PDF. Adjust opacity before downloading.</description>
+    </item>
+    <item>
+      <title>Password Protect PDF</title>
+      <link>https://kitzos.com/en/tools/pdf-protect/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/pdf-protect/</guid>
+      <description>Encrypt a PDF with a password. Lock your document before sharing.</description>
+    </item>
+    <item>
+      <title>Compress Image</title>
+      <link>https://kitzos.com/en/tools/compress-image/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/compress-image/</guid>
+      <description>Reduce JPG and PNG file size with adjustable quality. No upload required.</description>
+    </item>
+    <item>
+      <title>Image Resizer</title>
+      <link>https://kitzos.com/en/tools/image-resizer/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/image-resizer/</guid>
+      <description>Resize images to exact pixel dimensions with optional aspect ratio lock.</description>
+    </item>
+    <item>
+      <title>Crop Image</title>
+      <link>https://kitzos.com/en/tools/crop-image/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/crop-image/</guid>
+      <description>Crop images with a draggable selection and optional fixed aspect ratios.</description>
+    </item>
+    <item>
+      <title>Image Converter</title>
+      <link>https://kitzos.com/en/tools/image-converter/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/image-converter/</guid>
+      <description>Convert images between PNG, JPG, and WebP formats in your browser.</description>
+    </item>
+    <item>
+      <title>CSS Gradient Generator</title>
+      <link>https://kitzos.com/en/tools/gradient-generator/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/gradient-generator/</guid>
+      <description>Create linear and radial CSS gradients with a live preview and copy-ready code.</description>
+    </item>
+    <item>
+      <title>Remove EXIF Data</title>
+      <link>https://kitzos.com/en/tools/exif-remover/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/exif-remover/</guid>
+      <description>Strip GPS, camera, and metadata from photos by re-exporting through canvas.</description>
+    </item>
+    <item>
+      <title>Meme Generator</title>
+      <link>https://kitzos.com/en/tools/meme-generator/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/meme-generator/</guid>
+      <description>Add top and bottom text to any image. Classic meme layout, export as PNG.</description>
+    </item>
+    <item>
+      <title>Word Counter</title>
+      <link>https://kitzos.com/en/tools/word-counter/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/word-counter/</guid>
+      <description>Count words, characters, sentences, paragraphs, and estimated reading time.</description>
+    </item>
+    <item>
+      <title>Case Converter</title>
+      <link>https://kitzos.com/en/tools/case-converter/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/case-converter/</guid>
+      <description>Convert text to uppercase, lowercase, title case, camelCase, and more.</description>
+    </item>
+    <item>
+      <title>Password Generator</title>
+      <link>https://kitzos.com/en/tools/password-generator/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/password-generator/</guid>
+      <description>Create strong random passwords with customizable length and character sets.</description>
+    </item>
+    <item>
+      <title>Markdown to HTML</title>
+      <link>https://kitzos.com/en/tools/markdown-to-html/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/markdown-to-html/</guid>
+      <description>Convert Markdown to HTML with a live preview and copy-ready output.</description>
+    </item>
+    <item>
+      <title>Lorem Ipsum Generator</title>
+      <link>https://kitzos.com/en/tools/lorem-ipsum-generator/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/lorem-ipsum-generator/</guid>
+      <description>Generate placeholder paragraphs, sentences, or words for mockups and drafts.</description>
+    </item>
+    <item>
+      <title>Text Diff Checker</title>
+      <link>https://kitzos.com/en/tools/text-diff-checker/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/text-diff-checker/</guid>
+      <description>Compare two texts side by side with highlighted additions and deletions.</description>
+    </item>
+    <item>
+      <title>Remove Line Breaks</title>
+      <link>https://kitzos.com/en/tools/remove-line-breaks/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/remove-line-breaks/</guid>
+      <description>Clean up text by removing line breaks, extra spaces, or converting breaks to spaces.</description>
+    </item>
+    <item>
+      <title>QR Code Generator</title>
+      <link>https://kitzos.com/en/tools/qr-code-generator/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/qr-code-generator/</guid>
+      <description>Generate QR codes from text or URLs. Download as PNG or SVG.</description>
+    </item>
+    <item>
+      <title>JSON Formatter</title>
+      <link>https://kitzos.com/en/tools/json-formatter/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/json-formatter/</guid>
+      <description>Format, validate, and minify JSON with clear error messages.</description>
+    </item>
+    <item>
+      <title>Base64 Encoder / Decoder</title>
+      <link>https://kitzos.com/en/tools/base64/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/base64/</guid>
+      <description>Encode and decode text or images to Base64. Works entirely offline.</description>
+    </item>
+    <item>
+      <title>Color Picker</title>
+      <link>https://kitzos.com/en/tools/color-picker/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/color-picker/</guid>
+      <description>Pick a color and convert between HEX, RGB, and HSL formats.</description>
+    </item>
+    <item>
+      <title>Timestamp Converter</title>
+      <link>https://kitzos.com/en/tools/timestamp-converter/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/timestamp-converter/</guid>
+      <description>Convert Unix timestamps to dates and back. Supports seconds and milliseconds.</description>
+    </item>
+    <item>
+      <title>Hash Generator</title>
+      <link>https://kitzos.com/en/tools/hash-generator/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/hash-generator/</guid>
+      <description>Generate MD5, SHA-1, SHA-256, and SHA-512 hashes from any text.</description>
+    </item>
+    <item>
+      <title>JWT Decoder</title>
+      <link>https://kitzos.com/en/tools/jwt-decoder/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/jwt-decoder/</guid>
+      <description>Decode and inspect JSON Web Tokens. View header, payload, and signature instantly in your browser. No data leaves your device.</description>
+    </item>
+    <item>
+      <title>CSV ↔ JSON Converter</title>
+      <link>https://kitzos.com/en/tools/csv-json-converter/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/csv-json-converter/</guid>
+      <description>Convert CSV to JSON and JSON to CSV instantly in your browser. Paste data or upload a file. Nothing is uploaded to a server.</description>
+    </item>
+    <item>
+      <title>Regex Tester</title>
+      <link>https://kitzos.com/en/tools/regex-tester/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/regex-tester/</guid>
+      <description>Test and debug regular expressions with live highlighting. See matches and groups as you type. Runs entirely in your browser.</description>
+    </item>
+    <item>
+      <title>Open Graph Image Generator</title>
+      <link>https://kitzos.com/en/tools/og-image-generator/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/og-image-generator/</guid>
+      <description>Create 1200×630 OG images for social sharing with custom title and colors.</description>
+    </item>
+    <item>
+      <title>Favicon Generator</title>
+      <link>https://kitzos.com/en/tools/favicon-generator/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/favicon-generator/</guid>
+      <description>Generate favicon PNGs in multiple sizes from one image and download as ZIP.</description>
+    </item>
+    <item>
+      <title>SVG Pattern Generator</title>
+      <link>https://kitzos.com/en/tools/svg-pattern-generator/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/svg-pattern-generator/</guid>
+      <description>Create repeating SVG background patterns and copy the CSS code.</description>
+    </item>
+    <item>
+      <title>Box Shadow Generator</title>
+      <link>https://kitzos.com/en/tools/box-shadow-generator/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/box-shadow-generator/</guid>
+      <description>Design CSS box shadows with live preview and copy ready-to-use code.</description>
+    </item>
+    <item>
+      <title>Signature Generator PNG</title>
+      <link>https://kitzos.com/en/tools/signature-pad/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/signature-pad/</guid>
+      <description>Draw a transparent signature and download as PNG for documents and forms.</description>
+    </item>
+    <item>
+      <title>Color Palette Generator</title>
+      <link>https://kitzos.com/en/tools/color-palette-generator/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/color-palette-generator/</guid>
+      <description>Generate complementary, analogous, and triadic color palettes from a base color.</description>
+    </item>
+    <item>
+      <title>Glassmorphism Generator</title>
+      <link>https://kitzos.com/en/tools/glassmorphism-generator/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/glassmorphism-generator/</guid>
+      <description>Design frosted-glass CSS effects with live preview. Copy blur, border, and background code.</description>
+    </item>
+    <item>
+      <title>BMI Calculator</title>
+      <link>https://kitzos.com/en/tools/bmi-calculator/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/bmi-calculator/</guid>
+      <description>Calculate your Body Mass Index from height and weight. Supports metric and imperial units.</description>
+    </item>
+    <item>
+      <title>Calorie Calculator</title>
+      <link>https://kitzos.com/en/tools/calorie-calculator/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/calorie-calculator/</guid>
+      <description>Estimate daily calories using the Mifflin-St Jeor equation. BMR and TDEE for maintain, lose, or gain.</description>
+    </item>
+    <item>
+      <title>Percentage Calculator</title>
+      <link>https://kitzos.com/en/tools/percentage-calculator/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/percentage-calculator/</guid>
+      <description>Find percentages, percent of a number, and percentage increase or decrease between values.</description>
+    </item>
+    <item>
+      <title>Loan Calculator</title>
+      <link>https://kitzos.com/en/tools/loan-calculator/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/loan-calculator/</guid>
+      <description>Calculate monthly payments, total interest, and total cost for fixed-rate loans.</description>
+    </item>
+    <item>
+      <title>Due Date Calculator</title>
+      <link>https://kitzos.com/en/tools/due-date-calculator/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/due-date-calculator/</guid>
+      <description>Estimate pregnancy due date from your last menstrual period and see current pregnancy week.</description>
+    </item>
+    <item>
+      <title>Date Difference Calculator</title>
+      <link>https://kitzos.com/en/tools/date-difference/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/date-difference/</guid>
+      <description>Find the difference between two dates in days, weeks, months, and years. Count days until or since a date.</description>
+    </item>
+    <item>
+      <title>Unit Converter</title>
+      <link>https://kitzos.com/en/tools/unit-converter/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/unit-converter/</guid>
+      <description>Convert length, weight, temperature, area, and volume between common units instantly.</description>
+    </item>
+    <item>
+      <title>Pomodoro Timer</title>
+      <link>https://kitzos.com/en/tools/pomodoro-timer/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/pomodoro-timer/</guid>
+      <description>Focus timer with work and break cycles. Customizable durations, cycle counter, and sound alerts.</description>
+    </item>
+    <item>
+      <title>Random Picker &amp; Number Generator</title>
+      <link>https://kitzos.com/en/tools/random-picker/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/random-picker/</guid>
+      <description>Pick a random name or option from a list, or generate a random number in any range.</description>
+    </item>
+    <item>
+      <title>Typing Speed Test</title>
+      <link>https://kitzos.com/en/tools/typing-speed-test/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/typing-speed-test/</guid>
+      <description>Measure your typing speed in WPM and accuracy with a live typing test.</description>
+    </item>
+    <item>
+      <title>Online Notepad</title>
+      <link>https://kitzos.com/en/tools/online-notepad/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/online-notepad/</guid>
+      <description>A simple notepad that auto-saves to your browser. Word and character count included.</description>
+    </item>
+    <item>
+      <title>Click Ripple Effect Generator</title>
+      <link>https://kitzos.com/en/tools/interaction-fx/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/interaction-fx/</guid>
+      <description>Preview material-style ripple clicks and export CSS + JS using Pointer Events.</description>
+    </item>
+    <item>
+      <title>MP3 Cutter Online</title>
+      <link>https://kitzos.com/en/tools/mp3-cutter/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/mp3-cutter/</guid>
+      <description>Cut and trim audio files in your browser. Export as MP3 or WAV — no upload required.</description>
+    </item>
+    <item>
+      <title>Audio Converter</title>
+      <link>https://kitzos.com/en/tools/audio-converter/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/audio-converter/</guid>
+      <description>Convert WAV to MP3 and other audio formats locally using Web Audio API.</description>
+    </item>
+    <item>
+      <title>Audio Merger</title>
+      <link>https://kitzos.com/en/tools/audio-merger/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/audio-merger/</guid>
+      <description>Merge multiple audio files into one track. Combine clips in order and download.</description>
+    </item>
+    <item>
+      <title>Online Voice Recorder</title>
+      <link>https://kitzos.com/en/tools/voice-recorder/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/voice-recorder/</guid>
+      <description>Record voice from your microphone and download instantly. Private browser recording.</description>
+    </item>
+    <item>
+      <title>Image to Text (OCR)</title>
+      <link>https://kitzos.com/en/tools/image-to-text/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/image-to-text/</guid>
+      <description>Extract text from images with OCR. Supports English and Arabic — runs entirely in your browser.</description>
+    </item>
+  </channel>
+</rss>

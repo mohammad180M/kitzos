@@ -88,5 +88,20 @@
     "title": "مولّد تأثيرات النقر",
     "description": "عاين تأثير ripple وصدّر CSS وJS يعمل باللمس والماوس.",
     "keywords": ["مولد تأثيرات النقر", "تأثير ripple", "تأثير ضغطة", "انيميشن نقر"]
+  },
+  "jwt-decoder": {
+    "title": "فك تشفير JWT",
+    "description": "فك وتحليل رموز JWT. اعرض الـ header والـ payload والتوقيع فوراً في متصفحك. لا تغادر بياناتك جهازك.",
+    "keywords": ["فك تشفير jwt", "decode jwt", "محلل jwt", "json web token عربي"]
+  },
+  "csv-json-converter": {
+    "title": "محوّل CSV ↔ JSON",
+    "description": "حوّل CSV إلى JSON و JSON إلى CSV فوراً في متصفحك. الصق البيانات أو ارفع ملفاً. لا شيء يُرفع إلى أي خادم.",
+    "keywords": ["تحويل csv الى json", "json الى csv", "محول csv", "csv json عربي"]
+  },
+  "regex-tester": {
+    "title": "اختبار Regex",
+    "description": "اختبر ونقّح التعابير النمطية مع تظليل حيّ. شاهد التطابقات والمجموعات أثناء الكتابة. يعمل بالكامل في متصفحك.",
+    "keywords": ["اختبار regex", "تعبير نمطي", "regex عربي", "اختبار regular expression"]
   }
 }

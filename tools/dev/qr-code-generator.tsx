@@ -237,6 +237,7 @@ export default function QrCodeGenerator() {
             alt="Generated QR code"
             width={size}
             height={size}
+            decoding="async"
             className="max-w-full"
             style={{ width: size, height: size }}
           />

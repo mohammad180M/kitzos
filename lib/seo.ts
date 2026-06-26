@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import type { Category } from "./categories";
+import type { Category, CategoryId } from "./categories";
 import { getCategoryById } from "./categories";
 import { getDictionary } from "./i18n/dictionaries";
 import { getLocalizedCategory, getLocalizedTool, getArabicKeywords } from "./i18n/localized-data";
@@ -9,6 +9,50 @@ import type { Tool } from "./registry";
 
 const SITE_NAME = "kitzos";
 const SITE_URL = "https://kitzos.com";
+const DEFAULT_OG_IMAGE = "/og/default.png";
+const OG_IMAGE_WIDTH = 512;
+const OG_IMAGE_HEIGHT = 512;
+
+export function getOgImagePath(categoryId?: CategoryId): string {
+  if (categoryId) return `/og/category-${categoryId}.png`;
+  return DEFAULT_OG_IMAGE;
+}
+
+function buildOgImages(
+  alt: string,
+  categoryId?: CategoryId
+): Array<{ url: string; width: number; height: number; alt: string }> {
+  const path = getOgImagePath(categoryId);
+  return [
+    {
+      url: path,
+      width: OG_IMAGE_WIDTH,
+      height: OG_IMAGE_HEIGHT,
+      alt,
+    },
+  ];
+}
+
+function withSocialImages(
+  metadata: Metadata,
+  alt: string,
+  categoryId?: CategoryId
+): Metadata {
+  const ogImages = buildOgImages(alt, categoryId);
+  const twitterImages = ogImages.map((img) => img.url);
+  return {
+    ...metadata,
+    openGraph: {
+      ...metadata.openGraph,
+      images: ogImages,
+    },
+    twitter: {
+      ...metadata.twitter,
+      card: "summary_large_image",
+      images: twitterImages,
+    },
+  };
+}
 
 export interface FaqItem {
   question: string;
@@ -61,13 +105,19 @@ export function getBaseMetadata(): Metadata {
       "text tools",
       "developer tools",
     ],
+    themeColor: [
+      { media: "(prefers-color-scheme: light)", color: "#2563eb" },
+      { media: "(prefers-color-scheme: dark)", color: "#1e3a8a" },
+    ],
     openGraph: {
       type: "website",
       siteName: SITE_NAME,
       locale: "en_US",
+      images: buildOgImages(`${SITE_NAME} — Free Online Tools`),
     },
     twitter: {
       card: "summary_large_image",
+      images: [DEFAULT_OG_IMAGE],
     },
     robots: {
       index: true,
@@ -82,22 +132,25 @@ export function getHomeMetadata(locale: Locale): Metadata {
   const description = t.home.subtitle;
   const path = "/";
 
-  return {
-    title,
-    description,
-    alternates: buildCanonicalAlternates(locale, path),
-    openGraph: {
-      title: `${title} | ${SITE_NAME}`,
+  return withSocialImages(
+    {
+      title,
       description,
-      url: buildLocalizedUrl(locale, path),
-      type: "website",
-      locale: locale === "ar" ? "ar_SA" : "en_US",
+      alternates: buildCanonicalAlternates(locale, path),
+      openGraph: {
+        title: `${title} | ${SITE_NAME}`,
+        description,
+        url: buildLocalizedUrl(locale, path),
+        type: "website",
+        locale: locale === "ar" ? "ar_SA" : "en_US",
+      },
+      twitter: {
+        title: `${title} | ${SITE_NAME}`,
+        description,
+      },
     },
-    twitter: {
-      title: `${title} | ${SITE_NAME}`,
-      description,
-    },
-  };
+    title
+  );
 }
 
 export function getToolMetadata(tool: Tool, locale: Locale): Metadata {
@@ -108,41 +161,53 @@ export function getToolMetadata(tool: Tool, locale: Locale): Metadata {
       : tool.keywords;
   const path = `/tools/${tool.slug}`;
 
-  return {
+  return withSocialImages(
+    {
+      title,
+      description,
+      keywords,
+      alternates: buildCanonicalAlternates(locale, path),
+      openGraph: {
+        title: `${title} | ${SITE_NAME}`,
+        description,
+        url: buildLocalizedUrl(locale, path),
+        type: "website",
+        locale: locale === "ar" ? "ar_SA" : "en_US",
+      },
+      twitter: {
+        title: `${title} | ${SITE_NAME}`,
+        description,
+      },
+    },
     title,
-    description,
-    keywords,
-    alternates: buildCanonicalAlternates(locale, path),
-    openGraph: {
-      title: `${title} | ${SITE_NAME}`,
-      description,
-      url: buildLocalizedUrl(locale, path),
-      type: "website",
-      locale: locale === "ar" ? "ar_SA" : "en_US",
-    },
-    twitter: {
-      title: `${title} | ${SITE_NAME}`,
-      description,
-    },
-  };
+    tool.category
+  );
 }
 
 export function getCategoryMetadata(category: Category, locale: Locale): Metadata {
   const { name, description } = getLocalizedCategory(category, locale);
   const path = `/${category.id}`;
 
-  return {
-    title: name,
-    description,
-    alternates: buildCanonicalAlternates(locale, path),
-    openGraph: {
-      title: `${name} | ${SITE_NAME}`,
+  return withSocialImages(
+    {
+      title: name,
       description,
-      url: buildLocalizedUrl(locale, path),
-      type: "website",
-      locale: locale === "ar" ? "ar_SA" : "en_US",
+      alternates: buildCanonicalAlternates(locale, path),
+      openGraph: {
+        title: `${name} | ${SITE_NAME}`,
+        description,
+        url: buildLocalizedUrl(locale, path),
+        type: "website",
+        locale: locale === "ar" ? "ar_SA" : "en_US",
+      },
+      twitter: {
+        title: `${name} | ${SITE_NAME}`,
+        description,
+      },
     },
-  };
+    name,
+    category.id
+  );
 }
 
 export function getInfoPageMetadata(
@@ -151,22 +216,25 @@ export function getInfoPageMetadata(
   description: string,
   path: string
 ): Metadata {
-  return {
-    title,
-    description,
-    alternates: buildCanonicalAlternates(locale, path),
-    openGraph: {
-      title: `${title} | ${SITE_NAME}`,
+  return withSocialImages(
+    {
+      title,
       description,
-      url: buildLocalizedUrl(locale, path),
-      type: "website",
-      locale: locale === "ar" ? "ar_SA" : "en_US",
+      alternates: buildCanonicalAlternates(locale, path),
+      openGraph: {
+        title: `${title} | ${SITE_NAME}`,
+        description,
+        url: buildLocalizedUrl(locale, path),
+        type: "website",
+        locale: locale === "ar" ? "ar_SA" : "en_US",
+      },
+      twitter: {
+        title: `${title} | ${SITE_NAME}`,
+        description,
+      },
     },
-    twitter: {
-      title: `${title} | ${SITE_NAME}`,
-      description,
-    },
-  };
+    title
+  );
 }
 
 export type LegalPageKey = "privacy" | "terms" | "about" | "contact";
@@ -272,6 +340,71 @@ export function generateToolBreadcrumbs(
     },
     { name: title, url: buildLocalizedUrl(locale, `/tools/${tool.slug}`) },
   ];
+}
+
+export function generateCategoryBreadcrumbs(
+  category: Category,
+  locale: Locale
+): { name: string; url: string }[] {
+  const t = getDictionary(locale);
+  const { name } = getLocalizedCategory(category, locale);
+  return [
+    { name: t.common.home, url: buildLocalizedUrl(locale, "/") },
+    { name, url: buildLocalizedUrl(locale, `/${category.id}`) },
+  ];
+}
+
+export function generateInfoBreadcrumbs(
+  locale: Locale,
+  pageTitle: string,
+  path: string
+): { name: string; url: string }[] {
+  const t = getDictionary(locale);
+  return [
+    { name: t.common.home, url: buildLocalizedUrl(locale, "/") },
+    { name: pageTitle, url: buildLocalizedUrl(locale, path) },
+  ];
+}
+
+export function generateWebSiteSchema(locale: Locale = DEFAULT_LOCALE): object {
+  const t = getDictionary(locale);
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: SITE_NAME,
+    url: buildLocalizedUrl(locale, "/"),
+    description: t.home.subtitle,
+    inLanguage: ["en", "ar"],
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: `${buildLocalizedUrl(locale, "/")}?q={search_term_string}`,
+      },
+      "query-input": "required name=search_term_string",
+    },
+  };
+}
+
+export function generateHowToSchema(
+  tool: Tool,
+  locale: Locale,
+  steps: HowToStep[]
+): object | null {
+  if (steps.length === 0) return null;
+  const { title, description } = getLocalizedTool(tool, locale);
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: title,
+    description,
+    step: steps.map((step, index) => ({
+      "@type": "HowToStep",
+      position: index + 1,
+      name: step.title,
+      text: step.description,
+    })),
+  };
 }
 
 /** Build sitemap hreflang alternates (en + ar, no x-default — Next.js sitemap format). */

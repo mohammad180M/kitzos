@@ -12,7 +12,10 @@
     "notFound": "Page not found",
     "notFoundDescription": "The page you are looking for does not exist or has been moved.",
     "pageNotFound": "404 — Page not found",
-    "backHome": "Back to home"
+    "backHome": "Back to home",
+    "popularTools": "Popular tools",
+    "emptyStateHint": "Start by pasting or typing — your data stays in your browser.",
+    "keyboardHint": "Tip: Ctrl+Enter to run, Esc to clear"
   },
   "header": {
     "categoriesAria": "Categories",
@@ -56,5 +59,81 @@
     "contactTitle": "Contact",
     "contactDescription": "We'd love to hear from you.",
     "lastUpdated": "Last updated"
+  },
+  "jwtDecoder": {
+    "tokenLabel": "JWT token",
+    "tokenPlaceholder": "Paste your JWT here (header.payload.signature)",
+    "header": "Header",
+    "payload": "Payload",
+    "signature": "Signature (raw)",
+    "copyHeader": "Copy header",
+    "copyPayload": "Copy payload",
+    "expired": "Expired",
+    "securityNoticeTitle": "Security notice",
+    "securityNotice": "This tool decodes tokens only — it does not verify signatures. Nothing is sent to any server. Do not paste sensitive production tokens.",
+    "claimExp": "Expires (exp)",
+    "claimIat": "Issued at (iat)",
+    "claimNbf": "Not before (nbf)",
+    "errors": {
+      "INVALID_PARTS": "Invalid JWT: expected three dot-separated parts (header.payload.signature).",
+      "INVALID_BASE64": "Invalid JWT: could not decode Base64URL segment.",
+      "INVALID_JSON": "Invalid JWT: header or payload is not valid JSON."
+    }
+  },
+  "csvJsonConverter": {
+    "csvToJson": "CSV → JSON",
+    "jsonToCsv": "JSON → CSV",
+    "delimiter": "Delimiter",
+    "delimiterComma": "Comma (,)",
+    "delimiterSemicolon": "Semicolon (;)",
+    "delimiterTab": "Tab",
+    "inputCsv": "CSV input",
+    "inputJson": "JSON input",
+    "outputJson": "JSON output",
+    "outputCsv": "CSV output",
+    "csvPlaceholder": "name,email\nAlice,alice@example.com\nBob,bob@example.com",
+    "jsonPlaceholder": "[{\"name\":\"Alice\",\"email\":\"alice@example.com\"}]",
+    "uploadFile": "Upload file",
+    "errors": {
+      "EMPTY_CSV": "CSV is empty or has no header row.",
+      "INVALID_JSON": "Invalid JSON. Check syntax and try again.",
+      "NOT_ARRAY": "JSON must be an array to convert to CSV.",
+      "NOT_OBJECTS": "JSON must be an array of objects (not nested arrays or primitives)."
+    }
+  },
+  "regexTester": {
+    "patternLabel": "Pattern",
+    "patternPlaceholder": "e.g. [a-z]+@[a-z]+\\.[a-z]+",
+    "copyPattern": "Copy pattern",
+    "flags": "Flags",
+    "testTextLabel": "Test text",
+    "testTextPlaceholder": "Paste or type text to test against the pattern…",
+    "matchCount": "Matches",
+    "matchesTitle": "Match details",
+    "atIndex": "at index",
+    "group": "Group",
+    "namedGroup": "Named",
+    "emptyGroup": "(empty)",
+    "examplesTitle": "Quick examples",
+    "examples": [
+      {
+        "label": "Email",
+        "pattern": "[\\w.-]+@[\\w.-]+\\.\\w+",
+        "text": "Contact us at hello@kitzos.com or support@example.org",
+        "caseInsensitive": false
+      },
+      {
+        "label": "Phone",
+        "pattern": "\\+?\\d[\\d\\s-]{7,}\\d",
+        "text": "Call +1 555-123-4567 or 555 987 6543",
+        "caseInsensitive": false
+      },
+      {
+        "label": "URL",
+        "pattern": "https?://[\\w.-]+(?:/[\\w./?%&=-]*)?",
+        "text": "Visit https://kitzos.com/tools or http://example.com/page",
+        "caseInsensitive": false
+      }
+    ]
   }
 }

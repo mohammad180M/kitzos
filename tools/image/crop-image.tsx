@@ -200,6 +200,10 @@ export default function CropImage() {
               src={imageUrl}
               alt="Crop preview"
               onLoad={onImageLoad}
+              loading="lazy"
+              decoding="async"
+              width={800}
+              height={600}
               className="block h-full w-full select-none"
               draggable={false}
             />

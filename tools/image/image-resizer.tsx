@@ -133,6 +133,10 @@ export default function ImageResizer() {
             <img
               src={previewUrl}
               alt="Image preview"
+              loading="lazy"
+              decoding="async"
+              width={800}
+              height={512}
               className="max-h-48 w-full object-contain"
             />
           </div>

@@ -12,7 +12,10 @@
     "notFound": "الصفحة غير موجودة",
     "notFoundDescription": "الصفحة التي تبحث عنها غير موجودة أو تم نقلها.",
     "pageNotFound": "404 — الصفحة غير موجودة",
-    "backHome": "العودة للرئيسية"
+    "backHome": "العودة للرئيسية",
+    "popularTools": "أدوات شائعة",
+    "emptyStateHint": "ابدأ باللصق أو الكتابة — بياناتك تبقى في متصفحك.",
+    "keyboardHint": "اختصار: Ctrl+Enter للتشغيل، Esc للمسح"
   },
   "header": {
     "categoriesAria": "الفئات",
@@ -56,5 +59,81 @@
     "contactTitle": "اتصل بنا",
     "contactDescription": "يسعدنا سماع رأيك.",
     "lastUpdated": "آخر تحديث"
+  },
+  "jwtDecoder": {
+    "tokenLabel": "رمز JWT",
+    "tokenPlaceholder": "الصق رمز JWT هنا (header.payload.signature)",
+    "header": "Header",
+    "payload": "Payload",
+    "signature": "التوقيع (خام)",
+    "copyHeader": "نسخ الـ header",
+    "copyPayload": "نسخ الـ payload",
+    "expired": "منتهي",
+    "securityNoticeTitle": "تنبيه أمني",
+    "securityNotice": "هذه الأداة تفك التوكن فقط ولا تتحقق من صحة التوقيع. لا يُرسل أي شيء إلى خادم. لا تلصق توكنات إنتاجية حساسة.",
+    "claimExp": "انتهاء الصلاحية (exp)",
+    "claimIat": "وقت الإصدار (iat)",
+    "claimNbf": "لا يُقبل قبل (nbf)",
+    "errors": {
+      "INVALID_PARTS": "JWT غير صالح: يجب أن يحتوي على ثلاثة أجزاء مفصولة بنقاط (header.payload.signature).",
+      "INVALID_BASE64": "JWT غير صالح: تعذّر فك ترميز Base64URL.",
+      "INVALID_JSON": "JWT غير صالح: الـ header أو الـ payload ليس JSON صالحاً."
+    }
+  },
+  "csvJsonConverter": {
+    "csvToJson": "CSV → JSON",
+    "jsonToCsv": "JSON → CSV",
+    "delimiter": "الفاصل",
+    "delimiterComma": "فاصلة (,)",
+    "delimiterSemicolon": "فاصلة منقوطة (;)",
+    "delimiterTab": "Tab",
+    "inputCsv": "إدخال CSV",
+    "inputJson": "إدخال JSON",
+    "outputJson": "إخراج JSON",
+    "outputCsv": "إخراج CSV",
+    "csvPlaceholder": "name,email\nAlice,alice@example.com\nBob,bob@example.com",
+    "jsonPlaceholder": "[{\"name\":\"Alice\",\"email\":\"alice@example.com\"}]",
+    "uploadFile": "رفع ملف",
+    "errors": {
+      "EMPTY_CSV": "ملف CSV فارغ أو بلا صف رؤوس.",
+      "INVALID_JSON": "JSON غير صالح. تحقق من الصياغة وحاول مجدداً.",
+      "NOT_ARRAY": "يجب أن يكون JSON مصفوفة للتحويل إلى CSV.",
+      "NOT_OBJECTS": "يجب أن تكون المصفوفة من كائنات (وليس مصفوفات متداخلة أو قيم بدائية)."
+    }
+  },
+  "regexTester": {
+    "patternLabel": "النمط",
+    "patternPlaceholder": "مثال: [a-z]+@[a-z]+\\.[a-z]+",
+    "copyPattern": "نسخ النمط",
+    "flags": "الأعلام",
+    "testTextLabel": "نص الاختبار",
+    "testTextPlaceholder": "الصق أو اكتب النص لاختباره مقابل النمط…",
+    "matchCount": "التطابقات",
+    "matchesTitle": "تفاصيل التطابقات",
+    "atIndex": "عند الموضع",
+    "group": "مجموعة",
+    "namedGroup": "مسمّاة",
+    "emptyGroup": "(فارغ)",
+    "examplesTitle": "أمثلة سريعة",
+    "examples": [
+      {
+        "label": "بريد إلكتروني",
+        "pattern": "[\\w.-]+@[\\w.-]+\\.\\w+",
+        "text": "تواصل معنا على hello@kitzos.com أو support@example.org",
+        "caseInsensitive": false
+      },
+      {
+        "label": "هاتف",
+        "pattern": "\\+?\\d[\\d\\s-]{7,}\\d",
+        "text": "اتصل على +966 55 123 4567 أو 555 987 6543",
+        "caseInsensitive": false
+      },
+      {
+        "label": "رابط",
+        "pattern": "https?://[\\w.-]+(?:/[\\w./?%&=-]*)?",
+        "text": "زر https://kitzos.com/tools أو http://example.com/page",
+        "caseInsensitive": false
+      }
+    ]
   }
 }

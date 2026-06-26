@@ -100,6 +100,10 @@ export default function ImageToText() {
         <img
           src={preview}
           alt="Uploaded for OCR"
+          loading="lazy"
+          decoding="async"
+          width={800}
+          height={480}
           className="max-h-48 rounded-lg border border-gray-200 object-contain dark:border-gray-700"
         />
       )}

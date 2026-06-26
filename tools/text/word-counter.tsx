@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import CopyButton from "@/components/CopyButton";
 
 function countWords(text: string): number {
   const trimmed = text.trim();
@@ -51,6 +52,14 @@ export default function WordCounter() {
     { label: "Reading time", value: `${stats.readingTime} min` },
   ];
 
+  const copyText = useMemo(
+    () =>
+      statItems
+        .map((item) => `${item.label}: ${item.value}`)
+        .join("\n"),
+    [statItems]
+  );
+
   return (
     <div className="space-y-4">
       <textarea
@@ -73,6 +82,8 @@ export default function WordCounter() {
           </div>
         ))}
       </div>
+
+      {text.trim() && <CopyButton text={copyText} />}
     </div>
   );
 }

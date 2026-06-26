@@ -1,7 +1,12 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Check, Copy, MapPin, Minimize2, Wand2 } from "lucide-react";
+import { MapPin, Minimize2, Wand2 } from "lucide-react";
+import CopyButton from "@/components/CopyButton";
+import ToolEmptyHint from "@/components/ToolEmptyHint";
+import { usePersistedInput } from "@/lib/hooks/use-persisted-input";
+import { useToolKeyboard } from "@/lib/hooks/use-tool-keyboard";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
 
 const LINE_HEIGHT_PX = 20;
@@ -130,10 +135,10 @@ function LineHighlightOverlay({
 
 export default function JsonFormatter() {
   const labels = useCommonLabels();
-  const [input, setInput] = useState("");
+  const { t } = useLocale();
+  const [input, setInput] = usePersistedInput("kitzos-json-formatter-input");
   const [output, setOutput] = useState("");
   const [error, setError] = useState<JsonError | null>(null);
-  const [copied, setCopied] = useState(false);
   const [highlightError, setHighlightError] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -174,19 +179,22 @@ export default function JsonFormatter() {
     window.setTimeout(() => setHighlightError(false), 2000);
   };
 
-  const copy = async () => {
-    if (!output) return;
-    try {
-      await navigator.clipboard.writeText(output);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // ignored
-    }
+  const clearAll = () => {
+    setInput("");
+    setOutput("");
+    setError(null);
+    setHighlightError(false);
   };
+
+  useToolKeyboard({
+    onRun: () => format(false),
+    onClear: clearAll,
+  });
 
   return (
     <div className="space-y-4">
+      <ToolEmptyHint message={t.common.emptyStateHint} show={!input.trim()} />
+      <p className="text-xs text-gray-500 dark:text-gray-400">{t.common.keyboardHint}</p>
       <div>
         <label htmlFor="json-input" className="text-sm font-medium text-gray-700 dark:text-gray-300">
           JSON input
@@ -263,20 +271,14 @@ export default function JsonFormatter() {
             rows={8}
             className="input-field mt-1 resize-y font-mono text-sm bg-gray-50 dark:bg-gray-800/50 dark:bg-gray-800/80"
           />
-          <button type="button" onClick={copy} className="btn-secondary mt-2">
-            {copied ? (
-              <>
-                <Check className="h-4 w-4" />
-                {labels.copied}
-              </>
-            ) : (
-              <>
-                <Copy className="h-4 w-4" />
-                {labels.copy}
-              </>
-            )}
-          </button>
+          <CopyButton text={output} className="mt-2" />
         </div>
+      )}
+
+      {input && (
+        <button type="button" onClick={clearAll} className="btn-secondary">
+          {labels.clear}
+        </button>
       )}
     </div>
   );

@@ -20,7 +20,7 @@ export default function CategoryContent({ category }: CategoryContentProps) {
 
   return (
     <>
-      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+      <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 xl:max-w-[1400px] xl:px-8">
         <div className="mb-8 flex items-start gap-4">
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary-50 text-primary-600 dark:bg-primary-950/60 dark:text-primary-400">
             <Icon className="h-6 w-6" aria-hidden="true" />
@@ -33,7 +33,7 @@ export default function CategoryContent({ category }: CategoryContentProps) {
           </div>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {categoryTools.map((tool) => (
             <ToolCard key={tool.slug} tool={tool} />
           ))}

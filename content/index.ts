@@ -25,6 +25,9 @@ import * as base64 from "./base64";
 import * as colorPicker from "./color-picker";
 import * as timestampConverter from "./timestamp-converter";
 import * as hashGenerator from "./hash-generator";
+import * as jwtDecoder from "./jwt-decoder";
+import * as csvJsonConverter from "./csv-json-converter";
+import * as regexTester from "./regex-tester";
 import * as bmiCalculator from "./bmi-calculator";
 import * as calorieCalculator from "./calorie-calculator";
 import * as percentageCalculator from "./percentage-calculator";
@@ -64,6 +67,9 @@ const contentMap: Record<string, ToolContent> = {
   "color-picker": colorPicker,
   "timestamp-converter": timestampConverter,
   "hash-generator": hashGenerator,
+  "jwt-decoder": jwtDecoder,
+  "csv-json-converter": csvJsonConverter,
+  "regex-tester": regexTester,
   "bmi-calculator": bmiCalculator,
   "calorie-calculator": calorieCalculator,
   "percentage-calculator": percentageCalculator,

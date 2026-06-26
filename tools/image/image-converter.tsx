@@ -133,7 +133,7 @@ export default function ImageConverter() {
         <>
           <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={previewUrl} alt="Preview" className="max-h-64 w-full object-contain" />
+            <img src={previewUrl} alt="Preview" loading="lazy" decoding="async" width={800} height={512} className="max-h-64 w-full object-contain" />
           </div>
 
           <div>

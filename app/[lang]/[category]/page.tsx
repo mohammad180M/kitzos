@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { categories, getCategoryById, type CategoryId } from "@/lib/categories";
-import { getCategoryMetadata } from "@/lib/seo";
+import {
+  generateBreadcrumbSchema,
+  generateCategoryBreadcrumbs,
+  getCategoryMetadata,
+} from "@/lib/seo";
 import CategoryContent from "@/components/CategoryContent";
+import JsonLd from "@/components/JsonLd";
 import { LOCALES, type Locale } from "@/lib/i18n/types";
 import { isValidLocale } from "@/lib/i18n/routing";
 
@@ -31,5 +36,15 @@ export default function CategoryPage({ params }: CategoryPageProps) {
   const category = getCategoryById(params.category as CategoryId);
   if (!category) notFound();
 
-  return <CategoryContent category={category} />;
+  const locale = params.lang as Locale;
+  const breadcrumbSchema = generateBreadcrumbSchema(
+    generateCategoryBreadcrumbs(category, locale)
+  );
+
+  return (
+    <>
+      <JsonLd data={breadcrumbSchema} />
+      <CategoryContent category={category} />
+    </>
+  );
 }

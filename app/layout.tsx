@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import Script from "next/script";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import ThemeProvider from "@/components/ThemeProvider";
+import CloudflareAnalytics from "@/components/CloudflareAnalytics";
 import { getBaseMetadata } from "@/lib/seo";
 import { themeInitScript } from "@/lib/theme-script";
 
@@ -34,14 +34,20 @@ export default function RootLayout({
   return (
     <html lang="en" dir="ltr" suppressHydrationWarning>
       <head>
+        <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+        <link rel="alternate" type="application/rss+xml" title="kitzos tools feed" href="/feed.xml" />
         <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2890911389961532"
           crossOrigin="anonymous"
         />
-        <Script id="kitzos-theme-init" strategy="beforeInteractive">
-          {themeInitScript}
-        </Script>
+        <script
+          id="kitzos-theme-init"
+          dangerouslySetInnerHTML={{ __html: themeInitScript }}
+          suppressHydrationWarning
+        />
+        <CloudflareAnalytics />
       </head>
       <body className={`${inter.className} min-h-screen flex flex-col`}>
         <ThemeProvider>{children}</ThemeProvider>

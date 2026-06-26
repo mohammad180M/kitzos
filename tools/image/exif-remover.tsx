@@ -112,6 +112,10 @@ export default function ExifRemover() {
         <img
           src={preview}
           alt="Preview"
+          loading="lazy"
+          decoding="async"
+          width={800}
+          height={480}
           className="max-h-48 rounded-lg border object-contain dark:border-gray-700"
         />
       )}

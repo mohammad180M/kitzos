@@ -6,6 +6,13 @@ import { useLocale } from "@/lib/i18n/LocaleProvider";
 
 type LegalPageKey = "privacy" | "terms" | "about" | "contact";
 
+const PAGE_PATHS: Record<LegalPageKey, string> = {
+  privacy: "/privacy",
+  terms: "/terms",
+  about: "/about",
+  contact: "/contact",
+};
+
 const TITLE_KEYS: Record<LegalPageKey, keyof ReturnType<typeof useLocale>["t"]["legal"]> = {
   privacy: "privacyTitle",
   terms: "termsTitle",
@@ -31,7 +38,7 @@ export default function LocalizedInfoPage({ page, children }: LocalizedInfoPageP
   const description = t.legal[DESC_KEYS[page]] as string;
 
   return (
-    <InfoPageLayout title={title} description={description}>
+    <InfoPageLayout title={title} description={description} pagePath={PAGE_PATHS[page]}>
       {children}
     </InfoPageLayout>
   );

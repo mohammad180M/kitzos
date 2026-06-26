@@ -25,6 +25,9 @@ import Base64Tool from "@/tools/dev/base64";
 import ColorPicker from "@/tools/dev/color-picker";
 import TimestampConverter from "@/tools/dev/timestamp-converter";
 import HashGenerator from "@/tools/dev/hash-generator";
+import JwtDecoder from "@/tools/dev/jwt-decoder";
+import CsvJsonConverter from "@/tools/dev/csv-json-converter";
+import RegexTester from "@/tools/dev/regex-tester";
 import OgImageGenerator from "@/tools/dev/og-image-generator";
 import FaviconGenerator from "@/tools/dev/favicon-generator";
 import SvgPatternGenerator from "@/tools/dev/svg-pattern-generator";
@@ -77,6 +80,9 @@ const toolComponents: Record<string, ComponentType> = {
   "color-picker": ColorPicker,
   "timestamp-converter": TimestampConverter,
   "hash-generator": HashGenerator,
+  "jwt-decoder": JwtDecoder,
+  "csv-json-converter": CsvJsonConverter,
+  "regex-tester": RegexTester,
   "og-image-generator": OgImageGenerator,
   "favicon-generator": FaviconGenerator,
   "svg-pattern-generator": SvgPatternGenerator,
