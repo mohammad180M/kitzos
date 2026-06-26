@@ -52,13 +52,57 @@ export const extraToolContent: Record<string, ToolContent> = {
   ),
   "image-to-text": content(
     [
-      { title: "Select OCR language", description: "Choose English, Arabic, or both for bilingual documents." },
-      { title: "Upload image", description: "Use a clear photo or scan with readable text." },
-      { title: "Copy text", description: "Review extracted text and copy it to your clipboard." },
+      {
+        title: "Choose text language",
+        description:
+          "Select English, Arabic, or both for mixed documents. For best Arabic accuracy, choose Arabic only.",
+      },
+      {
+        title: "Upload your image",
+        description:
+          "Drop a clear photo or screenshot (JPG, PNG, WebP). Processing happens in your browser — your image is never uploaded to any server.",
+      },
+      {
+        title: "Improve accuracy (optional)",
+        description:
+          "Enable image enhancement or rotate a tilted photo for a more accurate result.",
+      },
+      {
+        title: "Copy the text",
+        description: "Review the extracted text and copy it with one click.",
+      },
     ],
     [
-      { question: "Does OCR work offline?", answer: "Tesseract.js loads on demand. After the first run, much of the processing can be cached by your browser." },
-      { question: "How accurate is Arabic OCR?", answer: "Accuracy depends on image quality. Use high-contrast, straight photos for best results." },
+      {
+        question: "How do I convert an image to text for free?",
+        answer:
+          "Upload the image, choose the language, and the tool will extract text automatically using OCR. Completely free, no sign-up, and runs right in your browser.",
+      },
+      {
+        question: "Does the tool support extracting Arabic text from images?",
+        answer:
+          'Yes, it supports Arabic and English. For best Arabic accuracy, choose "Arabic only" and use a clear image with readable text.',
+      },
+      {
+        question: "Are my images uploaded to a server?",
+        answer:
+          "No. All processing happens entirely inside your browser, and your image never leaves your device — complete privacy, unlike tools that upload your files.",
+      },
+      {
+        question: "Is there a limit on the number or size of images?",
+        answer:
+          "There is no limit on the number of images. The tool has no daily caps and no subscription, unlike many sites that limit you to a few images per hour.",
+      },
+      {
+        question: "How accurate is Arabic text extraction?",
+        answer:
+          "Accuracy is good on clear text. For best results, use a high-quality image with large text and enable image enhancement. Tilted or faded images reduce accuracy.",
+      },
+      {
+        question: "What image formats are supported?",
+        answer:
+          "JPG, PNG, WebP, and screenshots. You can upload any image that contains readable text.",
+      },
     ]
   ),
   "pdf-sign": content(

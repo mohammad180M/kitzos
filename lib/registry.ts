@@ -332,11 +332,19 @@ const toolDefinitions: Tool[] = [
   },
   {
     slug: "image-to-text",
-    title: "Image to Text (OCR)",
-    description: "Extract text from images with OCR. Supports English and Arabic — runs entirely in your browser.",
+    title: "Image to Text — Extract Text from Images (OCR)",
+    description:
+      "Convert image to text for free. Extract Arabic and English text from images right in your browser. No upload, no sign-up, no limits — fully private.",
     category: "vision",
     icon: "ScanLine",
-    keywords: ["image to text ocr", "ocr online", "extract text from image", "arabic ocr"],
+    keywords: [
+      "image to text",
+      "convert image to text",
+      "extract text from image",
+      "ocr online free",
+      "arabic ocr",
+      "image to text ocr",
+    ],
   },
   {
     slug: "pdf-sign",

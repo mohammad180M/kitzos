@@ -55,7 +55,7 @@
 - [Audio Converter](https://kitzos.com/en/tools/audio-converter/): Convert WAV to MP3 and other audio formats locally using Web Audio API.
 - [Audio Merger](https://kitzos.com/en/tools/audio-merger/): Merge multiple audio files into one track. Combine clips in order and download.
 - [Online Voice Recorder](https://kitzos.com/en/tools/voice-recorder/): Record voice from your microphone and download instantly. Private browser recording.
-- [Image to Text (OCR)](https://kitzos.com/en/tools/image-to-text/): Extract text from images with OCR. Supports English and Arabic — runs entirely in your browser.
+- [Image to Text — Extract Text from Images (OCR)](https://kitzos.com/en/tools/image-to-text/): Convert image to text for free. Extract Arabic and English text from images right in your browser. No upload, no sign-up, no limits — fully private.
 
 ## Categories
 - [PDF Tools](https://kitzos.com/en/pdf/): Merge, split, and work with PDF files entirely in your browser.
