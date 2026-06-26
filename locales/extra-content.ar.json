@@ -194,7 +194,7 @@
     ],
     "faq": [
       { "question": "يعمل باللمس؟", "answer": "نعم، pointerdown للنقر واللمس." },
-      { "question": "ربطه بزر؟", "answer": "استدعِ attachRipple(العنصر) من الكود المُصدَّر." }
+      { "question": "ربطه بزر؟", "answer": "استدعِ attachPressEffect(العنصر) من الكود المُصدَّر." }
     ]
   },
   "jwt-decoder": {

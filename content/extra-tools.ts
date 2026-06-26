@@ -201,7 +201,7 @@ export const extraToolContent: Record<string, ToolContent> = {
     ],
     [
       { question: "Does exported JS work on touch?", answer: "Yes. It listens to pointerdown so taps and clicks both trigger ripples." },
-      { question: "Can I attach it to any button?", answer: "Call attachRipple(yourElement) from the exported snippet." },
+      { question: "Can I attach it to any button?", answer: "Call attachPressEffect(yourElement) from the exported snippet." },
     ]
   ),
 };

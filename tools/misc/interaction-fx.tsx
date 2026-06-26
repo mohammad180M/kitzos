@@ -5,22 +5,28 @@ import { Check, Copy, Download } from "lucide-react";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
 import { downloadBlob } from "@/lib/download";
 import {
-  RIPPLE_PRESETS,
+  RIPPLE_PATTERNS,
   CURSOR_PRESETS,
+  DEFAULT_RIPPLE_STYLE,
   buildRippleCss,
   buildRippleJs,
   buildCursorCss,
   buildCursorJs,
-  type RipplePreset,
+  setupCursorPreview,
+  spawnPressEffect,
+  type RipplePattern,
+  type RippleStyle,
   type CursorPreset,
 } from "@/lib/interaction-presets";
 
-function PresetCard({
+function PatternCard({
   name,
+  description,
   active,
   onClick,
 }: {
   name: string;
+  description: string;
   active: boolean;
   onClick: () => void;
 }) {
@@ -34,9 +40,14 @@ function PresetCard({
           : "border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600"
       }`}
     >
-      {name}
+      <span className="block font-medium">{name}</span>
+      <span className="mt-0.5 block text-xs text-gray-500 dark:text-gray-400">{description}</span>
     </button>
   );
+}
+
+function rippleScale(size: number): number {
+  return Math.max(3, size / 22);
 }
 
 export default function InteractionFx() {
@@ -44,166 +55,69 @@ export default function InteractionFx() {
   const rippleRef = useRef<HTMLDivElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
 
-  const [ripplePreset, setRipplePreset] = useState<RipplePreset>(RIPPLE_PRESETS[0]);
-  const [cursorPreset, setCursorPreset] = useState<CursorPreset>(CURSOR_PRESETS[0]);
-  const [rippleColor, setRippleColor] = useState(RIPPLE_PRESETS[0].color);
-  const [rippleDuration, setRippleDuration] = useState(RIPPLE_PRESETS[0].duration);
-  const [rippleSize, setRippleSize] = useState(RIPPLE_PRESETS[0].size);
+  const [ripplePattern, setRipplePattern] = useState<RipplePattern>("ripple");
+  const [cursorModeId, setCursorModeId] = useState(CURSOR_PRESETS[0].id);
+  const [cursorColor, setCursorColor] = useState(CURSOR_PRESETS[0].color);
+  const [cursorSize, setCursorSize] = useState(CURSOR_PRESETS[0].size);
+  const [cursorBlur, setCursorBlur] = useState(CURSOR_PRESETS[0].blur);
+  const [rippleColor, setRippleColor] = useState(DEFAULT_RIPPLE_STYLE.ripple.color);
+  const [rippleDuration, setRippleDuration] = useState(DEFAULT_RIPPLE_STYLE.ripple.duration);
+  const [rippleSize, setRippleSize] = useState(DEFAULT_RIPPLE_STYLE.ripple.size);
   const [copiedRipple, setCopiedRipple] = useState(false);
   const rippleHex = rippleColor.length >= 7 ? rippleColor.slice(0, 7) : "#2563eb";
+  const cursorHex = cursorColor.length >= 7 ? cursorColor.slice(0, 7) : "#2563eb";
   const [copiedCursor, setCopiedCursor] = useState(false);
 
-  const activeRipple: RipplePreset = useMemo(
-    () => ({ ...ripplePreset, color: rippleColor, duration: rippleDuration, size: rippleSize }),
-    [ripplePreset, rippleColor, rippleDuration, rippleSize]
+  const activeCursor: CursorPreset = useMemo(() => {
+    const base = CURSOR_PRESETS.find((p) => p.id === cursorModeId) ?? CURSOR_PRESETS[0];
+    return { ...base, color: cursorColor, size: cursorSize, blur: cursorBlur };
+  }, [cursorModeId, cursorColor, cursorSize, cursorBlur]);
+
+  const activeRipple: RippleStyle = useMemo(
+    () => ({
+      pattern: ripplePattern,
+      color: rippleColor,
+      duration: rippleDuration,
+      size: rippleSize,
+    }),
+    [ripplePattern, rippleColor, rippleDuration, rippleSize]
   );
 
   const rippleCss = buildRippleCss(activeRipple);
   const rippleJs = buildRippleJs(activeRipple);
   const rippleExport = `${rippleCss}\n\n${rippleJs}`;
 
-  const cursorCss = buildCursorCss(cursorPreset);
-  const cursorJs = buildCursorJs(cursorPreset);
+  const cursorCss = buildCursorCss(activeCursor);
+  const cursorJs = buildCursorJs(activeCursor);
   const cursorExport = `${cursorCss}\n\n${cursorJs}`;
 
-  const applyRipplePreset = (p: RipplePreset) => {
-    setRipplePreset(p);
-    setRippleColor(p.color);
-    setRippleDuration(p.duration);
-    setRippleSize(p.size);
+  const applyRipplePattern = (pattern: RipplePattern) => {
+    const defaults = DEFAULT_RIPPLE_STYLE[pattern];
+    setRipplePattern(pattern);
+    setRippleColor(defaults.color);
+    setRippleDuration(defaults.duration);
+    setRippleSize(defaults.size);
+    rippleRef.current?.replaceChildren();
+  };
+
+  const applyCursorMode = (preset: CursorPreset) => {
+    setCursorModeId(preset.id);
+    setCursorColor(preset.color);
+    setCursorSize(preset.size);
+    setCursorBlur(preset.blur);
   };
 
   const onRippleDown = (e: React.PointerEvent<HTMLDivElement>) => {
     const el = rippleRef.current;
     if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const ripple = document.createElement("span");
-    const d = Math.max(rect.width, rect.height, activeRipple.size);
-    Object.assign(ripple.style, {
-      position: "absolute",
-      borderRadius: "50%",
-      width: `${d}px`,
-      height: `${d}px`,
-      left: `${e.clientX - rect.left - d / 2}px`,
-      top: `${e.clientY - rect.top - d / 2}px`,
-      background: activeRipple.color,
-      transform: "scale(0)",
-      animation: `ripple-preview ${activeRipple.duration}ms ${activeRipple.easing}`,
-      pointerEvents: "none",
-    });
-    el.appendChild(ripple);
-    ripple.addEventListener("animationend", () => ripple.remove());
+    spawnPressEffect(el, e.clientX, e.clientY, activeRipple);
   };
 
   useEffect(() => {
     const el = cursorRef.current;
     if (!el) return;
-
-    el.replaceChildren();
-    el.className =
-      "relative flex h-48 cursor-crosshair items-center justify-center overflow-hidden rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 text-gray-500 dark:border-gray-600 dark:bg-gray-800";
-
-    const p = cursorPreset;
-
-    if (p.mode === "glow") {
-      el.classList.add("cursor-glow-wrap");
-      const glow = document.createElement("div");
-      glow.className = "cursor-glow";
-      Object.assign(glow.style, {
-        position: "absolute",
-        width: `${p.size}px`,
-        height: `${p.size}px`,
-        borderRadius: "50%",
-        background: p.color,
-        filter: `blur(${p.blur}px)`,
-        pointerEvents: "none",
-        transform: "translate(-50%, -50%)",
-        transition: "left 0.08s ease-out, top 0.08s ease-out",
-      });
-      el.appendChild(glow);
-      const move = (e: PointerEvent) => {
-        const rect = el.getBoundingClientRect();
-        glow.style.left = `${e.clientX - rect.left}px`;
-        glow.style.top = `${e.clientY - rect.top}px`;
-      };
-      el.addEventListener("pointermove", move);
-      return () => el.removeEventListener("pointermove", move);
-    }
-
-    if (p.mode === "ring") {
-      const ring = document.createElement("div");
-      Object.assign(ring.style, {
-        position: "absolute",
-        width: `${p.size}px`,
-        height: `${p.size}px`,
-        border: `2px solid ${p.color}`,
-        borderRadius: "50%",
-        pointerEvents: "none",
-        transform: "translate(-50%, -50%)",
-        transition: "left 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94), top 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
-      });
-      el.appendChild(ring);
-      const move = (e: PointerEvent) => {
-        const rect = el.getBoundingClientRect();
-        ring.style.left = `${e.clientX - rect.left}px`;
-        ring.style.top = `${e.clientY - rect.top}px`;
-      };
-      el.addEventListener("pointermove", move);
-      return () => el.removeEventListener("pointermove", move);
-    }
-
-    if (p.mode === "trail") {
-      let last = 0;
-      const move = (e: PointerEvent) => {
-        const now = Date.now();
-        if (now - last < 40) return;
-        last = now;
-        const dot = document.createElement("div");
-        Object.assign(dot.style, {
-          position: "absolute",
-          width: `${p.size}px`,
-          height: `${p.size}px`,
-          borderRadius: "50%",
-          background: p.color,
-          pointerEvents: "none",
-          left: "0",
-          top: "0",
-          transform: "translate(-50%, -50%)",
-          animation: "trail-fade 0.5s ease-out forwards",
-        });
-        const rect = el.getBoundingClientRect();
-        dot.style.left = `${e.clientX - rect.left}px`;
-        dot.style.top = `${e.clientY - rect.top}px`;
-        el.appendChild(dot);
-        dot.addEventListener("animationend", () => dot.remove());
-        while (el.children.length > p.trailLength + 1) {
-          el.firstChild?.remove();
-        }
-      };
-      el.addEventListener("pointermove", move);
-      return () => el.removeEventListener("pointermove", move);
-    }
-
-    const dot = document.createElement("div");
-    Object.assign(dot.style, {
-      position: "absolute",
-      width: `${p.size}px`,
-      height: `${p.size}px`,
-      borderRadius: "50%",
-      background: p.color,
-      pointerEvents: "none",
-      transform: "translate(-50%, -50%)",
-      transition: "left 0.05s linear, top 0.05s linear",
-    });
-    el.appendChild(dot);
-    const move = (e: PointerEvent) => {
-      const rect = el.getBoundingClientRect();
-      dot.style.left = `${e.clientX - rect.left}px`;
-      dot.style.top = `${e.clientY - rect.top}px`;
-    };
-    el.addEventListener("pointermove", move);
-    return () => el.removeEventListener("pointermove", move);
-  }, [cursorPreset]);
+    return setupCursorPreview(el, activeCursor);
+  }, [activeCursor]);
 
   const copyText = async (text: string, which: "ripple" | "cursor") => {
     await navigator.clipboard.writeText(text);
@@ -217,33 +131,63 @@ export default function InteractionFx() {
   };
 
   const downloadBundle = () => {
-    const content = `/* Click Ripple */\n${rippleExport}\n\n/* Cursor Motion */\n${cursorExport}\n\n// Usage:\n// attachRipple(document.querySelector('.my-button'));\n// attachCursorDot(document.querySelector('.my-area'));`;
+    const attachName =
+      activeCursor.mode === "glow"
+        ? "attachCursorGlow"
+        : activeCursor.mode === "ring"
+          ? "attachCursorRing"
+          : activeCursor.mode === "trail"
+            ? "attachCursorTrail"
+            : "attachCursorDot";
+
+    const content = `/* Press effect (${activeRipple.pattern}) */\n${rippleExport}\n\n/* Cursor motion (${activeCursor.mode}) */\n${cursorExport}\n\n// Usage:\n// attachPressEffect(document.querySelector('.my-button'));\n// ${attachName}(document.querySelector('.my-area'));`;
     downloadBlob(new Blob([content], { type: "text/plain" }), "interaction-effects.txt");
   };
+
+  const scale = rippleScale(rippleSize);
 
   return (
     <div className="space-y-8" dir="ltr">
       <style>{`
-        @keyframes ripple-preview { to { transform: scale(${activeRipple.scale}); opacity: 0; } }
-        @keyframes trail-fade {
-          0% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
-          100% { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+        @keyframes press-ripple { to { transform: scale(${scale}); opacity: 0; } }
+        @keyframes press-burst-fly {
+          from { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+          to {
+            transform: translate(calc(-50% + var(--bx)), calc(-50% + var(--by))) scale(0.2);
+            opacity: 0;
+          }
+        }
+        @keyframes press-shockwave { to { transform: scale(${scale * 1.2}); opacity: 0; } }
+        @keyframes press-ring-pulse { to { transform: scale(${scale}); opacity: 0; } }
+        @keyframes press-ink-spread {
+          to {
+            transform: scaleX(${scale * 0.9}) scaleY(${scale * 0.75});
+            opacity: 0;
+            border-radius: 2px;
+          }
+        }
+        @keyframes cursor-trail-fade {
+          0% { opacity: 0.85; transform: translate(-50%, -50%) scale(1); }
+          100% { opacity: 0; transform: translate(-50%, -50%) scale(0.25); }
         }
       `}</style>
 
       <section className="space-y-4">
         <div>
-          <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100">Click ripple</h3>
-          <p className="text-sm text-gray-500">Choose a preset, customize, then click the preview.</p>
+          <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100">Press effects</h3>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            Pick an effect pattern, customize color and timing, then tap the preview.
+          </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5">
-          {RIPPLE_PRESETS.map((p) => (
-            <PresetCard
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+          {RIPPLE_PATTERNS.map((p) => (
+            <PatternCard
               key={p.id}
               name={p.name}
-              active={ripplePreset.id === p.id}
-              onClick={() => applyRipplePreset(p)}
+              description={p.description}
+              active={ripplePattern === p.id}
+              onClick={() => applyRipplePattern(p.id)}
             />
           ))}
         </div>
@@ -251,10 +195,10 @@ export default function InteractionFx() {
         <div
           ref={rippleRef}
           onPointerDown={onRippleDown}
-          className="relative flex h-44 cursor-pointer items-center justify-center overflow-hidden rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 text-gray-500 dark:border-gray-600 dark:bg-gray-800"
+          className="relative flex h-44 cursor-pointer select-none items-center justify-center overflow-hidden rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 text-gray-500 dark:border-gray-600 dark:bg-gray-800"
           style={{ touchAction: "none" }}
         >
-          Click to preview ripple
+          Tap to preview — {RIPPLE_PATTERNS.find((p) => p.id === ripplePattern)?.name}
         </div>
 
         <div className="grid gap-3 sm:grid-cols-3">
@@ -263,7 +207,11 @@ export default function InteractionFx() {
             <input
               type="color"
               value={rippleHex}
-              onChange={(e) => setRippleColor(e.target.value + (rippleColor.length === 9 ? rippleColor.slice(7) : "80"))}
+              onChange={(e) =>
+                setRippleColor(
+                  e.target.value + (rippleColor.length === 9 ? rippleColor.slice(7) : "80")
+                )
+              }
               className="mt-1 h-10 w-full cursor-pointer rounded border dark:border-gray-600"
             />
           </label>
@@ -302,7 +250,7 @@ export default function InteractionFx() {
           className="btn-secondary inline-flex items-center gap-2"
         >
           {copiedRipple ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-          {copiedRipple ? labels.copied : "Copy ripple CSS + JS"}
+          {copiedRipple ? labels.copied : "Copy press effect CSS + JS"}
         </button>
       </section>
 
@@ -311,29 +259,91 @@ export default function InteractionFx() {
       <section className="space-y-4">
         <div>
           <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100">Cursor motion</h3>
-          <p className="text-sm text-gray-500">Move your pointer over the preview — not just on click.</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            Pick a motion style, customize color and size, then move over the preview.
+          </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
           {CURSOR_PRESETS.map((p) => (
             <button
               key={p.id}
               type="button"
-              onClick={() => setCursorPreset(p)}
+              onClick={() => applyCursorMode(p)}
               className={`rounded-lg border px-3 py-2 text-left text-sm transition-colors ${
-                cursorPreset.id === p.id
+                cursorModeId === p.id
                   ? "border-primary-500 bg-primary-50 dark:border-primary-400 dark:bg-primary-950/40"
                   : "border-gray-200 dark:border-gray-700"
               }`}
             >
               <span className="block font-medium">{p.name}</span>
-              <span className="text-xs text-gray-500">{p.description}</span>
+              <span className="text-xs text-gray-500 dark:text-gray-400">{p.description}</span>
             </button>
           ))}
         </div>
 
-        <div ref={cursorRef} style={{ touchAction: "none" }}>
-          Move cursor here
+        <div
+          ref={cursorRef}
+          className="relative flex h-48 w-full min-h-[12rem] cursor-crosshair items-center justify-center overflow-hidden rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 text-sm text-gray-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400"
+          style={{ touchAction: "none" }}
+          aria-label="Cursor motion preview"
+        >
+          <span
+            data-preview-hint
+            className="pointer-events-none z-0 select-none transition-opacity duration-200"
+          >
+            Move cursor here
+          </span>
+        </div>
+
+        <div className={`grid gap-3 ${activeCursor.mode === "glow" ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}>
+          <label className="text-sm text-gray-700 dark:text-gray-300">
+            Color
+            <input
+              type="color"
+              value={cursorHex}
+              onChange={(e) => {
+                const alpha =
+                  activeCursor.mode === "glow" || activeCursor.mode === "trail"
+                    ? cursorColor.length === 9
+                      ? cursorColor.slice(7)
+                      : "99"
+                    : "";
+                setCursorColor(
+                  activeCursor.mode === "glow" || activeCursor.mode === "trail"
+                    ? e.target.value + alpha
+                    : e.target.value
+                );
+              }}
+              className="mt-1 h-10 w-full cursor-pointer rounded border dark:border-gray-600"
+            />
+          </label>
+          <label className="text-sm text-gray-700 dark:text-gray-300">
+            Size ({cursorSize}px)
+            <input
+              type="range"
+              min={activeCursor.mode === "glow" ? 60 : 6}
+              max={activeCursor.mode === "glow" ? 200 : activeCursor.mode === "ring" ? 80 : 24}
+              step={1}
+              value={cursorSize}
+              onChange={(e) => setCursorSize(Number(e.target.value))}
+              className="mt-1 w-full"
+            />
+          </label>
+          {activeCursor.mode === "glow" && (
+            <label className="text-sm text-gray-700 dark:text-gray-300">
+              Blur ({cursorBlur}px)
+              <input
+                type="range"
+                min={8}
+                max={48}
+                step={2}
+                value={cursorBlur}
+                onChange={(e) => setCursorBlur(Number(e.target.value))}
+                className="mt-1 w-full"
+              />
+            </label>
+          )}
         </div>
 
         <pre className="max-h-40 overflow-auto rounded-lg bg-gray-100 p-3 text-xs dark:bg-gray-800">
