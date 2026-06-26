@@ -88,6 +88,14 @@ function buildCanonicalAlternates(locale: Locale, path: string) {
   };
 }
 
+/** Meta description for the home page (~150–160 chars, natural sentence per locale). */
+export function getHomeMetaDescription(locale: Locale): string {
+  if (locale === "ar") {
+    return "أدوات مجانية تعمل بالكامل في متصفحك — بدون تسجيل وبدون رفع ملفات إلى خوادمنا. PDF، صور، نصوص، مطورين، حاسبات، محولات، صوت، OCR والمزيد.";
+  }
+  return "Free online tools that run entirely in your browser — no signup, no uploads. PDF, images, text, dev tools, calculators, converters, audio, OCR, and more.";
+}
+
 export function getBaseMetadata(): Metadata {
   return {
     metadataBase: new URL(SITE_URL),
@@ -129,7 +137,7 @@ export function getBaseMetadata(): Metadata {
 export function getHomeMetadata(locale: Locale): Metadata {
   const t = getDictionary(locale);
   const title = t.home.title;
-  const description = t.home.subtitle;
+  const description = getHomeMetaDescription(locale);
   const path = "/";
 
   return withSocialImages(
@@ -367,13 +375,12 @@ export function generateInfoBreadcrumbs(
 }
 
 export function generateWebSiteSchema(locale: Locale = DEFAULT_LOCALE): object {
-  const t = getDictionary(locale);
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: SITE_NAME,
     url: buildLocalizedUrl(locale, "/"),
-    description: t.home.subtitle,
+    description: getHomeMetaDescription(locale),
     inLanguage: ["en", "ar"],
     potentialAction: {
       "@type": "SearchAction",
