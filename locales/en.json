@@ -135,5 +135,20 @@
         "caseInsensitive": false
       }
     ]
+  },
+  "imageToText": {
+    "ocrLanguage": "OCR language",
+    "langEng": "English",
+    "langAra": "Arabic",
+    "langBoth": "English + Arabic",
+    "enhance": "Enhance image before OCR",
+    "tip": "For best accuracy: use a clear image with large text and good lighting. Avoid tilted or faded photos.",
+    "upload": "Upload image to extract text",
+    "extract": "Extract text",
+    "rotate": "Rotate 90°",
+    "progress": "Processing…",
+    "extractedText": "Extracted text",
+    "error": "OCR failed. Try a clearer image or another language.",
+    "previewAlt": "Uploaded for OCR"
   }
 }

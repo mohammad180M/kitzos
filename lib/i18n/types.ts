@@ -128,4 +128,19 @@ export interface Dictionary {
       caseInsensitive: boolean;
     }>;
   };
+  imageToText: {
+    ocrLanguage: string;
+    langEng: string;
+    langAra: string;
+    langBoth: string;
+    enhance: string;
+    tip: string;
+    upload: string;
+    extract: string;
+    rotate: string;
+    progress: string;
+    extractedText: string;
+    error: string;
+    previewAlt: string;
+  };
 }
