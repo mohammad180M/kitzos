@@ -18,6 +18,7 @@ import { localizedPath } from "@/lib/i18n/routing";
 import FaqAccordion from "./FaqAccordion";
 import JsonLd from "./JsonLd";
 import ToolCard from "./ToolCard";
+import ToolPageAd from "./ToolPageAd";
 import Footer from "./Footer";
 
 interface ToolLayoutProps {
@@ -90,6 +91,8 @@ export default function ToolLayout({ tool, relatedTools, children }: ToolLayoutP
         </header>
 
         <div className="card mb-8">{children}</div>
+
+        <ToolPageAd />
 
         {howTo.length > 0 && (
           <section className="mb-10" aria-labelledby="how-to-heading">
