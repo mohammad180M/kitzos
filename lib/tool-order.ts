@@ -56,6 +56,7 @@ const CATEGORY_SLUG_ORDER: Record<CategoryId, string[]> = {
     "typing-speed-test",
     "online-notepad",
     "interaction-fx",
+    "certificate-generator",
   ],
   audio: ["mp3-cutter", "audio-converter", "audio-merger", "voice-recorder"],
   vision: ["image-to-text"],

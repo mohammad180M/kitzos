@@ -443,6 +443,22 @@ const toolDefinitions: Tool[] = [
     keywords: ["glassmorphism generator", "glass effect css", "frosted glass css", "glassmorphism css"],
   },
   {
+    slug: "certificate-generator",
+    title: "Certificate Generator",
+    description:
+      "Create a professional achievement or project certificate. Customize text, colors, and logo with a live preview, then download as PNG or PDF. Runs entirely in your browser.",
+    category: "misc",
+    icon: "Award",
+    keywords: [
+      "certificate generator",
+      "achievement certificate maker",
+      "project certificate",
+      "certificate template",
+      "download certificate pdf",
+    ],
+    isNew: true,
+  },
+  {
     slug: "interaction-fx",
     title: "Click Ripple Effect Generator",
     description: "Preview material-style ripple clicks and export CSS + JS using Pointer Events.",

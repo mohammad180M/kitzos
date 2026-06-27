@@ -1,5 +1,6 @@
 import {
   AppWindow,
+  Award,
   ArrowLeftRight,
   Binary,
   Blend,
@@ -58,6 +59,7 @@ import {
 
 const iconMap: Record<string, LucideIcon> = {
   AppWindow,
+  Award,
   ArrowLeftRight,
   Binary,
   Blend,

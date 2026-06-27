@@ -248,4 +248,50 @@ export const extraToolContent: Record<string, ToolContent> = {
       { question: "Can I attach it to any button?", answer: "Call attachPressEffect(yourElement) from the exported snippet." },
     ]
   ),
+  "certificate-generator": content(
+    [
+      {
+        title: "Pick a template",
+        description: "Choose classic, modern, tech, or elegant — colors and frame update instantly.",
+      },
+      {
+        title: "Customize text and logo",
+        description: "Edit title, recipient name, project, description, date, and signature. Upload a logo and adjust size, opacity, and position.",
+      },
+      {
+        title: "Tune colors and size",
+        description: "Set accent, background, and text colors. Pick A4, Letter, or square; landscape or portrait.",
+      },
+      {
+        title: "Download PNG or PDF",
+        description: "Export a high-resolution certificate — everything runs locally in your browser.",
+      },
+    ],
+    [
+      {
+        question: "Is the certificate generator free?",
+        answer: "Yes. Create and download unlimited certificates with no sign-up and no watermarks from kitzos.",
+      },
+      {
+        question: "Are my images uploaded to a server?",
+        answer: "No. Your logo and certificate are processed entirely in your browser. Nothing is sent to our servers.",
+      },
+      {
+        question: "Does it support Arabic text on the certificate?",
+        answer: "Yes. Arabic names and project titles render with RTL-aware canvas text and Noto Sans Arabic for connected letter shapes.",
+      },
+      {
+        question: "What formats can I download?",
+        answer: "PNG for sharing online and PDF for printing. Both export at 2× resolution for sharp output.",
+      },
+      {
+        question: "Can I use my own logo?",
+        answer: "Yes. Upload any image as a logo, resize it, change opacity, and place it at the top or as a watermark.",
+      },
+      {
+        question: "What certificate sizes are available?",
+        answer: "A4 and US Letter in landscape or portrait, plus a square format ideal for social posts.",
+      },
+    ]
+  ),
 };

@@ -51,6 +51,7 @@
 - [Typing Speed Test](https://kitzos.com/en/tools/typing-speed-test/): Measure your typing speed in WPM and accuracy with a live typing test.
 - [Online Notepad](https://kitzos.com/en/tools/online-notepad/): A simple notepad that auto-saves to your browser. Word and character count included.
 - [Click Ripple Effect Generator](https://kitzos.com/en/tools/interaction-fx/): Preview material-style ripple clicks and export CSS + JS using Pointer Events.
+- [Certificate Generator](https://kitzos.com/en/tools/certificate-generator/): Create a professional achievement or project certificate. Customize text, colors, and logo with a live preview, then download as PNG or PDF. Runs entirely in your browser.
 - [MP3 Cutter Online](https://kitzos.com/en/tools/mp3-cutter/): Cut and trim audio files in your browser. Export as MP3 or WAV — no upload required.
 - [Audio Converter](https://kitzos.com/en/tools/audio-converter/): Convert WAV to MP3 and other audio formats locally using Web Audio API.
 - [Audio Merger](https://kitzos.com/en/tools/audio-merger/): Merge multiple audio files into one track. Combine clips in order and download.

@@ -15,6 +15,25 @@ export function setupCanvas(
   return ctx;
 }
 
+/** Preview canvas: fills container width, keeps certificate aspect ratio. */
+export function setupPreviewCanvas(
+  canvas: HTMLCanvasElement,
+  width: number,
+  height: number
+): CanvasRenderingContext2D {
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = Math.floor(width * dpr);
+  canvas.height = Math.floor(height * dpr);
+  canvas.style.width = "100%";
+  canvas.style.height = "auto";
+  canvas.style.maxWidth = "100%";
+  canvas.style.display = "block";
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("Canvas not supported");
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return ctx;
+}
+
 export function canvasToBlob(canvas: HTMLCanvasElement, type = "image/png"): Promise<Blob> {
   return new Promise((resolve, reject) => {
     canvas.toBlob((blob) => {

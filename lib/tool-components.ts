@@ -47,6 +47,7 @@ import RandomPicker from "@/tools/misc/random-picker";
 import TypingSpeedTest from "@/tools/misc/typing-speed-test";
 import OnlineNotepad from "@/tools/misc/online-notepad";
 import InteractionFx from "@/tools/misc/interaction-fx";
+import CertificateGenerator from "@/tools/misc/certificate-generator";
 import Mp3Cutter from "@/tools/audio/mp3-cutter";
 import AudioConverter from "@/tools/audio/audio-converter";
 import AudioMerger from "@/tools/audio/audio-merger";
@@ -102,6 +103,7 @@ const toolComponents: Record<string, ComponentType> = {
   "typing-speed-test": TypingSpeedTest,
   "online-notepad": OnlineNotepad,
   "interaction-fx": InteractionFx,
+  "certificate-generator": CertificateGenerator,
   "mp3-cutter": Mp3Cutter,
   "audio-converter": AudioConverter,
   "audio-merger": AudioMerger,
