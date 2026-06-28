@@ -6,7 +6,7 @@
     "dev": "npm run generate:assets && next dev",
     "generate:assets": "tsx scripts/generate-assets.ts",
     "generate:llms": "npm run generate:assets",
-    "build": "npm run generate:assets && next build",
+    "build": "npm run generate:assets && next build && tsx scripts/fix-html-lang.ts",
     "start": "next start",
     "lint": "next lint"
   },

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import HomeContent from "@/components/HomeContent";
 import JsonLd from "@/components/JsonLd";
-import { getHomeMetadata, generateWebSiteSchema } from "@/lib/seo";
+import { getHomeMetadata, generateOrganizationSchema, generateWebSiteSchema } from "@/lib/seo";
 import { isValidLocale } from "@/lib/i18n/routing";
 import type { Locale } from "@/lib/i18n/types";
 
@@ -19,7 +19,7 @@ export default function HomePage({ params }: HomePageProps) {
   const locale = isValidLocale(params.lang) ? (params.lang as Locale) : "en";
   return (
     <>
-      <JsonLd data={generateWebSiteSchema(locale)} />
+      <JsonLd data={[generateWebSiteSchema(locale), generateOrganizationSchema()]} />
       <Suspense fallback={null}>
         <HomeContent />
       </Suspense>

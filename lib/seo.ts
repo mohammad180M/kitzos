@@ -10,8 +10,8 @@ import type { Tool } from "./registry";
 const SITE_NAME = "kitzos";
 const SITE_URL = "https://kitzos.com";
 const DEFAULT_OG_IMAGE = "/og/default.png";
-const OG_IMAGE_WIDTH = 512;
-const OG_IMAGE_HEIGHT = 512;
+const OG_IMAGE_WIDTH = 1200;
+const OG_IMAGE_HEIGHT = 630;
 
 export function getOgImagePath(categoryId?: CategoryId): string {
   if (categoryId) return `/og/category-${categoryId}.png`;
@@ -100,18 +100,21 @@ export function getBaseMetadata(): Metadata {
   return {
     metadataBase: new URL(SITE_URL),
     title: {
-      default: `${SITE_NAME} — Free Online Tools`,
+      default: `${SITE_NAME} — Kitzos Tools`,
       template: `%s | ${SITE_NAME}`,
     },
     description:
-      "Free online tools for PDF, images, text, and developers. Fast, private, and works in your browser — no signup required.",
+      "Free browser-based tools for PDF, images, text, and developers. Fast, private, no signup — everything runs in your browser.",
     keywords: [
       "online tools",
       "free tools",
+      "browser tools",
       "pdf tools",
       "image tools",
       "text tools",
       "developer tools",
+      "calculators",
+      "converters",
     ],
     themeColor: [
       { media: "(prefers-color-scheme: light)", color: "#2563eb" },
@@ -121,7 +124,7 @@ export function getBaseMetadata(): Metadata {
       type: "website",
       siteName: SITE_NAME,
       locale: "en_US",
-      images: buildOgImages(`${SITE_NAME} — Free Online Tools`),
+      images: buildOgImages(`${SITE_NAME} — Kitzos Tools`),
     },
     twitter: {
       card: "summary_large_image",
@@ -130,8 +133,43 @@ export function getBaseMetadata(): Metadata {
     robots: {
       index: true,
       follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
     },
   };
+}
+
+/** Metadata for the domain root `/` (served with full head for crawlers). */
+export function getRootMetadata(): Metadata {
+  const title = getDictionary(DEFAULT_LOCALE).home.title;
+  const description = getHomeMetaDescription(DEFAULT_LOCALE);
+
+  return withSocialImages(
+    {
+      title,
+      description,
+      alternates: {
+        canonical: buildLocalizedUrl(DEFAULT_LOCALE, "/"),
+        languages: buildLanguageAlternates("/"),
+      },
+      openGraph: {
+        title: `${title} | ${SITE_NAME}`,
+        description,
+        url: `${SITE_URL}/`,
+        type: "website",
+        locale: "en_US",
+      },
+      twitter: {
+        title: `${title} | ${SITE_NAME}`,
+        description,
+      },
+    },
+    title
+  );
 }
 
 export function getHomeMetadata(locale: Locale): Metadata {
@@ -289,13 +327,34 @@ export function generateSoftwareApplicationSchema(tool: Tool, locale: Locale): o
     description,
     inLanguage: locale === "ar" ? "ar" : "en",
     applicationCategory: "UtilitiesApplication",
-    operatingSystem: "Any",
+    operatingSystem: "Web Browser",
+    browserRequirements: "Requires JavaScript. Requires HTML5.",
+    isAccessibleForFree: true,
     offers: {
       "@type": "Offer",
       price: "0",
       priceCurrency: "USD",
     },
     url: buildLocalizedUrl(locale, path),
+  };
+}
+
+export function generateOrganizationSchema(): object {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: SITE_NAME,
+    url: SITE_URL,
+    logo: `${SITE_URL}/icon-512.png`,
+  };
+}
+
+function organizationEntity() {
+  return {
+    "@type": "Organization" as const,
+    name: SITE_NAME,
+    url: SITE_URL,
+    logo: `${SITE_URL}/icon-512.png`,
   };
 }
 
@@ -382,6 +441,7 @@ export function generateWebSiteSchema(locale: Locale = DEFAULT_LOCALE): object {
     url: buildLocalizedUrl(locale, "/"),
     description: getHomeMetaDescription(locale),
     inLanguage: ["en", "ar"],
+    publisher: organizationEntity(),
     potentialAction: {
       "@type": "SearchAction",
       target: {
@@ -389,6 +449,32 @@ export function generateWebSiteSchema(locale: Locale = DEFAULT_LOCALE): object {
         urlTemplate: `${buildLocalizedUrl(locale, "/")}?q={search_term_string}`,
       },
       "query-input": "required name=search_term_string",
+    },
+  };
+}
+
+export function generateCategoryItemListSchema(
+  category: Category,
+  locale: Locale,
+  toolSlugs: { slug: string; title: string }[]
+): object {
+  const { name, description } = getLocalizedCategory(category, locale);
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name,
+    description,
+    url: buildLocalizedUrl(locale, `/${category.id}`),
+    inLanguage: locale === "ar" ? "ar" : "en",
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: toolSlugs.length,
+      itemListElement: toolSlugs.map((tool, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: tool.title,
+        url: buildLocalizedUrl(locale, `/tools/${tool.slug}`),
+      })),
     },
   };
 }
@@ -414,11 +500,13 @@ export function generateHowToSchema(
   };
 }
 
-/** Build sitemap hreflang alternates (en + ar, no x-default — Next.js sitemap format). */
+/** Build sitemap hreflang alternates (en + ar + x-default). */
 export function buildSitemapLanguageAlternates(
   path: string
 ): Record<string, string> {
-  return Object.fromEntries(
+  const languages = Object.fromEntries(
     LOCALES.map((locale) => [locale, buildLocalizedUrl(locale, path)])
   );
+  languages["x-default"] = buildLocalizedUrl(DEFAULT_LOCALE, path);
+  return languages;
 }

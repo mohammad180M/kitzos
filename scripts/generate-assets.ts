@@ -33,13 +33,33 @@ async function generateFavicons(): Promise<void> {
   copyFileSync(faviconPath, join(appDir, "favicon.ico"));
 }
 
+const OG_WIDTH = 1200;
+const OG_HEIGHT = 630;
+const OG_BG = { r: 37, g: 99, b: 235, alpha: 1 };
+
+async function generateOgImage(outputPath: string, sourceBuffer: Buffer): Promise<void> {
+  const logoSize = 320;
+  const logo = await sharp(sourceBuffer)
+    .resize(logoSize, logoSize, { fit: "cover" })
+    .png()
+    .toBuffer();
+
+  await sharp({
+    create: { width: OG_WIDTH, height: OG_HEIGHT, channels: 4, background: OG_BG },
+  })
+    .composite([{ input: logo, gravity: "center" }])
+    .png({ compressionLevel: 9 })
+    .toFile(outputPath);
+}
+
 async function main(): Promise<void> {
   mkdirSync(ogDir, { recursive: true });
+  const sourceBuffer = await sharp(sourceIcon).toBuffer();
   await generateFavicons();
 
-  copyFileSync(join(publicDir, "icon-512.png"), join(ogDir, "default.png"));
+  await generateOgImage(join(ogDir, "default.png"), sourceBuffer);
   for (const category of categories) {
-    copyFileSync(join(publicDir, "icon-512.png"), join(ogDir, `category-${category.id}.png`));
+    await generateOgImage(join(ogDir, `category-${category.id}.png`), sourceBuffer);
   }
 
   writeFileSync(join(publicDir, "llms.txt"), generateLlmsTxt(), "utf8");
@@ -60,7 +80,7 @@ async function main(): Promise<void> {
   const feed = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-    <title>kitzos — Free Online Tools</title>
+    <title>kitzos — Kitzos Tools</title>
     <link>${siteUrl}/en/</link>
     <description>Latest free browser-based tools on kitzos.</description>
     <language>en</language>

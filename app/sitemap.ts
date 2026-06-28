@@ -2,9 +2,12 @@ import type { MetadataRoute } from "next";
 import { categories } from "@/lib/categories";
 import { tools } from "@/lib/registry";
 import { INFO_PAGES } from "@/lib/site-config";
-import { buildSitemapLanguageAlternates, getSiteUrl } from "@/lib/seo";
+import {
+  buildSitemapLanguageAlternates,
+  getSiteUrl,
+} from "@/lib/seo";
 import { localizedPath } from "@/lib/i18n/routing";
-import { LOCALES, type Locale } from "@/lib/i18n/types";
+import { DEFAULT_LOCALE, LOCALES, type Locale } from "@/lib/i18n/types";
 
 export const dynamic = "force-static";
 
@@ -29,6 +32,16 @@ function localizedSitemapEntry(
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  const rootPage: MetadataRoute.Sitemap[0] = {
+    url: `${getSiteUrl()}/`,
+    lastModified: new Date(),
+    changeFrequency: "weekly",
+    priority: 1,
+    alternates: {
+      languages: buildSitemapLanguageAlternates("/"),
+    },
+  };
+
   const homePages: MetadataRoute.Sitemap = LOCALES.map((locale) =>
     localizedSitemapEntry(locale, "/", {
       changeFrequency: "weekly",
@@ -63,5 +76,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     )
   );
 
-  return [...homePages, ...categoryPages, ...toolPages, ...infoPages];
+  return [rootPage, ...homePages, ...categoryPages, ...toolPages, ...infoPages];
 }
