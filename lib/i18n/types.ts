@@ -36,6 +36,13 @@ export interface Dictionary {
     searchAria: string;
     clearSearch: string;
     noResults: string;
+    filterAll: string;
+    filterAria: string;
+    noCategoryTools: string;
+    toolsPageNav: string;
+    toolsPagePrev: string;
+    toolsPageNext: string;
+    toolsPageIndicator: string;
   };
   tool: {
     howToUse: string;

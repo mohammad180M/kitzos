@@ -1,9 +1,18 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Pause, Play, RotateCcw } from "lucide-react";
 
 type Phase = "work" | "break";
+
+type AlarmSound = "chime" | "bell" | "beep" | "alarm";
+
+const ALARM_OPTIONS: { id: AlarmSound; label: string }[] = [
+  { id: "chime", label: "Chime" },
+  { id: "bell", label: "Bell" },
+  { id: "beep", label: "Beep" },
+  { id: "alarm", label: "Alarm" },
+];
 
 function formatTime(seconds: number): string {
   const m = Math.floor(seconds / 60);
@@ -11,18 +20,44 @@ function formatTime(seconds: number): string {
   return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
 }
 
-function playChime() {
+function playAlarm(sound: AlarmSound, volume: number) {
   try {
     const ctx = new AudioContext();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.frequency.value = 880;
-    gain.gain.setValueAtTime(0.3, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
-    osc.start(ctx.currentTime);
-    osc.stop(ctx.currentTime + 0.5);
+    const t0 = ctx.currentTime;
+
+    const playTone = (freq: number, start: number, dur: number, type: OscillatorType = "sine") => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = type;
+      osc.frequency.value = freq;
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      gain.gain.setValueAtTime(volume, t0 + start);
+      gain.gain.exponentialRampToValueAtTime(0.001, t0 + start + dur);
+      osc.start(t0 + start);
+      osc.stop(t0 + start + dur + 0.05);
+    };
+
+    switch (sound) {
+      case "chime":
+        playTone(880, 0, 0.4);
+        playTone(1100, 0.15, 0.5);
+        break;
+      case "bell":
+        playTone(660, 0, 0.6);
+        playTone(990, 0.1, 0.5);
+        playTone(1320, 0.2, 0.4);
+        break;
+      case "beep":
+        for (let i = 0; i < 3; i++) playTone(1000, i * 0.25, 0.15, "square");
+        break;
+      case "alarm":
+        for (let i = 0; i < 4; i++) {
+          playTone(800, i * 0.3, 0.12, "sawtooth");
+          playTone(600, i * 0.3 + 0.12, 0.12, "sawtooth");
+        }
+        break;
+    }
   } catch {
     // audio not available
   }
@@ -32,20 +67,28 @@ export default function PomodoroTimer() {
   const [workMin, setWorkMin] = useState(25);
   const [breakMin, setBreakMin] = useState(5);
   const [soundEnabled, setSoundEnabled] = useState(true);
+  const [alarmSound, setAlarmSound] = useState<AlarmSound>("chime");
+  const [volume, setVolume] = useState(0.75);
   const [phase, setPhase] = useState<Phase>("work");
   const [secondsLeft, setSecondsLeft] = useState(workMin * 60);
   const [running, setRunning] = useState(false);
   const [cycles, setCycles] = useState(0);
+  const alarmRef = useRef({ sound: alarmSound, volume, enabled: soundEnabled });
+
+  useEffect(() => {
+    alarmRef.current = { sound: alarmSound, volume, enabled: soundEnabled };
+  }, [alarmSound, volume, soundEnabled]);
 
   const switchPhase = useCallback(() => {
     setPhase((current) => {
       const next: Phase = current === "work" ? "break" : "work";
       if (next === "work") setCycles((c) => c + 1);
       setSecondsLeft((next === "work" ? workMin : breakMin) * 60);
-      if (soundEnabled) playChime();
+      const { sound, volume: vol, enabled } = alarmRef.current;
+      if (enabled) playAlarm(sound, vol);
       return next;
     });
-  }, [workMin, breakMin, soundEnabled]);
+  }, [workMin, breakMin]);
 
   useEffect(() => {
     if (!running) return;
@@ -72,6 +115,8 @@ export default function PomodoroTimer() {
     setPhase("work");
     setSecondsLeft(workMin * 60);
   };
+
+  const testSound = () => playAlarm(alarmSound, volume);
 
   const progress =
     phase === "work"
@@ -159,15 +204,61 @@ export default function PomodoroTimer() {
         </div>
       </div>
 
-      <label className="flex cursor-pointer items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-        <input
-          type="checkbox"
-          checked={soundEnabled}
-          onChange={(e) => setSoundEnabled(e.target.checked)}
-          className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 dark:border-gray-600"
-        />
-        Play sound when a phase ends
-      </label>
+      <div className="space-y-3 rounded-lg border border-gray-200 p-4 dark:border-gray-700">
+        <label className="flex cursor-pointer items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+          <input
+            type="checkbox"
+            checked={soundEnabled}
+            onChange={(e) => setSoundEnabled(e.target.checked)}
+            className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 dark:border-gray-600"
+          />
+          Play sound when a phase ends
+        </label>
+
+        {soundEnabled && (
+          <>
+            <div>
+              <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">Alarm sound</p>
+              <div className="flex flex-wrap gap-1 rounded-lg border border-gray-300 bg-white p-0.5 dark:border-gray-600 dark:bg-gray-800">
+                {ALARM_OPTIONS.map((opt) => (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    onClick={() => setAlarmSound(opt.id)}
+                    className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+                      alarmSound === opt.id
+                        ? "bg-primary-600 text-white"
+                        : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="alarm-vol" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Volume: {Math.round(volume * 100)}%
+              </label>
+              <input
+                id="alarm-vol"
+                type="range"
+                min={0.2}
+                max={1}
+                step={0.05}
+                value={volume}
+                onChange={(e) => setVolume(Number(e.target.value))}
+                className="mt-2 w-full accent-primary-600"
+              />
+            </div>
+
+            <button type="button" onClick={testSound} className="btn-secondary text-sm">
+              Test sound
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
 }

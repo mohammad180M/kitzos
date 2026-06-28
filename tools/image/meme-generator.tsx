@@ -8,6 +8,15 @@ import { useCommonLabels } from "@/lib/i18n/use-common-labels";
 
 const CANVAS_WIDTH = 600;
 
+const FONT_OPTIONS = [
+  { id: "impact", label: "Impact", css: "bold 36px Impact, Haettenschweiler, sans-serif" },
+  { id: "arial", label: "Arial Black", css: "bold 36px 'Arial Black', Arial, sans-serif" },
+  { id: "comic", label: "Comic Sans", css: "bold 36px 'Comic Sans MS', cursive, sans-serif" },
+  { id: "noto-ar", label: "Noto Sans Arabic", css: "bold 36px 'Noto Sans Arabic', 'Segoe UI', Tahoma, sans-serif" },
+  { id: "georgia", label: "Georgia", css: "bold 36px Georgia, 'Times New Roman', serif" },
+  { id: "courier", label: "Courier", css: "bold 32px 'Courier New', Courier, monospace" },
+] as const;
+
 export default function MemeGenerator() {
   const labels = useCommonLabels();
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -16,7 +25,10 @@ export default function MemeGenerator() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [topText, setTopText] = useState("TOP TEXT");
   const [bottomText, setBottomText] = useState("BOTTOM TEXT");
+  const [fontId, setFontId] = useState<(typeof FONT_OPTIONS)[number]["id"]>("impact");
   const [hasImage, setHasImage] = useState(false);
+
+  const fontCss = FONT_OPTIONS.find((f) => f.id === fontId)?.css ?? FONT_OPTIONS[0].css;
 
   const render = () => {
     const canvas = canvasRef.current;
@@ -30,10 +42,10 @@ export default function MemeGenerator() {
     ctx.strokeStyle = "#000";
     ctx.lineWidth = 4;
     ctx.textAlign = "center";
-    ctx.font = "bold 36px Impact, sans-serif";
+    ctx.font = fontCss;
 
     const drawText = (text: string, y: number) => {
-      const value = text.toUpperCase();
+      const value = fontId === "noto-ar" ? text : text.toUpperCase();
       ctx.strokeText(value, CANVAS_WIDTH / 2, y);
       ctx.fillText(value, CANVAS_WIDTH / 2, y);
     };
@@ -44,7 +56,8 @@ export default function MemeGenerator() {
 
   useEffect(() => {
     if (hasImage) render();
-  }, [topText, bottomText, hasImage]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [topText, bottomText, hasImage, fontId]);
 
   useEffect(() => {
     return () => {
@@ -106,6 +119,26 @@ export default function MemeGenerator() {
           className="mx-auto max-w-full rounded-lg border dark:border-gray-700"
         />
       )}
+
+      <div>
+        <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">Font</p>
+        <div className="flex flex-wrap gap-1 rounded-lg border border-gray-300 bg-white p-0.5 dark:border-gray-600 dark:bg-gray-800">
+          {FONT_OPTIONS.map((f) => (
+            <button
+              key={f.id}
+              type="button"
+              onClick={() => setFontId(f.id)}
+              className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+                fontId === f.id
+                  ? "bg-primary-600 text-white"
+                  : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
+              }`}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+      </div>
 
       <div className="grid gap-3 sm:grid-cols-2">
         <label className="text-sm">

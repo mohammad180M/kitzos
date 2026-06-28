@@ -4,7 +4,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import ThemeProvider from "@/components/ThemeProvider";
 import CloudflareAnalytics from "@/components/CloudflareAnalytics";
-import { getBaseMetadata } from "@/lib/seo";
+import { getBaseMetadata, getSiteUrl } from "@/lib/seo";
+import { getSiteIconsMetadata, SITE_ICON_PATHS } from "@/lib/site-icons";
 import { themeInitScript } from "@/lib/theme-script";
 
 const inter = Inter({
@@ -15,15 +16,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   ...getBaseMetadata(),
   manifest: "/site.webmanifest",
-  icons: {
-    icon: [
-      { url: "/icon-16.png", sizes: "16x16", type: "image/png" },
-      { url: "/icon-32.png", sizes: "32x32", type: "image/png" },
-      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
-      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
-    ],
-    apple: "/apple-touch-icon.png",
-  },
+  icons: getSiteIconsMetadata(),
 };
 
 export default function RootLayout({
@@ -37,6 +30,12 @@ export default function RootLayout({
         <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <link rel="alternate" type="application/rss+xml" title="kitzos tools feed" href="/feed.xml" />
+        <link
+          rel="icon"
+          type="image/png"
+          href={`${getSiteUrl()}${SITE_ICON_PATHS.icon48}`}
+          sizes="48x48"
+        />
         <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2890911389961532"

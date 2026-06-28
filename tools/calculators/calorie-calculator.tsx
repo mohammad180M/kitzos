@@ -1,17 +1,13 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useCalcToolLabels } from "@/lib/i18n/use-calc-tool-labels";
 
 type Sex = "male" | "female";
 type UnitSystem = "metric" | "imperial";
 
-const ACTIVITY_LEVELS = [
-  { value: 1.2, label: "Sedentary", description: "Little or no exercise" },
-  { value: 1.375, label: "Light", description: "Exercise 1–3 days/week" },
-  { value: 1.55, label: "Moderate", description: "Exercise 3–5 days/week" },
-  { value: 1.725, label: "Active", description: "Exercise 6–7 days/week" },
-  { value: 1.9, label: "Very active", description: "Hard exercise or physical job" },
-] as const;
+const ACTIVITY_KEYS = ["sedentary", "light", "moderate", "active", "veryActive"] as const;
+const ACTIVITY_VALUES = [1.2, 1.375, 1.55, 1.725, 1.9] as const;
 
 function calcBmr(sex: Sex, weightKg: number, heightCm: number, age: number): number {
   const base = 10 * weightKg + 6.25 * heightCm - 5 * age;
@@ -19,6 +15,7 @@ function calcBmr(sex: Sex, weightKg: number, heightCm: number, age: number): num
 }
 
 export default function CalorieCalculator() {
+  const t = useCalcToolLabels("calorieCalculator");
   const [sex, setSex] = useState<Sex>("male");
   const [unitSystem, setUnitSystem] = useState<UnitSystem>("metric");
   const [age, setAge] = useState("30");
@@ -27,7 +24,9 @@ export default function CalorieCalculator() {
   const [heightFt, setHeightFt] = useState("5");
   const [heightIn, setHeightIn] = useState("9");
   const [weightLbs, setWeightLbs] = useState("165");
-  const [activity, setActivity] = useState(1.55);
+  const [activityIndex, setActivityIndex] = useState(2);
+
+  const activity = ACTIVITY_VALUES[activityIndex];
 
   const result = useMemo(() => {
     const ageNum = parseInt(age, 10);
@@ -65,39 +64,39 @@ export default function CalorieCalculator() {
     <div className="space-y-4">
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Sex</p>
+          <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.sex}</p>
           <div className="mt-2 inline-flex rounded-lg border border-gray-300 bg-white p-0.5 dark:border-gray-600 dark:bg-gray-800">
             {(["male", "female"] as Sex[]).map((s) => (
               <button
                 key={s}
                 type="button"
                 onClick={() => setSex(s)}
-                className={`rounded-md px-3 py-1.5 text-sm font-medium capitalize transition-colors ${
+                className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
                   sex === s
                     ? "bg-primary-600 text-white"
                     : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
                 }`}
               >
-                {s}
+                {s === "male" ? t.male : t.female}
               </button>
             ))}
           </div>
         </div>
         <div>
-          <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Units</p>
+          <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.units}</p>
           <div className="mt-2 inline-flex rounded-lg border border-gray-300 bg-white p-0.5 dark:border-gray-600 dark:bg-gray-800">
             {(["metric", "imperial"] as UnitSystem[]).map((u) => (
               <button
                 key={u}
                 type="button"
                 onClick={() => setUnitSystem(u)}
-                className={`rounded-md px-3 py-1.5 text-sm font-medium capitalize transition-colors ${
+                className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
                   unitSystem === u
                     ? "bg-primary-600 text-white"
                     : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
                 }`}
               >
-                {u}
+                {u === "metric" ? t.metric : t.imperial}
               </button>
             ))}
           </div>
@@ -106,7 +105,7 @@ export default function CalorieCalculator() {
 
       <div>
         <label htmlFor="cal-age" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-          Age (years)
+          {t.age}
         </label>
         <input
           id="cal-age"
@@ -123,7 +122,7 @@ export default function CalorieCalculator() {
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label htmlFor="cal-height" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Height (cm)
+              {t.heightCm}
             </label>
             <input
               id="cal-height"
@@ -135,7 +134,7 @@ export default function CalorieCalculator() {
           </div>
           <div>
             <label htmlFor="cal-weight" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Weight (kg)
+              {t.weightKg}
             </label>
             <input
               id="cal-weight"
@@ -149,7 +148,7 @@ export default function CalorieCalculator() {
       ) : (
         <div className="grid gap-4 sm:grid-cols-3">
           <div>
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Height (ft)</label>
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.heightFt}</label>
             <input
               type="number"
               value={heightFt}
@@ -158,7 +157,7 @@ export default function CalorieCalculator() {
             />
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Height (in)</label>
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.heightIn}</label>
             <input
               type="number"
               value={heightIn}
@@ -167,7 +166,7 @@ export default function CalorieCalculator() {
             />
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Weight (lbs)</label>
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.weightLbs}</label>
             <input
               type="number"
               value={weightLbs}
@@ -180,17 +179,17 @@ export default function CalorieCalculator() {
 
       <div>
         <label htmlFor="activity" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-          Activity level
+          {t.activityLevel}
         </label>
         <select
           id="activity"
-          value={activity}
-          onChange={(e) => setActivity(parseFloat(e.target.value))}
+          value={activityIndex}
+          onChange={(e) => setActivityIndex(Number(e.target.value))}
           className="input-field mt-1"
         >
-          {ACTIVITY_LEVELS.map((level) => (
-            <option key={level.value} value={level.value}>
-              {level.label} — {level.description}
+          {ACTIVITY_KEYS.map((key, i) => (
+            <option key={key} value={i}>
+              {t.activities[key].label} — {t.activities[key].description}
             </option>
           ))}
         </select>
@@ -199,27 +198,33 @@ export default function CalorieCalculator() {
       {result && (
         <div className="grid gap-3 sm:grid-cols-2">
           <div className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800/50">
-            <p className="text-xs text-gray-500 dark:text-gray-400">BMR (basal metabolic rate)</p>
-            <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{result.bmr} kcal/day</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">{t.bmr}</p>
+            <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+              {result.bmr} {t.kcalDay}
+            </p>
           </div>
           <div className="rounded-lg border border-primary-200 bg-primary-50 px-4 py-3 dark:border-primary-800 dark:bg-primary-950/40">
-            <p className="text-xs text-primary-600 dark:text-primary-400">Maintain weight</p>
-            <p className="text-2xl font-bold text-primary-700 dark:text-primary-300">{result.maintain} kcal/day</p>
+            <p className="text-xs text-primary-600 dark:text-primary-400">{t.maintain}</p>
+            <p className="text-2xl font-bold text-primary-700 dark:text-primary-300">
+              {result.maintain} {t.kcalDay}
+            </p>
           </div>
           <div className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800/50">
-            <p className="text-xs text-gray-500 dark:text-gray-400">Lose ~0.5 kg/week</p>
-            <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{result.lose} kcal/day</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">{t.lose}</p>
+            <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+              {result.lose} {t.kcalDay}
+            </p>
           </div>
           <div className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800/50">
-            <p className="text-xs text-gray-500 dark:text-gray-400">Gain ~0.5 kg/week</p>
-            <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{result.gain} kcal/day</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">{t.gain}</p>
+            <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+              {result.gain} {t.kcalDay}
+            </p>
           </div>
         </div>
       )}
 
-      <p className="text-xs text-gray-400 dark:text-gray-500">
-        Uses the Mifflin-St Jeor equation. Results are estimates — individual needs vary.
-      </p>
+      <p className="text-xs text-gray-400 dark:text-gray-500">{t.disclaimer}</p>
     </div>
   );
 }

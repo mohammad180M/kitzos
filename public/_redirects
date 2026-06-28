@@ -11,7 +11,9 @@
 #
 # لا تضف هنا /ar/ → شيء — العربي يعمل أصلاً بدون تحويل.
 
-/  /en/  301
+# لا تحوّل / → /en/ هنا: جوجل يقرأ favicon من HTML الصفحة الرئيسية (/)
+# و index.html في out/ يحتوي <link rel="icon">. تحويل 301 يمنع ذلك ويُظهر أيقونة
+# الكرة الأرضية في نتائج البحث. التوجيه للمستخدم يتم عبر app/page.tsx (JS + meta refresh).
 
 # Tools (legacy → English default)
 /tools/:slug  /en/tools/:slug/  301

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import JSZip from "jszip";
 import { Download, Loader2, ShieldAlert, Upload } from "lucide-react";
 import { downloadBlob } from "@/lib/download";
 import {
@@ -10,79 +11,116 @@ import {
 } from "@/lib/exif-metadata";
 import { cleanImage, outputFilename } from "@/lib/exif-clean";
 
+interface FileEntry {
+  file: File;
+  preview: string;
+  groups: ExifGroup[];
+  selected: Set<string>;
+}
+
 export default function ExifRemover() {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [file, setFile] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
-  const [groups, setGroups] = useState<ExifGroup[]>([]);
-  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [entries, setEntries] = useState<FileEntry[]>([]);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [cleaning, setCleaning] = useState(false);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
 
-  const loadFile = async (f: File) => {
+  const active = entries[activeIndex] ?? null;
+
+  const loadFiles = async (files: FileList | File[]) => {
     setLoading(true);
     setError(null);
     setDone(false);
-    setFile(f);
-    setPreview(URL.createObjectURL(f));
+
+    const list = Array.from(files).filter((f) => f.type.startsWith("image/"));
+    if (list.length === 0) {
+      setError("Please upload valid image files.");
+      setLoading(false);
+      return;
+    }
 
     try {
-      const parsed = await parseExifFields(f);
-      setGroups(parsed);
-      setSelected(defaultSelectedKeys(parsed));
+      const loaded: FileEntry[] = [];
+      for (const f of list) {
+        const parsed = await parseExifFields(f).catch(() => [] as ExifGroup[]);
+        loaded.push({
+          file: f,
+          preview: URL.createObjectURL(f),
+          groups: parsed,
+          selected: defaultSelectedKeys(parsed),
+        });
+      }
+      setEntries(loaded);
+      setActiveIndex(0);
     } catch {
-      setGroups([]);
-      setSelected(new Set());
-      setError("Could not read metadata from this file.");
+      setError("Could not read metadata from files.");
     } finally {
       setLoading(false);
     }
   };
 
-  const toggle = (key: string) => {
-    setSelected((prev) => {
-      const next = new Set(prev);
-      if (next.has(key)) next.delete(key);
-      else next.add(key);
-      return next;
-    });
+  const updateActive = (patch: Partial<FileEntry>) => {
+    setEntries((prev) =>
+      prev.map((e, i) => (i === activeIndex ? { ...e, ...patch } : e))
+    );
     setDone(false);
+  };
+
+  const toggle = (key: string) => {
+    if (!active) return;
+    const next = new Set(active.selected);
+    if (next.has(key)) next.delete(key);
+    else next.add(key);
+    updateActive({ selected: next });
   };
 
   const toggleGroup = (group: ExifGroup, checked: boolean) => {
-    setSelected((prev) => {
-      const next = new Set(prev);
-      for (const field of group.fields) {
-        if (checked) next.add(field.key);
-        else next.delete(field.key);
-      }
-      return next;
-    });
-    setDone(false);
+    if (!active) return;
+    const next = new Set(active.selected);
+    for (const field of group.fields) {
+      if (checked) next.add(field.key);
+      else next.delete(field.key);
+    }
+    updateActive({ selected: next });
   };
 
   const handleClean = async () => {
-    if (!file) return;
+    if (entries.length === 0) return;
     setCleaning(true);
     setProgress(0);
     setError(null);
     setDone(false);
 
     try {
-      const blob = await cleanImage(file, groups, selected, setProgress);
-      downloadBlob(blob, outputFilename(file));
+      const cleaned: { name: string; blob: Blob }[] = [];
+      for (let i = 0; i < entries.length; i++) {
+        const entry = entries[i];
+        const blob = await cleanImage(entry.file, entry.groups, entry.selected, (p) => {
+          setProgress(Math.round(((i + p / 100) / entries.length) * 100));
+        });
+        cleaned.push({ name: outputFilename(entry.file), blob });
+      }
+
+      if (cleaned.length === 1) {
+        downloadBlob(cleaned[0].blob, cleaned[0].name);
+      } else {
+        const zip = new JSZip();
+        for (const c of cleaned) zip.file(c.name, c.blob);
+        const zipBlob = await zip.generateAsync({ type: "blob" });
+        downloadBlob(zipBlob, "cleaned-images.zip");
+      }
       setDone(true);
     } catch {
-      setError("Could not clean image. Try another file.");
+      setError("Could not clean images. Try another file.");
     } finally {
       setCleaning(false);
     }
   };
 
-  const totalFields = groups.reduce((n, g) => n + g.fields.length, 0);
+  const totalFields = active?.groups.reduce((n, g) => n + g.fields.length, 0) ?? 0;
 
   return (
     <div className="space-y-4" dir="ltr">
@@ -90,10 +128,11 @@ export default function ExifRemover() {
         ref={inputRef}
         type="file"
         accept="image/jpeg,image/png,image/webp"
+        multiple
         className="hidden"
         onChange={(e) => {
-          const f = e.target.files?.[0];
-          if (f) void loadFile(f);
+          const files = e.target.files;
+          if (files?.length) void loadFiles(files);
           e.target.value = "";
         }}
       />
@@ -105,22 +144,40 @@ export default function ExifRemover() {
         className="flex w-full flex-col items-center gap-2 rounded-xl border-2 border-dashed border-gray-300 p-8 text-gray-500 hover:border-primary-400 dark:border-gray-600"
       >
         {loading ? <Loader2 className="h-8 w-8 animate-spin" /> : <Upload className="h-8 w-8" />}
-        <span>Upload image to inspect EXIF metadata</span>
+        <span>Upload image(s) to inspect EXIF metadata</span>
+        <span className="text-xs text-gray-400">Select one or multiple files</span>
       </button>
 
-      {preview && (
+      {entries.length > 1 && (
+        <div className="flex flex-wrap gap-2">
+          {entries.map((entry, i) => (
+            <button
+              key={`${entry.file.name}-${i}`}
+              type="button"
+              onClick={() => setActiveIndex(i)}
+              className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
+                i === activeIndex
+                  ? "border-primary-500 bg-primary-50 text-primary-700 dark:border-primary-400 dark:bg-primary-950/40"
+                  : "border-gray-200 text-gray-600 dark:border-gray-700 dark:text-gray-400"
+              }`}
+            >
+              {entry.file.name}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {active?.preview && (
         <img
-          src={preview}
+          src={active.preview}
           alt="Preview"
           loading="lazy"
           decoding="async"
-          width={800}
-          height={480}
           className="max-h-48 rounded-lg border object-contain dark:border-gray-700"
         />
       )}
 
-      {groups.length > 0 && (
+      {active && active.groups.length > 0 && (
         <div className="space-y-3 rounded-xl border border-gray-200 p-4 dark:border-gray-700">
           <div className="flex items-center justify-between gap-2">
             <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200">
@@ -130,19 +187,20 @@ export default function ExifRemover() {
               type="button"
               className="text-xs text-primary-600 hover:underline dark:text-primary-400"
               onClick={() => {
-                const all = new Set(groups.flatMap((g) => g.fields.map((f) => f.key)));
-                setSelected(selected.size === totalFields ? new Set() : all);
-                setDone(false);
+                const all = new Set(active.groups.flatMap((g) => g.fields.map((f) => f.key)));
+                updateActive({
+                  selected: active.selected.size === totalFields ? new Set() : all,
+                });
               }}
             >
-              {selected.size === totalFields ? "Deselect all" : "Select all"}
+              {active.selected.size === totalFields ? "Deselect all" : "Select all"}
             </button>
           </div>
 
-          {groups.map((group) => {
+          {active.groups.map((group) => {
             const groupKeys = group.fields.map((f) => f.key);
-            const allChecked = groupKeys.every((k) => selected.has(k));
-            const someChecked = groupKeys.some((k) => selected.has(k));
+            const allChecked = groupKeys.every((k) => active.selected.has(k));
+            const someChecked = groupKeys.some((k) => active.selected.has(k));
 
             return (
               <div key={group.id} className="space-y-2">
@@ -171,7 +229,7 @@ export default function ExifRemover() {
                         <input
                           type="checkbox"
                           className="mt-0.5"
-                          checked={selected.has(field.key)}
+                          checked={active.selected.has(field.key)}
                           onChange={() => toggle(field.key)}
                         />
                         <span className="min-w-0 flex-1">
@@ -195,22 +253,26 @@ export default function ExifRemover() {
         </div>
       )}
 
-      {file && groups.length === 0 && !loading && !error && (
+      {active && active.groups.length === 0 && !loading && !error && (
         <p className="rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700 dark:bg-green-950/40 dark:text-green-400">
           No EXIF metadata detected. Image is already clean.
         </p>
       )}
 
-      {file && groups.length > 0 && (
+      {entries.length > 0 && (
         <div className="space-y-2">
           <button
             type="button"
             onClick={() => void handleClean()}
-            disabled={cleaning || selected.size === 0}
+            disabled={cleaning || entries.length === 0}
             className="btn-primary inline-flex w-full items-center justify-center gap-2 sm:w-auto"
           >
             {cleaning ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
-            {cleaning ? "Cleaning…" : `Remove selected (${selected.size}) & download`}
+            {cleaning
+              ? "Cleaning…"
+              : entries.length > 1
+                ? `Clean ${entries.length} images & download ZIP`
+                : `Remove selected (${active?.selected.size ?? 0}) & download`}
           </button>
 
           {cleaning && (
@@ -229,7 +291,7 @@ export default function ExifRemover() {
 
       {done && (
         <p className="text-sm text-green-600 dark:text-green-400">
-          Clean image downloaded successfully.
+          Clean image{entries.length > 1 ? "s" : ""} downloaded successfully.
         </p>
       )}
 

@@ -24,12 +24,19 @@
     "switchToEnglish": "Switch to English"
   },
   "home": {
-    "title": "Free online tools",
+    "title": "Kitzos Tools",
     "subtitle": "Fast, private tools that run in your browser. No signup required.",
     "searchPlaceholder": "Search tools…",
     "searchAria": "Search tools",
     "clearSearch": "Clear search",
-    "noResults": "No tools found for \"{query}\""
+    "noResults": "No tools found for \"{query}\"",
+    "filterAll": "All",
+    "filterAria": "Filter tools by category",
+    "noCategoryTools": "No tools in this category match your search.",
+    "toolsPageNav": "Browse tools in this category",
+    "toolsPagePrev": "Previous tools",
+    "toolsPageNext": "Next tools",
+    "toolsPageIndicator": "{current} / {total}"
   },
   "tool": {
     "howToUse": "How to use",

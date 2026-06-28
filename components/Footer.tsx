@@ -13,7 +13,7 @@ export default function Footer() {
 
   return (
     <footer className="border-t border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
-      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+      <div className="site-container py-12">
         <div className="mb-8">
           <Link href={localizedPath(locale, "/")} className="text-lg font-bold text-gray-900 dark:text-gray-100">
             kitzos

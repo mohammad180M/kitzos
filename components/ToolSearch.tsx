@@ -25,7 +25,10 @@ export default function ToolSearch({
         aria-hidden="true"
       />
       <input
-        type="search"
+        type="text"
+        role="searchbox"
+        inputMode="search"
+        enterKeyHint="search"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={t.home.searchPlaceholder}
@@ -33,6 +36,7 @@ export default function ToolSearch({
         aria-label={t.home.searchAria}
         dir="auto"
         autoFocus={autoFocus}
+        autoComplete="off"
       />
       {value && (
         <button

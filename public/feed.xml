@@ -84,6 +84,42 @@
       <description>Add top and bottom text to any image. Classic meme layout, export as PNG.</description>
     </item>
     <item>
+      <title>Image Rotator &amp; Flipper</title>
+      <link>https://kitzos.com/en/tools/image-rotator/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/image-rotator/</guid>
+      <description>Rotate images 90°, 180°, or 270° and flip horizontally or vertically. Download as PNG.</description>
+    </item>
+    <item>
+      <title>Add Text to Image</title>
+      <link>https://kitzos.com/en/tools/add-text-to-image/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/add-text-to-image/</guid>
+      <description>Overlay custom text on any image with size, color, and position controls. Export PNG.</description>
+    </item>
+    <item>
+      <title>Image Collage Maker</title>
+      <link>https://kitzos.com/en/tools/image-collage/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/image-collage/</guid>
+      <description>Combine 2–4 photos into a grid collage with adjustable gap. Download as one PNG.</description>
+    </item>
+    <item>
+      <title>Pixelate Image</title>
+      <link>https://kitzos.com/en/tools/pixelate-image/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/pixelate-image/</guid>
+      <description>Blur sensitive areas with adjustable pixelation for privacy. Process locally in browser.</description>
+    </item>
+    <item>
+      <title>Image to ASCII Art</title>
+      <link>https://kitzos.com/en/tools/image-to-ascii/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/image-to-ascii/</guid>
+      <description>Convert photos to ASCII art using brightness sampling. Copy or download as text.</description>
+    </item>
+    <item>
+      <title>Image Border Adder</title>
+      <link>https://kitzos.com/en/tools/image-border-adder/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/image-border-adder/</guid>
+      <description>Add colored borders, padding, and optional drop shadow to images. Download PNG.</description>
+    </item>
+    <item>
       <title>Word Counter</title>
       <link>https://kitzos.com/en/tools/word-counter/</link>
       <guid isPermaLink="true">https://kitzos.com/en/tools/word-counter/</guid>
@@ -124,6 +160,60 @@
       <link>https://kitzos.com/en/tools/remove-line-breaks/</link>
       <guid isPermaLink="true">https://kitzos.com/en/tools/remove-line-breaks/</guid>
       <description>Clean up text by removing line breaks, extra spaces, or converting breaks to spaces.</description>
+    </item>
+    <item>
+      <title>Word Frequency Counter</title>
+      <link>https://kitzos.com/en/tools/word-frequency-counter/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/word-frequency-counter/</guid>
+      <description>Count how often each word appears in text and sort results by frequency.</description>
+    </item>
+    <item>
+      <title>Arabic Diacritics Remover</title>
+      <link>https://kitzos.com/en/tools/arabic-diacritics-remover/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/arabic-diacritics-remover/</guid>
+      <description>Remove Arabic tashkeel (harakat) from text instantly. Fully client-side.</description>
+    </item>
+    <item>
+      <title>Line Sorter</title>
+      <link>https://kitzos.com/en/tools/line-sorter/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/line-sorter/</guid>
+      <description>Sort lines alphabetically, reverse order, or randomly. Optionally remove duplicate lines.</description>
+    </item>
+    <item>
+      <title>Text Reverser</title>
+      <link>https://kitzos.com/en/tools/text-reverser/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/text-reverser/</guid>
+      <description>Reverse entire text, individual lines, or word order. Useful for puzzles and testing.</description>
+    </item>
+    <item>
+      <title>Slug Generator</title>
+      <link>https://kitzos.com/en/tools/slug-generator/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/slug-generator/</guid>
+      <description>Convert titles to clean URL slugs with lowercase letters and hyphens.</description>
+    </item>
+    <item>
+      <title>Find and Replace</title>
+      <link>https://kitzos.com/en/tools/find-and-replace/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/find-and-replace/</guid>
+      <description>Search and replace text with optional regex support. Replace all matches at once.</description>
+    </item>
+    <item>
+      <title>Whitespace Remover</title>
+      <link>https://kitzos.com/en/tools/whitespace-remover/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/whitespace-remover/</guid>
+      <description>Trim lines, collapse extra spaces, and remove blank lines from messy text.</description>
+    </item>
+    <item>
+      <title>Text to ASCII Art</title>
+      <link>https://kitzos.com/en/tools/text-to-ascii-art/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/text-to-ascii-art/</guid>
+      <description>Convert text to ASCII art banners using figlet fonts. Runs in your browser.</description>
+    </item>
+    <item>
+      <title>Character Map</title>
+      <link>https://kitzos.com/en/tools/character-map/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/character-map/</guid>
+      <description>Browse special Unicode characters and symbols. Click to copy any character instantly.</description>
     </item>
     <item>
       <title>QR Code Generator</title>
@@ -222,6 +312,78 @@
       <description>Design frosted-glass CSS effects with live preview. Copy blur, border, and background code.</description>
     </item>
     <item>
+      <title>CSS Minifier &amp; Formatter</title>
+      <link>https://kitzos.com/en/tools/css-minifier/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/css-minifier/</guid>
+      <description>Minify or beautify CSS. Remove comments and whitespace for production or readable output.</description>
+    </item>
+    <item>
+      <title>JavaScript Minifier</title>
+      <link>https://kitzos.com/en/tools/js-minifier/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/js-minifier/</guid>
+      <description>Minify JavaScript with Terser in your browser. Compress and mangle for smaller bundles.</description>
+    </item>
+    <item>
+      <title>XML Formatter</title>
+      <link>https://kitzos.com/en/tools/xml-formatter/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/xml-formatter/</guid>
+      <description>Format or minify XML markup. Pretty-print with indentation or compress for transport.</description>
+    </item>
+    <item>
+      <title>SQL Formatter</title>
+      <link>https://kitzos.com/en/tools/sql-formatter/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/sql-formatter/</guid>
+      <description>Format SQL queries with proper indentation. Supports standard SQL syntax.</description>
+    </item>
+    <item>
+      <title>URL Encoder / Decoder</title>
+      <link>https://kitzos.com/en/tools/url-encoder-decoder/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/url-encoder-decoder/</guid>
+      <description>Encode or decode URL components with encodeURIComponent and decodeURIComponent.</description>
+    </item>
+    <item>
+      <title>UUID Generator</title>
+      <link>https://kitzos.com/en/tools/uuid-generator/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/uuid-generator/</guid>
+      <description>Generate random UUID v4 identifiers. Create 1–20 UUIDs and copy them all at once.</description>
+    </item>
+    <item>
+      <title>Cron Expression Parser</title>
+      <link>https://kitzos.com/en/tools/cron-expression-parser/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/cron-expression-parser/</guid>
+      <description>Parse standard 5-field cron expressions into human-readable English descriptions.</description>
+    </item>
+    <item>
+      <title>Color Code Converter</title>
+      <link>https://kitzos.com/en/tools/color-code-converter/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/color-code-converter/</guid>
+      <description>Convert between HEX, RGB, HSL, and HSV color formats from a single input value.</description>
+    </item>
+    <item>
+      <title>Meta Tag Generator</title>
+      <link>https://kitzos.com/en/tools/meta-tag-generator/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/meta-tag-generator/</guid>
+      <description>Generate HTML meta, Open Graph, and Twitter Card tags from title, description, URL, and image.</description>
+    </item>
+    <item>
+      <title>.htaccess Redirect Generator</title>
+      <link>https://kitzos.com/en/tools/htaccess-redirect-generator/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/htaccess-redirect-generator/</guid>
+      <description>Generate Apache mod_rewrite 301 or 302 redirect rules for .htaccess files.</description>
+    </item>
+    <item>
+      <title>Placeholder Image Generator</title>
+      <link>https://kitzos.com/en/tools/lorem-picsum-placeholder/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/lorem-picsum-placeholder/</guid>
+      <description>Create custom-size placeholder PNG images with dimensions text. No external API required.</description>
+    </item>
+    <item>
+      <title>JSON to TypeScript</title>
+      <link>https://kitzos.com/en/tools/json-to-typescript/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/json-to-typescript/</guid>
+      <description>Convert JSON objects to TypeScript interfaces automatically. Nested objects become named interfaces.</description>
+    </item>
+    <item>
       <title>BMI Calculator</title>
       <link>https://kitzos.com/en/tools/bmi-calculator/</link>
       <guid isPermaLink="true">https://kitzos.com/en/tools/bmi-calculator/</guid>
@@ -258,10 +420,106 @@
       <description>Find the difference between two dates in days, weeks, months, and years. Count days until or since a date.</description>
     </item>
     <item>
+      <title>Age Calculator</title>
+      <link>https://kitzos.com/en/tools/age-calculator/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/age-calculator/</guid>
+      <description>Calculate your exact age in years, months, and days from your birth date. See days until your next birthday.</description>
+    </item>
+    <item>
+      <title>Tip Calculator</title>
+      <link>https://kitzos.com/en/tools/tip-calculator/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/tip-calculator/</guid>
+      <description>Calculate tip amount and split a restaurant bill evenly between any number of people.</description>
+    </item>
+    <item>
+      <title>GPA Calculator</title>
+      <link>https://kitzos.com/en/tools/gpa-calculator/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/gpa-calculator/</guid>
+      <description>Calculate weighted GPA on a 4.0 scale from course credits and letter grades.</description>
+    </item>
+    <item>
+      <title>Compound Interest Calculator</title>
+      <link>https://kitzos.com/en/tools/compound-interest/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/compound-interest/</guid>
+      <description>Project investment growth with compound interest. Choose compounding frequency and see total returns.</description>
+    </item>
+    <item>
+      <title>Mortgage Calculator</title>
+      <link>https://kitzos.com/en/tools/mortgage-calculator/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/mortgage-calculator/</guid>
+      <description>Estimate monthly mortgage payments, total interest, and view an amortization schedule with down payment.</description>
+    </item>
+    <item>
+      <title>Fuel Cost Calculator</title>
+      <link>https://kitzos.com/en/tools/fuel-cost-calculator/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/fuel-cost-calculator/</guid>
+      <description>Estimate fuel needed and trip cost from distance, consumption (L/100km or MPG), and fuel price.</description>
+    </item>
+    <item>
+      <title>Discount Calculator</title>
+      <link>https://kitzos.com/en/tools/discount-calculator/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/discount-calculator/</guid>
+      <description>Calculate sale price after a percentage discount and see how much you save.</description>
+    </item>
+    <item>
+      <title>Aspect Ratio Calculator</title>
+      <link>https://kitzos.com/en/tools/aspect-ratio-calculator/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/aspect-ratio-calculator/</guid>
+      <description>Find image and video aspect ratios, use presets like 16:9, and scale width or height proportionally.</description>
+    </item>
+    <item>
+      <title>Number Base Converter</title>
+      <link>https://kitzos.com/en/tools/number-base-converter/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/number-base-converter/</guid>
+      <description>Convert numbers between binary, octal, decimal, and hexadecimal instantly in your browser.</description>
+    </item>
+    <item>
       <title>Unit Converter</title>
       <link>https://kitzos.com/en/tools/unit-converter/</link>
       <guid isPermaLink="true">https://kitzos.com/en/tools/unit-converter/</guid>
       <description>Convert length, weight, temperature, area, and volume between common units instantly.</description>
+    </item>
+    <item>
+      <title>Roman Numeral Converter</title>
+      <link>https://kitzos.com/en/tools/roman-numeral-converter/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/roman-numeral-converter/</guid>
+      <description>Convert between Arabic numerals and Roman numerals (I, V, X, L, C, D, M). Supports 1–3999.</description>
+    </item>
+    <item>
+      <title>Number to Words — Tafqit</title>
+      <link>https://kitzos.com/en/tools/number-to-words/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/number-to-words/</guid>
+      <description>Convert numbers to words in English or Arabic (tafqit). Supports large numbers up to billions.</description>
+    </item>
+    <item>
+      <title>File Size Converter</title>
+      <link>https://kitzos.com/en/tools/file-size-converter/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/file-size-converter/</guid>
+      <description>Convert between bytes, KB, MB, GB, TB using binary (1024) or decimal (1000) bases.</description>
+    </item>
+    <item>
+      <title>Temperature Converter</title>
+      <link>https://kitzos.com/en/tools/temperature-converter/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/temperature-converter/</guid>
+      <description>Convert Celsius, Fahrenheit, and Kelvin with helpful reference notes.</description>
+    </item>
+    <item>
+      <title>Data Unit Converter</title>
+      <link>https://kitzos.com/en/tools/data-unit-converter/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/data-unit-converter/</guid>
+      <description>Convert bits, bytes, storage sizes, and network speeds (Mbps, Gbps) instantly.</description>
+    </item>
+    <item>
+      <title>Cooking Unit Converter</title>
+      <link>https://kitzos.com/en/tools/cooking-converter/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/cooking-converter/</guid>
+      <description>Convert cups, tablespoons, teaspoons, milliliters, and grams for recipes.</description>
+    </item>
+    <item>
+      <title>Hijri Gregorian Converter</title>
+      <link>https://kitzos.com/en/tools/hijri-gregorian-converter/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/hijri-gregorian-converter/</guid>
+      <description>Convert dates between Hijri (Islamic) and Gregorian calendars. Fully client-side.</description>
     </item>
     <item>
       <title>Pomodoro Timer</title>
@@ -292,6 +550,18 @@
       <link>https://kitzos.com/en/tools/interaction-fx/</link>
       <guid isPermaLink="true">https://kitzos.com/en/tools/interaction-fx/</guid>
       <description>Preview material-style ripple clicks and export CSS + JS using Pointer Events.</description>
+    </item>
+    <item>
+      <title>Barcode Generator</title>
+      <link>https://kitzos.com/en/tools/barcode-generator/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/barcode-generator/</guid>
+      <description>Generate CODE128, EAN13, UPC, and CODE39 barcodes from text. Download as PNG.</description>
+    </item>
+    <item>
+      <title>Stopwatch &amp; Countdown Timer</title>
+      <link>https://kitzos.com/en/tools/stopwatch-timer/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/stopwatch-timer/</guid>
+      <description>Online stopwatch with lap times and countdown timer with audio alert. Fully client-side.</description>
     </item>
     <item>
       <title>Certificate Generator</title>

@@ -91,6 +91,66 @@
     "description": "صمّم تأثير زجاجي ضبابي بمعاينة حية وانسخ كود CSS.",
     "keywords": ["مولد زجاجي css", "glassmorphism", "تأثير زجاجي", "خلفية ضبابية"]
   },
+  "css-minifier": {
+    "title": "ضاغط ومُنسّق CSS",
+    "description": "اضغط أو جمّل CSS. أزل التعليقات والمسافات للإنتاج أو للقراءة.",
+    "keywords": ["ضاغط css", "تنسيق css", "minify css", "تجميل css"]
+  },
+  "js-minifier": {
+    "title": "ضاغط JavaScript",
+    "description": "اضغط JavaScript باستخدام Terser في متصفحك. ضغط وتشويش للحزم الأصغر.",
+    "keywords": ["ضاغط javascript", "minify js", "terser", "ضغط جافاسكربت"]
+  },
+  "xml-formatter": {
+    "title": "مُنسّق XML",
+    "description": "نسّق أو اضغط XML. طباعة جميلة بمسافات بادئة أو ضغط للنقل.",
+    "keywords": ["منسق xml", "تنسيق xml", "ضغط xml", "pretty print xml"]
+  },
+  "sql-formatter": {
+    "title": "مُنسّق SQL",
+    "description": "نسّق استعلامات SQL بمسافات بادئة صحيحة. يدعم SQL القياسي.",
+    "keywords": ["منسق sql", "تنسيق sql", "format sql", "تجميل sql"]
+  },
+  "url-encoder-decoder": {
+    "title": "مُرمّز / مُفكّك URL",
+    "description": "رمّز أو فكّ ترميز مكوّنات URL باستخدام encodeURIComponent.",
+    "keywords": ["ترميز url", "فك ترميز url", "percent encode", "uri encode"]
+  },
+  "uuid-generator": {
+    "title": "مولّد UUID",
+    "description": "ولّد معرفات UUID v4 عشوائية. أنشئ 1–20 معرفاً وانسخها دفعة واحدة.",
+    "keywords": ["مولد uuid", "توليد uuid", "uuid v4", "معرف عشوائي"]
+  },
+  "cron-expression-parser": {
+    "title": "محلّل تعبير Cron",
+    "description": "حوّل تعبيرات cron بخمسة حقول إلى وصف إنجليزي مقروء.",
+    "keywords": ["محلل cron", "تعبير cron", "crontab", "شرح cron"]
+  },
+  "color-code-converter": {
+    "title": "محوّل أكواد الألوان",
+    "description": "حوّل بين HEX و RGB و HSL و HSV من قيمة إدخال واحدة.",
+    "keywords": ["محول الوان", "hex الى rgb", "rgb الى hsl", "تحويل لون"]
+  },
+  "meta-tag-generator": {
+    "title": "مولّد وسوم Meta",
+    "description": "ولّد وسوم HTML meta و Open Graph و Twitter Card من العنوان والوصف والرابط والصورة.",
+    "keywords": ["مولد meta tags", "وسوم og", "open graph", "وسوم seo"]
+  },
+  "htaccess-redirect-generator": {
+    "title": "مولّد تحويل .htaccess",
+    "description": "ولّد قواعد تحويل Apache mod_rewrite 301 أو 302 لملف .htaccess.",
+    "keywords": ["htaccess redirect", "تحويل 301", "apache rewrite", "مولد htaccess"]
+  },
+  "lorem-picsum-placeholder": {
+    "title": "مولّد صور Placeholder",
+    "description": "أنشئ صور PNG placeholder بأبعاد مخصصة ونص الأبعاد. بدون API خارجي.",
+    "keywords": ["صورة placeholder", "بديل lorem picsum", "صورة وهمية", "placeholder png"]
+  },
+  "json-to-typescript": {
+    "title": "JSON إلى TypeScript",
+    "description": "حوّل كائنات JSON إلى واجهات TypeScript تلقائياً. الكائنات المتداخلة تصبح واجهات مسماة.",
+    "keywords": ["json الى typescript", "json الى interface", "مولد typescript", "json to ts"]
+  },
   "interaction-fx": {
     "title": "مولّد تأثيرات النقر",
     "description": "عاين تأثير ripple وصدّر CSS وJS يعمل باللمس والماوس.",
@@ -121,5 +181,170 @@
       "قالب شهادة",
       "تحميل شهادة pdf"
     ]
+  },
+  "age-calculator": {
+    "title": "حاسبة العمر",
+    "description": "احسب عمرك بالسنوات والأشهر والأيام من تاريخ ميلادك. اعرف كم يوماً متبقياً على عيد ميلادك القادم.",
+    "keywords": ["حاسبة العمر", "كم عمري", "حساب العمر", "عمر بالأيام", "تاريخ الميلاد"]
+  },
+  "tip-calculator": {
+    "title": "حاسبة البقشيش",
+    "description": "احسب البقشиш وقسّم الفاتورة بالتساوي بين أي عدد من الأشخاص.",
+    "keywords": ["حاسبة بقشيش", "تقسيم فاتورة", "بقشيش مطعم", "حاسبة gratuity"]
+  },
+  "gpa-calculator": {
+    "title": "حاسبة المعدل التراكمي",
+    "description": "احسب المعدل التراكمي GPA على مقياس 4.0 من ساعات المواد ودرجات الحروف.",
+    "keywords": ["حاسبة gpa", "المعدل التراكمي", "معدل جامعي", "gpa عربي"]
+  },
+  "compound-interest": {
+    "title": "حاسبة الفائدة المركّبة",
+    "description": "توقّع نمو الاستثمار بالفائدة المركّبة. اختر تكرار المركّب واعرض العائد الإجمالي.",
+    "keywords": ["فائدة مركبة", "حاسبة استثمار", "نمو مدخرات", "حاسبة فائدة"]
+  },
+  "mortgage-calculator": {
+    "title": "حاسبة القرض العقاري",
+    "description": "قدّر القسط الشهري للرهن العقاري وإجمالي الفائدة مع جدول سداد ودفعة أولى.",
+    "keywords": ["حاسبة رهن عقاري", "قرض منزل", "جدول سداد", "قسط شهري منزل"]
+  },
+  "fuel-cost-calculator": {
+    "title": "حاسبة تكلفة الوقود",
+    "description": "قدّر الوقود المطلوب وتكلفة الرحلة من المسافة والاستهلاك (لتر/100كم أو MPG) وسعر الوقود.",
+    "keywords": ["تكلفة وقود", "حاسبة بنزين", "استهلاك وقود", "تكلفة رحلة"]
+  },
+  "discount-calculator": {
+    "title": "حاسبة الخصم",
+    "description": "احسب السعر بعد الخصم كنسبة مئوية واعرف المبلغ الذي توفره.",
+    "keywords": ["حاسبة خصم", "سعر بعد التخفيض", "نسبة خصم", "حاسبة تخفيضات"]
+  },
+  "aspect-ratio-calculator": {
+    "title": "حاسبة نسبة الأبعاد",
+    "description": "احسب نسبة أبعاد الصور والفيديو، استخدم 16:9 وغيرها، وقِس العرض أو الارتفاع تناسبياً.",
+    "keywords": ["نسبة ابعاد", "16:9", "aspect ratio", "ابعاد صورة", "ابعاد فيديو"]
+  },
+  "number-base-converter": {
+    "title": "محوّل أنظمة الأرقام",
+    "description": "حوّل الأرقام بين الثنائي والثماني والعشري والست عشري فوراً في متصفحك.",
+    "keywords": ["تحويل ثنائي", "hex الى decimal", "decimal الى binary", "محول انظمة ارقام"]
+  },
+  "roman-numeral-converter": {
+    "title": "محوّل الأرقام الرومانية",
+    "description": "حوّل بين الأرقام العربية والرومانية (I, V, X, L, C, D, M) للنطاق 1–3999.",
+    "keywords": ["ارقام رومانية", "تحويل روماني", "MMXXVI", "روماني الى عربي", "محول ارقام رومانية"]
+  },
+  "number-to-words": {
+    "title": "تحويل الأرقام إلى كلمات — تفقيط",
+    "description": "حوّل الأرقام إلى كلمات بالإنجليزية أو العربية (تفقيط). يدعم أعداداً كبيرة حتى المليارات.",
+    "keywords": ["تفقيط", "تحويل رقم الى كلمات", "number to words", "تفقيط عربي", "كتابة الارقام بالحروف"]
+  },
+  "file-size-converter": {
+    "title": "محوّل حجم الملفات",
+    "description": "حوّل بين بايت وKB وMB وGB وTB باستخدام الأساس الثنائي (1024) أو العشري (1000).",
+    "keywords": ["تحويل حجم ملف", "بايت الى ميغابايت", "kb الى gb", "حجم ملف ثنائي", "محول بايت"]
+  },
+  "temperature-converter": {
+    "title": "محوّل درجة الحرارة",
+    "description": "حوّل بين مئوية وفهرنهايت وكلفن مع ملاحظات مرجعية مفيدة.",
+    "keywords": ["تحويل درجة حرارة", "مئوية الى فهرنهايت", "فهرنهايت الى مئوية", "محول كلفن"]
+  },
+  "data-unit-converter": {
+    "title": "محوّل وحدات البيانات",
+    "description": "حوّل بين بت وبايت وأحجام التخزين وسرعات الشبكة (Mbps, Gbps) فوراً.",
+    "keywords": ["تحويل بت الى بايت", "محول mbps", "وحدات بيانات", "سرعة شبكة", "محول bandwidth"]
+  },
+  "cooking-converter": {
+    "title": "محوّل وحدات الطبخ",
+    "description": "حوّل أكواب وملاعق وملليلترات وغرامات للوصفات.",
+    "keywords": ["تحويل كوب الى ml", "ملعقة طعام", "وحدات طبخ", "محول وصفات", "مقاييس مطبخ"]
+  },
+  "hijri-gregorian-converter": {
+    "title": "محوّل التاريخ الهجري والميلادي",
+    "description": "حوّل التواريخ بين التقويم الهجري الإسلامي والميلادي. يعمل بالكامل في المتصفح.",
+    "keywords": ["تحويل هجري", "تقويم اسلامي", "ميلادي الى هجري", "هجري الى ميلادي", "تاريخ هجري"]
+  },
+  "word-frequency-counter": {
+    "title": "عداد تكرار الكلمات",
+    "description": "احسب عدد مرات ظهور كل كلمة في النص ورتّب النتائج حسب التكرار. مفيد لتحليل SEO والكتابة.",
+    "keywords": ["تكرار الكلمات", "تحليل نص", "كثافة كلمات مفتاحية", "عداد تكرار", "word frequency"]
+  },
+  "arabic-diacritics-remover": {
+    "title": "إزالة التشكيل العربي",
+    "description": "أزل الحركات والتشكيل (tashkeel) من النص العربي فوراً. يعمل بالكامل في متصفحك دون رفع.",
+    "keywords": ["ازالة تشكيل", "حذف حركات", "ازالة تاشكيل", "تنظيف نص عربي", "strip harakat"]
+  },
+  "line-sorter": {
+    "title": "ترتيب الأسطر",
+    "description": "رتّب الأسطر أبجدياً أو عكسياً أو عشوائياً. أزل الأسطر المكررة اختيارياً.",
+    "keywords": ["ترتيب اسطر", "فرز ابجدي", "حذف اسطر مكررة", "sort lines", "ترتيب قائمة"]
+  },
+  "text-reverser": {
+    "title": "عكس النص",
+    "description": "اعكس النص بالكامل أو كل سطر أو ترتيب الكلمات. مفيد للألغاز والاختبار.",
+    "keywords": ["عكس نص", "قلب نص", "reverse text", "عكس كلمات", "نص معكوس"]
+  },
+  "slug-generator": {
+    "title": "مولّد Slug للروابط",
+    "description": "حوّل العناوين إلى slugs نظيفة للروابط بأحرف صغيرة وشرطات. مثالي لـ SEO والروابط الدائمة.",
+    "keywords": ["مولد slug", "رابط url", "permalink", "slug seo", "تحويل عنوان الى رابط"]
+  },
+  "find-and-replace": {
+    "title": "بحث واستبدال",
+    "description": "ابحث واستبدل النص مع دعم regex اختياري. استبدل كل التطابقات دفعة واحدة.",
+    "keywords": ["بحث واستبدال", "find and replace", "استبدال نص", "regex replace", "استبدال جماعي"]
+  },
+  "whitespace-remover": {
+    "title": "إزالة المسافات الزائدة",
+    "description": "قصّ الأسطر واضغط المسافات المتعددة وأزل الأسطر الفارغة من النص غير المنظم.",
+    "keywords": ["ازالة مسافات", "تنظيف نص", "trim lines", "حذف اسطر فارغة", "تنظيف مسافات"]
+  },
+  "text-to-ascii-art": {
+    "title": "تحويل النص إلى ASCII Art",
+    "description": "حوّل النص إلى بanners ASCII بخطوط figlet. يعمل في متصفحك.",
+    "keywords": ["ascii art", "نص الى ascii", "figlet", "بانر ascii", "فن ascii"]
+  },
+  "character-map": {
+    "title": "خريطة الأحرف والرموز",
+    "description": "تصفّح رموز Unicode الخاصة والرموز. انقر لنسخ أي حرف فوراً.",
+    "keywords": ["خريطة احرف", "رموز unicode", "احرف خاصة", "نسخ رموز", "character map"]
+  },
+  "image-rotator": {
+    "title": "تدوير وقلب الصور",
+    "description": "دوّر الصور 90° أو 180° أو 270° واقلبها أفقياً أو عمودياً. نزّل PNG.",
+    "keywords": ["تدوير صورة", "قلب صورة", "rotate image", "مرآة صورة", "image rotator"]
+  },
+  "add-text-to-image": {
+    "title": "إضافة نص على الصورة",
+    "description": "ضع نصاً مخصصاً على أي صورة مع التحكم بالحجم واللون والموضع. صدّر PNG.",
+    "keywords": ["اضافة نص على صورة", "caption صورة", "كتابة على صورة", "text overlay", "تعليق على صورة"]
+  },
+  "image-collage": {
+    "title": "صانع كولاج الصور",
+    "description": "ادمج 2–4 صور في شبكة كولاج مع فجوة قابلة للضبط. نزّل PNG واحداً.",
+    "keywords": ["كولاج صور", "دمج صور", "photo grid", "collage maker", "شبكة صور"]
+  },
+  "pixelate-image": {
+    "title": "تبكسل الصورة",
+    "description": "ضبابية المناطق الحساسة بتبكسل قابل للضبط للخصوصية. معالجة محلية في المتصفح.",
+    "keywords": ["تبكسل صورة", "blur face", "تمويه وجه", "censor image", "خصوصية صورة"]
+  },
+  "image-to-ascii": {
+    "title": "تحويل الصورة إلى ASCII",
+    "description": "حوّل الصور إلى فن ASCII بأخذ عينات السطوع. انسخ أو نزّل كنص.",
+    "keywords": ["صورة الى ascii", "ascii art صورة", "photo to ascii", "فن نصي من صورة"]
+  },
+  "image-border-adder": {
+    "title": "إضافة إطار للصورة",
+    "description": "أضف حدوداً ملونة وحشواً وظلاً اختيارياً للصور. نزّل PNG.",
+    "keywords": ["اطار صورة", "border صورة", "frame photo", "ظل صورة", "padding صورة"]
+  },
+  "barcode-generator": {
+    "title": "مولّد الباركود",
+    "description": "ولّد باركود CODE128 أو EAN13 أو UPC أو CODE39. نزّل SVG أو PNG للملصقات والمخزون.",
+    "keywords": ["مولد باركود", "barcode generator", "ean13", "code128", "باركود اونلاين"]
+  },
+  "stopwatch-timer": {
+    "title": "ساعة إيقاف وعداد تنازلي",
+    "description": "ساعة إيقاف مع لفات وتوقيت، أو عداد تنازلي مع صوت عند الانتهاء. يعمل في المتصفح.",
+    "keywords": ["ساعة ايقاف", "عداد تنازلي", "stopwatch", "timer online", "مؤقت"]
   }
 }

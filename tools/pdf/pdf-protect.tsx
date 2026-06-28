@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Download, Loader2, Upload } from "lucide-react";
+import { Download, Eye, EyeOff, Loader2, Upload } from "lucide-react";
 import { downloadBlob } from "@/lib/audio-utils";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
 
@@ -10,6 +10,7 @@ export default function PdfProtect() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -74,13 +75,23 @@ export default function PdfProtect() {
 
       <label className="block text-sm">
         <span className="font-medium text-gray-700 dark:text-gray-300">Password</span>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="input-field mt-1"
-          autoComplete="new-password"
-        />
+        <div className="relative mt-1">
+          <input
+            type={showPassword ? "text" : "password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="input-field pe-10"
+            autoComplete="new-password"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((v) => !v)}
+            className="absolute end-2 top-1/2 -translate-y-1/2 rounded p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            aria-label={showPassword ? "Hide password" : "Show password"}
+          >
+            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+          </button>
+        </div>
       </label>
 
       {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}

@@ -1,5 +1,7 @@
 type ThemeName = "light" | "dark";
 
+let animating = false;
+
 function getMaxRevealRadius(x: number, y: number): number {
   return Math.hypot(
     Math.max(x, window.innerWidth - x),
@@ -42,11 +44,17 @@ export function toggleThemeWithTransition(
     return;
   }
 
+  if (animating) return;
+  animating = true;
+
   setRevealOrigin(clickX, clickY);
 
   const transition = document.startViewTransition(() => {
     applyTheme();
   });
 
-  void transition.finished.finally(clearRevealOrigin);
+  void transition.finished.finally(() => {
+    clearRevealOrigin();
+    animating = false;
+  });
 }

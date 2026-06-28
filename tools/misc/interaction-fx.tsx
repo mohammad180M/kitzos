@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Check, Copy, Download } from "lucide-react";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
+import { useMiscToolsExtraLabels } from "@/lib/i18n/use-misc-tools-extra-labels";
 import { downloadBlob } from "@/lib/download";
 import {
   RIPPLE_PATTERNS,
@@ -52,6 +53,7 @@ function rippleScale(size: number): number {
 
 export default function InteractionFx() {
   const labels = useCommonLabels();
+  const t = useMiscToolsExtraLabels("interactionFx");
   const rippleRef = useRef<HTMLDivElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
 
@@ -174,22 +176,23 @@ export default function InteractionFx() {
 
       <section className="space-y-4">
         <div>
-          <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100">Press effects</h3>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            Pick an effect pattern, customize color and timing, then tap the preview.
-          </p>
+          <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100">{t.pressEffects}</h3>
+          <p className="text-sm text-gray-500 dark:text-gray-400">{t.pressHint}</p>
         </div>
 
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
-          {RIPPLE_PATTERNS.map((p) => (
-            <PatternCard
-              key={p.id}
-              name={p.name}
-              description={p.description}
-              active={ripplePattern === p.id}
-              onClick={() => applyRipplePattern(p.id)}
-            />
-          ))}
+          {RIPPLE_PATTERNS.map((p) => {
+            const meta = t.patterns[p.id];
+            return (
+              <PatternCard
+                key={p.id}
+                name={meta.name}
+                description={meta.description}
+                active={ripplePattern === p.id}
+                onClick={() => applyRipplePattern(p.id)}
+              />
+            );
+          })}
         </div>
 
         <div
@@ -198,12 +201,12 @@ export default function InteractionFx() {
           className="relative flex h-44 cursor-pointer select-none items-center justify-center overflow-hidden rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 text-gray-500 dark:border-gray-600 dark:bg-gray-800"
           style={{ touchAction: "none" }}
         >
-          Tap to preview — {RIPPLE_PATTERNS.find((p) => p.id === ripplePattern)?.name}
+          {t.tapPreview} {t.patterns[ripplePattern].name}
         </div>
 
         <div className="grid gap-3 sm:grid-cols-3">
           <label className="text-sm">
-            Color
+            {t.color}
             <input
               type="color"
               value={rippleHex}
@@ -216,7 +219,7 @@ export default function InteractionFx() {
             />
           </label>
           <label className="text-sm">
-            Duration ({rippleDuration}ms)
+            {t.duration} ({rippleDuration}ms)
             <input
               type="range"
               min={200}
@@ -228,7 +231,7 @@ export default function InteractionFx() {
             />
           </label>
           <label className="text-sm">
-            Size ({rippleSize}px)
+            {t.size} ({rippleSize}px)
             <input
               type="range"
               min={40}
@@ -250,7 +253,7 @@ export default function InteractionFx() {
           className="btn-secondary inline-flex items-center gap-2"
         >
           {copiedRipple ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-          {copiedRipple ? labels.copied : "Copy press effect CSS + JS"}
+          {copiedRipple ? labels.copied : t.copyPress}
         </button>
       </section>
 
@@ -258,47 +261,48 @@ export default function InteractionFx() {
 
       <section className="space-y-4">
         <div>
-          <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100">Cursor motion</h3>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            Pick a motion style, customize color and size, then move over the preview.
-          </p>
+          <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100">{t.cursorMotion}</h3>
+          <p className="text-sm text-gray-500 dark:text-gray-400">{t.cursorHint}</p>
         </div>
 
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-          {CURSOR_PRESETS.map((p) => (
-            <button
-              key={p.id}
-              type="button"
-              onClick={() => applyCursorMode(p)}
-              className={`rounded-lg border px-3 py-2 text-left text-sm transition-colors ${
-                cursorModeId === p.id
-                  ? "border-primary-500 bg-primary-50 dark:border-primary-400 dark:bg-primary-950/40"
-                  : "border-gray-200 dark:border-gray-700"
-              }`}
-            >
-              <span className="block font-medium">{p.name}</span>
-              <span className="text-xs text-gray-500 dark:text-gray-400">{p.description}</span>
-            </button>
-          ))}
+          {CURSOR_PRESETS.map((p) => {
+            const meta = t.cursors[p.id as keyof typeof t.cursors];
+            return (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => applyCursorMode(p)}
+                className={`rounded-lg border px-3 py-2 text-left text-sm transition-colors ${
+                  cursorModeId === p.id
+                    ? "border-primary-500 bg-primary-50 dark:border-primary-400 dark:bg-primary-950/40"
+                    : "border-gray-200 dark:border-gray-700"
+                }`}
+              >
+                <span className="block font-medium">{meta.name}</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">{meta.description}</span>
+              </button>
+            );
+          })}
         </div>
 
         <div
           ref={cursorRef}
           className="relative flex h-48 w-full min-h-[12rem] cursor-crosshair items-center justify-center overflow-hidden rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 text-sm text-gray-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400"
           style={{ touchAction: "none" }}
-          aria-label="Cursor motion preview"
+          aria-label={t.cursorPreview}
         >
           <span
             data-preview-hint
             className="pointer-events-none z-0 select-none transition-opacity duration-200"
           >
-            Move cursor here
+            {t.moveCursor}
           </span>
         </div>
 
         <div className={`grid gap-3 ${activeCursor.mode === "glow" ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}>
           <label className="text-sm text-gray-700 dark:text-gray-300">
-            Color
+            {t.color}
             <input
               type="color"
               value={cursorHex}
@@ -319,7 +323,7 @@ export default function InteractionFx() {
             />
           </label>
           <label className="text-sm text-gray-700 dark:text-gray-300">
-            Size ({cursorSize}px)
+            {t.size} ({cursorSize}px)
             <input
               type="range"
               min={activeCursor.mode === "glow" ? 60 : 6}
@@ -332,7 +336,7 @@ export default function InteractionFx() {
           </label>
           {activeCursor.mode === "glow" && (
             <label className="text-sm text-gray-700 dark:text-gray-300">
-              Blur ({cursorBlur}px)
+              {t.blur} ({cursorBlur}px)
               <input
                 type="range"
                 min={8}
@@ -357,7 +361,7 @@ export default function InteractionFx() {
             className="btn-secondary inline-flex items-center gap-2"
           >
             {copiedCursor ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-            {copiedCursor ? labels.copied : "Copy cursor CSS + JS"}
+            {copiedCursor ? labels.copied : t.copyCursor}
           </button>
           <button
             type="button"
@@ -365,7 +369,7 @@ export default function InteractionFx() {
             className="btn-primary inline-flex items-center gap-2"
           >
             <Download className="h-4 w-4" />
-            Download all effects
+            {t.downloadAll}
           </button>
         </div>
       </section>

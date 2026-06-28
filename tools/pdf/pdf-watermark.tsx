@@ -12,8 +12,48 @@ export default function PdfWatermark() {
   const [file, setFile] = useState<File | null>(null);
   const [text, setText] = useState("CONFIDENTIAL");
   const [opacity, setOpacity] = useState(0.3);
+  const [fontSize, setFontSize] = useState(48);
+  const [tile, setTile] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const drawWatermark = (
+    page: ReturnType<PDFDocument["getPages"]>[number],
+    watermarkText: string,
+    size: number,
+    alpha: number,
+    tiled: boolean
+  ) => {
+    const { width, height } = page.getSize();
+    const textWidth = watermarkText.length * size * 0.55;
+
+    if (!tiled) {
+      page.drawText(watermarkText, {
+        x: width / 2 - textWidth / 2,
+        y: height / 2,
+        size,
+        color: rgb(0.5, 0.5, 0.5),
+        opacity: alpha,
+        rotate: degrees(-35),
+      });
+      return;
+    }
+
+    const stepX = textWidth + size;
+    const stepY = size * 2.5;
+    for (let y = -stepY; y < height + stepY; y += stepY) {
+      for (let x = -width; x < width * 2; x += stepX) {
+        page.drawText(watermarkText, {
+          x,
+          y,
+          size,
+          color: rgb(0.5, 0.5, 0.5),
+          opacity: alpha,
+          rotate: degrees(-35),
+        });
+      }
+    }
+  };
 
   const apply = async () => {
     if (!file) return;
@@ -23,15 +63,7 @@ export default function PdfWatermark() {
       const pdfDoc = await PDFDocument.load(await file.arrayBuffer());
       const pages = pdfDoc.getPages();
       for (const page of pages) {
-        const { width, height } = page.getSize();
-        page.drawText(text, {
-          x: width / 2 - text.length * 6,
-          y: height / 2,
-          size: 48,
-          color: rgb(0.5, 0.5, 0.5),
-          opacity,
-          rotate: degrees(-35),
-        });
+        drawWatermark(page, text, fontSize, opacity, tile);
       }
       const out = await pdfDoc.save();
       downloadBlob(new Blob([out as BlobPart], { type: "application/pdf" }), `watermarked-${file.name}`);
@@ -68,6 +100,19 @@ export default function PdfWatermark() {
       </label>
 
       <label className="block text-sm">
+        <span className="font-medium text-gray-700 dark:text-gray-300">Size ({fontSize}pt)</span>
+        <input
+          type="range"
+          min={16}
+          max={120}
+          step={2}
+          value={fontSize}
+          onChange={(e) => setFontSize(Number(e.target.value))}
+          className="mt-1 w-full"
+        />
+      </label>
+
+      <label className="block text-sm">
         <span className="font-medium text-gray-700 dark:text-gray-300">Opacity ({Math.round(opacity * 100)}%)</span>
         <input
           type="range"
@@ -79,6 +124,30 @@ export default function PdfWatermark() {
           className="mt-1 w-full"
         />
       </label>
+
+      <div>
+        <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Layout</p>
+        <div className="mt-2 inline-flex rounded-lg border border-gray-300 bg-white p-0.5 dark:border-gray-600 dark:bg-gray-800">
+          <button
+            type="button"
+            onClick={() => setTile(false)}
+            className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+              !tile ? "bg-primary-600 text-white" : "text-gray-600 dark:text-gray-400"
+            }`}
+          >
+            Single
+          </button>
+          <button
+            type="button"
+            onClick={() => setTile(true)}
+            className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+              tile ? "bg-primary-600 text-white" : "text-gray-600 dark:text-gray-400"
+            }`}
+          >
+            Tiled (repeat)
+          </button>
+        </div>
+      </div>
 
       {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
 

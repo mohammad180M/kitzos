@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
 import Header from "@/components/Header";
+import CategoryBar from "@/components/CategoryBar";
 import { LocaleProvider } from "@/lib/i18n/LocaleProvider";
 import { LangHtmlAttributes } from "@/lib/i18n/LangHtmlAttributes";
 import { isValidLocale } from "@/lib/i18n/routing";
@@ -27,6 +28,7 @@ export default function LangLayout({ children, params }: LangLayoutProps) {
     <LocaleProvider initialLocale={params.lang}>
       <LangHtmlAttributes />
       <Header />
+      <CategoryBar />
       <main className="flex-1">{children}</main>
     </LocaleProvider>
   );

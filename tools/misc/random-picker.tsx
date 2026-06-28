@@ -20,12 +20,23 @@ function prefersReducedMotion(): boolean {
 function spinRotation(current: number, winnerIndex: number, segmentCount: number): number {
   const slice = 360 / segmentCount;
   const centerAngle = (winnerIndex + 0.5) * slice;
-  const landOffset = 360 - centerAngle;
+  const landOffset = (360 - centerAngle) % 360;
   const fullSpins = (4 + Math.floor(Math.random() * 3)) * 360;
   const currentNorm = ((current % 360) + 360) % 360;
   let delta = fullSpins + landOffset - currentNorm;
-  if (delta < fullSpins) delta += 360;
+  while (delta < fullSpins) delta += 360;
   return current + delta;
+}
+
+/** Which segment center sits under the top pointer after rotation. */
+function winnerIndexAtRotation(rotation: number, count: number): number {
+  const slice = 360 / count;
+  const norm = ((rotation % 360) + 360) % 360;
+  const angleAtPointer = (360 - norm) % 360;
+  let idx = Math.floor(angleAtPointer / slice);
+  if (idx >= count) idx = count - 1;
+  if (idx < 0) idx = 0;
+  return idx;
 }
 
 function truncateLabel(text: string, max = 10): string {
@@ -44,11 +55,14 @@ export default function RandomPicker() {
   const [copied, setCopied] = useState(false);
   const rotationRef = useRef(0);
   const spinTimerRef = useRef<number | null>(null);
+  const itemsRef = useRef<string[]>([]);
 
   const items = listInput
     .split("\n")
     .map((s) => s.trim())
     .filter(Boolean);
+
+  itemsRef.current = items;
 
   useEffect(() => {
     rotationRef.current = rotation;
@@ -61,18 +75,18 @@ export default function RandomPicker() {
   }, []);
 
   const pickFromList = useCallback(() => {
-    if (items.length === 0) return;
+    const currentItems = itemsRef.current;
+    if (currentItems.length === 0) return;
 
-    const winnerIndex = Math.floor(Math.random() * items.length);
-    const winner = items[winnerIndex];
+    const winnerIndex = Math.floor(Math.random() * currentItems.length);
 
     if (spinTimerRef.current !== null) {
       window.clearTimeout(spinTimerRef.current);
       spinTimerRef.current = null;
     }
 
-    if (prefersReducedMotion() || items.length === 1) {
-      setResult(winner);
+    if (prefersReducedMotion() || currentItems.length === 1) {
+      setResult(currentItems[winnerIndex]);
       setSpinning(false);
       return;
     }
@@ -80,16 +94,17 @@ export default function RandomPicker() {
     setResult(null);
     setSpinning(true);
 
-    const nextRotation = spinRotation(rotationRef.current, winnerIndex, items.length);
+    const nextRotation = spinRotation(rotationRef.current, winnerIndex, currentItems.length);
     rotationRef.current = nextRotation;
     setRotation(nextRotation);
 
     spinTimerRef.current = window.setTimeout(() => {
-      setResult(winner);
+      const idx = winnerIndexAtRotation(rotationRef.current, currentItems.length);
+      setResult(currentItems[idx]);
       setSpinning(false);
       spinTimerRef.current = null;
     }, SPIN_MS);
-  }, [items]);
+  }, []);
 
   const pickNumber = () => {
     const lo = parseInt(min, 10);

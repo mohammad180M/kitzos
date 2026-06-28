@@ -10,12 +10,37 @@ import { useCommonLabels } from "@/lib/i18n/use-common-labels";
 const PAD_WIDTH = 400;
 const PAD_HEIGHT = 150;
 
+type PageMode = "current" | "all" | "range";
+
+function parsePageRange(range: string, totalPages: number): number[] {
+  const pages = new Set<number>();
+  for (const part of range.split(",")) {
+    const trimmed = part.trim();
+    if (!trimmed) continue;
+    if (trimmed.includes("-")) {
+      const [startStr, endStr] = trimmed.split("-");
+      const start = parseInt(startStr.trim(), 10);
+      const end = parseInt(endStr.trim(), 10);
+      if (isNaN(start) || isNaN(end)) continue;
+      for (let i = Math.max(1, start); i <= Math.min(totalPages, end); i++) pages.add(i);
+    } else {
+      const n = parseInt(trimmed, 10);
+      if (!isNaN(n) && n >= 1 && n <= totalPages) pages.add(n);
+    }
+  }
+  return Array.from(pages).sort((a, b) => a - b);
+}
+
 export default function PdfSign() {
   const labels = useCommonLabels();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const drawing = useRef(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [pdfFile, setPdfFile] = useState<File | null>(null);
+  const [pageCount, setPageCount] = useState(0);
+  const [pageMode, setPageMode] = useState<PageMode>("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageRange, setPageRange] = useState("1");
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -27,8 +52,10 @@ export default function PdfSign() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     const rect = canvas.getBoundingClientRect();
+    const scaleX = PAD_WIDTH / rect.width;
+    const scaleY = PAD_HEIGHT / rect.height;
     ctx.beginPath();
-    ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+    ctx.moveTo((e.clientX - rect.left) * scaleX, (e.clientY - rect.top) * scaleY);
   };
 
   const draw = (e: React.PointerEvent<HTMLCanvasElement>) => {
@@ -37,7 +64,9 @@ export default function PdfSign() {
     const ctx = canvas?.getContext("2d");
     if (!canvas || !ctx) return;
     const rect = canvas.getBoundingClientRect();
-    ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+    const scaleX = PAD_WIDTH / rect.width;
+    const scaleY = PAD_HEIGHT / rect.height;
+    ctx.lineTo((e.clientX - rect.left) * scaleX, (e.clientY - rect.top) * scaleY);
     ctx.strokeStyle = "#1e3a8a";
     ctx.lineWidth = 2;
     ctx.lineCap = "round";
@@ -62,6 +91,34 @@ export default function PdfSign() {
     if (canvas) setupCanvas(canvas, PAD_WIDTH, PAD_HEIGHT);
   }, []);
 
+  const loadPdf = async (file: File) => {
+    setPdfFile(file);
+    setError(null);
+    try {
+      const pdfDoc = await PDFDocument.load(await file.arrayBuffer());
+      const count = pdfDoc.getPageCount();
+      setPageCount(count);
+      setCurrentPage(1);
+      setPageRange(`1${count > 1 ? `-${count}` : ""}`);
+    } catch {
+      setPageCount(0);
+      setError("Could not read PDF. Try another file.");
+    }
+  };
+
+  const getTargetPageIndices = (total: number): number[] => {
+    if (pageMode === "all") {
+      return Array.from({ length: total }, (_, i) => i);
+    }
+    if (pageMode === "current") {
+      const idx = Math.max(0, Math.min(total - 1, currentPage - 1));
+      return [idx];
+    }
+    const pages = parsePageRange(pageRange, total);
+    if (pages.length === 0) return [];
+    return pages.map((p) => p - 1);
+  };
+
   const applySignature = async () => {
     if (!pdfFile || !canvasRef.current) return;
     setProcessing(true);
@@ -74,16 +131,27 @@ export default function PdfSign() {
       const pdfBytes = await pdfFile.arrayBuffer();
       const pdfDoc = await PDFDocument.load(pdfBytes);
       const sigImage = await pdfDoc.embedPng(sigBytes);
-      const page = pdfDoc.getPage(0);
-      const { width } = page.getSize();
+      const pageIndices = getTargetPageIndices(pdfDoc.getPageCount());
+
+      if (pageIndices.length === 0) {
+        setError("Enter a valid page range (e.g. 1-3, 5).");
+        return;
+      }
+
       const sigW = 150;
       const sigH = (sigImage.height / sigImage.width) * sigW;
-      page.drawImage(sigImage, {
-        x: width - sigW - 50,
-        y: 50,
-        width: sigW,
-        height: sigH,
-      });
+
+      for (const idx of pageIndices) {
+        const page = pdfDoc.getPage(idx);
+        const { width } = page.getSize();
+        page.drawImage(sigImage, {
+          x: width - sigW - 50,
+          y: 50,
+          width: sigW,
+          height: sigH,
+        });
+      }
+
       const out = await pdfDoc.save();
       downloadBlob(new Blob([out as BlobPart], { type: "application/pdf" }), `signed-${pdfFile.name}`);
     } catch {
@@ -100,7 +168,10 @@ export default function PdfSign() {
         type="file"
         accept="application/pdf"
         className="hidden"
-        onChange={(e) => setPdfFile(e.target.files?.[0] ?? null)}
+        onChange={(e) => {
+          const f = e.target.files?.[0];
+          if (f) void loadPdf(f);
+        }}
       />
 
       <button
@@ -111,6 +182,67 @@ export default function PdfSign() {
         <Upload className="h-4 w-4" />
         {pdfFile ? pdfFile.name : "Upload PDF"}
       </button>
+
+      {pageCount > 0 && (
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          {pageCount} page{pageCount !== 1 ? "s" : ""}
+        </p>
+      )}
+
+      {pageCount > 0 && (
+        <div className="space-y-3 rounded-lg border border-gray-200 p-4 dark:border-gray-700">
+          <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Apply signature to</p>
+          <div className="flex flex-wrap gap-2">
+            {(
+              [
+                { id: "current" as PageMode, label: "Current page" },
+                { id: "all" as PageMode, label: "All pages" },
+                { id: "range" as PageMode, label: "Page range" },
+              ] as const
+            ).map(({ id, label }) => (
+              <button
+                key={id}
+                type="button"
+                onClick={() => setPageMode(id)}
+                className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+                  pageMode === id
+                    ? "bg-primary-600 text-white"
+                    : "border border-gray-300 text-gray-600 dark:border-gray-600 dark:text-gray-400"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+
+          {pageMode === "current" && (
+            <label className="block text-sm">
+              <span className="text-gray-600 dark:text-gray-400">Page number</span>
+              <input
+                type="number"
+                min={1}
+                max={pageCount}
+                value={currentPage}
+                onChange={(e) => setCurrentPage(Number(e.target.value))}
+                className="input-field mt-1"
+              />
+            </label>
+          )}
+
+          {pageMode === "range" && (
+            <label className="block text-sm">
+              <span className="text-gray-600 dark:text-gray-400">Pages (e.g. 1-3, 5)</span>
+              <input
+                type="text"
+                value={pageRange}
+                onChange={(e) => setPageRange(e.target.value)}
+                placeholder="1-3, 5"
+                className="input-field mt-1"
+              />
+            </label>
+          )}
+        </div>
+      )}
 
       <div>
         <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">Draw signature</p>
