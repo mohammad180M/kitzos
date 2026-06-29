@@ -10,6 +10,10 @@ import {
   type ExifGroup,
 } from "@/lib/exif-metadata";
 import { cleanImage, outputFilename } from "@/lib/exif-clean";
+import {
+  useImageToolsExtraLabels,
+  useImageToolsSharedLabels,
+} from "@/lib/i18n/use-image-tools-extra-labels";
 
 interface FileEntry {
   file: File;
@@ -19,6 +23,8 @@ interface FileEntry {
 }
 
 export default function ExifRemover() {
+  const shared = useImageToolsSharedLabels();
+  const t = useImageToolsExtraLabels("exifRemover");
   const inputRef = useRef<HTMLInputElement>(null);
   const [entries, setEntries] = useState<FileEntry[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -37,7 +43,7 @@ export default function ExifRemover() {
 
     const list = Array.from(files).filter((f) => f.type.startsWith("image/"));
     if (list.length === 0) {
-      setError("Please upload valid image files.");
+      setError(t.errInvalidFiles);
       setLoading(false);
       return;
     }
@@ -56,7 +62,7 @@ export default function ExifRemover() {
       setEntries(loaded);
       setActiveIndex(0);
     } catch {
-      setError("Could not read metadata from files.");
+      setError(t.errReadMetadata);
     } finally {
       setLoading(false);
     }
@@ -114,7 +120,7 @@ export default function ExifRemover() {
       }
       setDone(true);
     } catch {
-      setError("Could not clean images. Try another file.");
+      setError(t.errCleanFailed);
     } finally {
       setCleaning(false);
     }
@@ -144,8 +150,8 @@ export default function ExifRemover() {
         className="flex w-full flex-col items-center gap-2 rounded-xl border-2 border-dashed border-gray-300 p-8 text-gray-500 hover:border-primary-400 dark:border-gray-600"
       >
         {loading ? <Loader2 className="h-8 w-8 animate-spin" /> : <Upload className="h-8 w-8" />}
-        <span>Upload image(s) to inspect EXIF metadata</span>
-        <span className="text-xs text-gray-400">Select one or multiple files</span>
+        <span>{t.uploadHint}</span>
+        <span className="text-xs text-gray-400">{t.uploadSubHint}</span>
       </button>
 
       {entries.length > 1 && (
@@ -170,7 +176,7 @@ export default function ExifRemover() {
       {active?.preview && (
         <img
           src={active.preview}
-          alt="Preview"
+          alt={shared.preview}
           loading="lazy"
           decoding="async"
           className="max-h-48 rounded-lg border object-contain dark:border-gray-700"
@@ -181,7 +187,7 @@ export default function ExifRemover() {
         <div className="space-y-3 rounded-xl border border-gray-200 p-4 dark:border-gray-700">
           <div className="flex items-center justify-between gap-2">
             <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200">
-              Metadata found ({totalFields} fields)
+              {t.metadataFound(totalFields)}
             </h3>
             <button
               type="button"
@@ -193,7 +199,7 @@ export default function ExifRemover() {
                 });
               }}
             >
-              {active.selected.size === totalFields ? "Deselect all" : "Select all"}
+              {active.selected.size === totalFields ? t.deselectAll : t.selectAll}
             </button>
           </div>
 
@@ -255,7 +261,7 @@ export default function ExifRemover() {
 
       {active && active.groups.length === 0 && !loading && !error && (
         <p className="rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700 dark:bg-green-950/40 dark:text-green-400">
-          No EXIF metadata detected. Image is already clean.
+          {t.noExif}
         </p>
       )}
 
@@ -269,10 +275,10 @@ export default function ExifRemover() {
           >
             {cleaning ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
             {cleaning
-              ? "Cleaning…"
+              ? t.cleaning
               : entries.length > 1
-                ? `Clean ${entries.length} images & download ZIP`
-                : `Remove selected (${active?.selected.size ?? 0}) & download`}
+                ? t.cleanZip(entries.length)
+                : t.removeSelected(active?.selected.size ?? 0)}
           </button>
 
           {cleaning && (
@@ -291,15 +297,14 @@ export default function ExifRemover() {
 
       {done && (
         <p className="text-sm text-green-600 dark:text-green-400">
-          Clean image{entries.length > 1 ? "s" : ""} downloaded successfully.
+          {entries.length > 1 ? t.doneMultiple : t.doneSingle}
         </p>
       )}
 
       {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
 
       <p className="text-xs text-gray-400">
-        Sensitive fields (GPS, serial numbers, comments) are pre-selected. JPEG files keep unchecked
-        metadata; PNG/WebP are re-encoded without all metadata.
+        {t.privacyNote}
       </p>
     </div>
   );

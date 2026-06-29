@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
+import { useCalcToolLabels } from "@/lib/i18n/use-calc-tool-labels";
 
 const PREGNANCY_DAYS = 280;
 
@@ -25,11 +26,14 @@ function daysBetween(start: Date, end: Date): number {
 }
 
 export default function DueDateCalculator() {
-  const [lmp, setLmp] = useState(() => {
+  const t = useCalcToolLabels("dueDateCalculator");
+  const [lmp, setLmp] = useState("");
+
+  useEffect(() => {
     const d = new Date();
     d.setDate(d.getDate() - 60);
-    return d.toISOString().slice(0, 10);
-  });
+    setLmp(d.toISOString().slice(0, 10));
+  }, []);
 
   const result = useMemo(() => {
     if (!lmp) return null;
@@ -58,7 +62,7 @@ export default function DueDateCalculator() {
     <div className="space-y-4">
       <div>
         <label htmlFor="lmp-date" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-          First day of last menstrual period (LMP)
+          {t.lmp}
         </label>
         <input
           id="lmp-date"
@@ -72,7 +76,7 @@ export default function DueDateCalculator() {
       {result && (
         <div className="space-y-3">
           <div className="rounded-lg border border-primary-200 bg-primary-50 px-4 py-4 dark:border-primary-800 dark:bg-primary-950/40">
-            <p className="text-sm font-medium text-primary-600 dark:text-primary-400">Estimated due date</p>
+            <p className="text-sm font-medium text-primary-600 dark:text-primary-400">{t.estimatedDueDate}</p>
             <p className="mt-1 text-xl font-bold text-primary-800 dark:text-primary-200">
               {formatDate(result.dueDate)}
             </p>
@@ -80,28 +84,24 @@ export default function DueDateCalculator() {
 
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800/50">
-              <p className="text-xs text-gray-500 dark:text-gray-400">Current pregnancy week</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">{t.currentPregnancyWeek}</p>
               <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                Week {result.pregnancyWeek}
-                {result.pregnancyDay > 0 && ` + ${result.pregnancyDay} day${result.pregnancyDay !== 1 ? "s" : ""}`}
+                {t.pregnancyWeekLine(result.pregnancyWeek, result.pregnancyDay)}
               </p>
             </div>
             <div className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800/50">
               <p className="text-xs text-gray-500 dark:text-gray-400">
-                {result.isPastDue ? "Days past due date" : "Days until due date"}
+                {result.isPastDue ? t.daysPastDue : t.daysUntilDue}
               </p>
               <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                {Math.abs(result.daysUntilDue)} days
+                {t.daysCount(Math.abs(result.daysUntilDue))}
               </p>
             </div>
           </div>
         </div>
       )}
 
-      <p className="text-xs text-gray-400 dark:text-gray-500">
-        Based on Naegele&apos;s rule (LMP + 280 days). This is an estimate only — ultrasound dating by a
-        healthcare provider is more accurate. Not medical advice.
-      </p>
+      <p className="text-xs text-gray-400 dark:text-gray-500">{t.disclaimer}</p>
     </div>
   );
 }

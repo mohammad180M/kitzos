@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import CryptoJS from "crypto-js";
 import { Check, Copy } from "lucide-react";
+import { useDevToolsExtraLabels } from "@/lib/i18n/use-dev-tools-extra-labels";
 
 type HashAlgo = "MD5" | "SHA-1" | "SHA-256" | "SHA-512";
 
@@ -35,6 +36,7 @@ async function computeHashes(text: string): Promise<HashResult[]> {
 }
 
 export default function HashGenerator() {
+  const t = useDevToolsExtraLabels("hashGenerator");
   const [input, setInput] = useState("");
   const [hashes, setHashes] = useState<HashResult[]>([]);
   const [copied, setCopied] = useState<string | null>(null);
@@ -66,14 +68,14 @@ export default function HashGenerator() {
     <div className="space-y-4">
       <div>
         <label htmlFor="hash-input" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-          Input text
+          {t.inputText}
         </label>
         <textarea
           id="hash-input"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           rows={4}
-          placeholder="Enter text to hash…"
+          placeholder={t.placeholder}
           className="input-field mt-1 resize-y font-mono text-sm"
           spellCheck={false}
         />
@@ -94,7 +96,7 @@ export default function HashGenerator() {
                 type="button"
                 onClick={() => copy(algo, value)}
                 className="shrink-0 rounded p-1.5 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600 hover:text-gray-700 dark:hover:text-gray-300"
-                aria-label={`Copy ${algo}`}
+                aria-label={`${t.copyAlgo} ${algo}`}
               >
                 {copied === algo ? (
                   <Check className="h-4 w-4 text-green-600 dark:text-green-400" />

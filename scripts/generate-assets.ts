@@ -1,4 +1,4 @@
-import { copyFileSync, mkdirSync, writeFileSync } from "fs";
+import { mkdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import sharp from "sharp";
 import { categories } from "../lib/categories";
@@ -7,7 +7,6 @@ import { tools } from "../lib/registry";
 import { buildLocalizedUrl, getSiteUrl } from "../lib/seo";
 
 const publicDir = join(process.cwd(), "public");
-const appDir = join(process.cwd(), "app");
 const ogDir = join(publicDir, "og");
 const sourceIcon = join(publicDir, "icon-512.png");
 
@@ -29,8 +28,6 @@ async function generateFavicons(): Promise<void> {
 
   const faviconPath = join(publicDir, "favicon.ico");
   await sharp(sourceBuffer).resize(48, 48, { fit: "cover" }).toFile(faviconPath);
-
-  copyFileSync(faviconPath, join(appDir, "favicon.ico"));
 }
 
 const OG_WIDTH = 1200;

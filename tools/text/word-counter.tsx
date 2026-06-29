@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import CopyButton from "@/components/CopyButton";
+import { useTextToolLabels } from "@/lib/i18n/use-text-tool-labels";
 
 function countWords(text: string): number {
   const trimmed = text.trim();
@@ -23,6 +24,7 @@ function countParagraphs(text: string): number {
 }
 
 export default function WordCounter() {
+  const t = useTextToolLabels("wordCounter");
   const [text, setText] = useState("");
 
   const stats = useMemo(() => {
@@ -43,21 +45,21 @@ export default function WordCounter() {
     };
   }, [text]);
 
-  const statItems = [
-    { label: "Words", value: stats.words },
-    { label: "Characters", value: stats.characters },
-    { label: "Characters (no spaces)", value: stats.charactersNoSpaces },
-    { label: "Sentences", value: stats.sentences },
-    { label: "Paragraphs", value: stats.paragraphs },
-    { label: "Reading time", value: `${stats.readingTime} min` },
-  ];
+  const statItems = useMemo(
+    () => [
+      { label: t.words, value: stats.words },
+      { label: t.characters, value: stats.characters },
+      { label: t.charactersNoSpaces, value: stats.charactersNoSpaces },
+      { label: t.sentences, value: stats.sentences },
+      { label: t.paragraphs, value: stats.paragraphs },
+      { label: t.readingTime, value: t.readingTimeMin(stats.readingTime) },
+    ],
+    [stats, t]
+  );
 
   const copyText = useMemo(
-    () =>
-      statItems
-        .map((item) => `${item.label}: ${item.value}`)
-        .join("\n"),
-    [statItems]
+    () => statItems.map((item) => t.statLine(item.label, item.value)).join("\n"),
+    [statItems, t]
   );
 
   return (
@@ -65,10 +67,10 @@ export default function WordCounter() {
       <textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
-        placeholder="Type or paste your text here…"
+        placeholder={t.placeholder}
         rows={8}
         className="input-field resize-y"
-        aria-label="Text to count"
+        aria-label={t.ariaLabel}
       />
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">

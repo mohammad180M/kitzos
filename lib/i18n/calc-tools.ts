@@ -149,6 +149,70 @@ export const calcToolsEn = {
     kcalDay: "kcal/day",
     disclaimer: "Uses the Mifflin-St Jeor equation. Results are estimates — individual needs vary.",
   },
+  loanCalculator: {
+    loanAmount: "Loan amount ($)",
+    annualRate: "Annual interest rate (%)",
+    loanTerm: "Loan term",
+    termUnit: "Term unit",
+    years: "Years",
+    months: "Months",
+    monthlyPayment: "Monthly payment",
+    totalInterest: "Total interest",
+    totalPaid: "Total paid",
+    disclaimer: "Assumes a fixed-rate loan with equal monthly payments. Does not include taxes, insurance, or fees.",
+  },
+  percentageCalculator: {
+    mode: "Mode",
+    modePercentOf: "X% of Y",
+    modeWhatPercent: "X is ?% of Y",
+    modeChange: "% change",
+    percentLabel: "Percentage (%)",
+    ofNumber: "Of number",
+    value: "Value",
+    ofTotal: "Of total",
+    originalValue: "Original value",
+    newValue: "New value",
+    invalid: "Enter valid numbers to calculate.",
+    resultPercentOf: (pct: string, num: string, result: string) => `${pct}% of ${num} = ${result}`,
+    resultWhatPercent: (a: string, pct: string, b: string) => `${a} is ${pct}% of ${b}`,
+    resultChangeIncrease: (from: string, to: string, pct: string) =>
+      `From ${from} to ${to} is a ${pct}% increase`,
+    resultChangeDecrease: (from: string, to: string, pct: string) =>
+      `From ${from} to ${to} is a ${pct}% decrease`,
+  },
+  dateDifference: {
+    sectionBetween: "Difference between two dates",
+    startDate: "Start date",
+    endDate: "End date",
+    totalDays: "Total days",
+    weeks: "Weeks",
+    monthsApprox: "Months (approx.)",
+    yearsDays: "Years / days",
+    sectionRelative: "Days until / since a date",
+    targetDate: "Target date",
+    daysUntil: "Days until",
+    daysSince: "Days since",
+    today: "Today",
+    daysSuffix: (n: number) => `${n} days`,
+    monthsApproxDisplay: (years: number, months: number) =>
+      years > 0 ? `${years}y ${months}m` : `${months}m`,
+    yearsDaysDisplay: (years: number, days: number) => `${years}y ${days}d`,
+  },
+  dueDateCalculator: {
+    lmp: "First day of last menstrual period (LMP)",
+    estimatedDueDate: "Estimated due date",
+    currentPregnancyWeek: "Current pregnancy week",
+    daysPastDue: "Days past due date",
+    daysUntilDue: "Days until due date",
+    daysCount: (n: number) => `${n} days`,
+    pregnancyWeekLine: (week: number, extraDays: number) => {
+      if (extraDays <= 0) return `Week ${week}`;
+      const dayWord = extraDays === 1 ? "day" : "days";
+      return `Week ${week} + ${extraDays} ${dayWord}`;
+    },
+    disclaimer:
+      "Based on Naegele's rule (LMP + 280 days). This is an estimate only — ultrasound dating by a healthcare provider is more accurate. Not medical advice.",
+  },
 } as const;
 
 export const calcToolsAr = {
@@ -301,6 +365,70 @@ export const calcToolsAr = {
     gain: "لزيادة ~0.5 كغ/أسبوع",
     kcalDay: "سعرة/يوم",
     disclaimer: "يستخدم معادلة Mifflin-St Jeor. النتائج تقديرية — الاحتياجات الفردية تختلف.",
+  },
+  loanCalculator: {
+    loanAmount: "مبلغ القرض ($)",
+    annualRate: "معدل الفائدة السنوي (%)",
+    loanTerm: "مدة القرض",
+    termUnit: "وحدة المدة",
+    years: "سنوات",
+    months: "أشهر",
+    monthlyPayment: "القسط الشهري",
+    totalInterest: "إجمالي الفائدة",
+    totalPaid: "إجمالي المدفوع",
+    disclaimer: "يفترض قرضاً بفائدة ثابتة وأقساط شهرية متساوية. لا يشمل الضرائب أو التأمين أو الرسوم.",
+  },
+  percentageCalculator: {
+    mode: "الوضع",
+    modePercentOf: "X% من Y",
+    modeWhatPercent: "X يساوي ؟% من Y",
+    modeChange: "نسبة التغيير",
+    percentLabel: "النسبة (%)",
+    ofNumber: "من العدد",
+    value: "القيمة",
+    ofTotal: "من الإجمالي",
+    originalValue: "القيمة الأصلية",
+    newValue: "القيمة الجديدة",
+    invalid: "أدخل أرقاماً صالحة للحساب.",
+    resultPercentOf: (pct: string, num: string, result: string) => `${pct}% من ${num} = ${result}`,
+    resultWhatPercent: (a: string, pct: string, b: string) => `${a} يساوي ${pct}% من ${b}`,
+    resultChangeIncrease: (from: string, to: string, pct: string) =>
+      `من ${from} إلى ${to} زيادة بنسبة ${pct}%`,
+    resultChangeDecrease: (from: string, to: string, pct: string) =>
+      `من ${from} إلى ${to} انخفاض بنسبة ${pct}%`,
+  },
+  dateDifference: {
+    sectionBetween: "الفرق بين تاريخين",
+    startDate: "تاريخ البداية",
+    endDate: "تاريخ النهاية",
+    totalDays: "إجمالي الأيام",
+    weeks: "أسابيع",
+    monthsApprox: "أشهر (تقريبي)",
+    yearsDays: "سنوات / أيام",
+    sectionRelative: "أيام حتى / منذ تاريخ",
+    targetDate: "التاريخ المستهدف",
+    daysUntil: "أيام حتى",
+    daysSince: "أيام منذ",
+    today: "اليوم",
+    daysSuffix: (n: number) => `${n} يوم`,
+    monthsApproxDisplay: (years: number, months: number) =>
+      years > 0 ? `${years}س ${months}ش` : `${months}ش`,
+    yearsDaysDisplay: (years: number, days: number) => `${years}س ${days}ي`,
+  },
+  dueDateCalculator: {
+    lmp: "أول يوم من آخر دورة شهرية (LMP)",
+    estimatedDueDate: "تاريخ الولادة المتوقع",
+    currentPregnancyWeek: "أسبوع الحمل الحالي",
+    daysPastDue: "أيام بعد موعد الولادة",
+    daysUntilDue: "أيام حتى موعد الولادة",
+    daysCount: (n: number) => `${n} يوم`,
+    pregnancyWeekLine: (week: number, extraDays: number) => {
+      if (extraDays <= 0) return `الأسبوع ${week}`;
+      const dayWord = extraDays === 1 ? "يوم" : "أيام";
+      return `الأسبوع ${week} + ${extraDays} ${dayWord}`;
+    },
+    disclaimer:
+      "يعتمد على قاعدة Naegele (LMP + 280 يوم). هذا تقدير فقط — التاريخ بالموجات فوق الصوتية من مقدم الرعاية الصحية أدق. ليس نصيحة طبية.",
   },
 } as const;
 

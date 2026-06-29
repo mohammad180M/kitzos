@@ -1,9 +1,26 @@
 import { categories } from "./categories";
+import { getLocalizedCategory, getLocalizedTool } from "./i18n/localized-data";
+import type { Locale } from "./i18n/types";
 import { tools } from "./registry";
 import { buildLocalizedUrl } from "./seo";
-import { DEFAULT_LOCALE } from "./i18n/types";
 
-const LLMS_LOCALE = DEFAULT_LOCALE;
+function appendToolSection(lines: string[], locale: Locale, heading: string): void {
+  lines.push("", heading);
+  for (const tool of tools) {
+    const { title, description } = getLocalizedTool(tool, locale);
+    const url = buildLocalizedUrl(locale, `/tools/${tool.slug}`);
+    lines.push(`- [${title}](${url}): ${description}`);
+  }
+}
+
+function appendCategorySection(lines: string[], locale: Locale, heading: string): void {
+  lines.push("", heading);
+  for (const category of categories) {
+    const { name, description } = getLocalizedCategory(category, locale);
+    const url = buildLocalizedUrl(locale, `/${category.id}`);
+    lines.push(`- [${name}](${url}): ${description}`);
+  }
+}
 
 /**
  * Build llms.txt (Markdown) from the tool registry so it stays in sync with new tools.
@@ -13,27 +30,19 @@ export function generateLlmsTxt(): string {
     "# kitzos",
     "> Free browser-based tools — no sign-up, no server uploads. Privacy-first.",
     "> Available in English and Arabic.",
-    "",
-    "## Tools",
   ];
 
-  for (const tool of tools) {
-    const url = buildLocalizedUrl(LLMS_LOCALE, `/tools/${tool.slug}`);
-    lines.push(`- [${tool.title}](${url}): ${tool.description}`);
-  }
+  appendToolSection(lines, "en", "## Tools (English)");
+  appendToolSection(lines, "ar", "## Tools (العربية)");
 
-  lines.push("", "## Categories");
-
-  for (const category of categories) {
-    const url = buildLocalizedUrl(LLMS_LOCALE, `/${category.id}`);
-    lines.push(`- [${category.name}](${url}): ${category.description}`);
-  }
+  appendCategorySection(lines, "en", "## Categories (English)");
+  appendCategorySection(lines, "ar", "## Categories (العربية)");
 
   lines.push(
     "",
     "## About",
-    `- [About](${buildLocalizedUrl(LLMS_LOCALE, "/about")})`,
-    `- [Privacy](${buildLocalizedUrl(LLMS_LOCALE, "/privacy")})`,
+    `- [About](${buildLocalizedUrl("en", "/about")}) | [من نحن](${buildLocalizedUrl("ar", "/about")})`,
+    `- [Privacy](${buildLocalizedUrl("en", "/privacy")}) | [الخصوصية](${buildLocalizedUrl("ar", "/privacy")})`,
     ""
   );
 

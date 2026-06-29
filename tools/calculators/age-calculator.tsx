@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useCalcToolLabels } from "@/lib/i18n/use-calc-tool-labels";
 
 function diffAge(birth: Date, ref: Date) {
@@ -30,9 +30,12 @@ function diffAge(birth: Date, ref: Date) {
 
 export default function AgeCalculator() {
   const t = useCalcToolLabels("ageCalculator");
-  const today = new Date().toISOString().slice(0, 10);
   const [birthDate, setBirthDate] = useState("1990-06-15");
-  const [asOfDate, setAsOfDate] = useState(today);
+  const [asOfDate, setAsOfDate] = useState("");
+
+  useEffect(() => {
+    setAsOfDate(new Date().toISOString().slice(0, 10));
+  }, []);
 
   const result = useMemo(() => {
     const birth = new Date(birthDate + "T12:00:00");
@@ -53,7 +56,13 @@ export default function AgeCalculator() {
           <input type="date" value={asOfDate} onChange={(e) => setAsOfDate(e.target.value)} className="input-field mt-1 w-full" />
         </label>
       </div>
-      <button type="button" onClick={() => setAsOfDate(today)} className="btn-secondary text-sm">{t.useToday}</button>
+      <button
+        type="button"
+        onClick={() => setAsOfDate(new Date().toISOString().slice(0, 10))}
+        className="btn-secondary text-sm"
+      >
+        {t.useToday}
+      </button>
       {result ? (
         <div className="grid gap-3 sm:grid-cols-3">
           {[

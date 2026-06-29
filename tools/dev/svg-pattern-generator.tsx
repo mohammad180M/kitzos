@@ -3,11 +3,13 @@
 import { useMemo, useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
+import { useDevToolsExtraLabels } from "@/lib/i18n/use-dev-tools-extra-labels";
 
 type PatternType = "dots" | "lines" | "grid";
 
 export default function SvgPatternGenerator() {
   const labels = useCommonLabels();
+  const t = useDevToolsExtraLabels("svgPatternGenerator");
   const [type, setType] = useState<PatternType>("dots");
   const [color, setColor] = useState("#2563eb");
   const [bg, setBg] = useState("#ffffff");
@@ -46,30 +48,30 @@ export default function SvgPatternGenerator() {
 
       <div className="grid gap-3 sm:grid-cols-2">
         <div>
-          <p className="text-sm font-medium">Pattern</p>
+          <p className="text-sm font-medium">{t.pattern}</p>
           <div className="mt-1 flex gap-1">
-            {(["dots", "lines", "grid"] as const).map((t) => (
+            {(["dots", "lines", "grid"] as const).map((pt) => (
               <button
-                key={t}
+                key={pt}
                 type="button"
-                onClick={() => setType(t)}
-                className={`rounded px-3 py-1 text-sm capitalize ${type === t ? "bg-primary-600 text-white" : "bg-gray-100 dark:bg-gray-800"}`}
+                onClick={() => setType(pt)}
+                className={`rounded px-3 py-1 text-sm capitalize ${type === pt ? "bg-primary-600 text-white" : "bg-gray-100 dark:bg-gray-800"}`}
               >
-                {t}
+                {t.patterns[pt]}
               </button>
             ))}
           </div>
         </div>
         <label className="text-sm">
-          Tile size
+          {t.tileSize}
           <input type="number" min={8} max={80} value={size} onChange={(e) => setSize(Number(e.target.value))} className="input-field mt-1" />
         </label>
         <label className="text-sm">
-          Pattern color
+          {t.patternColor}
           <input type="color" value={color} onChange={(e) => setColor(e.target.value)} className="mt-1 h-10 w-full" />
         </label>
         <label className="text-sm">
-          Background
+          {t.background}
           <input type="color" value={bg} onChange={(e) => setBg(e.target.value)} className="mt-1 h-10 w-full" />
         </label>
       </div>

@@ -116,10 +116,6 @@ export function getBaseMetadata(): Metadata {
       "calculators",
       "converters",
     ],
-    themeColor: [
-      { media: "(prefers-color-scheme: light)", color: "#2563eb" },
-      { media: "(prefers-color-scheme: dark)", color: "#1e3a8a" },
-    ],
     openGraph: {
       type: "website",
       siteName: SITE_NAME,
@@ -159,7 +155,7 @@ export function getRootMetadata(): Metadata {
       openGraph: {
         title: `${title} | ${SITE_NAME}`,
         description,
-        url: `${SITE_URL}/`,
+        url: buildLocalizedUrl(DEFAULT_LOCALE, "/"),
         type: "website",
         locale: "en_US",
       },
@@ -330,11 +326,6 @@ export function generateSoftwareApplicationSchema(tool: Tool, locale: Locale): o
     operatingSystem: "Web Browser",
     browserRequirements: "Requires JavaScript. Requires HTML5.",
     isAccessibleForFree: true,
-    offers: {
-      "@type": "Offer",
-      price: "0",
-      priceCurrency: "USD",
-    },
     url: buildLocalizedUrl(locale, path),
   };
 }

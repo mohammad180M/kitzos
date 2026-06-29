@@ -3,9 +3,11 @@
 import { useMemo, useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
+import { useDevToolsExtraLabels } from "@/lib/i18n/use-dev-tools-extra-labels";
 
 export default function GlassmorphismGenerator() {
   const labels = useCommonLabels();
+  const t = useDevToolsExtraLabels("glassmorphismGenerator");
   const [blur, setBlur] = useState(16);
   const [opacity, setOpacity] = useState(0.25);
   const [border, setBorder] = useState(1);
@@ -39,22 +41,22 @@ export default function GlassmorphismGenerator() {
             border: `${border}px solid rgba(255,255,255,0.3)`,
           }}
         >
-          <p className="text-lg font-semibold">Glass card</p>
-          <p className="text-sm opacity-90">Live preview</p>
+          <p className="text-lg font-semibold">{t.glassCard}</p>
+          <p className="text-sm opacity-90">{t.livePreview}</p>
         </div>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2">
-        <label className="text-sm">Blur ({blur}px)
+        <label className="text-sm">{t.blur} ({blur}px)
           <input type="range" min={4} max={40} value={blur} onChange={(e) => setBlur(Number(e.target.value))} className="w-full" />
         </label>
-        <label className="text-sm">Opacity ({opacity})
+        <label className="text-sm">{t.opacity} ({opacity})
           <input type="range" min={0.05} max={0.6} step={0.05} value={opacity} onChange={(e) => setOpacity(Number(e.target.value))} className="w-full" />
         </label>
-        <label className="text-sm">Border ({border}px)
+        <label className="text-sm">{t.border} ({border}px)
           <input type="range" min={0} max={4} value={border} onChange={(e) => setBorder(Number(e.target.value))} className="w-full" />
         </label>
-        <label className="text-sm">Backdrop gradient
+        <label className="text-sm">{t.backdropGradient}
           <input type="color" value={bg} onChange={(e) => setBg(e.target.value)} className="mt-1 h-10 w-full" />
         </label>
       </div>

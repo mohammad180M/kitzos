@@ -2,8 +2,14 @@
 
 import { useCallback, useRef, useState } from "react";
 import { Download, Lock, Unlock, Upload } from "lucide-react";
+import {
+  useImageToolsExtraLabels,
+  useImageToolsSharedLabels,
+} from "@/lib/i18n/use-image-tools-extra-labels";
 
 export default function ImageResizer() {
+  const shared = useImageToolsSharedLabels();
+  const t = useImageToolsExtraLabels("imageResizer");
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [originalWidth, setOriginalWidth] = useState(0);
@@ -16,29 +22,32 @@ export default function ImageResizer() {
 
   const aspectRatio = originalWidth / originalHeight || 1;
 
-  const handleFile = useCallback((f: File) => {
-    if (!f.type.startsWith("image/")) {
-      setError("Please upload a valid image file.");
-      return;
-    }
+  const handleFile = useCallback(
+    (f: File) => {
+      if (!f.type.startsWith("image/")) {
+        setError(shared.invalidImage);
+        return;
+      }
 
-    const url = URL.createObjectURL(f);
-    const img = new Image();
-    img.onload = () => {
-      setFile(f);
-      setPreviewUrl(url);
-      setOriginalWidth(img.width);
-      setOriginalHeight(img.height);
-      setWidth(img.width);
-      setHeight(img.height);
-      setError(null);
-    };
-    img.onerror = () => {
-      setError("Failed to load image.");
-      URL.revokeObjectURL(url);
-    };
-    img.src = url;
-  }, []);
+      const url = URL.createObjectURL(f);
+      const img = new Image();
+      img.onload = () => {
+        setFile(f);
+        setPreviewUrl(url);
+        setOriginalWidth(img.width);
+        setOriginalHeight(img.height);
+        setWidth(img.width);
+        setHeight(img.height);
+        setError(null);
+      };
+      img.onerror = () => {
+        setError(shared.loadFailed);
+        URL.revokeObjectURL(url);
+      };
+      img.src = url;
+    },
+    [shared.invalidImage, shared.loadFailed]
+  );
 
   const handleWidthChange = (w: number) => {
     setWidth(w);
@@ -56,7 +65,7 @@ export default function ImageResizer() {
 
   const download = () => {
     if (!file || !previewUrl || width <= 0 || height <= 0) {
-      setError("Enter valid dimensions.");
+      setError(t.errInvalidDims);
       return;
     }
 
@@ -67,7 +76,7 @@ export default function ImageResizer() {
       canvas.height = height;
       const ctx = canvas.getContext("2d");
       if (!ctx) {
-        setError("Canvas not supported.");
+        setError(t.errCanvasNotSupported);
         return;
       }
       ctx.drawImage(img, 0, 0, width, height);
@@ -76,7 +85,7 @@ export default function ImageResizer() {
       canvas.toBlob(
         (blob) => {
           if (!blob) {
-            setError("Resize failed.");
+            setError(t.errResizeFailed);
             return;
           }
           const ext = mimeType.split("/")[1] || "png";
@@ -106,7 +115,7 @@ export default function ImageResizer() {
         className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 dark:bg-gray-800/50 dark:border-gray-600 px-6 py-10 transition-colors hover:border-primary-400 hover:bg-primary-50/50 dark:hover:border-primary-500 dark:hover:bg-primary-950/30"
       >
         <Upload className="h-8 w-8 text-gray-400 dark:text-gray-500" aria-hidden="true" />
-        <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">Upload an image</p>
+        <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">{shared.uploadImage}</p>
         <input
           ref={inputRef}
           type="file"
@@ -132,7 +141,7 @@ export default function ImageResizer() {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={previewUrl}
-              alt="Image preview"
+              alt={t.previewAlt}
               loading="lazy"
               decoding="async"
               width={800}
@@ -142,13 +151,13 @@ export default function ImageResizer() {
           </div>
 
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            Original: {originalWidth} × {originalHeight} px
+            {t.originalDims(originalWidth, originalHeight)}
           </p>
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label htmlFor="width" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Width (px)
+                {t.width}
               </label>
               <input
                 id="width"
@@ -161,7 +170,7 @@ export default function ImageResizer() {
             </div>
             <div>
               <label htmlFor="height" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Height (px)
+                {t.height}
               </label>
               <input
                 id="height"
@@ -185,12 +194,12 @@ export default function ImageResizer() {
             ) : (
               <Unlock className="h-4 w-4" aria-hidden="true" />
             )}
-            {lockAspect ? "Aspect ratio locked" : "Aspect ratio unlocked"}
+            {lockAspect ? t.aspectLocked : t.aspectUnlocked}
           </button>
 
           <button type="button" onClick={download} className="btn-primary">
             <Download className="h-4 w-4" />
-            Download resized image
+            {t.downloadResized}
           </button>
         </>
       )}

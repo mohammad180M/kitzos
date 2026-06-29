@@ -6,6 +6,7 @@ import { Download, Loader2, Upload } from "lucide-react";
 import { setupCanvas } from "@/lib/canvas-utils";
 import { downloadBlob } from "@/lib/download";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
+import { usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
 
 const PAD_WIDTH = 400;
 const PAD_HEIGHT = 150;
@@ -32,6 +33,7 @@ function parsePageRange(range: string, totalPages: number): number[] {
 }
 
 export default function PdfSign() {
+  const t = usePdfToolLabels("pdfSign");
   const labels = useCommonLabels();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const drawing = useRef(false);
@@ -102,7 +104,7 @@ export default function PdfSign() {
       setPageRange(`1${count > 1 ? `-${count}` : ""}`);
     } catch {
       setPageCount(0);
-      setError("Could not read PDF. Try another file.");
+      setError(t.errReadFailed);
     }
   };
 
@@ -134,7 +136,7 @@ export default function PdfSign() {
       const pageIndices = getTargetPageIndices(pdfDoc.getPageCount());
 
       if (pageIndices.length === 0) {
-        setError("Enter a valid page range (e.g. 1-3, 5).");
+        setError(t.errInvalidRange);
         return;
       }
 
@@ -155,7 +157,7 @@ export default function PdfSign() {
       const out = await pdfDoc.save();
       downloadBlob(new Blob([out as BlobPart], { type: "application/pdf" }), `signed-${pdfFile.name}`);
     } catch {
-      setError("Could not sign PDF. Check the file and try again.");
+      setError(t.errSignFailed);
     } finally {
       setProcessing(false);
     }
@@ -180,24 +182,24 @@ export default function PdfSign() {
         className="btn-secondary inline-flex items-center gap-2"
       >
         <Upload className="h-4 w-4" />
-        {pdfFile ? pdfFile.name : "Upload PDF"}
+        {pdfFile ? pdfFile.name : t.uploadPdf}
       </button>
 
       {pageCount > 0 && (
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          {pageCount} page{pageCount !== 1 ? "s" : ""}
+          {t.pageCount(pageCount)}
         </p>
       )}
 
       {pageCount > 0 && (
         <div className="space-y-3 rounded-lg border border-gray-200 p-4 dark:border-gray-700">
-          <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Apply signature to</p>
+          <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.applySignatureTo}</p>
           <div className="flex flex-wrap gap-2">
             {(
               [
-                { id: "current" as PageMode, label: "Current page" },
-                { id: "all" as PageMode, label: "All pages" },
-                { id: "range" as PageMode, label: "Page range" },
+                { id: "current" as PageMode, label: t.currentPage },
+                { id: "all" as PageMode, label: t.allPages },
+                { id: "range" as PageMode, label: t.pageRange },
               ] as const
             ).map(({ id, label }) => (
               <button
@@ -217,7 +219,7 @@ export default function PdfSign() {
 
           {pageMode === "current" && (
             <label className="block text-sm">
-              <span className="text-gray-600 dark:text-gray-400">Page number</span>
+              <span className="text-gray-600 dark:text-gray-400">{t.pageNumber}</span>
               <input
                 type="number"
                 min={1}
@@ -231,12 +233,12 @@ export default function PdfSign() {
 
           {pageMode === "range" && (
             <label className="block text-sm">
-              <span className="text-gray-600 dark:text-gray-400">Pages (e.g. 1-3, 5)</span>
+              <span className="text-gray-600 dark:text-gray-400">{t.pagesRangeHint}</span>
               <input
                 type="text"
                 value={pageRange}
                 onChange={(e) => setPageRange(e.target.value)}
-                placeholder="1-3, 5"
+                placeholder={t.pagesRangePlaceholder}
                 className="input-field mt-1"
               />
             </label>
@@ -245,7 +247,7 @@ export default function PdfSign() {
       )}
 
       <div>
-        <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">Draw signature</p>
+        <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">{t.drawSignature}</p>
         <canvas
           ref={canvasRef}
           className="w-full max-w-md cursor-crosshair rounded-lg border border-gray-300 bg-white dark:border-gray-600 dark:bg-gray-900"
@@ -269,7 +271,7 @@ export default function PdfSign() {
         className="btn-primary inline-flex items-center gap-2"
       >
         {processing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
-        Sign & {labels.download}
+        {t.signAndDownload}
       </button>
     </div>
   );

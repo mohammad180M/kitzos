@@ -102,10 +102,10 @@
       <description>Combine 2–4 photos into a grid collage with adjustable gap. Download as one PNG.</description>
     </item>
     <item>
-      <title>Pixelate Image</title>
+      <title>Pixelate Images</title>
       <link>https://kitzos.com/en/tools/pixelate-image/</link>
       <guid isPermaLink="true">https://kitzos.com/en/tools/pixelate-image/</guid>
-      <description>Blur sensitive areas with adjustable pixelation for privacy. Process locally in browser.</description>
+      <description>Pixelate a selected region or the full image for privacy. Process locally in browser.</description>
     </item>
     <item>
       <title>Image to ASCII Art</title>

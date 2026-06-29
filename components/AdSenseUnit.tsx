@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { ADSENSE_CLIENT } from "@/lib/ads-config";
+import { useEffect, useRef, useState } from "react";
+import { ADSENSE_CLIENT, shouldShowAds } from "@/lib/ads-config";
 
 declare global {
   interface Window {
@@ -18,8 +18,14 @@ interface AdSenseUnitProps {
 
 export default function AdSenseUnit({ slot, width, height, className }: AdSenseUnitProps) {
   const insRef = useRef<HTMLModElement>(null);
+  const [adsEnabled, setAdsEnabled] = useState(false);
 
   useEffect(() => {
+    setAdsEnabled(shouldShowAds());
+  }, []);
+
+  useEffect(() => {
+    if (!adsEnabled) return;
     const el = insRef.current;
     if (!el || el.getAttribute("data-adsbygoogle-status")) return;
     try {
@@ -27,7 +33,9 @@ export default function AdSenseUnit({ slot, width, height, className }: AdSenseU
     } catch {
       // ignored
     }
-  }, [slot]);
+  }, [slot, adsEnabled]);
+
+  if (!adsEnabled) return null;
 
   return (
     <ins

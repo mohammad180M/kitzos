@@ -150,3 +150,27 @@
     animation: none;
   }
 }
+
+/* Home category pagination — fade between pages */
+.home-category-page-grid {
+  transition: opacity 0.25s ease-out;
+}
+
+.home-category-page-grid--hidden {
+  opacity: 0;
+}
+
+.home-category-page-viewport {
+  transition: height 0.3s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-category-page-grid,
+  .home-category-page-viewport {
+    transition: none;
+  }
+
+  .home-category-page-grid--hidden {
+    opacity: 1;
+  }
+}

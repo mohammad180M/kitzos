@@ -1,7 +1,7 @@
 {
   "name": "kitzos — Free Online Tools",
   "short_name": "kitzos",
-  "description": "Free browser-based tools for PDF, images, text, and developers. Private, fast, no signup.",
+  "description": "Free browser-based tools for PDF, images, text, and developers. Available in English and Arabic.",
   "lang": "en",
   "dir": "ltr",
   "start_url": "/en/",

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
+import { useTextToolLabels } from "@/lib/i18n/use-text-tool-labels";
 
 type CaseType =
   | "upper"
@@ -40,19 +41,20 @@ function toSnakeCase(str: string): string {
     .toLowerCase();
 }
 
-const buttons: { type: CaseType; label: string }[] = [
-  { type: "upper", label: "UPPERCASE" },
-  { type: "lower", label: "lowercase" },
-  { type: "title", label: "Title Case" },
-  { type: "sentence", label: "Sentence case" },
-  { type: "camel", label: "camelCase" },
-  { type: "snake", label: "snake_case" },
-];
-
 export default function CaseConverter() {
   const labels = useCommonLabels();
+  const t = useTextToolLabels("caseConverter");
   const [text, setText] = useState("");
   const [copied, setCopied] = useState(false);
+
+  const buttons: { type: CaseType; label: string }[] = [
+    { type: "upper", label: t.upper },
+    { type: "lower", label: t.lower },
+    { type: "title", label: t.title },
+    { type: "sentence", label: t.sentence },
+    { type: "camel", label: t.camel },
+    { type: "snake", label: t.snake },
+  ];
 
   const convert = (type: CaseType) => {
     switch (type) {
@@ -92,10 +94,10 @@ export default function CaseConverter() {
       <textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
-        placeholder="Enter text to convert…"
+        placeholder={t.placeholder}
         rows={6}
         className="input-field resize-y"
-        aria-label="Text to convert"
+        aria-label={t.ariaLabel}
       />
 
       <div className="flex flex-wrap gap-2">

@@ -3,9 +3,11 @@
 import { useEffect, useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
+import { useTextToolLabels } from "@/lib/i18n/use-text-tool-labels";
 
 export default function MarkdownToHtml() {
   const labels = useCommonLabels();
+  const t = useTextToolLabels("markdownToHtml");
   const [markdown, setMarkdown] = useState("# Hello\n\nWrite **Markdown** here.");
   const [html, setHtml] = useState("");
   const [copied, setCopied] = useState(false);
@@ -51,7 +53,7 @@ export default function MarkdownToHtml() {
       <div className="grid gap-4 lg:grid-cols-2">
         <div>
           <label htmlFor="md-input" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Markdown
+            {t.markdown}
           </label>
           <textarea
             id="md-input"
@@ -60,15 +62,15 @@ export default function MarkdownToHtml() {
             rows={14}
             className="input-field mt-1 resize-y font-mono text-sm"
             spellCheck={false}
-            placeholder="# Heading&#10;&#10;Your markdown here…"
+            placeholder={t.placeholder}
           />
         </div>
         <div>
-          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">HTML preview</label>
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.htmlPreview}</label>
           <div
             className="mt-1 max-h-[22rem] min-h-[22rem] overflow-auto rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 [&_a]:text-primary-600 dark:[&_a]:text-primary-400 [&_code]:rounded [&_code]:bg-gray-100 [&_code]:px-1 dark:[&_code]:bg-gray-700 [&_h1]:text-xl [&_h1]:font-bold [&_h2]:text-lg [&_h2]:font-semibold [&_ol]:list-decimal [&_ol]:pl-5 [&_p]:my-2 [&_ul]:list-disc [&_ul]:pl-5"
             dangerouslySetInnerHTML={{
-              __html: html || "<p class='text-gray-400 dark:text-gray-500'>Preview appears here…</p>",
+              __html: html || `<p class='text-gray-400 dark:text-gray-500'>${t.previewEmpty}</p>`,
             }}
           />
         </div>
@@ -83,7 +85,7 @@ export default function MarkdownToHtml() {
         ) : (
           <>
             <Copy className="h-4 w-4" />
-            Copy HTML
+            {t.copyHtml}
           </>
         )}
       </button>

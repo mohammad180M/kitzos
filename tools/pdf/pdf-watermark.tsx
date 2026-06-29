@@ -4,10 +4,10 @@ import { useRef, useState } from "react";
 import { PDFDocument, rgb, degrees } from "pdf-lib";
 import { Download, Loader2, Upload } from "lucide-react";
 import { downloadBlob } from "@/lib/audio-utils";
-import { useCommonLabels } from "@/lib/i18n/use-common-labels";
+import { usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
 
 export default function PdfWatermark() {
-  const labels = useCommonLabels();
+  const t = usePdfToolLabels("pdfWatermark");
   const inputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [text, setText] = useState("CONFIDENTIAL");
@@ -68,7 +68,7 @@ export default function PdfWatermark() {
       const out = await pdfDoc.save();
       downloadBlob(new Blob([out as BlobPart], { type: "application/pdf" }), `watermarked-${file.name}`);
     } catch {
-      setError("Could not watermark PDF.");
+      setError(t.errWatermarkFailed);
     } finally {
       setProcessing(false);
     }
@@ -86,11 +86,11 @@ export default function PdfWatermark() {
 
       <button type="button" onClick={() => inputRef.current?.click()} className="btn-secondary inline-flex items-center gap-2">
         <Upload className="h-4 w-4" />
-        {file ? file.name : "Upload PDF"}
+        {file ? file.name : t.uploadPdf}
       </button>
 
       <label className="block text-sm">
-        <span className="font-medium text-gray-700 dark:text-gray-300">Watermark text</span>
+        <span className="font-medium text-gray-700 dark:text-gray-300">{t.watermarkText}</span>
         <input
           type="text"
           value={text}
@@ -100,7 +100,7 @@ export default function PdfWatermark() {
       </label>
 
       <label className="block text-sm">
-        <span className="font-medium text-gray-700 dark:text-gray-300">Size ({fontSize}pt)</span>
+        <span className="font-medium text-gray-700 dark:text-gray-300">{t.sizeLabel(fontSize)}</span>
         <input
           type="range"
           min={16}
@@ -113,7 +113,7 @@ export default function PdfWatermark() {
       </label>
 
       <label className="block text-sm">
-        <span className="font-medium text-gray-700 dark:text-gray-300">Opacity ({Math.round(opacity * 100)}%)</span>
+        <span className="font-medium text-gray-700 dark:text-gray-300">{t.opacityLabel(Math.round(opacity * 100))}</span>
         <input
           type="range"
           min={0.1}
@@ -126,7 +126,7 @@ export default function PdfWatermark() {
       </label>
 
       <div>
-        <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Layout</p>
+        <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.layout}</p>
         <div className="mt-2 inline-flex rounded-lg border border-gray-300 bg-white p-0.5 dark:border-gray-600 dark:bg-gray-800">
           <button
             type="button"
@@ -135,7 +135,7 @@ export default function PdfWatermark() {
               !tile ? "bg-primary-600 text-white" : "text-gray-600 dark:text-gray-400"
             }`}
           >
-            Single
+            {t.single}
           </button>
           <button
             type="button"
@@ -144,7 +144,7 @@ export default function PdfWatermark() {
               tile ? "bg-primary-600 text-white" : "text-gray-600 dark:text-gray-400"
             }`}
           >
-            Tiled (repeat)
+            {t.tiled}
           </button>
         </div>
       </div>
@@ -158,7 +158,7 @@ export default function PdfWatermark() {
         className="btn-primary inline-flex items-center gap-2"
       >
         {processing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
-        Apply & {labels.download}
+        {t.applyAndDownload}
       </button>
     </div>
   );

@@ -10,6 +10,7 @@ import {
   Upload,
   Loader2,
 } from "lucide-react";
+import { usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
 
 interface PdfFile {
   id: string;
@@ -25,6 +26,7 @@ function formatBytes(bytes: number): string {
 }
 
 export default function MergePdf() {
+  const t = usePdfToolLabels("mergePdf");
   const [files, setFiles] = useState<PdfFile[]>([]);
   const [merging, setMerging] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -32,26 +34,29 @@ export default function MergePdf() {
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const addFiles = useCallback((newFiles: FileList | File[]) => {
-    setError(null);
-    const pdfFiles = Array.from(newFiles).filter(
-      (f) => f.type === "application/pdf" || f.name.toLowerCase().endsWith(".pdf")
-    );
+  const addFiles = useCallback(
+    (newFiles: FileList | File[]) => {
+      setError(null);
+      const pdfFiles = Array.from(newFiles).filter(
+        (f) => f.type === "application/pdf" || f.name.toLowerCase().endsWith(".pdf")
+      );
 
-    if (pdfFiles.length === 0) {
-      setError("Please select valid PDF files.");
-      return;
-    }
+      if (pdfFiles.length === 0) {
+        setError(t.errInvalidFiles);
+        return;
+      }
 
-    const items: PdfFile[] = pdfFiles.map((file) => ({
-      id: `${file.name}-${file.size}-${Date.now()}-${Math.random()}`,
-      file,
-      name: file.name,
-      size: file.size,
-    }));
+      const items: PdfFile[] = pdfFiles.map((file) => ({
+        id: `${file.name}-${file.size}-${Date.now()}-${Math.random()}`,
+        file,
+        name: file.name,
+        size: file.size,
+      }));
 
-    setFiles((prev) => [...prev, ...items]);
-  }, []);
+      setFiles((prev) => [...prev, ...items]);
+    },
+    [t.errInvalidFiles]
+  );
 
   const handleDrop = useCallback(
     (e: DragEvent) => {
@@ -98,7 +103,7 @@ export default function MergePdf() {
 
   const mergePdfs = async () => {
     if (files.length < 2) {
-      setError("Add at least two PDF files to merge.");
+      setError(t.errNeedTwo);
       return;
     }
 
@@ -126,9 +131,7 @@ export default function MergePdf() {
       a.click();
       URL.revokeObjectURL(url);
     } catch {
-      setError(
-        "Failed to merge PDFs. Make sure all files are valid, unencrypted PDFs."
-      );
+      setError(t.errMergeFailed);
     } finally {
       setMerging(false);
     }
@@ -145,13 +148,11 @@ export default function MergePdf() {
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") inputRef.current?.click();
         }}
-        className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 dark:bg-gray-800/50 dark:border-gray-600 px-6 py-10 transition-colors hover:border-primary-400 hover:bg-primary-50/50 dark:hover:border-primary-500 dark:hover:bg-primary-950/30"
+        className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 px-6 py-10 transition-colors hover:border-primary-400 hover:bg-primary-50/50 dark:border-gray-600 dark:bg-gray-800/50 dark:hover:border-primary-500 dark:hover:bg-primary-950/30"
       >
         <Upload className="h-8 w-8 text-gray-400 dark:text-gray-500" aria-hidden="true" />
-        <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-          Drop PDF files here or click to upload
-        </p>
-        <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">Multiple files supported</p>
+        <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">{t.dropHint}</p>
+        <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">{t.multipleSupported}</p>
         <input
           ref={inputRef}
           type="file"
@@ -166,13 +167,16 @@ export default function MergePdf() {
       </div>
 
       {error && (
-        <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300" role="alert">
+        <p
+          className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300"
+          role="alert"
+        >
           {error}
         </p>
       )}
 
       {files.length > 0 && (
-        <ul className="space-y-2" aria-label="PDF files to merge">
+        <ul className="space-y-2" aria-label={t.filesListAria}>
           {files.map((pdf, index) => (
             <li
               key={pdf.id}
@@ -194,16 +198,21 @@ export default function MergePdf() {
                 className="h-4 w-4 shrink-0 cursor-grab text-gray-400 dark:text-gray-500"
                 aria-hidden="true"
               />
-              <FileText className="h-5 w-5 shrink-0 text-primary-600 dark:text-primary-400" aria-hidden="true" />
+              <FileText
+                className="h-5 w-5 shrink-0 text-primary-600 dark:text-primary-400"
+                aria-hidden="true"
+              />
               <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium text-gray-900 dark:text-gray-100">{pdf.name}</p>
+                <p className="truncate text-sm font-medium text-gray-900 dark:text-gray-100">
+                  {pdf.name}
+                </p>
                 <p className="text-xs text-gray-400 dark:text-gray-500">{formatBytes(pdf.size)}</p>
               </div>
               <button
                 type="button"
                 onClick={() => removeFile(pdf.id)}
-                className="rounded p-1 text-gray-400 dark:text-gray-500 hover:bg-gray-100 hover:text-red-600 dark:hover:bg-gray-700"
-                aria-label={`Remove ${pdf.name}`}
+                className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-red-600 dark:text-gray-500 dark:hover:bg-gray-700"
+                aria-label={t.removeFile(pdf.name)}
               >
                 <Trash2 className="h-4 w-4" />
               </button>
@@ -221,12 +230,12 @@ export default function MergePdf() {
         {merging ? (
           <>
             <Loader2 className="h-4 w-4 animate-spin" />
-            Merging…
+            {t.merging}
           </>
         ) : (
           <>
             <Download className="h-4 w-4" />
-            Merge PDF
+            {t.mergePdf}
           </>
         )}
       </button>

@@ -3,11 +3,13 @@
 import { useMemo, useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
+import { useTextToolLabels } from "@/lib/i18n/use-text-tool-labels";
 
 type CleanMode = "remove-breaks" | "remove-extra-spaces" | "breaks-to-spaces";
 
 export default function RemoveLineBreaks() {
   const labels = useCommonLabels();
+  const t = useTextToolLabels("removeLineBreaks");
   const [input, setInput] = useState("");
   const [mode, setMode] = useState<CleanMode>("remove-breaks");
   const [copied, setCopied] = useState(false);
@@ -30,6 +32,12 @@ export default function RemoveLineBreaks() {
     }
   }, [input, mode]);
 
+  const modeOptions: { value: CleanMode; label: string }[] = [
+    { value: "remove-breaks", label: t.removeBreaks },
+    { value: "remove-extra-spaces", label: t.removeExtraSpaces },
+    { value: "breaks-to-spaces", label: t.breaksToSpaces },
+  ];
+
   const copy = async () => {
     if (!output) return;
     try {
@@ -45,25 +53,21 @@ export default function RemoveLineBreaks() {
     <div className="space-y-4">
       <div>
         <label htmlFor="line-input" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-          Text
+          {t.input}
         </label>
         <textarea
           id="line-input"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           rows={8}
-          placeholder="Paste text with line breaks…"
+          placeholder={t.placeholder}
           className="input-field mt-1 resize-y text-sm"
         />
       </div>
 
       <fieldset className="space-y-2">
-        <legend className="text-sm font-medium text-gray-700 dark:text-gray-300">Options</legend>
-        {[
-          { value: "remove-breaks" as const, label: "Remove all line breaks" },
-          { value: "remove-extra-spaces" as const, label: "Remove extra spaces (keep line breaks)" },
-          { value: "breaks-to-spaces" as const, label: "Convert line breaks to spaces" },
-        ].map((opt) => (
+        <legend className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.options}</legend>
+        {modeOptions.map((opt) => (
           <label key={opt.value} className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
             <input
               type="radio"
@@ -80,7 +84,7 @@ export default function RemoveLineBreaks() {
       {output && (
         <div>
           <label htmlFor="line-output" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Result
+            {t.result}
           </label>
           <textarea
             id="line-output"

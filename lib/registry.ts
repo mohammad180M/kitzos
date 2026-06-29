@@ -669,8 +669,8 @@ const toolDefinitions: Tool[] = [
   },
   {
     slug: "pixelate-image",
-    title: "Pixelate Image",
-    description: "Blur sensitive areas with adjustable pixelation for privacy. Process locally in browser.",
+    title: "Pixelate Images",
+    description: "Pixelate a selected region or the full image for privacy. Process locally in browser.",
     category: "image",
     icon: "Grid3x3",
     keywords: ["pixelate image", "blur face", "censor image", "privacy blur photo"],

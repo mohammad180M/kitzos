@@ -5,6 +5,7 @@ import { Download, Upload } from "lucide-react";
 import { setupCanvas, canvasToBlob } from "@/lib/canvas-utils";
 import { downloadBlob } from "@/lib/download";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
+import { useImageToolsExtraLabels } from "@/lib/i18n/use-image-tools-extra-labels";
 
 const CANVAS_WIDTH = 600;
 
@@ -19,6 +20,7 @@ const FONT_OPTIONS = [
 
 export default function MemeGenerator() {
   const labels = useCommonLabels();
+  const t = useImageToolsExtraLabels("memeGenerator");
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
   const objectUrlRef = useRef<string | null>(null);
@@ -110,7 +112,7 @@ export default function MemeGenerator() {
         className="btn-secondary inline-flex items-center gap-2"
       >
         <Upload className="h-4 w-4" />
-        Upload image
+        {t.uploadImage}
       </button>
 
       {hasImage && (
@@ -121,7 +123,7 @@ export default function MemeGenerator() {
       )}
 
       <div>
-        <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">Font</p>
+        <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">{t.font}</p>
         <div className="flex flex-wrap gap-1 rounded-lg border border-gray-300 bg-white p-0.5 dark:border-gray-600 dark:bg-gray-800">
           {FONT_OPTIONS.map((f) => (
             <button
@@ -142,7 +144,7 @@ export default function MemeGenerator() {
 
       <div className="grid gap-3 sm:grid-cols-2">
         <label className="text-sm">
-          Top text
+          {t.topText}
           <input
             value={topText}
             onChange={(e) => setTopText(e.target.value)}
@@ -151,7 +153,7 @@ export default function MemeGenerator() {
           />
         </label>
         <label className="text-sm">
-          Bottom text
+          {t.bottomText}
           <input
             value={bottomText}
             onChange={(e) => setBottomText(e.target.value)}

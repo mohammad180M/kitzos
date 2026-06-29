@@ -3,10 +3,10 @@
 import { useRef, useState } from "react";
 import { Download, Eye, EyeOff, Loader2, Upload } from "lucide-react";
 import { downloadBlob } from "@/lib/audio-utils";
-import { useCommonLabels } from "@/lib/i18n/use-common-labels";
+import { usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
 
 export default function PdfProtect() {
-  const labels = useCommonLabels();
+  const t = usePdfToolLabels("pdfProtect");
   const inputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [password, setPassword] = useState("");
@@ -16,7 +16,7 @@ export default function PdfProtect() {
 
   const protect = async () => {
     if (!file || !password) {
-      setError("Upload a PDF and enter a password.");
+      setError(t.errNeedPassword);
       return;
     }
     setProcessing(true);
@@ -52,7 +52,7 @@ export default function PdfProtect() {
       const out = qpdf.FS.readFile(outputPath);
       downloadBlob(new Blob([out as BlobPart], { type: "application/pdf" }), `protected-${file.name}`);
     } catch {
-      setError("Could not protect PDF. Try a different file or password.");
+      setError(t.errProtectFailed);
     } finally {
       setProcessing(false);
     }
@@ -70,11 +70,11 @@ export default function PdfProtect() {
 
       <button type="button" onClick={() => inputRef.current?.click()} className="btn-secondary inline-flex items-center gap-2">
         <Upload className="h-4 w-4" />
-        {file ? file.name : "Upload PDF"}
+        {file ? file.name : t.uploadPdf}
       </button>
 
       <label className="block text-sm">
-        <span className="font-medium text-gray-700 dark:text-gray-300">Password</span>
+        <span className="font-medium text-gray-700 dark:text-gray-300">{t.password}</span>
         <div className="relative mt-1">
           <input
             type={showPassword ? "text" : "password"}
@@ -87,7 +87,7 @@ export default function PdfProtect() {
             type="button"
             onClick={() => setShowPassword((v) => !v)}
             className="absolute end-2 top-1/2 -translate-y-1/2 rounded p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-            aria-label={showPassword ? "Hide password" : "Show password"}
+            aria-label={showPassword ? t.hidePassword : t.showPassword}
           >
             {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
           </button>
@@ -103,12 +103,10 @@ export default function PdfProtect() {
         className="btn-primary inline-flex items-center gap-2"
       >
         {processing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
-        Protect & {labels.download}
+        {t.protectAndDownload}
       </button>
 
-      <p className="text-xs text-gray-400">
-        Uses qpdf (WASM) locally in your browser — standard PDF password encryption, nothing uploaded.
-      </p>
+      <p className="text-xs text-gray-400">{t.privacyNote}</p>
     </div>
   );
 }

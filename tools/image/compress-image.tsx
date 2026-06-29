@@ -2,6 +2,10 @@
 
 import { useCallback, useRef, useState } from "react";
 import { Download, ImageIcon, Upload } from "lucide-react";
+import {
+  useImageToolsExtraLabels,
+  useImageToolsSharedLabels,
+} from "@/lib/i18n/use-image-tools-extra-labels";
 
 function formatBytes(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
@@ -15,6 +19,8 @@ function effectiveJpegQuality(sliderValue: number): number {
 }
 
 export default function CompressImage() {
+  const shared = useImageToolsSharedLabels();
+  const t = useImageToolsExtraLabels("compressImage");
   const [originalFile, setOriginalFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [quality, setQuality] = useState(80);
@@ -53,7 +59,7 @@ export default function CompressImage() {
           canvas.height = img.height;
           const ctx = canvas.getContext("2d");
           if (!ctx) {
-            setError("Canvas not supported in this browser.");
+            setError(shared.canvasNotSupported);
             return;
           }
           ctx.drawImage(img, 0, 0);
@@ -64,7 +70,7 @@ export default function CompressImage() {
           canvas.toBlob(
             (blob) => {
               if (!blob) {
-                setError("Compression failed. Try a different image.");
+                setError(t.errCompressionFailed);
                 return;
               }
               applyResult(file, blob);
@@ -73,19 +79,19 @@ export default function CompressImage() {
             qualityValue
           );
         };
-        img.onerror = () => setError("Failed to load image.");
+        img.onerror = () => setError(shared.loadFailed);
         img.src = e.target?.result as string;
       };
-      reader.onerror = () => setError("Failed to read file.");
+      reader.onerror = () => setError(t.errReadFailed);
       reader.readAsDataURL(file);
     },
-    [applyResult]
+    [applyResult, shared.canvasNotSupported, shared.loadFailed, t.errCompressionFailed, t.errReadFailed]
   );
 
   const handleFile = useCallback(
     (file: File) => {
       if (!["image/jpeg", "image/png", "image/jpg"].includes(file.type)) {
-        setError("Please upload a JPG or PNG image.");
+        setError(t.errInvalidFormat);
         return;
       }
       setOriginalFile(file);
@@ -96,7 +102,7 @@ export default function CompressImage() {
       setSavingsPercent(null);
       compress(file, quality);
     },
-    [compress, quality]
+    [compress, quality, t.errInvalidFormat]
   );
 
   const handleQualityChange = (q: number) => {
@@ -131,7 +137,7 @@ export default function CompressImage() {
       >
         <Upload className="h-8 w-8 text-gray-400 dark:text-gray-500" aria-hidden="true" />
         <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-          Upload JPG or PNG image
+          {t.uploadHint}
         </p>
         <input
           ref={inputRef}
@@ -156,7 +162,7 @@ export default function CompressImage() {
         <>
           <div className="flex flex-col gap-4 sm:flex-row">
             <div className="flex-1">
-              <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">Preview</p>
+              <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">{shared.preview}</p>
               <div
                 className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700"
                 style={{
@@ -171,7 +177,7 @@ export default function CompressImage() {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={previewUrl}
-                  alt="Image preview"
+                  alt={t.previewAlt}
                   loading="lazy"
                   decoding="async"
                   width={800}
@@ -188,29 +194,29 @@ export default function CompressImage() {
                 </div>
                 <dl className="mt-3 space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <dt className="text-gray-500 dark:text-gray-400">Original size</dt>
+                    <dt className="text-gray-500 dark:text-gray-400">{t.originalSize}</dt>
                     <dd className="font-medium">{formatBytes(originalFile.size)}</dd>
                   </div>
                   {outputSize !== null && (
                     <>
                       <div className="flex justify-between">
-                        <dt className="text-gray-500 dark:text-gray-400">Output size</dt>
+                        <dt className="text-gray-500 dark:text-gray-400">{t.outputSize}</dt>
                         <dd className="font-medium text-primary-600 dark:text-primary-400">
                           {formatBytes(outputSize)}
                         </dd>
                       </div>
                       {usingOriginal ? (
                         <div className="flex justify-between">
-                          <dt className="text-gray-500 dark:text-gray-400">Status</dt>
+                          <dt className="text-gray-500 dark:text-gray-400">{t.status}</dt>
                           <dd className="font-medium text-amber-700 dark:text-amber-300">
-                            Already optimized — original kept
+                            {t.alreadyOptimized}
                           </dd>
                         </div>
                       ) : (
                         savingsPercent !== null &&
                         savingsPercent > 0 && (
                           <div className="flex justify-between">
-                            <dt className="text-gray-500 dark:text-gray-400">Saved</dt>
+                            <dt className="text-gray-500 dark:text-gray-400">{t.saved}</dt>
                             <dd className="font-medium text-green-600 dark:text-green-400">
                               {savingsPercent}%
                             </dd>
@@ -225,7 +231,7 @@ export default function CompressImage() {
               {!isPng && (
                 <div>
                   <label htmlFor="quality" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Quality: {quality}%
+                    {t.qualityLabel(quality)}
                   </label>
                   <input
                     id="quality"
@@ -237,15 +243,14 @@ export default function CompressImage() {
                     className="mt-2 w-full accent-primary-600"
                   />
                   <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
-                    Quality applies to JPEG only. PNG files keep their original format.
+                    {t.qualityHint}
                   </p>
                 </div>
               )}
 
               {isPng && (
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  PNG is lossless — output stays PNG with transparency preserved. If
-                  re-encoding cannot reduce size, the original file is kept.
+                  {t.pngHint}
                 </p>
               )}
             </div>
@@ -258,7 +263,7 @@ export default function CompressImage() {
             className="btn-primary"
           >
             <Download className="h-4 w-4" />
-            {usingOriginal ? "Download original image" : "Download compressed image"}
+            {usingOriginal ? t.downloadOriginal : t.downloadCompressed}
           </button>
         </>
       )}

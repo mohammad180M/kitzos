@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { RotateCcw } from "lucide-react";
+import { useMiscToolsExtraLabels } from "@/lib/i18n/use-misc-tools-extra-labels";
 
 const SAMPLE_TEXTS = [
   "The quick brown fox jumps over the lazy dog near the riverbank on a sunny afternoon.",
@@ -16,12 +17,17 @@ function pickSample(): string {
 }
 
 export default function TypingSpeedTest() {
-  const [sample, setSample] = useState(pickSample);
+  const t = useMiscToolsExtraLabels("typingSpeedTest");
+  const [sample, setSample] = useState(SAMPLE_TEXTS[0]);
   const [input, setInput] = useState("");
   const [startedAt, setStartedAt] = useState<number | null>(null);
   const [finished, setFinished] = useState(false);
   const [tick, setTick] = useState(0);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    setSample(pickSample());
+  }, []);
 
   useEffect(() => {
     if (!startedAt || finished) return;
@@ -87,27 +93,27 @@ export default function TypingSpeedTest() {
         value={input}
         onChange={(e) => handleInput(e.target.value)}
         disabled={finished}
-        placeholder="Start typing here…"
+        placeholder={t.placeholder}
         rows={4}
         className="input-field resize-none font-mono text-sm"
         spellCheck={false}
         autoComplete="off"
         autoCorrect="off"
         autoCapitalize="off"
-        aria-label="Typing input"
+        aria-label={t.ariaLabel}
       />
 
       <div className="grid grid-cols-3 gap-3">
         <div className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-center dark:border-gray-700 dark:bg-gray-900">
-          <p className="text-xs text-gray-500 dark:text-gray-400">WPM</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400">{t.wpm}</p>
           <p className="text-xl font-bold text-primary-600 dark:text-primary-400">{wpm}</p>
         </div>
         <div className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-center dark:border-gray-700 dark:bg-gray-900">
-          <p className="text-xs text-gray-500 dark:text-gray-400">Accuracy</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400">{t.accuracy}</p>
           <p className="text-xl font-bold text-gray-900 dark:text-gray-100">{accuracy}%</p>
         </div>
         <div className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-center dark:border-gray-700 dark:bg-gray-900">
-          <p className="text-xs text-gray-500 dark:text-gray-400">Progress</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400">{t.progress}</p>
           <p className="text-xl font-bold text-gray-900 dark:text-gray-100">
             {Math.min(100, Math.round((input.length / sample.length) * 100))}%
           </p>
@@ -116,16 +122,16 @@ export default function TypingSpeedTest() {
 
       {finished && (
         <div className="rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-center dark:border-green-800 dark:bg-green-950/40">
-          <p className="font-semibold text-green-800 dark:text-green-200">Test complete!</p>
+          <p className="font-semibold text-green-800 dark:text-green-200">{t.testComplete}</p>
           <p className="mt-1 text-sm text-green-700 dark:text-green-300">
-            {wpm} WPM with {accuracy}% accuracy
+            {t.resultSummary.replace("{wpm}", String(wpm)).replace("{accuracy}", String(accuracy))}
           </p>
         </div>
       )}
 
       <button type="button" onClick={reset} className="btn-secondary">
         <RotateCcw className="h-4 w-4" />
-        New test
+        {t.newTest}
       </button>
     </div>
   );

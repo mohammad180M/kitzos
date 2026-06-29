@@ -28,6 +28,10 @@ export interface Dictionary {
     categoriesMenu: string;
     switchToArabic: string;
     switchToEnglish: string;
+    toggleLanguage: string;
+    switchToLightMode: string;
+    switchToDarkMode: string;
+    toggleTheme: string;
   };
   home: {
     title: string;
@@ -49,6 +53,7 @@ export interface Dictionary {
     relatedTools: string;
     faq: string;
     breadcrumbAria: string;
+    advertisementAria: string;
   };
   footer: {
     tagline: string;

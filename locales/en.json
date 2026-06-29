@@ -21,7 +21,11 @@
     "categoriesAria": "Categories",
     "categoriesMenu": "Browse tool categories",
     "switchToArabic": "Switch to Arabic",
-    "switchToEnglish": "Switch to English"
+    "switchToEnglish": "Switch to English",
+    "toggleLanguage": "Toggle language",
+    "switchToLightMode": "Switch to light mode",
+    "switchToDarkMode": "Switch to dark mode",
+    "toggleTheme": "Toggle theme"
   },
   "home": {
     "title": "Kitzos Tools",
@@ -42,7 +46,8 @@
     "howToUse": "How to use",
     "relatedTools": "Related tools",
     "faq": "Frequently Asked Questions",
-    "breadcrumbAria": "Breadcrumb"
+    "breadcrumbAria": "Breadcrumb",
+    "advertisementAria": "Advertisement"
   },
   "footer": {
     "tagline": "Free online tools that run in your browser. No signup, no uploads to our servers — your files stay private.",

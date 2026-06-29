@@ -24,15 +24,22 @@ interface Rect {
   h: number;
 }
 
-function pixelateRect(
+/** Pixelate a destination rect using the matching source region from the image. */
+function pixelateRegion(
   ctx: CanvasRenderingContext2D,
   img: HTMLImageElement,
   destX: number,
   destY: number,
   destW: number,
   destH: number,
-  block: number
+  block: number,
+  srcX: number,
+  srcY: number,
+  srcW: number,
+  srcH: number
 ) {
+  if (destW < 1 || destH < 1 || srcW < 1 || srcH < 1) return;
+
   const sw = Math.max(1, Math.floor(destW / block));
   const sh = Math.max(1, Math.floor(destH / block));
   const small = document.createElement("canvas");
@@ -40,7 +47,8 @@ function pixelateRect(
   small.height = sh;
   const sctx = small.getContext("2d");
   if (!sctx) return;
-  sctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, sw, sh);
+
+  sctx.drawImage(img, srcX, srcY, srcW, srcH, 0, 0, sw, sh);
   ctx.imageSmoothingEnabled = false;
   ctx.drawImage(small, 0, 0, sw, sh, destX, destY, destW, destH);
 }
@@ -53,6 +61,7 @@ export default function PixelateImage() {
   const toolSlug = getToolSlugFromPath(pathname);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const previewScaleRef = useRef(1);
   const { imgRef, inputRef, hasImage, imageVersion, error, handleInputChange } = useImageLoader(
     toolSlug ? toolImageSessionKey(toolSlug) : undefined
   );
@@ -62,7 +71,6 @@ export default function PixelateImage() {
   const [region, setRegion] = useState<Rect | null>(null);
   const [dragging, setDragging] = useState(false);
   const [dragStart, setDragStart] = useState<{ x: number; y: number } | null>(null);
-  const [displayScale, setDisplayScale] = useState(1);
 
   const messages = { invalid: shared.invalidImage, loadFailed: shared.loadFailed };
 
@@ -74,7 +82,7 @@ export default function PixelateImage() {
     const natW = img.naturalWidth;
     const natH = img.naturalHeight;
     const scale = Math.min(1, MAX_PREVIEW / Math.max(natW, natH));
-    setDisplayScale(scale);
+    previewScaleRef.current = scale;
     const w = Math.round(natW * scale);
     const h = Math.round(natH * scale);
 
@@ -84,9 +92,13 @@ export default function PixelateImage() {
     const block = Math.max(2, pixelSize);
 
     if (mode === "full") {
-      pixelateRect(ctx, img, 0, 0, w, h, block);
+      pixelateRegion(ctx, img, 0, 0, w, h, block, 0, 0, natW, natH);
     } else if (region && region.w > 2 && region.h > 2) {
-      pixelateRect(ctx, img, region.x, region.y, region.w, region.h, block);
+      const srcX = region.x / scale;
+      const srcY = region.y / scale;
+      const srcW = region.w / scale;
+      const srcH = region.h / scale;
+      pixelateRegion(ctx, img, region.x, region.y, region.w, region.h, block, srcX, srcY, srcW, srcH);
       ctx.strokeStyle = "rgba(59, 130, 246, 0.9)";
       ctx.lineWidth = 2;
       ctx.setLineDash([6, 4]);
@@ -95,16 +107,14 @@ export default function PixelateImage() {
     }
   }, [pixelSize, mode, region, imgRef]);
 
+  // Reset selection only when a new image is loaded — not when region/render updates.
   useEffect(() => {
-    if (hasImage) {
-      setRegion(null);
-      render();
-    }
-  }, [hasImage, imageVersion, render]);
+    setRegion(null);
+  }, [imageVersion]);
 
   useEffect(() => {
     if (hasImage) render();
-  }, [pixelSize, mode, region, hasImage, render]);
+  }, [hasImage, imageVersion, pixelSize, mode, region, render]);
 
   const pointerPos = (e: React.PointerEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
@@ -150,6 +160,7 @@ export default function PixelateImage() {
     const natW = img.naturalWidth;
     const natH = img.naturalHeight;
     const block = Math.max(2, pixelSize);
+    const scale = previewScaleRef.current;
 
     const off = document.createElement("canvas");
     off.width = natW;
@@ -160,13 +171,13 @@ export default function PixelateImage() {
     ctx.drawImage(img, 0, 0, natW, natH);
 
     if (mode === "full") {
-      pixelateRect(ctx, img, 0, 0, natW, natH, block);
+      pixelateRegion(ctx, img, 0, 0, natW, natH, block, 0, 0, natW, natH);
     } else if (region && region.w > 0 && region.h > 0) {
-      const rx = Math.round(region.x / displayScale);
-      const ry = Math.round(region.y / displayScale);
-      const rw = Math.round(region.w / displayScale);
-      const rh = Math.round(region.h / displayScale);
-      pixelateRect(ctx, img, rx, ry, rw, rh, block);
+      const rx = Math.round(region.x / scale);
+      const ry = Math.round(region.y / scale);
+      const rw = Math.round(region.w / scale);
+      const rh = Math.round(region.h / scale);
+      pixelateRegion(ctx, img, rx, ry, rw, rh, block, rx, ry, rw, rh);
     }
 
     try {
@@ -245,7 +256,7 @@ export default function PixelateImage() {
             />
           </div>
 
-          {mode === "region" && region && (
+          {mode === "region" && region && region.w > 2 && region.h > 2 && (
             <button type="button" onClick={() => setRegion(null)} className="btn-secondary text-sm">
               {t.clearRegion}
             </button>

@@ -2,6 +2,8 @@
 
 import { useCallback, useMemo, useState } from "react";
 import { Check, Copy } from "lucide-react";
+import { useDevToolsExtraLabels } from "@/lib/i18n/use-dev-tools-extra-labels";
+import { useCommonLabels } from "@/lib/i18n/use-common-labels";
 
 interface Rgb {
   r: number;
@@ -187,6 +189,8 @@ function getShadesAndTints(hex: string): string[] {
 }
 
 export default function ColorPicker() {
+  const t = useDevToolsExtraLabels("colorPicker");
+  const labels = useCommonLabels();
   const [color, setColor] = useState("#3B82F6");
   const [hexInput, setHexInput] = useState("#3B82F6");
   const [copiedField, setCopiedField] = useState<string | null>(null);
@@ -220,19 +224,19 @@ export default function ColorPicker() {
   };
 
   const colorSpaceRows = [
-    { key: "hex", label: "HEX", value: values.hex },
+    { key: "hex", label: t.hex, value: values.hex },
     { key: "rgb", label: "RGB", value: values.rgb },
     { key: "hsl", label: "HSL", value: values.hsl },
     { key: "hsv", label: "HSV", value: values.hsv },
     { key: "cmyk", label: "CMYK", value: values.cmyk },
-    { key: "decimal", label: "Decimal (R, G, B)", value: values.decimal },
+    { key: "decimal", label: t.decimal, value: values.decimal },
   ];
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col items-center gap-4 sm:flex-row">
         <label className="relative cursor-pointer">
-          <span className="sr-only">Pick a color</span>
+          <span className="sr-only">{t.pickColor}</span>
           <input
             type="color"
             value={color}
@@ -250,7 +254,7 @@ export default function ColorPicker() {
 
       <div>
         <label htmlFor="hex-input" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-          HEX
+          {t.hex}
         </label>
         <input
           id="hex-input"
@@ -264,13 +268,13 @@ export default function ColorPicker() {
       </div>
 
       <div>
-        <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">Color spaces</h3>
+        <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.colorSpaces}</h3>
         <div className="mt-2 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-gray-200 bg-gray-50 dark:bg-gray-800/50 dark:border-gray-700 text-left">
-                <th className="px-4 py-2.5 font-medium text-gray-500 dark:text-gray-400">Space</th>
-                <th className="px-4 py-2.5 font-medium text-gray-500 dark:text-gray-400">Value</th>
+                <th className="px-4 py-2.5 font-medium text-gray-500 dark:text-gray-400">{t.space}</th>
+                <th className="px-4 py-2.5 font-medium text-gray-500 dark:text-gray-400">{t.value}</th>
                 <th className="w-12 px-2 py-2.5" aria-hidden="true" />
               </tr>
             </thead>
@@ -288,7 +292,7 @@ export default function ColorPicker() {
                       type="button"
                       onClick={() => copy(row.key, row.value)}
                       className="rounded p-1.5 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-700 dark:hover:text-gray-300 dark:hover:text-gray-200"
-                      aria-label={`Copy ${row.label}`}
+                      aria-label={`${labels.copy} ${row.label}`}
                     >
                       {copiedField === row.key ? (
                         <Check className="h-4 w-4 text-green-600 dark:text-green-400" />
@@ -305,7 +309,7 @@ export default function ColorPicker() {
       </div>
 
       <div>
-        <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">Quick palette</h3>
+        <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.quickPalette}</h3>
         <div className="mt-2 grid grid-cols-7 gap-2 sm:grid-cols-9">
           {PRESET_COLORS.map((preset) => (
             <button
@@ -319,14 +323,14 @@ export default function ColorPicker() {
               }`}
               style={{ backgroundColor: preset }}
               title={preset}
-              aria-label={`Select ${preset}`}
+              aria-label={`${t.selectColor} ${preset}`}
             />
           ))}
         </div>
       </div>
 
       <div>
-        <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">Shades &amp; tints</h3>
+        <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.shadesAndTints}</h3>
         <div className="mt-2 flex gap-1.5 overflow-x-auto pb-1">
           {shades.map((shade, index) => (
             <button
@@ -340,7 +344,7 @@ export default function ColorPicker() {
               }`}
               style={{ backgroundColor: shade }}
               title={shade}
-              aria-label={`Select ${shade}`}
+              aria-label={`${t.selectColor} ${shade}`}
             />
           ))}
         </div>

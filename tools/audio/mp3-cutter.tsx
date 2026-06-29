@@ -11,9 +11,11 @@ import {
   sliceBuffer,
 } from "@/lib/audio-utils";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
+import { useAudioToolLabels } from "@/lib/i18n/use-audio-tool-labels";
 
 export default function Mp3Cutter() {
   const labels = useCommonLabels();
+  const t = useAudioToolLabels("mp3Cutter");
   const inputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [duration, setDuration] = useState(0);
@@ -27,7 +29,7 @@ export default function Mp3Cutter() {
   const loadFile = useCallback(async (f: File) => {
     setError(null);
     if (!isAudioFile(f)) {
-      setError("Unsupported file. Use MP3, WAV, M4A, OGG, or WebM.");
+      setError(t.unsupportedFile);
       return;
     }
     try {
@@ -38,16 +40,16 @@ export default function Mp3Cutter() {
       setStart(0);
       setEnd(buffer.duration);
     } catch {
-      setError("Could not decode this audio file. Try MP3, WAV, M4A, or WebM.");
+      setError(t.decodeFailed);
       bufferRef.current = null;
       setFile(null);
     }
-  }, []);
+  }, [t.unsupportedFile, t.decodeFailed]);
 
   const handleCut = async () => {
     const buffer = bufferRef.current;
     if (!buffer || start >= end) {
-      setError("Select a valid start and end time.");
+      setError(t.errInvalidRange);
       return;
     }
     setProcessing(true);
@@ -59,7 +61,7 @@ export default function Mp3Cutter() {
       const base = file?.name.replace(/\.[^.]+$/, "") ?? "audio";
       downloadBlob(blob, `${base}-cut.${format}`);
     } catch {
-      setError("Export failed. Try WAV format instead.");
+      setError(t.errExportFailed);
     } finally {
       setProcessing(false);
     }
@@ -98,17 +100,17 @@ export default function Mp3Cutter() {
           className="flex w-full flex-col items-center gap-2 rounded-xl border-2 border-dashed border-gray-300 p-10 text-gray-500 transition-colors hover:border-primary-400 hover:text-primary-600 dark:border-gray-600 dark:hover:border-primary-500"
         >
           <Upload className="h-8 w-8" />
-          <span>Upload an audio file to cut</span>
+          <span>{t.uploadHint}</span>
         </button>
       ) : (
         <>
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            <strong>{file.name}</strong> — {fmt(duration)} total
+            <strong>{file.name}</strong> — {fmt(duration)} {t.totalLabel}
           </p>
 
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="block text-sm">
-              <span className="font-medium text-gray-700 dark:text-gray-300">Start (sec)</span>
+              <span className="font-medium text-gray-700 dark:text-gray-300">{t.startSec}</span>
               <input
                 type="number"
                 min={0}
@@ -120,7 +122,7 @@ export default function Mp3Cutter() {
               />
             </label>
             <label className="block text-sm">
-              <span className="font-medium text-gray-700 dark:text-gray-300">End (sec)</span>
+              <span className="font-medium text-gray-700 dark:text-gray-300">{t.endSec}</span>
               <input
                 type="number"
                 min={0}
@@ -141,7 +143,7 @@ export default function Mp3Cutter() {
             value={start}
             onChange={(e) => setStart(Number(e.target.value))}
             className="w-full"
-            aria-label="Start time"
+            aria-label={t.startTimeAria}
           />
           <input
             type="range"
@@ -151,11 +153,11 @@ export default function Mp3Cutter() {
             value={end}
             onChange={(e) => setEnd(Number(e.target.value))}
             className="w-full"
-            aria-label="End time"
+            aria-label={t.endTimeAria}
           />
 
           <div>
-            <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Export format</p>
+            <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.exportFormat}</p>
             <div className="mt-2 inline-flex rounded-lg border border-gray-300 p-0.5 dark:border-gray-600">
               {(["mp3", "wav"] as const).map((f) => (
                 <button

@@ -4,10 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import { Download, Loader2, Mic, Square } from "lucide-react";
 import { downloadBlob } from "@/lib/download";
 import { decodeAudioFile, encodeMp3, encodeWav } from "@/lib/audio-utils";
+import { useAudioToolLabels } from "@/lib/i18n/use-audio-tool-labels";
 
 type ExportFormat = "webm" | "mp3" | "wav";
 
 export default function VoiceRecorder() {
+  const t = useAudioToolLabels("voiceRecorder");
   const [recording, setRecording] = useState(false);
   const [blob, setBlob] = useState<Blob | null>(null);
   const [playbackUrl, setPlaybackUrl] = useState<string | null>(null);
@@ -21,7 +23,7 @@ export default function VoiceRecorder() {
   useEffect(() => {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
-      recorderRef.current?.stream.getTracks().forEach((t) => t.stop());
+      recorderRef.current?.stream.getTracks().forEach((track) => track.stop());
       if (playbackUrl) URL.revokeObjectURL(playbackUrl);
     };
   }, [playbackUrl]);
@@ -54,7 +56,7 @@ export default function VoiceRecorder() {
         });
         setBlob(audioBlob);
         setPlaybackUrl(URL.createObjectURL(audioBlob));
-        stream.getTracks().forEach((t) => t.stop());
+        stream.getTracks().forEach((track) => track.stop());
       };
 
       recorderRef.current = recorder;
@@ -63,7 +65,7 @@ export default function VoiceRecorder() {
       setSeconds(0);
       timerRef.current = setInterval(() => setSeconds((s) => s + 1), 1000);
     } catch {
-      setError("Microphone access denied or unavailable.");
+      setError(t.errMicDenied);
     }
   };
 
@@ -93,7 +95,7 @@ export default function VoiceRecorder() {
         format === "mp3" ? await encodeMp3(buffer) : encodeWav(buffer);
       downloadBlob(out, `recording-${Date.now()}.${format}`);
     } catch {
-      setError(`Could not export as ${format.toUpperCase()}. Try WebM instead.`);
+      setError(t.errExportFailed(format.toUpperCase()));
     } finally {
       setExporting(false);
     }
@@ -116,7 +118,7 @@ export default function VoiceRecorder() {
             className="btn-primary inline-flex items-center gap-2"
           >
             <Mic className="h-5 w-5" />
-            Start recording
+            {t.startRecording}
           </button>
         ) : (
           <button
@@ -125,7 +127,7 @@ export default function VoiceRecorder() {
             className="inline-flex items-center gap-2 rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
           >
             <Square className="h-4 w-4 fill-current" />
-            Stop
+            {t.stop}
           </button>
         )}
       </div>
@@ -161,7 +163,7 @@ export default function VoiceRecorder() {
       )}
 
       <p className="text-xs text-gray-400 dark:text-gray-500">
-        Recording stays on your device. Export as WebM, MP3, or WAV — nothing is uploaded.
+        {t.privacyNote}
       </p>
     </div>
   );

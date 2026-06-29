@@ -3,6 +3,7 @@
 import { useCallback, useState } from "react";
 import { Check, Copy, RefreshCw } from "lucide-react";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
+import { useTextToolLabels } from "@/lib/i18n/use-text-tool-labels";
 
 const UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const LOWER = "abcdefghijklmnopqrstuvwxyz";
@@ -46,15 +47,9 @@ const strengthColors: Record<Strength, string> = {
   strong: "bg-green-500",
 };
 
-const strengthLabels: Record<Strength, string> = {
-  weak: "Weak",
-  fair: "Fair",
-  good: "Good",
-  strong: "Strong",
-};
-
 export default function PasswordGenerator() {
   const labels = useCommonLabels();
+  const t = useTextToolLabels("passwordGenerator");
   const [length, setLength] = useState(16);
   const [upper, setUpper] = useState(true);
   const [lower, setLower] = useState(true);
@@ -64,10 +59,17 @@ export default function PasswordGenerator() {
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const strengthLabels: Record<Strength, string> = {
+    weak: t.strengthWeak,
+    fair: t.strengthFair,
+    good: t.strengthGood,
+    strong: t.strengthStrong,
+  };
+
   const generate = useCallback(() => {
     const charset = getCharset({ upper, lower, numbers, symbols });
     if (!charset) {
-      setError("Enable at least one character type.");
+      setError(t.errNoCharset);
       return;
     }
 
@@ -79,7 +81,7 @@ export default function PasswordGenerator() {
       result += charset[array[i] % charset.length];
     }
     setPassword(result);
-  }, [length, upper, lower, numbers, symbols]);
+  }, [length, upper, lower, numbers, symbols, t]);
 
   const strength = password ? getStrength(password, length) : null;
 
@@ -98,14 +100,14 @@ export default function PasswordGenerator() {
     <div className="space-y-4">
       <div className="flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 dark:bg-gray-800/50 px-4 py-3 dark:border-gray-700 font-mono text-sm">
         <span className="flex-1 break-all" aria-live="polite">
-          {password || "Click Generate to create a password"}
+          {password || t.emptyHint}
         </span>
         <button
           type="button"
           onClick={copy}
           disabled={!password}
           className="shrink-0 rounded p-1.5 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600 hover:text-gray-700 dark:hover:text-gray-300 disabled:opacity-40"
-          aria-label="Copy password"
+          aria-label={t.copyAria}
         >
           {copied ? <Check className="h-4 w-4 text-green-600 dark:text-green-400" /> : <Copy className="h-4 w-4" />}
         </button>
@@ -114,7 +116,7 @@ export default function PasswordGenerator() {
       {strength && (
         <div>
           <div className="flex items-center justify-between text-sm">
-            <span className="text-gray-500 dark:text-gray-400">Strength</span>
+            <span className="text-gray-500 dark:text-gray-400">{t.strength}</span>
             <span className="font-medium text-gray-700 dark:text-gray-300">{strengthLabels[strength]}</span>
           </div>
           <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-gray-200">
@@ -137,7 +139,7 @@ export default function PasswordGenerator() {
 
       <div>
         <label htmlFor="pw-length" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-          Length: {length}
+          {t.length(length)}
         </label>
         <input
           id="pw-length"
@@ -151,12 +153,12 @@ export default function PasswordGenerator() {
       </div>
 
       <fieldset className="space-y-2">
-        <legend className="text-sm font-medium text-gray-700 dark:text-gray-300">Character types</legend>
+        <legend className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.characterTypes}</legend>
         {[
-          { label: "Uppercase (A-Z)", checked: upper, set: setUpper },
-          { label: "Lowercase (a-z)", checked: lower, set: setLower },
-          { label: "Numbers (0-9)", checked: numbers, set: setNumbers },
-          { label: "Symbols (!@#…)", checked: symbols, set: setSymbols },
+          { label: t.uppercase, checked: upper, set: setUpper },
+          { label: t.lowercase, checked: lower, set: setLower },
+          { label: t.numbers, checked: numbers, set: setNumbers },
+          { label: t.symbols, checked: symbols, set: setSymbols },
         ].map((opt) => (
           <label key={opt.label} className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
             <input

@@ -10,7 +10,7 @@ import {
   encodeWav,
   isAudioFile,
 } from "@/lib/audio-utils";
-import { useCommonLabels } from "@/lib/i18n/use-common-labels";
+import { useAudioToolLabels } from "@/lib/i18n/use-audio-tool-labels";
 
 interface AudioItem {
   id: string;
@@ -19,7 +19,7 @@ interface AudioItem {
 }
 
 export default function AudioMerger() {
-  const labels = useCommonLabels();
+  const t = useAudioToolLabels("audioMerger");
   const inputRef = useRef<HTMLInputElement>(null);
   const [items, setItems] = useState<AudioItem[]>([]);
   const [format, setFormat] = useState<"mp3" | "wav">("mp3");
@@ -29,7 +29,7 @@ export default function AudioMerger() {
   const addFiles = (files: FileList | File[]) => {
     const audioFiles = Array.from(files).filter(isAudioFile);
     if (audioFiles.length === 0) {
-      setError("Please select audio files (MP3, WAV, M4A, OGG, WebM…).");
+      setError(t.errNeedAudio);
       return;
     }
     setError(null);
@@ -45,7 +45,7 @@ export default function AudioMerger() {
 
   const merge = async () => {
     if (items.length < 2) {
-      setError("Add at least two audio files to merge.");
+      setError(t.errNeedTwo);
       return;
     }
     setProcessing(true);
@@ -61,7 +61,7 @@ export default function AudioMerger() {
         format === "mp3" ? await encodeMp3(merged) : encodeWav(merged);
       downloadBlob(blob, `merged-audio.${format}`);
     } catch {
-      setError("Merge failed. Try WAV output or fewer files.");
+      setError(t.errMergeFailed);
     } finally {
       setProcessing(false);
     }
@@ -87,7 +87,7 @@ export default function AudioMerger() {
         className="btn-secondary inline-flex items-center gap-2"
       >
         <Upload className="h-4 w-4" />
-        Add audio files
+        {t.addFiles}
       </button>
 
       {items.length > 0 && (
@@ -103,7 +103,7 @@ export default function AudioMerger() {
                 type="button"
                 onClick={() => setItems((prev) => prev.filter((i) => i.id !== item.id))}
                 className="text-gray-400 hover:text-red-500"
-                aria-label="Remove"
+                aria-label={t.remove}
               >
                 <Trash2 className="h-4 w-4" />
               </button>
@@ -113,7 +113,7 @@ export default function AudioMerger() {
       )}
 
       <div>
-        <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Output format</p>
+        <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.outputFormat}</p>
         <div className="mt-2 inline-flex rounded-lg border border-gray-300 p-0.5 dark:border-gray-600">
           {(["mp3", "wav"] as const).map((f) => (
             <button
@@ -147,7 +147,7 @@ export default function AudioMerger() {
         ) : (
           <Download className="h-4 w-4" />
         )}
-        Merge & {labels.download}
+        {t.mergeDownload}
       </button>
     </div>
   );

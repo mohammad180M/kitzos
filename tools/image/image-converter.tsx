@@ -4,6 +4,10 @@ import { useCallback, useRef, useState } from "react";
 import JSZip from "jszip";
 import { Download, Upload } from "lucide-react";
 import { downloadBlob } from "@/lib/download";
+import {
+  useImageToolsExtraLabels,
+  useImageToolsSharedLabels,
+} from "@/lib/i18n/use-image-tools-extra-labels";
 
 type OutputFormat = "image/png" | "image/jpeg" | "image/webp";
 
@@ -59,6 +63,8 @@ function convertImage(
 }
 
 export default function ImageConverter() {
+  const shared = useImageToolsSharedLabels();
+  const t = useImageToolsExtraLabels("imageConverter");
   const [originalFile, setOriginalFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [selectedFormats, setSelectedFormats] = useState<Set<OutputFormat>>(
@@ -77,7 +83,7 @@ export default function ImageConverter() {
       const results = await Promise.all(formats.map((mime) => convertImage(file, mime, q)));
       setOutputs(results);
     } catch {
-      setError("Conversion failed. Try a different format.");
+      setError(t.errConvertFailed);
       setOutputs([]);
     } finally {
       setConverting(false);
@@ -86,7 +92,7 @@ export default function ImageConverter() {
 
   const handleFile = (file: File) => {
     if (!file.type.startsWith("image/")) {
-      setError("Please upload a valid image file.");
+      setError(shared.invalidImage);
       return;
     }
     setOriginalFile(file);
@@ -152,7 +158,7 @@ export default function ImageConverter() {
         className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 px-6 py-10 transition-colors hover:border-primary-400 hover:bg-primary-50/50 dark:border-gray-600 dark:bg-gray-800/50 dark:hover:border-primary-500 dark:hover:bg-primary-950/30"
       >
         <Upload className="h-8 w-8 text-gray-400 dark:text-gray-500" aria-hidden="true" />
-        <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">Upload an image to convert</p>
+        <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">{t.uploadHint}</p>
         <input
           ref={inputRef}
           type="file"
@@ -176,11 +182,11 @@ export default function ImageConverter() {
         <>
           <div className="overflow-hidden rounded-lg border border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/50">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={previewUrl} alt="Preview" loading="lazy" decoding="async" className="max-h-64 w-full object-contain" />
+            <img src={previewUrl} alt={shared.preview} loading="lazy" decoding="async" className="max-h-64 w-full object-contain" />
           </div>
 
           <div>
-            <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">Output format(s)</p>
+            <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">{t.outputFormats}</p>
             <div className="flex flex-wrap gap-3">
               {FORMATS.map((f) => (
                 <label key={f.value} className="inline-flex cursor-pointer items-center gap-2 text-sm">
@@ -195,14 +201,14 @@ export default function ImageConverter() {
               ))}
             </div>
             <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
-              Select one or more formats. Multiple formats download as a ZIP.
+              {t.formatHint}
             </p>
           </div>
 
           {hasLossy && (
             <div>
               <label htmlFor="conv-quality" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Quality: {quality}%
+                {t.qualityLabel(quality)}
               </label>
               <input
                 id="conv-quality"
@@ -224,8 +230,8 @@ export default function ImageConverter() {
           >
             <Download className="h-4 w-4" />
             {outputs.length > 1
-              ? `Download ${outputs.length} formats (ZIP)`
-              : "Download converted image"}
+              ? t.downloadZip(outputs.length)
+              : t.downloadConverted}
           </button>
         </>
       )}

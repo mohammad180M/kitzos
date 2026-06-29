@@ -742,11 +742,12 @@ export const extraToolContent: Record<string, ToolContent> = {
   "pixelate-image": content(
     [
       { title: "Upload image", description: "Choose the photo you want to censor or stylize." },
+      { title: "Choose mode", description: "Pixelate the entire image or drag to select a specific region." },
       { title: "Set pixel size", description: "Adjust block size for stronger or subtler pixelation." },
       { title: "Download result", description: "Save the pixelated PNG for privacy or creative use." },
     ],
     [
-      { question: "Can I pixelate part of an image?", answer: "This tool applies pixelation to the full image. Use it for quick full-frame blur effects." },
+      { question: "Can I pixelate part of an image?", answer: "Yes. Choose “Selected region” and drag on the preview to mark the area to pixelate." },
       { question: "Is my photo private?", answer: "Yes. Processing happens locally; nothing leaves your device." },
     ]
   ),

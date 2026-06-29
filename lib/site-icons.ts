@@ -11,7 +11,7 @@ export const SITE_ICON_PATHS = {
 
 /**
  * Site-wide icon metadata for Next.js.
- * Order matters: Google Search prefers ≥48×48 PNG declared first.
+ * Google Search prefers ≥48×48 PNG declared first; .ico via shortcut only.
  */
 export function getSiteIconsMetadata(): NonNullable<Metadata["icons"]> {
   return {
@@ -19,9 +19,6 @@ export function getSiteIconsMetadata(): NonNullable<Metadata["icons"]> {
       { url: SITE_ICON_PATHS.icon48, sizes: "48x48", type: "image/png" },
       { url: SITE_ICON_PATHS.icon192, sizes: "192x192", type: "image/png" },
       { url: SITE_ICON_PATHS.icon512, sizes: "512x512", type: "image/png" },
-      { url: "/icon-32.png", sizes: "32x32", type: "image/png" },
-      { url: "/icon-16.png", sizes: "16x16", type: "image/png" },
-      { url: SITE_ICON_PATHS.favicon, sizes: "48x48", type: "image/x-icon" },
     ],
     shortcut: SITE_ICON_PATHS.favicon,
     apple: {

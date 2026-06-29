@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import * as Diff from "diff";
+import { useTextToolLabels } from "@/lib/i18n/use-text-tool-labels";
 
 const CONTEXT_LINES = 3;
 const MIN_LINES_FOR_CONTEXT = 24;
@@ -224,6 +225,7 @@ function DiffLine({ row }: { row: DiffRow }) {
 }
 
 export default function TextDiffChecker() {
+  const t = useTextToolLabels("textDiffChecker");
   const [original, setOriginal] = useState("The quick brown fox\njumps over the lazy dog.");
   const [changed, setChanged] = useState("The quick brown fox\nleaps over the lazy dog.");
 
@@ -242,7 +244,7 @@ export default function TextDiffChecker() {
       <div className="grid gap-4 lg:grid-cols-2">
         <div>
           <label htmlFor="diff-original" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Original
+            {t.original}
           </label>
           <textarea
             id="diff-original"
@@ -255,7 +257,7 @@ export default function TextDiffChecker() {
         </div>
         <div>
           <label htmlFor="diff-changed" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Changed
+            {t.changed}
           </label>
           <textarea
             id="diff-changed"
@@ -269,12 +271,12 @@ export default function TextDiffChecker() {
       </div>
 
       <div>
-        <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">Diff</p>
+        <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">{t.diff}</p>
         <div className="max-h-80 overflow-auto rounded-lg border border-gray-200 bg-white font-mono text-sm leading-relaxed dark:border-gray-700 dark:bg-gray-900">
           {displayRows.length === 0 ? (
-            <p className="p-4 text-gray-400 dark:text-gray-500">Enter text in both fields to compare.</p>
+            <p className="p-4 text-gray-400 dark:text-gray-500">{t.enterBoth}</p>
           ) : !hasChanges ? (
-            <p className="p-4 text-gray-500 dark:text-gray-400">No differences found.</p>
+            <p className="p-4 text-gray-500 dark:text-gray-400">{t.noDiff}</p>
           ) : (
             <div>
               <div className="flex border-b border-gray-200 bg-gray-50 text-xs font-medium text-gray-500 dark:border-gray-700 dark:bg-gray-800/50 dark:text-gray-400">
@@ -284,7 +286,7 @@ export default function TextDiffChecker() {
                 <div className="w-10 shrink-0 border-e border-gray-200 py-1.5 pr-2 text-right dark:border-gray-700">
                   #
                 </div>
-                <div className="flex-1 px-3 py-1.5">Line</div>
+                <div className="flex-1 px-3 py-1.5">{t.line}</div>
               </div>
               {displayRows.map((row, index) =>
                 row.kind === "ellipsis" ? (
@@ -292,7 +294,7 @@ export default function TextDiffChecker() {
                     key={`ellipsis-${index}`}
                     className="border-y border-dashed border-gray-200 bg-gray-50 px-3 py-1 text-center text-xs text-gray-400 dark:border-gray-700 dark:bg-gray-800/50 dark:text-gray-500"
                   >
-                    ··· unchanged lines hidden ···
+                    {t.hiddenLines}
                   </div>
                 ) : (
                   <DiffLine key={`${row.kind}-${row.originalLineNum}-${row.changedLineNum}-${index}`} row={row} />
@@ -303,15 +305,15 @@ export default function TextDiffChecker() {
         </div>
         <p className="mt-2 text-xs text-gray-400 dark:text-gray-500">
           <span className="inline-block rounded bg-red-100 px-1 text-red-800 dark:bg-red-900/40 dark:text-red-300">
-            Removed
+            {t.removed}
           </span>
           {" · "}
           <span className="inline-block rounded bg-green-100 px-1 text-green-800 dark:bg-green-900/40 dark:text-green-300">
-            Added
+            {t.added}
           </span>
           {" · "}
           <span className="inline-block rounded bg-amber-50 px-1 text-amber-800 dark:bg-amber-950/50 dark:text-amber-300">
-            Modified (word highlight)
+            {t.modified}
           </span>
         </p>
       </div>

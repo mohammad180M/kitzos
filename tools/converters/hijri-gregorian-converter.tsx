@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import {
   gregorianToHijri,
   hijriToGregorian,
@@ -16,11 +16,14 @@ export default function HijriGregorianConverter() {
   const { locale } = useLocale();
   const t = useConverterToolLabels("hijriGregorian");
   const [mode, setMode] = useState<Mode>("to-hijri");
-  const today = new Date();
-  const [gDate, setGDate] = useState(today.toISOString().slice(0, 10));
+  const [gDate, setGDate] = useState("");
   const [hYear, setHYear] = useState("1447");
   const [hMonth, setHMonth] = useState("9");
   const [hDay, setHDay] = useState("1");
+
+  useEffect(() => {
+    setGDate(new Date().toISOString().slice(0, 10));
+  }, []);
 
   const monthNames = locale === "ar" ? HIJRI_MONTHS_AR : HIJRI_MONTHS_EN;
 

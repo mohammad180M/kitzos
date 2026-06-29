@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
+import { useDevToolsExtraLabels } from "@/lib/i18n/use-dev-tools-extra-labels";
 
 function hexToRgba(hex: string, alpha: number): string {
   const cleaned = hex.replace("#", "");
@@ -20,6 +21,7 @@ function ColorControl({
   showAlpha,
   alpha,
   onAlphaChange,
+  opacityLabel = "Opacity",
 }: {
   label: string;
   color: string;
@@ -27,6 +29,7 @@ function ColorControl({
   showAlpha?: boolean;
   alpha?: number;
   onAlphaChange?: (a: number) => void;
+  opacityLabel?: string;
 }) {
   return (
     <div className="text-sm">
@@ -50,7 +53,7 @@ function ColorControl({
       </div>
       {showAlpha && onAlphaChange != null && alpha != null && (
         <label className="mt-2 block text-xs text-gray-500">
-          Opacity ({Math.round(alpha * 100)}%)
+          {opacityLabel} ({Math.round(alpha * 100)}%)
           <input
             type="range"
             min={0}
@@ -67,6 +70,7 @@ function ColorControl({
 
 export default function BoxShadowGenerator() {
   const labels = useCommonLabels();
+  const t = useDevToolsExtraLabels("boxShadowGenerator");
   const [x, setX] = useState(0);
   const [y, setY] = useState(8);
   const [blur, setBlur] = useState(24);
@@ -105,17 +109,18 @@ export default function BoxShadowGenerator() {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <ColorControl label="Box color" color={boxColor} onChange={setBoxColor} />
+        <ColorControl label={t.boxColor} color={boxColor} onChange={setBoxColor} />
         <ColorControl
-          label="Shadow color"
+          label={t.shadowColor}
           color={shadowColor}
           onChange={setShadowColor}
           showAlpha
           alpha={shadowAlpha}
           onAlphaChange={setShadowAlpha}
+          opacityLabel={t.opacity}
         />
         <label className="text-sm">
-          X offset ({x}px)
+          {t.xOffset} ({x}px)
           <input
             type="range"
             min={-40}
@@ -126,7 +131,7 @@ export default function BoxShadowGenerator() {
           />
         </label>
         <label className="text-sm">
-          Y offset ({y}px)
+          {t.yOffset} ({y}px)
           <input
             type="range"
             min={-40}
@@ -137,7 +142,7 @@ export default function BoxShadowGenerator() {
           />
         </label>
         <label className="text-sm">
-          Blur ({blur}px)
+          {t.blur} ({blur}px)
           <input
             type="range"
             min={0}
@@ -148,7 +153,7 @@ export default function BoxShadowGenerator() {
           />
         </label>
         <label className="text-sm">
-          Spread ({spread}px)
+          {t.spread} ({spread}px)
           <input
             type="range"
             min={-40}
@@ -160,7 +165,7 @@ export default function BoxShadowGenerator() {
         </label>
         <label className="flex items-center gap-2 text-sm sm:col-span-2">
           <input type="checkbox" checked={inset} onChange={(e) => setInset(e.target.checked)} />
-          Inset shadow
+          {t.insetShadow}
         </label>
       </div>
 

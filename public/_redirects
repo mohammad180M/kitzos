@@ -5,7 +5,7 @@
 # لم يكن هناك /ar/ قديم — لذلك نوجّه القديم → /en/ كـ x-default لجوجل والروابط المحفوظة.
 #
 # العربي مفهرس بالكامل عبر:
-#   • https://kitzos.com/ar/...  (64+ صفحة في sitemap.xml)
+#   • https://kitzos.com/ar/...  (227+ URLs in sitemap.xml)
 #   • hreflang على كل صفحة en + ar
 #   • لا يوجد أي redirect يمنع /ar/ — هذه المسارات تُخدم مباشرة
 #

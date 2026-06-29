@@ -4,15 +4,16 @@ import { useRef, useState } from "react";
 import { PDFDocument } from "pdf-lib";
 import JSZip from "jszip";
 import { Download, FileText, Loader2, Upload } from "lucide-react";
+import { usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
 
 type SplitMode = "each" | "ranges";
 
 function parsePageRanges(
   input: string,
   pageCount: number
-): { start: number; end: number }[] {
+): { start: number; end: number }[] | null {
   const trimmed = input.trim();
-  if (!trimmed) return [];
+  if (!trimmed) return null;
 
   const groups: { start: number; end: number }[] = [];
 
@@ -25,19 +26,19 @@ function parsePageRanges(
       const start = parseInt(startStr, 10);
       const end = parseInt(endStr, 10);
       if (isNaN(start) || isNaN(end) || start < 1 || end < start || start > pageCount) {
-        throw new Error(`Invalid range: ${segment}`);
+        return null;
       }
       groups.push({ start: start - 1, end: Math.min(end, pageCount) - 1 });
     } else {
       const page = parseInt(segment, 10);
       if (isNaN(page) || page < 1 || page > pageCount) {
-        throw new Error(`Invalid page: ${segment}`);
+        return null;
       }
       groups.push({ start: page - 1, end: page - 1 });
     }
   }
 
-  return groups;
+  return groups.length > 0 ? groups : null;
 }
 
 function downloadBlob(blob: Blob, filename: string) {
@@ -50,6 +51,7 @@ function downloadBlob(blob: Blob, filename: string) {
 }
 
 export default function SplitPdf() {
+  const t = usePdfToolLabels("splitPdf");
   const [file, setFile] = useState<File | null>(null);
   const [pageCount, setPageCount] = useState(0);
   const [mode, setMode] = useState<SplitMode>("each");
@@ -69,7 +71,7 @@ export default function SplitPdf() {
     } catch {
       setFile(null);
       setPageCount(0);
-      setError("Could not read PDF. Make sure the file is a valid, unencrypted PDF.");
+      setError(t.errReadFailed);
     }
   };
 
@@ -88,10 +90,12 @@ export default function SplitPdf() {
       if (mode === "each") {
         groups = Array.from({ length: pageCount }, (_, i) => ({ start: i, end: i }));
       } else {
-        groups = parsePageRanges(ranges, pageCount);
-        if (groups.length === 0) {
-          throw new Error("Enter at least one page or range (e.g. 1-3, 5).");
+        const parsed = parsePageRanges(ranges, pageCount);
+        if (!parsed) {
+          setError(t.errNoRanges);
+          return;
         }
+        groups = parsed;
       }
 
       const outputs: { name: string; bytes: Uint8Array }[] = [];
@@ -126,8 +130,8 @@ export default function SplitPdf() {
         const baseName = file.name.replace(/\.pdf$/i, "") || "document";
         downloadBlob(zipBlob, `${baseName}-split.zip`);
       }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to split PDF.");
+    } catch {
+      setError(t.errSplitFailed);
     } finally {
       setSplitting(false);
     }
@@ -142,12 +146,10 @@ export default function SplitPdf() {
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") inputRef.current?.click();
         }}
-        className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 dark:bg-gray-800/50 dark:border-gray-600 px-6 py-10 transition-colors hover:border-primary-400 hover:bg-primary-50/50 dark:hover:border-primary-500 dark:hover:bg-primary-950/30"
+        className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 px-6 py-10 transition-colors hover:border-primary-400 hover:bg-primary-50/50 dark:border-gray-600 dark:bg-gray-800/50 dark:hover:border-primary-500 dark:hover:bg-primary-950/30"
       >
         <Upload className="h-8 w-8 text-gray-400 dark:text-gray-500" aria-hidden="true" />
-        <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-          Upload a PDF to split
-        </p>
+        <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">{t.uploadHint}</p>
         <input
           ref={inputRef}
           type="file"
@@ -166,23 +168,23 @@ export default function SplitPdf() {
           <FileText className="h-5 w-5 shrink-0 text-primary-600 dark:text-primary-400" aria-hidden="true" />
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-medium text-gray-900 dark:text-gray-100">{file.name}</p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">{pageCount} page{pageCount !== 1 ? "s" : ""}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">{t.pageCount(pageCount)}</p>
           </div>
         </div>
       )}
 
       {file && pageCount > 0 && (
         <fieldset className="space-y-3">
-          <legend className="text-sm font-medium text-gray-700 dark:text-gray-300">Split mode</legend>
+          <legend className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.splitMode}</legend>
           <label className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
             <input
               type="radio"
               name="split-mode"
               checked={mode === "each"}
               onChange={() => setMode("each")}
-              className="h-4 w-4 border-gray-300 text-primary-600 dark:text-primary-400 focus:ring-primary-500"
+              className="h-4 w-4 border-gray-300 text-primary-600 focus:ring-primary-500 dark:text-primary-400"
             />
-            Split into individual pages (zip)
+            {t.modeEach}
           </label>
           <label className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
             <input
@@ -190,9 +192,9 @@ export default function SplitPdf() {
               name="split-mode"
               checked={mode === "ranges"}
               onChange={() => setMode("ranges")}
-              className="h-4 w-4 border-gray-300 text-primary-600 dark:text-primary-400 focus:ring-primary-500"
+              className="h-4 w-4 border-gray-300 text-primary-600 focus:ring-primary-500 dark:text-primary-400"
             />
-            Custom page ranges
+            {t.modeRanges}
           </label>
         </fieldset>
       )}
@@ -200,19 +202,17 @@ export default function SplitPdf() {
       {file && mode === "ranges" && (
         <div>
           <label htmlFor="page-ranges" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Page ranges
+            {t.pageRanges}
           </label>
           <input
             id="page-ranges"
             type="text"
             value={ranges}
             onChange={(e) => setRanges(e.target.value)}
-            placeholder="e.g. 1-3, 5, 7-10"
+            placeholder={t.rangesPlaceholder}
             className="input-field mt-1"
           />
-          <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
-            Use commas to separate ranges. Each range becomes a separate PDF file.
-          </p>
+          <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">{t.rangesHint}</p>
         </div>
       )}
 
@@ -231,12 +231,12 @@ export default function SplitPdf() {
         {splitting ? (
           <>
             <Loader2 className="h-4 w-4 animate-spin" />
-            Splitting…
+            {t.splitting}
           </>
         ) : (
           <>
             <Download className="h-4 w-4" />
-            Split &amp; Download
+            {t.splitDownload}
           </>
         )}
       </button>

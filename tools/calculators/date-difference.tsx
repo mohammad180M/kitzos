@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
+import { useCalcToolLabels } from "@/lib/i18n/use-calc-tool-labels";
 
 function parseDate(value: string): Date | null {
   if (!value) return null;
@@ -42,13 +43,18 @@ function diffParts(from: Date, to: Date) {
 }
 
 export default function DateDifference() {
+  const t = useCalcToolLabels("dateDifference");
   const [dateA, setDateA] = useState("2024-01-01");
-  const [dateB, setDateB] = useState(() => new Date().toISOString().slice(0, 10));
-  const [singleDate, setSingleDate] = useState(() => {
-    const d = new Date();
-    d.setMonth(d.getMonth() + 3);
-    return d.toISOString().slice(0, 10);
-  });
+  const [dateB, setDateB] = useState("");
+  const [singleDate, setSingleDate] = useState("");
+
+  useEffect(() => {
+    const today = new Date();
+    setDateB(today.toISOString().slice(0, 10));
+    const future = new Date(today);
+    future.setMonth(future.getMonth() + 3);
+    setSingleDate(future.toISOString().slice(0, 10));
+  }, []);
 
   const between = useMemo(() => {
     const a = parseDate(dateA);
@@ -65,19 +71,19 @@ export default function DateDifference() {
     const diff = daysBetween(today, target);
     return {
       diff,
-      label: diff > 0 ? "Days until" : diff < 0 ? "Days since" : "Today",
+      label: diff > 0 ? t.daysUntil : diff < 0 ? t.daysSince : t.today,
       abs: Math.abs(diff),
     };
-  }, [singleDate]);
+  }, [singleDate, t]);
 
   return (
     <div className="space-y-6">
       <section className="space-y-4">
-        <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Difference between two dates</h3>
+        <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">{t.sectionBetween}</h3>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label htmlFor="date-a" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Start date
+              {t.startDate}
             </label>
             <input
               id="date-a"
@@ -89,7 +95,7 @@ export default function DateDifference() {
           </div>
           <div>
             <label htmlFor="date-b" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              End date
+              {t.endDate}
             </label>
             <input
               id="date-b"
@@ -104,24 +110,23 @@ export default function DateDifference() {
         {between && (
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <div className="rounded-lg border border-primary-200 bg-primary-50 px-4 py-3 dark:border-primary-800 dark:bg-primary-950/40">
-              <p className="text-xs text-primary-600 dark:text-primary-400">Total days</p>
+              <p className="text-xs text-primary-600 dark:text-primary-400">{t.totalDays}</p>
               <p className="text-2xl font-bold text-primary-700 dark:text-primary-300">{between.totalDays}</p>
             </div>
             <div className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800/50">
-              <p className="text-xs text-gray-500 dark:text-gray-400">Weeks</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">{t.weeks}</p>
               <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{between.weeks}</p>
             </div>
             <div className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800/50">
-              <p className="text-xs text-gray-500 dark:text-gray-400">Months (approx.)</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">{t.monthsApprox}</p>
               <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                {between.years > 0 && `${between.years}y `}
-                {between.months}m
+                {t.monthsApproxDisplay(between.years, between.months)}
               </p>
             </div>
             <div className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800/50">
-              <p className="text-xs text-gray-500 dark:text-gray-400">Years / days</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">{t.yearsDays}</p>
               <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                {between.years}y {between.days}d
+                {t.yearsDaysDisplay(between.years, between.days)}
               </p>
             </div>
           </div>
@@ -129,10 +134,10 @@ export default function DateDifference() {
       </section>
 
       <section className="space-y-4 border-t border-gray-200 pt-6 dark:border-gray-700">
-        <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Days until / since a date</h3>
+        <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">{t.sectionRelative}</h3>
         <div>
           <label htmlFor="single-date" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Target date
+            {t.targetDate}
           </label>
           <input
             id="single-date"
@@ -146,8 +151,7 @@ export default function DateDifference() {
           <div className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-4 text-center dark:border-gray-700 dark:bg-gray-800/50">
             <p className="text-sm text-gray-500 dark:text-gray-400">{relative.label}</p>
             <p className="text-3xl font-bold text-primary-600 dark:text-primary-400">
-              {relative.diff === 0 ? "—" : relative.abs}
-              {relative.diff !== 0 && " days"}
+              {relative.diff === 0 ? "—" : t.daysSuffix(relative.abs)}
             </p>
           </div>
         )}

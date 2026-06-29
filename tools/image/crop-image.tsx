@@ -2,6 +2,10 @@
 
 import { useCallback, useEffect, useRef, useState, type PointerEvent, type SyntheticEvent } from "react";
 import { Download, Upload } from "lucide-react";
+import {
+  useImageToolsExtraLabels,
+  useImageToolsSharedLabels,
+} from "@/lib/i18n/use-image-tools-extra-labels";
 
 type AspectPreset = "free" | "1:1" | "4:3" | "16:9";
 
@@ -19,6 +23,8 @@ const ASPECT_VALUES: Record<Exclude<AspectPreset, "free">, number> = {
 };
 
 export default function CropImage() {
+  const shared = useImageToolsSharedLabels();
+  const t = useImageToolsExtraLabels("cropImage");
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [fileName, setFileName] = useState("cropped.png");
   const [naturalSize, setNaturalSize] = useState({ w: 0, h: 0 });
@@ -46,7 +52,7 @@ export default function CropImage() {
 
   const handleFile = (file: File) => {
     if (!file.type.startsWith("image/")) {
-      setError("Please upload a valid image file.");
+      setError(shared.invalidImage);
       return;
     }
     setError(null);
@@ -203,7 +209,7 @@ export default function CropImage() {
         className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 px-6 py-10 transition-colors hover:border-primary-400 hover:bg-primary-50/50 dark:border-gray-600 dark:bg-gray-800/50 dark:hover:border-primary-500 dark:hover:bg-primary-950/30"
       >
         <Upload className="h-8 w-8 text-gray-400 dark:text-gray-500" aria-hidden="true" />
-        <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">Upload an image to crop</p>
+        <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">{t.uploadHint}</p>
         <input
           ref={inputRef}
           type="file"
@@ -226,7 +232,7 @@ export default function CropImage() {
       {imageUrl && (
         <>
           <div>
-            <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">Aspect ratio</p>
+            <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">{t.aspectRatio}</p>
             <div className="inline-flex flex-wrap gap-1 rounded-lg border border-gray-300 bg-white p-0.5 dark:border-gray-600 dark:bg-gray-800">
               {(["free", "1:1", "4:3", "16:9"] as AspectPreset[]).map((preset) => (
                 <button
@@ -239,7 +245,7 @@ export default function CropImage() {
                       : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
                   }`}
                 >
-                  {preset === "free" ? "Free" : preset}
+                  {preset === "free" ? t.aspectFree : preset}
                 </button>
               ))}
             </div>
@@ -247,7 +253,7 @@ export default function CropImage() {
 
           {cropDims && (
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              Selection: {cropDims}
+              {t.selectionPrefix} {cropDims}
             </p>
           )}
 
@@ -262,7 +268,7 @@ export default function CropImage() {
             <img
               ref={imgRef}
               src={imageUrl}
-              alt="Crop preview"
+              alt={t.previewAlt}
               onLoad={onImageLoad}
               loading="lazy"
               decoding="async"
@@ -285,7 +291,7 @@ export default function CropImage() {
 
           <button type="button" onClick={downloadCrop} className="btn-primary">
             <Download className="h-4 w-4" />
-            Download cropped image
+            {t.downloadCropped}
           </button>
         </>
       )}

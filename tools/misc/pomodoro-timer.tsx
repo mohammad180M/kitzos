@@ -2,17 +2,13 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Pause, Play, RotateCcw } from "lucide-react";
+import { useMiscToolsExtraLabels } from "@/lib/i18n/use-misc-tools-extra-labels";
 
 type Phase = "work" | "break";
 
 type AlarmSound = "chime" | "bell" | "beep" | "alarm";
 
-const ALARM_OPTIONS: { id: AlarmSound; label: string }[] = [
-  { id: "chime", label: "Chime" },
-  { id: "bell", label: "Bell" },
-  { id: "beep", label: "Beep" },
-  { id: "alarm", label: "Alarm" },
-];
+const ALARM_SOUNDS: AlarmSound[] = ["chime", "bell", "beep", "alarm"];
 
 function formatTime(seconds: number): string {
   const m = Math.floor(seconds / 60);
@@ -64,6 +60,7 @@ function playAlarm(sound: AlarmSound, volume: number) {
 }
 
 export default function PomodoroTimer() {
+  const t = useMiscToolsExtraLabels("pomodoroTimer");
   const [workMin, setWorkMin] = useState(25);
   const [breakMin, setBreakMin] = useState(5);
   const [soundEnabled, setSoundEnabled] = useState(true);
@@ -127,7 +124,7 @@ export default function PomodoroTimer() {
     <div className="space-y-6">
       <div className="text-center">
         <p className="text-sm font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
-          {phase === "work" ? "Focus" : "Break"}
+          {phase === "work" ? t.focus : t.break}
         </p>
         <p className="mt-2 font-mono text-6xl font-bold tabular-nums text-gray-900 dark:text-gray-100">
           {formatTime(secondsLeft)}
@@ -141,7 +138,7 @@ export default function PomodoroTimer() {
           />
         </div>
         <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">
-          Completed cycles: <span className="font-semibold text-gray-900 dark:text-gray-100">{cycles}</span>
+          {t.completedCycles}: <span className="font-semibold text-gray-900 dark:text-gray-100">{cycles}</span>
         </p>
       </div>
 
@@ -154,25 +151,25 @@ export default function PomodoroTimer() {
           {running ? (
             <>
               <Pause className="h-4 w-4" />
-              Pause
+              {t.pause}
             </>
           ) : (
             <>
               <Play className="h-4 w-4" />
-              Start
+              {t.start}
             </>
           )}
         </button>
         <button type="button" onClick={reset} className="btn-secondary">
           <RotateCcw className="h-4 w-4" />
-          Reset
+          {t.reset}
         </button>
       </div>
 
       <div className="grid gap-4 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800/50 sm:grid-cols-2">
         <div>
           <label htmlFor="work-min" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Work (minutes): {workMin}
+            {t.workMinutes}: {workMin}
           </label>
           <input
             id="work-min"
@@ -188,7 +185,7 @@ export default function PomodoroTimer() {
         </div>
         <div>
           <label htmlFor="break-min" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Break (minutes): {breakMin}
+            {t.breakMinutes}: {breakMin}
           </label>
           <input
             id="break-min"
@@ -212,26 +209,26 @@ export default function PomodoroTimer() {
             onChange={(e) => setSoundEnabled(e.target.checked)}
             className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 dark:border-gray-600"
           />
-          Play sound when a phase ends
+          {t.playSoundOnPhaseEnd}
         </label>
 
         {soundEnabled && (
           <>
             <div>
-              <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">Alarm sound</p>
+              <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">{t.alarmSound}</p>
               <div className="flex flex-wrap gap-1 rounded-lg border border-gray-300 bg-white p-0.5 dark:border-gray-600 dark:bg-gray-800">
-                {ALARM_OPTIONS.map((opt) => (
+                {ALARM_SOUNDS.map((id) => (
                   <button
-                    key={opt.id}
+                    key={id}
                     type="button"
-                    onClick={() => setAlarmSound(opt.id)}
+                    onClick={() => setAlarmSound(id)}
                     className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-                      alarmSound === opt.id
+                      alarmSound === id
                         ? "bg-primary-600 text-white"
                         : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
                     }`}
                   >
-                    {opt.label}
+                    {t.alarms[id]}
                   </button>
                 ))}
               </div>
@@ -239,7 +236,7 @@ export default function PomodoroTimer() {
 
             <div>
               <label htmlFor="alarm-vol" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Volume: {Math.round(volume * 100)}%
+                {t.volume}: {Math.round(volume * 100)}%
               </label>
               <input
                 id="alarm-vol"
@@ -254,7 +251,7 @@ export default function PomodoroTimer() {
             </div>
 
             <button type="button" onClick={testSound} className="btn-secondary text-sm">
-              Test sound
+              {t.testSound}
             </button>
           </>
         )}

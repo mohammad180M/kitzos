@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
+import { useDevToolsExtraLabels } from "@/lib/i18n/use-dev-tools-extra-labels";
 
 type Harmony = "complementary" | "analogous" | "triadic";
 
@@ -52,6 +53,7 @@ function generatePalette(base: string, harmony: Harmony): string[] {
 
 export default function ColorPaletteGenerator() {
   const labels = useCommonLabels();
+  const t = useDevToolsExtraLabels("colorPaletteGenerator");
   const [base, setBase] = useState("#2563eb");
   const [harmony, setHarmony] = useState<Harmony>("complementary");
   const [copied, setCopied] = useState<string | null>(null);
@@ -86,12 +88,12 @@ export default function ColorPaletteGenerator() {
       </div>
 
       <label className="block text-sm">
-        Base color
+        {t.baseColor}
         <input type="color" value={base} onChange={(e) => setBase(e.target.value)} className="mt-1 h-10 w-full max-w-xs" />
       </label>
 
       <div>
-        <p className="text-sm font-medium">Harmony</p>
+        <p className="text-sm font-medium">{t.harmony}</p>
         <div className="mt-1 flex flex-wrap gap-1">
           {(["complementary", "analogous", "triadic"] as const).map((h) => (
             <button
@@ -100,7 +102,7 @@ export default function ColorPaletteGenerator() {
               onClick={() => setHarmony(h)}
               className={`rounded px-3 py-1 text-sm capitalize ${harmony === h ? "bg-primary-600 text-white" : "bg-gray-100 dark:bg-gray-800"}`}
             >
-              {h}
+              {t.harmonies[h]}
             </button>
           ))}
         </div>

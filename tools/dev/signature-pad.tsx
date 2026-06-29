@@ -5,9 +5,11 @@ import { Download } from "lucide-react";
 import { setupCanvas, canvasToBlob } from "@/lib/canvas-utils";
 import { downloadBlob } from "@/lib/audio-utils";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
+import { useDevToolsExtraLabels } from "@/lib/i18n/use-dev-tools-extra-labels";
 
 export default function SignaturePad() {
   const labels = useCommonLabels();
+  const t = useDevToolsExtraLabels("signaturePad");
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const drawing = useRef(false);
 
@@ -75,7 +77,7 @@ export default function SignaturePad() {
       <div className="flex gap-2">
         <button type="button" onClick={clear} className="btn-secondary">{labels.clear}</button>
         <button type="button" onClick={() => void exportPng()} className="btn-primary inline-flex items-center gap-2">
-          <Download className="h-4 w-4" /> {labels.download} PNG
+          <Download className="h-4 w-4" /> {t.downloadPng}
         </button>
       </div>
     </div>

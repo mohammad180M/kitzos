@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
+import { useDevToolsExtraLabels } from "@/lib/i18n/use-dev-tools-extra-labels";
 
 type CopiedField = "seconds" | "ms" | "date" | null;
 
@@ -32,12 +33,14 @@ function parseTimestampInput(value: string): { seconds: number; ms: number } | n
 
 export default function TimestampConverter() {
   const labels = useCommonLabels();
+  const t = useDevToolsExtraLabels("timestampConverter");
   const [timestampInput, setTimestampInput] = useState("");
   const [dateInput, setDateInput] = useState("");
-  const [now, setNow] = useState(() => Date.now());
+  const [now, setNow] = useState<number | null>(null);
   const [copied, setCopied] = useState<CopiedField>(null);
 
   useEffect(() => {
+    setNow(Date.now());
     const id = window.setInterval(() => setNow(Date.now()), 1000);
     return () => window.clearInterval(id);
   }, []);
@@ -73,39 +76,45 @@ export default function TimestampConverter() {
     }
   };
 
-  const nowSeconds = Math.floor(now / 1000);
+  const nowSeconds = now !== null ? Math.floor(now / 1000) : null;
 
   return (
     <div className="space-y-4">
       <div className="rounded-lg border border-gray-200 bg-gray-50 dark:bg-gray-800/50 px-4 py-3 dark:border-gray-700">
-        <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Current time</p>
-        <p className="mt-1 font-mono text-sm text-gray-900 dark:text-gray-100">{formatDate(new Date(now))}</p>
-        <div className="mt-2 flex flex-wrap items-center gap-3 text-sm">
-          <span className="font-mono text-primary-700 dark:text-primary-300">{nowSeconds} s</span>
-          <button
-            type="button"
-            onClick={() => copy("seconds", String(nowSeconds))}
-            className="inline-flex items-center gap-1 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
-          >
-            {copied === "seconds" ? <Check className="h-3.5 w-3.5 text-green-600 dark:text-green-400" /> : <Copy className="h-3.5 w-3.5" />}
-            Copy seconds
-          </button>
-          <span className="font-mono text-primary-700 dark:text-primary-300">{now} ms</span>
-          <button
-            type="button"
-            onClick={() => copy("ms", String(now))}
-            className="inline-flex items-center gap-1 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
-          >
-            {copied === "ms" ? <Check className="h-3.5 w-3.5 text-green-600 dark:text-green-400" /> : <Copy className="h-3.5 w-3.5" />}
-            Copy ms
-          </button>
-        </div>
+        <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.currentTime}</p>
+        {now !== null ? (
+          <>
+            <p className="mt-1 font-mono text-sm text-gray-900 dark:text-gray-100">{formatDate(new Date(now))}</p>
+            <div className="mt-2 flex flex-wrap items-center gap-3 text-sm">
+              <span className="font-mono text-primary-700 dark:text-primary-300">{nowSeconds} s</span>
+              <button
+                type="button"
+                onClick={() => copy("seconds", String(nowSeconds))}
+                className="inline-flex items-center gap-1 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+              >
+                {copied === "seconds" ? <Check className="h-3.5 w-3.5 text-green-600 dark:text-green-400" /> : <Copy className="h-3.5 w-3.5" />}
+                {t.copySeconds}
+              </button>
+              <span className="font-mono text-primary-700 dark:text-primary-300">{now} ms</span>
+              <button
+                type="button"
+                onClick={() => copy("ms", String(now))}
+                className="inline-flex items-center gap-1 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+              >
+                {copied === "ms" ? <Check className="h-3.5 w-3.5 text-green-600 dark:text-green-400" /> : <Copy className="h-3.5 w-3.5" />}
+                {t.copyMs}
+              </button>
+            </div>
+          </>
+        ) : (
+          <p className="mt-1 font-mono text-sm text-gray-400 dark:text-gray-500">—</p>
+        )}
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="ts-input" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Unix timestamp
+            {t.unixTimestamp}
           </label>
           <input
             id="ts-input"
@@ -113,7 +122,7 @@ export default function TimestampConverter() {
             inputMode="numeric"
             value={timestampInput}
             onChange={(e) => handleTimestampChange(e.target.value)}
-            placeholder="Seconds or milliseconds…"
+            placeholder={t.placeholderTimestamp}
             className="input-field mt-1 font-mono"
           />
           {parsedTs && dateFromTs && (
@@ -127,7 +136,7 @@ export default function TimestampConverter() {
         </div>
         <div>
           <label htmlFor="date-input" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Date &amp; time
+            {t.dateTime}
           </label>
           <input
             id="date-input"
@@ -138,7 +147,7 @@ export default function TimestampConverter() {
           />
           {validDate && (
             <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-              → <span className="font-mono">{Math.floor(validDate.getTime() / 1000)}</span> seconds
+              → <span className="font-mono">{Math.floor(validDate.getTime() / 1000)}</span> {t.seconds}
               <button
                 type="button"
                 onClick={() => copy("date", String(Math.floor(validDate.getTime() / 1000)))}

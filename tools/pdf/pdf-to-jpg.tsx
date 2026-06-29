@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import JSZip from "jszip";
 import { Download, FileText, Loader2, Upload } from "lucide-react";
+import { usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
 
 type PdfJsLib = typeof import("pdfjs-dist");
 
@@ -41,6 +42,7 @@ async function renderPageToJpeg(
 }
 
 export default function PdfToJpg() {
+  const t = usePdfToolLabels("pdfToJpg");
   const [file, setFile] = useState<File | null>(null);
   const [pageCount, setPageCount] = useState(0);
   const [converting, setConverting] = useState(false);
@@ -67,7 +69,7 @@ export default function PdfToJpg() {
     } catch {
       setFile(null);
       setPageCount(0);
-      setError("Could not read PDF. Make sure the file is valid and not encrypted.");
+      setError(t.errReadFailed);
     }
   };
 
@@ -96,7 +98,7 @@ export default function PdfToJpg() {
         downloadBlob(zipBlob, `${baseName}-pages.zip`);
       }
     } catch {
-      setError("Conversion failed. The PDF may be corrupted or password-protected.");
+      setError(t.errConvertFailed);
     } finally {
       setConverting(false);
     }
@@ -111,10 +113,10 @@ export default function PdfToJpg() {
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") inputRef.current?.click();
         }}
-        className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 dark:bg-gray-800/50 dark:border-gray-600 px-6 py-10 transition-colors hover:border-primary-400 hover:bg-primary-50/50 dark:hover:border-primary-500 dark:hover:bg-primary-950/30"
+        className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 px-6 py-10 transition-colors hover:border-primary-400 hover:bg-primary-50/50 dark:border-gray-600 dark:bg-gray-800/50 dark:hover:border-primary-500 dark:hover:bg-primary-950/30"
       >
         <Upload className="h-8 w-8 text-gray-400 dark:text-gray-500" aria-hidden="true" />
-        <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">Upload a PDF to convert</p>
+        <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">{t.uploadHint}</p>
         <input
           ref={inputRef}
           type="file"
@@ -133,7 +135,7 @@ export default function PdfToJpg() {
           <FileText className="h-5 w-5 shrink-0 text-primary-600 dark:text-primary-400" aria-hidden="true" />
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-medium text-gray-900 dark:text-gray-100">{file.name}</p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">{pageCount} page{pageCount !== 1 ? "s" : ""}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">{t.pageCount(pageCount)}</p>
           </div>
         </div>
       )}
@@ -156,12 +158,12 @@ export default function PdfToJpg() {
               {converting ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Converting…
+                  {t.converting}
                 </>
               ) : (
                 <>
                   <Download className="h-4 w-4" />
-                  Download JPG
+                  {t.downloadJpg}
                 </>
               )}
             </button>
@@ -174,7 +176,7 @@ export default function PdfToJpg() {
                 className="btn-secondary"
               >
                 <Download className="h-4 w-4" />
-                Page 1 as JPG
+                {t.pageOneJpg}
               </button>
               <button
                 type="button"
@@ -185,12 +187,12 @@ export default function PdfToJpg() {
                 {converting ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />
-                    Converting…
+                    {t.converting}
                   </>
                 ) : (
                   <>
                     <Download className="h-4 w-4" />
-                    All pages (ZIP)
+                    {t.allPagesZip}
                   </>
                 )}
               </button>

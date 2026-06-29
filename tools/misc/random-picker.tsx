@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Check, Copy, Dices, RefreshCw } from "lucide-react";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
+import { useMiscToolsExtraLabels } from "@/lib/i18n/use-misc-tools-extra-labels";
 
 type Mode = "list" | "number";
 
@@ -45,6 +46,7 @@ function truncateLabel(text: string, max = 10): string {
 
 export default function RandomPicker() {
   const labels = useCommonLabels();
+  const t = useMiscToolsExtraLabels("randomPicker");
   const [mode, setMode] = useState<Mode>("list");
   const [listInput, setListInput] = useState("Alice\nBob\nCharlie\nDiana\nEve");
   const [min, setMin] = useState("1");
@@ -130,7 +132,7 @@ export default function RandomPicker() {
   return (
     <div className="space-y-4">
       <div>
-        <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Mode</p>
+        <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.mode}</p>
         <div className="mt-2 inline-flex rounded-lg border border-gray-300 bg-white p-0.5 dark:border-gray-600 dark:bg-gray-800">
           <button
             type="button"
@@ -144,7 +146,7 @@ export default function RandomPicker() {
                 : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
             }`}
           >
-            Pick from list
+            {t.pickFromList}
           </button>
           <button
             type="button"
@@ -158,7 +160,7 @@ export default function RandomPicker() {
                 : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
             }`}
           >
-            Random number
+            {t.randomNumber}
           </button>
         </div>
       </div>
@@ -167,7 +169,7 @@ export default function RandomPicker() {
         <>
           <div>
             <label htmlFor="pick-list" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Options (one per line)
+              {t.options}
             </label>
             <textarea
               id="pick-list"
@@ -231,7 +233,7 @@ export default function RandomPicker() {
             className="btn-primary"
           >
             <RefreshCw className={`h-4 w-4 ${spinning ? "animate-spin" : ""}`} />
-            {spinning ? "Spinning…" : "Pick random"}
+            {spinning ? t.spinning : t.pickRandom}
           </button>
         </>
       ) : (
@@ -239,7 +241,7 @@ export default function RandomPicker() {
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label htmlFor="min-num" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Minimum
+                {t.minimum}
               </label>
               <input
                 id="min-num"
@@ -251,7 +253,7 @@ export default function RandomPicker() {
             </div>
             <div>
               <label htmlFor="max-num" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Maximum
+                {t.maximum}
               </label>
               <input
                 id="max-num"
@@ -271,7 +273,7 @@ export default function RandomPicker() {
 
       {result && !spinning && (
         <div className="rounded-lg border border-primary-200 bg-primary-50 px-4 py-4 text-center dark:border-primary-800 dark:bg-primary-950/40">
-          <p className="text-sm text-primary-600 dark:text-primary-400">Result</p>
+          <p className="text-sm text-primary-600 dark:text-primary-400">{t.result}</p>
           <p className="mt-1 text-2xl font-bold text-primary-800 dark:text-primary-200">{result}</p>
           <button type="button" onClick={copy} className="btn-secondary mt-3">
             {copied ? (

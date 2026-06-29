@@ -1,13 +1,16 @@
 "use client";
 
 import AdSenseUnit from "@/components/AdSenseUnit";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { AD_SLOTS } from "@/lib/ads-config";
 
 export default function ToolPageAd() {
+  const { t } = useLocale();
+
   return (
     <aside
       className="mb-8 flex justify-center overflow-hidden"
-      aria-label="Advertisement"
+      aria-label={t.tool.advertisementAria}
     >
       <div className="md:hidden">
         <AdSenseUnit slot={AD_SLOTS.mobileBanner} width={320} height={100} />

@@ -9,12 +9,12 @@ import {
   encodeWav,
   isAudioFile,
 } from "@/lib/audio-utils";
-import { useCommonLabels } from "@/lib/i18n/use-common-labels";
+import { useAudioToolLabels } from "@/lib/i18n/use-audio-tool-labels";
 
 type OutputFormat = "mp3" | "wav";
 
 export default function AudioConverter() {
-  const labels = useCommonLabels();
+  const t = useAudioToolLabels("audioConverter");
   const inputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [output, setOutput] = useState<OutputFormat>("mp3");
@@ -23,7 +23,7 @@ export default function AudioConverter() {
 
   const convert = async (f: File) => {
     if (!isAudioFile(f)) {
-      setError("Unsupported file. Use MP3, WAV, M4A, OGG, or WebM.");
+      setError(t.unsupportedFile);
       return;
     }
     setProcessing(true);
@@ -36,7 +36,7 @@ export default function AudioConverter() {
       downloadBlob(blob, `${base}.${output}`);
       setFile(f);
     } catch {
-      setError("Conversion failed. Try another file or WAV output.");
+      setError(t.errConvertFailed);
     } finally {
       setProcessing(false);
     }
@@ -57,7 +57,7 @@ export default function AudioConverter() {
       />
 
       <div>
-        <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Convert to</p>
+        <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.convertTo}</p>
         <div className="mt-2 inline-flex rounded-lg border border-gray-300 p-0.5 dark:border-gray-600">
           {(["mp3", "wav"] as const).map((f) => (
             <button
@@ -85,12 +85,12 @@ export default function AudioConverter() {
         ) : (
           <Upload className="h-8 w-8" />
         )}
-        <span>Upload audio (WAV, MP3, M4A, OGG…)</span>
+        <span>{t.uploadHint}</span>
       </button>
 
       {file && !processing && (
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          Last converted: {file.name}
+          {t.lastConverted(file.name)}
         </p>
       )}
 
@@ -101,7 +101,7 @@ export default function AudioConverter() {
       )}
 
       <p className="text-xs text-gray-400 dark:text-gray-500">
-        Decodes in your browser via Web Audio API. MP3 encoding uses lamejs locally — nothing is uploaded.
+        {t.privacyNote}
       </p>
     </div>
   );

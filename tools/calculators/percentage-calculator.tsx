@@ -1,10 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useCalcToolLabels } from "@/lib/i18n/use-calc-tool-labels";
 
 type Mode = "percent-of" | "what-percent" | "change";
 
 export default function PercentageCalculator() {
+  const t = useCalcToolLabels("percentageCalculator");
   const [mode, setMode] = useState<Mode>("percent-of");
   const [a, setA] = useState("20");
   const [b, setB] = useState("150");
@@ -14,36 +16,47 @@ export default function PercentageCalculator() {
     const numB = parseFloat(b);
     if (isNaN(numA) || isNaN(numB)) return null;
 
+    const fmt = (n: number) => n.toLocaleString(undefined, { maximumFractionDigits: 4 });
+    const strA = fmt(numA);
+    const strB = fmt(numB);
+
     switch (mode) {
       case "percent-of":
         if (numB === 0) return null;
-        return { text: `${numA}% of ${numB} = ${((numA / 100) * numB).toLocaleString(undefined, { maximumFractionDigits: 4 })}` };
+        return {
+          text: t.resultPercentOf(strA, strB, fmt((numA / 100) * numB)),
+        };
       case "what-percent":
         if (numB === 0) return null;
-        return { text: `${numA} is ${((numA / numB) * 100).toLocaleString(undefined, { maximumFractionDigits: 4 })}% of ${numB}` };
+        return {
+          text: t.resultWhatPercent(strA, fmt((numA / numB) * 100), strB),
+        };
       case "change": {
         if (numA === 0) return null;
         const change = ((numB - numA) / numA) * 100;
-        const direction = change >= 0 ? "increase" : "decrease";
+        const pct = fmt(Math.abs(change));
         return {
-          text: `From ${numA} to ${numB} is a ${Math.abs(change).toLocaleString(undefined, { maximumFractionDigits: 4 })}% ${direction}`,
+          text:
+            change >= 0
+              ? t.resultChangeIncrease(strA, strB, pct)
+              : t.resultChangeDecrease(strA, strB, pct),
         };
       }
       default:
         return null;
     }
-  }, [mode, a, b]);
+  }, [mode, a, b, t]);
 
   const labels: Record<Mode, { a: string; b: string }> = {
-    "percent-of": { a: "Percentage (%)", b: "Of number" },
-    "what-percent": { a: "Value", b: "Of total" },
-    change: { a: "Original value", b: "New value" },
+    "percent-of": { a: t.percentLabel, b: t.ofNumber },
+    "what-percent": { a: t.value, b: t.ofTotal },
+    change: { a: t.originalValue, b: t.newValue },
   };
 
   return (
     <div className="space-y-4">
       <div>
-        <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Mode</p>
+        <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.mode}</p>
         <div className="mt-2 flex flex-wrap gap-1 rounded-lg border border-gray-300 bg-white p-0.5 dark:border-gray-600 dark:bg-gray-800">
           <button
             type="button"
@@ -54,7 +67,7 @@ export default function PercentageCalculator() {
                 : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
             }`}
           >
-            X% of Y
+            {t.modePercentOf}
           </button>
           <button
             type="button"
@@ -65,7 +78,7 @@ export default function PercentageCalculator() {
                 : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
             }`}
           >
-            X is ?% of Y
+            {t.modeWhatPercent}
           </button>
           <button
             type="button"
@@ -76,7 +89,7 @@ export default function PercentageCalculator() {
                 : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
             }`}
           >
-            % change
+            {t.modeChange}
           </button>
         </div>
       </div>
@@ -113,7 +126,7 @@ export default function PercentageCalculator() {
           <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">{result.text}</p>
         </div>
       ) : (
-        <p className="text-sm text-gray-500 dark:text-gray-400">Enter valid numbers to calculate.</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400">{t.invalid}</p>
       )}
     </div>
   );

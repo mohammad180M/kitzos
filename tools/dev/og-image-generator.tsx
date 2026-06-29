@@ -5,6 +5,7 @@ import { Download, ImagePlus } from "lucide-react";
 import { setupCanvas, canvasToBlob } from "@/lib/canvas-utils";
 import { downloadBlob } from "@/lib/download";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
+import { useDevToolsExtraLabels } from "@/lib/i18n/use-dev-tools-extra-labels";
 
 const W = 1200;
 const H = 630;
@@ -34,6 +35,7 @@ function fontFamily(text: string): string {
 
 export default function OgImageGenerator() {
   const labels = useCommonLabels();
+  const t = useDevToolsExtraLabels("ogImageGenerator");
   const containerRef = useRef<HTMLDivElement>(null);
   const bgInputRef = useRef<HTMLInputElement>(null);
   const dragRef = useRef<{ id: LayerId; offsetX: number; offsetY: number } | null>(null);
@@ -185,18 +187,18 @@ export default function OgImageGenerator() {
                 opacity: fontsReady ? 1 : 0.9,
               }}
             >
-              {text || (layer.id === "title" ? "Title" : "Subtitle")}
+              {text || (layer.id === "title" ? t.titleFallback : t.subtitleFallback)}
             </div>
           );
         })}
         <p className="pointer-events-none absolute bottom-2 right-2 rounded bg-black/40 px-2 py-0.5 text-xs text-white">
-          Drag text to reposition
+          {t.dragHint}
         </p>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2">
         <label className="text-sm">
-          Title
+          {t.title}
           <input
             dir="auto"
             value={title}
@@ -205,7 +207,7 @@ export default function OgImageGenerator() {
           />
         </label>
         <label className="text-sm">
-          Subtitle
+          {t.subtitle}
           <input
             dir="auto"
             value={subtitle}
@@ -214,7 +216,7 @@ export default function OgImageGenerator() {
           />
         </label>
         <label className="text-sm">
-          Background color
+          {t.backgroundColor}
           <input
             type="color"
             value={bg}
@@ -223,7 +225,7 @@ export default function OgImageGenerator() {
           />
         </label>
         <label className="text-sm">
-          Text color
+          {t.textColor}
           <input
             type="color"
             value={fg}
@@ -252,7 +254,7 @@ export default function OgImageGenerator() {
           className="btn-secondary inline-flex items-center gap-2"
         >
           <ImagePlus className="h-4 w-4" />
-          Upload background
+          {t.uploadBackground}
         </button>
         {bgImage && (
           <button
@@ -263,7 +265,7 @@ export default function OgImageGenerator() {
             }}
             className="btn-secondary text-sm"
           >
-            Remove background image
+            {t.removeBackground}
           </button>
         )}
         <button

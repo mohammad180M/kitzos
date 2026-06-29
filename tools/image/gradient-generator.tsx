@@ -3,11 +3,13 @@
 import { useMemo, useState } from "react";
 import { Check, Copy, Plus, Trash2 } from "lucide-react";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
+import { useImageToolsExtraLabels } from "@/lib/i18n/use-image-tools-extra-labels";
 
 type GradientType = "linear" | "radial";
 
 export default function GradientGenerator() {
   const labels = useCommonLabels();
+  const t = useImageToolsExtraLabels("gradientGenerator");
   const [type, setType] = useState<GradientType>("linear");
   const [angle, setAngle] = useState(135);
   const [colors, setColors] = useState(["#2563eb", "#7c3aed", "#ec4899"]);
@@ -56,25 +58,25 @@ export default function GradientGenerator() {
       <div
         className="h-40 w-full rounded-xl border border-gray-200 shadow-inner dark:border-gray-700"
         style={previewStyle}
-        aria-label="Gradient preview"
+        aria-label={t.previewAria}
       />
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Type</p>
+          <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.type}</p>
           <div className="mt-2 inline-flex rounded-lg border border-gray-300 bg-white p-0.5 dark:border-gray-600 dark:bg-gray-800">
-            {(["linear", "radial"] as GradientType[]).map((t) => (
+            {(["linear", "radial"] as GradientType[]).map((typeKey) => (
               <button
-                key={t}
+                key={typeKey}
                 type="button"
-                onClick={() => setType(t)}
+                onClick={() => setType(typeKey)}
                 className={`rounded-md px-3 py-1.5 text-sm font-medium capitalize transition-colors ${
-                  type === t
+                  type === typeKey
                     ? "bg-primary-600 text-white"
                     : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
                 }`}
               >
-                {t}
+                {typeKey === "linear" ? t.typeLinear : t.typeRadial}
               </button>
             ))}
           </div>
@@ -82,7 +84,7 @@ export default function GradientGenerator() {
         {type === "linear" && (
           <div>
             <label htmlFor="angle" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Angle: {angle}°
+              {t.angleLabel(angle)}
             </label>
             <input
               id="angle"
@@ -99,11 +101,11 @@ export default function GradientGenerator() {
 
       <div>
         <div className="flex items-center justify-between">
-          <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Colors</p>
+          <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.colors}</p>
           {colors.length < 6 && (
             <button type="button" onClick={addColor} className="btn-secondary py-1.5 text-xs">
               <Plus className="h-3.5 w-3.5" />
-              Add color
+              {t.addColor}
             </button>
           )}
         </div>
@@ -115,7 +117,7 @@ export default function GradientGenerator() {
                 value={color}
                 onChange={(e) => updateColor(index, e.target.value)}
                 className="h-10 w-10 shrink-0 cursor-pointer rounded-lg border border-gray-300 dark:border-gray-600"
-                aria-label={`Color ${index + 1}`}
+                aria-label={t.colorAria(index + 1)}
               />
               <input
                 type="text"
@@ -128,7 +130,7 @@ export default function GradientGenerator() {
                   type="button"
                   onClick={() => removeColor(index)}
                   className="rounded p-2 text-gray-400 hover:bg-gray-100 hover:text-red-600 dark:hover:bg-gray-700"
-                  aria-label={`Remove color ${index + 1}`}
+                  aria-label={t.removeColorAria(index + 1)}
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
@@ -140,7 +142,7 @@ export default function GradientGenerator() {
 
       <div>
         <label htmlFor="css-output" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-          CSS
+          {t.css}
         </label>
         <textarea
           id="css-output"
@@ -158,7 +160,7 @@ export default function GradientGenerator() {
           ) : (
             <>
               <Copy className="h-4 w-4" />
-              Copy CSS
+              {t.copyCss}
             </>
           )}
         </button>

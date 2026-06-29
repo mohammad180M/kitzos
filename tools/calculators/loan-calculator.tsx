@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useCalcToolLabels } from "@/lib/i18n/use-calc-tool-labels";
 
 type TermUnit = "years" | "months";
 
@@ -14,6 +15,7 @@ function monthlyPayment(principal: number, annualRatePercent: number, months: nu
 }
 
 export default function LoanCalculator() {
+  const t = useCalcToolLabels("loanCalculator");
   const [amount, setAmount] = useState("250000");
   const [rate, setRate] = useState("6.5");
   const [term, setTerm] = useState("30");
@@ -48,11 +50,16 @@ export default function LoanCalculator() {
   const fmt = (n: number) =>
     n.toLocaleString(undefined, { style: "currency", currency: "USD", maximumFractionDigits: 2 });
 
+  const termUnits: { value: TermUnit; label: string }[] = [
+    { value: "years", label: t.years },
+    { value: "months", label: t.months },
+  ];
+
   return (
     <div className="space-y-4">
       <div>
         <label htmlFor="loan-amount" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-          Loan amount ($)
+          {t.loanAmount}
         </label>
         <input
           id="loan-amount"
@@ -66,7 +73,7 @@ export default function LoanCalculator() {
 
       <div>
         <label htmlFor="loan-rate" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-          Annual interest rate (%)
+          {t.annualRate}
         </label>
         <input
           id="loan-rate"
@@ -82,7 +89,7 @@ export default function LoanCalculator() {
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="loan-term" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Loan term
+            {t.loanTerm}
           </label>
           <input
             id="loan-term"
@@ -95,20 +102,20 @@ export default function LoanCalculator() {
           />
         </div>
         <div>
-          <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Term unit</p>
+          <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.termUnit}</p>
           <div className="mt-2 inline-flex rounded-lg border border-gray-300 bg-white p-0.5 dark:border-gray-600 dark:bg-gray-800">
-            {(["years", "months"] as TermUnit[]).map((u) => (
+            {termUnits.map(({ value, label }) => (
               <button
-                key={u}
+                key={value}
                 type="button"
-                onClick={() => setTermUnit(u)}
-                className={`rounded-md px-3 py-1.5 text-sm font-medium capitalize transition-colors ${
-                  termUnit === u
+                onClick={() => setTermUnit(value)}
+                className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+                  termUnit === value
                     ? "bg-primary-600 text-white"
                     : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
                 }`}
               >
-                {u}
+                {label}
               </button>
             ))}
           </div>
@@ -118,19 +125,19 @@ export default function LoanCalculator() {
       {result && (
         <div className="grid gap-3 sm:grid-cols-3">
           <div className="rounded-lg border border-primary-200 bg-primary-50 px-4 py-3 dark:border-primary-800 dark:bg-primary-950/40">
-            <p className="text-xs text-primary-600 dark:text-primary-400">Monthly payment</p>
+            <p className="text-xs text-primary-600 dark:text-primary-400">{t.monthlyPayment}</p>
             <p className="text-xl font-bold text-primary-700 dark:text-primary-300">
               {fmt(result.payment)}
             </p>
           </div>
           <div className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800/50">
-            <p className="text-xs text-gray-500 dark:text-gray-400">Total interest</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">{t.totalInterest}</p>
             <p className="text-xl font-bold text-gray-900 dark:text-gray-100">
               {fmt(result.totalInterest)}
             </p>
           </div>
           <div className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800/50">
-            <p className="text-xs text-gray-500 dark:text-gray-400">Total paid</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">{t.totalPaid}</p>
             <p className="text-xl font-bold text-gray-900 dark:text-gray-100">
               {fmt(result.totalPaid)}
             </p>
@@ -138,9 +145,7 @@ export default function LoanCalculator() {
         </div>
       )}
 
-      <p className="text-xs text-gray-400 dark:text-gray-500">
-        Assumes a fixed-rate loan with equal monthly payments. Does not include taxes, insurance, or fees.
-      </p>
+      <p className="text-xs text-gray-400 dark:text-gray-500">{t.disclaimer}</p>
     </div>
   );
 }

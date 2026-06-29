@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Check, Copy, Upload } from "lucide-react";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
+import { useDevToolsExtraLabels } from "@/lib/i18n/use-dev-tools-extra-labels";
 
 type Mode = "encode" | "decode";
 type InputMode = "text" | "image";
@@ -27,6 +28,7 @@ function decodeText(base64: string): string {
 
 export default function Base64Tool() {
   const labels = useCommonLabels();
+  const t = useDevToolsExtraLabels("base64");
   const [mode, setMode] = useState<Mode>("encode");
   const [inputMode, setInputMode] = useState<InputMode>("text");
   const [input, setInput] = useState("");
@@ -50,14 +52,14 @@ export default function Base64Tool() {
         setOutput(decodeText(value));
       }
     } catch {
-      setError("Invalid Base64 string. Check your input and try again.");
+      setError(t.errorInvalid);
       setOutput("");
     }
   };
 
   const handleImageUpload = (file: File) => {
     if (!file.type.startsWith("image/")) {
-      setError("Please upload an image file.");
+      setError(t.errorNotImage);
       return;
     }
 
@@ -69,7 +71,7 @@ export default function Base64Tool() {
       setOutput(result);
       setError(null);
     };
-    reader.onerror = () => setError("Failed to read image.");
+    reader.onerror = () => setError(t.errorReadImage);
     reader.readAsDataURL(file);
   };
 
@@ -100,7 +102,7 @@ export default function Base64Tool() {
               }}
               className={`rounded-md px-3 py-1.5 text-sm font-medium capitalize ${ mode === m ? "bg-primary-600 text-white" : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700" }`}
             >
-              {m}
+              {m === "encode" ? t.modeEncode : t.modeDecode}
             </button>
           ))}
         </div>
@@ -119,7 +121,7 @@ export default function Base64Tool() {
                 }}
                 className={`rounded-md px-3 py-1.5 text-sm font-medium capitalize ${ inputMode === m ? "bg-primary-600 text-white" : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700" }`}
               >
-                {m}
+                {m === "text" ? t.modeText : t.modeImage}
               </button>
             ))}
           </div>
@@ -129,7 +131,7 @@ export default function Base64Tool() {
       {mode === "encode" && inputMode === "image" ? (
         <label className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 dark:bg-gray-800/50 dark:border-gray-600 px-6 py-8 transition-colors hover:border-primary-400">
           <Upload className="h-6 w-6 text-gray-400 dark:text-gray-500" aria-hidden="true" />
-          <span className="mt-2 text-sm text-gray-600 dark:text-gray-400">Upload image to encode</span>
+          <span className="mt-2 text-sm text-gray-600 dark:text-gray-400">{t.uploadImage}</span>
           <input
             type="file"
             accept="image/*"
@@ -147,12 +149,12 @@ export default function Base64Tool() {
           onChange={(e) => handleTextInput(e.target.value)}
           placeholder={
             mode === "encode"
-              ? "Enter text to encode…"
-              : "Enter Base64 to decode…"
+              ? t.placeholderEncode
+              : t.placeholderDecode
           }
           rows={5}
           className="input-field resize-y font-mono text-sm"
-          aria-label={mode === "encode" ? "Text to encode" : "Base64 to decode"}
+          aria-label={mode === "encode" ? t.ariaEncode : t.ariaDecode}
         />
       )}
 
@@ -165,7 +167,7 @@ export default function Base64Tool() {
       {output && (
         <div>
           <label htmlFor="base64-output" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Output
+            {t.output}
           </label>
           <textarea
             id="base64-output"

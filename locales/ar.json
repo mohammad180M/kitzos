@@ -21,7 +21,11 @@
     "categoriesAria": "الفئات",
     "categoriesMenu": "تصفح فئات الأدوات",
     "switchToArabic": "التبديل إلى العربية",
-    "switchToEnglish": "التبديل إلى الإنجليزية"
+    "switchToEnglish": "التبديل إلى الإنجليزية",
+    "toggleLanguage": "تبديل اللغة",
+    "switchToLightMode": "التبديل إلى الوضع الفاتح",
+    "switchToDarkMode": "التبديل إلى الوضع الداكن",
+    "toggleTheme": "تبديل المظهر"
   },
   "home": {
     "title": "أدوات Kitzos",
@@ -42,7 +46,8 @@
     "howToUse": "طريقة الاستخدام",
     "relatedTools": "أدوات ذات صلة",
     "faq": "الأسئلة الشائعة",
-    "breadcrumbAria": "مسار التنقل"
+    "breadcrumbAria": "مسار التنقل",
+    "advertisementAria": "إعلان"
   },
   "footer": {
     "tagline": "أدوات مجانية تعمل في متصفحك وبدون رفع ملفات إلى خوادمنا — ملفاتك تبقى خاصة.",

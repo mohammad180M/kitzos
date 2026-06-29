@@ -8,6 +8,7 @@ import { usePersistedInput } from "@/lib/hooks/use-persisted-input";
 import { useToolKeyboard } from "@/lib/hooks/use-tool-keyboard";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
+import { useDevToolsExtraLabels } from "@/lib/i18n/use-dev-tools-extra-labels";
 
 const LINE_HEIGHT_PX = 20;
 
@@ -62,21 +63,25 @@ function formatErrorMessage(
   rawMessage: string,
   line: number,
   column: number,
-  showPriorLineHint: boolean
+  showPriorLineHint: boolean,
+  labels: { invalidJson: string; priorLineHint: string; errorAtLine: string; errorAtColumn: string }
 ): string {
   const withoutPosition = rawMessage.replace(/\s*in JSON at position \d+/i, "").trim();
   const cleaned = withoutPosition.replace(/^JSON\.parse:\s*/i, "").trim();
-  const base = cleaned || "Invalid JSON";
-  let message = `${base} at line ${line}, column ${column}`;
+  const base = cleaned || labels.invalidJson;
+  let message = `${base} ${labels.errorAtLine} ${line}, ${labels.errorAtColumn} ${column}`;
   if (showPriorLineHint) {
-    message +=
-      " — the missing comma or syntax issue is often on the line just before this one.";
+    message += labels.priorLineHint;
   }
   return message;
 }
 
-function parseJsonError(err: unknown, input: string): JsonError {
-  const rawMessage = err instanceof Error ? err.message : "Invalid JSON";
+function parseJsonError(
+  err: unknown,
+  input: string,
+  labels: { invalidJson: string; priorLineHint: string; errorAtLine: string; errorAtColumn: string }
+): JsonError {
+  const rawMessage = err instanceof Error ? err.message : labels.invalidJson;
   const posMatch = rawMessage.match(/position (\d+)/i);
   const position = posMatch ? parseInt(posMatch[1], 10) : 0;
   const { line, column, lineStart, lineEnd } = positionToLineColumn(input, position);
@@ -84,7 +89,7 @@ function parseJsonError(err: unknown, input: string): JsonError {
   const showPriorLineHint = isLikelyPriorLineSyntaxError(rawMessage) && previousLine !== null;
 
   return {
-    message: formatErrorMessage(rawMessage, line, column, showPriorLineHint),
+    message: formatErrorMessage(rawMessage, line, column, showPriorLineHint, labels),
     line,
     column,
     position,
@@ -135,7 +140,8 @@ function LineHighlightOverlay({
 
 export default function JsonFormatter() {
   const labels = useCommonLabels();
-  const { t } = useLocale();
+  const t = useDevToolsExtraLabels("jsonFormatter");
+  const { t: localeT } = useLocale();
   const [input, setInput] = usePersistedInput("kitzos-json-formatter-input");
   const [output, setOutput] = useState("");
   const [error, setError] = useState<JsonError | null>(null);
@@ -159,7 +165,7 @@ export default function JsonFormatter() {
       setHighlightError(false);
     } catch (err) {
       setOutput("");
-      setError(parseJsonError(err, input));
+      setError(parseJsonError(err, input, t));
     }
   };
 
@@ -193,11 +199,11 @@ export default function JsonFormatter() {
 
   return (
     <div className="space-y-4">
-      <ToolEmptyHint message={t.common.emptyStateHint} show={!input.trim()} />
-      <p className="text-xs text-gray-500 dark:text-gray-400">{t.common.keyboardHint}</p>
+      <ToolEmptyHint message={localeT.common.emptyStateHint} show={!input.trim()} />
+      <p className="text-xs text-gray-500 dark:text-gray-400">{localeT.common.keyboardHint}</p>
       <div>
         <label htmlFor="json-input" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-          JSON input
+          {t.input}
         </label>
         <div
           className={`relative mt-1 rounded-lg transition-colors ${
@@ -232,11 +238,11 @@ export default function JsonFormatter() {
       <div className="flex flex-wrap gap-2">
         <button type="button" onClick={() => format(false)} className="btn-primary">
           <Wand2 className="h-4 w-4" />
-          Format
+          {t.format}
         </button>
         <button type="button" onClick={() => format(true)} className="btn-secondary">
           <Minimize2 className="h-4 w-4" />
-          Minify
+          {t.minify}
         </button>
       </div>
 
@@ -244,7 +250,7 @@ export default function JsonFormatter() {
         <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300" role="alert">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
-              <p className="font-medium">Invalid JSON</p>
+              <p className="font-medium">{t.invalidJson}</p>
               <p className="mt-1">{error.message}</p>
             </div>
             <button
@@ -253,7 +259,7 @@ export default function JsonFormatter() {
               className="btn-secondary shrink-0 border-red-200 bg-white text-red-700 hover:bg-red-100 dark:border-red-800 dark:bg-gray-800 dark:text-red-300 dark:hover:bg-red-950/40"
             >
               <MapPin className="h-4 w-4" />
-              Go to error
+              {t.goToError}
             </button>
           </div>
         </div>
@@ -262,7 +268,7 @@ export default function JsonFormatter() {
       {output && (
         <div>
           <label htmlFor="json-output" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Output
+            {t.output}
           </label>
           <textarea
             id="json-output"

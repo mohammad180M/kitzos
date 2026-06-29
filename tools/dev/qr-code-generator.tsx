@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import QRCode from "qrcode";
 import { AlertTriangle, Download } from "lucide-react";
+import { useDevToolsExtraLabels } from "@/lib/i18n/use-dev-tools-extra-labels";
 
 type ErrorCorrectionLevel = "L" | "M" | "Q" | "H";
 
@@ -55,6 +56,7 @@ function getQrOptions(
 }
 
 export default function QrCodeGenerator() {
+  const t = useDevToolsExtraLabels("qrCodeGenerator");
   const [text, setText] = useState("https://kitzos.com");
   const [foreground, setForeground] = useState("#000000");
   const [background, setBackground] = useState("#ffffff");
@@ -82,7 +84,7 @@ export default function QrCodeGenerator() {
       })
       .catch(() => {
         setQrDataUrl(null);
-        setError("Could not generate QR code. Try shorter text.");
+        setError(t.errorGenerate);
       });
   }, [text, foreground, background, errorLevel, size]);
 
@@ -109,7 +111,7 @@ export default function QrCodeGenerator() {
       a.click();
       URL.revokeObjectURL(url);
     } catch {
-      setError("SVG export failed.");
+      setError(t.errorSvgExport);
     }
   };
 
@@ -117,14 +119,14 @@ export default function QrCodeGenerator() {
     <div className="space-y-4">
       <div>
         <label htmlFor="qr-text" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-          Text or URL
+          {t.textOrUrl}
         </label>
         <input
           id="qr-text"
           type="text"
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="Enter text or URL…"
+          placeholder={t.placeholderText}
           className="input-field mt-1"
         />
       </div>
@@ -133,7 +135,7 @@ export default function QrCodeGenerator() {
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label htmlFor="qr-fg" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Foreground
+              {t.foreground}
             </label>
             <div className="mt-1 flex items-center gap-2">
               <input
@@ -154,7 +156,7 @@ export default function QrCodeGenerator() {
           </div>
           <div>
             <label htmlFor="qr-bg" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Background
+              {t.background}
             </label>
             <div className="mt-1 flex items-center gap-2">
               <input
@@ -178,14 +180,14 @@ export default function QrCodeGenerator() {
         {lowContrast && (
           <p className="flex items-start gap-2 text-sm text-amber-700 dark:text-amber-300" role="status">
             <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
-            Low contrast between foreground and background may make this QR harder to scan.
+            {t.lowContrastWarning}
           </p>
         )}
 
         <div>
-          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Error correction</label>
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.errorCorrection}</label>
           <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
-            Higher = more scan-resistant but denser
+            {t.errorCorrectionHint}
           </p>
           <div className="mt-2 inline-flex rounded-lg border border-gray-300 bg-white dark:border-gray-600 dark:bg-gray-800 p-0.5">
             {ERROR_LEVELS.map((level) => (
@@ -204,7 +206,7 @@ export default function QrCodeGenerator() {
 
         <div>
           <label htmlFor="qr-size" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Size: {size}px
+            {t.size}: {size}px
           </label>
           <input
             id="qr-size"
@@ -234,7 +236,7 @@ export default function QrCodeGenerator() {
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={qrDataUrl}
-            alt="Generated QR code"
+            alt={t.previewAlt}
             width={size}
             height={size}
             decoding="async"
@@ -246,7 +248,7 @@ export default function QrCodeGenerator() {
             className="flex items-center justify-center text-sm text-gray-400 dark:text-gray-500"
             style={{ width: size, height: size, maxWidth: "100%" }}
           >
-            QR code preview
+            {t.previewPlaceholder}
           </div>
         )}
       </div>
@@ -259,7 +261,7 @@ export default function QrCodeGenerator() {
           className="btn-primary"
         >
           <Download className="h-4 w-4" />
-          Download PNG
+          {t.downloadPng}
         </button>
         <button
           type="button"
@@ -268,7 +270,7 @@ export default function QrCodeGenerator() {
           className="btn-secondary"
         >
           <Download className="h-4 w-4" />
-          Download SVG
+          {t.downloadSvg}
         </button>
       </div>
     </div>

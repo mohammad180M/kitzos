@@ -3,6 +3,7 @@
 import React, { useCallback, useState } from "react";
 import { Check, Copy, Download, RefreshCw } from "lucide-react";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
+import { useTextToolLabels } from "@/lib/i18n/use-text-tool-labels";
 
 type Unit = "paragraphs" | "sentences" | "words";
 
@@ -64,11 +65,18 @@ function generateWords(count: number, includeOpening: boolean): string {
 
 export default function LoremIpsumGenerator() {
   const labels = useCommonLabels();
+  const t = useTextToolLabels("loremIpsum");
   const [unit, setUnit] = useState<Unit>("paragraphs");
   const [count, setCount] = useState(3);
   const [startWithCanonical, setStartWithCanonical] = useState(true);
   const [output, setOutput] = useState("");
   const [copied, setCopied] = useState(false);
+
+  const unitLabels: Record<Unit, string> = {
+    paragraphs: t.unitParagraphs,
+    sentences: t.unitSentences,
+    words: t.unitWords,
+  };
 
   const generate = useCallback(() => {
     const n = Math.max(1, Math.min(count, unit === "words" ? 500 : 50));
@@ -116,20 +124,20 @@ export default function LoremIpsumGenerator() {
   return (
     <div className="space-y-4">
       <div>
-        <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Generate</p>
+        <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.generateLabel}</p>
         <div className="mt-2 inline-flex flex-wrap gap-1 rounded-lg border border-gray-300 bg-white p-0.5 dark:border-gray-600 dark:bg-gray-800">
           {(["paragraphs", "sentences", "words"] as Unit[]).map((u) => (
             <button
               key={u}
               type="button"
               onClick={() => setUnit(u)}
-              className={`rounded-md px-3 py-1.5 text-sm font-medium capitalize transition-colors ${
+              className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
                 unit === u
                   ? "bg-primary-600 text-white"
                   : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
               }`}
             >
-              {u}
+              {unitLabels[u]}
             </button>
           ))}
         </div>
@@ -137,7 +145,7 @@ export default function LoremIpsumGenerator() {
 
       <div>
         <label htmlFor="lorem-count" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-          Count: {count}
+          {t.count(count)}
         </label>
         <input
           id="lorem-count"
@@ -157,7 +165,7 @@ export default function LoremIpsumGenerator() {
           onChange={(e) => setStartWithCanonical(e.target.checked)}
           className="mt-0.5 h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 dark:border-gray-600"
         />
-        <span>Start with &ldquo;Lorem ipsum dolor sit amet&hellip;&rdquo;</span>
+        <span>{t.startCanonical}</span>
       </label>
 
       <button type="button" onClick={generate} className="btn-primary">
@@ -168,7 +176,7 @@ export default function LoremIpsumGenerator() {
       {output && (
         <div>
           <label htmlFor="lorem-output" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Output
+            {t.output}
           </label>
           <textarea
             id="lorem-output"
@@ -193,7 +201,7 @@ export default function LoremIpsumGenerator() {
             </button>
             <button type="button" onClick={download} className="btn-secondary">
               <Download className="h-4 w-4" />
-              Download .txt
+              {t.downloadTxt}
             </button>
           </div>
         </div>
