@@ -686,24 +686,25 @@ export const extraToolContent: Record<string, ToolContent> = {
   ),
   "text-to-ascii-art": content(
     [
-      { title: "Type your message", description: "Enter the word or phrase to turn into ASCII art." },
-      { title: "Pick a font", description: "Choose from figlet-style banner fonts." },
-      { title: "Copy or download", description: "Copy the ASCII banner or save it as a text file." },
+      { title: "Type your message", description: "Enter Latin text for figlet banners, or Arabic for block-letter output." },
+      { title: "Pick a font", description: "Choose a figlet font for Latin text (hidden for Arabic input)." },
+      { title: "Copy or download", description: "Copy the banner or save it as a text file." },
     ],
     [
-      { question: "Which font engine is used?", answer: "Figlet fonts loaded in the browser for classic text banners." },
+      { question: "Does Arabic work?", answer: "Figlet is Latin-only. Arabic input uses block-letter rendering with a quality notice; Latin text uses classic figlet fonts." },
+      { question: "Which font engine is used?", answer: "Figlet fonts in the browser for Latin; custom block grids for Arabic letters." },
       { question: "Does it work offline?", answer: "After the page loads, generation runs locally without network calls." },
     ]
   ),
   "character-map": content(
     [
-      { title: "Browse categories", description: "Explore symbols, arrows, math, currency, and emoji groups." },
-      { title: "Click a character", description: "Select any symbol to copy it to your clipboard." },
-      { title: "Paste anywhere", description: "Use copied characters in documents, code, or social posts." },
+      { title: "Browse categories", description: "Use tabs for arrows, math, currency, emoji, keyboard keys, shapes, and more." },
+      { title: "Search in English or Arabic", description: "Filter by tags like heart, سهم, قلب, نجمة, euro, يورو." },
+      { title: "Click to copy", description: "Tap any symbol to copy it — a confirmation appears when copied." },
     ],
     [
-      { question: "Which characters are included?", answer: "Common Unicode symbols and special characters organized by category." },
-      { question: "Does copy work on mobile?", answer: "Yes. Tap a character to copy when clipboard API is available." },
+      { question: "How many symbols are included?", answer: "Hundreds of Unicode symbols organized in categories including emoji and Mac/Windows/Android key labels." },
+      { question: "Does copy work on mobile?", answer: "Yes. Tap a character to copy when the clipboard API is available." },
     ]
   ),
   "image-rotator": content(

@@ -1,3 +1,5 @@
+import { EXTRA_CHARACTER_ENTRIES } from "./character-symbols-extra";
+
 export type CharacterCategory =
   | "currency"
   | "arrows"
@@ -8,7 +10,13 @@ export type CharacterCategory =
   | "latin"
   | "arabic"
   | "stars"
-  | "checkmarks";
+  | "checkmarks"
+  | "shapes"
+  | "numbers"
+  | "emoji"
+  | "techMac"
+  | "techWindows"
+  | "techAndroid";
 
 export interface CharacterEntry {
   char: string;
@@ -16,7 +24,7 @@ export interface CharacterEntry {
   tags: string[];
 }
 
-export const CHARACTER_ENTRIES: CharacterEntry[] = [
+const BASE_CHARACTER_ENTRIES: CharacterEntry[] = [
   { char: "$", category: "currency", tags: ["dollar", "usd", "دولار"] },
   { char: "€", category: "currency", tags: ["euro", "يورو"] },
   { char: "£", category: "currency", tags: ["pound", "gbp", "جنيه"] },
@@ -174,6 +182,11 @@ export const CHARACTER_ENTRIES: CharacterEntry[] = [
   { char: "﷽", category: "arabic", tags: ["bismillah", "بسم"] },
   { char: "﴾", category: "arabic", tags: ["parenthesis", "quran", "قوس"] },
   { char: "﴿", category: "arabic", tags: ["parenthesis", "quran", "قوس"] },
+];
+
+export const CHARACTER_ENTRIES: CharacterEntry[] = [
+  ...BASE_CHARACTER_ENTRIES,
+  ...EXTRA_CHARACTER_ENTRIES,
 ];
 
 export function filterCharacters(query: string): CharacterEntry[] {
