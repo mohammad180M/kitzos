@@ -21,12 +21,12 @@ export default function ContactContent() {
           جاهز.
         </p>
 
-        <div className="!my-8 flex flex-col items-start gap-4 rounded-xl border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800/50 sm:flex-row sm:items-center sm:justify-between">
+        <div className="!my-8 flex flex-col items-start gap-4 rounded-xl border border-line bg-surface p-6 dark:border-line dark:bg-surface-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-sm font-medium text-gray-500 dark:text-gray-400">راسلنا على</p>
+            <p className="text-sm font-medium text-muted">راسلنا على</p>
             <a
               href={mailtoHref}
-              className="mt-1 block text-lg font-semibold text-primary-600 dark:text-primary-400 ltr"
+              className="mt-1 block text-lg font-semibold text-accent ltr"
               dir="ltr"
             >
               {CONTACT_EMAIL}
@@ -46,30 +46,30 @@ export default function ContactContent() {
         </p>
 
         <div className="grid gap-4 !mt-6 sm:grid-cols-3">
-          <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
+          <div className="rounded-lg border border-line bg-surface p-4">
             <MessageSquare
-              className="h-5 w-5 text-primary-600 dark:text-primary-400"
+              className="h-5 w-5 text-accent"
               aria-hidden="true"
             />
-            <h3 className="!pt-2 text-base font-semibold text-gray-900 dark:text-gray-100">
+            <h3 className="!pt-2 text-base font-semibold text-foreground">
               ملاحظات واقتراحات
             </h3>
             <p className="mt-1 text-sm">
               أفكار لأدوات جديدة أو تحسينات أو انطباعات عامة عن الموقع.
             </p>
           </div>
-          <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
-            <Bug className="h-5 w-5 text-primary-600 dark:text-primary-400" aria-hidden="true" />
-            <h3 className="!pt-2 text-base font-semibold text-gray-900 dark:text-gray-100">
+          <div className="rounded-lg border border-line bg-surface p-4">
+            <Bug className="h-5 w-5 text-accent" aria-hidden="true" />
+            <h3 className="!pt-2 text-base font-semibold text-foreground">
               بلاغات الأخطاء
             </h3>
             <p className="mt-1 text-sm">
               شيء لا يعمل كما تتوقع؟ أخبرنا بالأداة والمتصفح وما حدث.
             </p>
           </div>
-          <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
-            <Mail className="h-5 w-5 text-primary-600 dark:text-primary-400" aria-hidden="true" />
-            <h3 className="!pt-2 text-base font-semibold text-gray-900 dark:text-gray-100">
+          <div className="rounded-lg border border-line bg-surface p-4">
+            <Mail className="h-5 w-5 text-accent" aria-hidden="true" />
+            <h3 className="!pt-2 text-base font-semibold text-foreground">
               أسئلة قانونية وخصوصية
             </h3>
             <p className="mt-1 text-sm">أسئلة حول سياسة الخصوصية أو شروط الخدمة.</p>
@@ -93,12 +93,12 @@ export default function ContactContent() {
         pre-filled subject line.
       </p>
 
-      <div className="!my-8 flex flex-col items-start gap-4 rounded-xl border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800/50 sm:flex-row sm:items-center sm:justify-between">
+      <div className="!my-8 flex flex-col items-start gap-4 rounded-xl border border-line bg-surface p-6 dark:border-line dark:bg-surface-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Email us at</p>
+          <p className="text-sm font-medium text-muted">Email us at</p>
           <a
             href={mailtoHref}
-            className="mt-1 block text-lg font-semibold text-primary-600 dark:text-primary-400"
+            className="mt-1 block text-lg font-semibold text-accent"
           >
             {CONTACT_EMAIL}
           </a>
@@ -117,30 +117,30 @@ export default function ContactContent() {
       </p>
 
       <div className="grid gap-4 !mt-6 sm:grid-cols-3">
-        <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
+        <div className="rounded-lg border border-line bg-surface p-4">
           <MessageSquare
-            className="h-5 w-5 text-primary-600 dark:text-primary-400"
+            className="h-5 w-5 text-accent"
             aria-hidden="true"
           />
-          <h3 className="!pt-2 text-base font-semibold text-gray-900 dark:text-gray-100">
+          <h3 className="!pt-2 text-base font-semibold text-foreground">
             Feedback & suggestions
           </h3>
           <p className="mt-1 text-sm">
             Ideas for new tools, improvements, or general thoughts about the site.
           </p>
         </div>
-        <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
-          <Bug className="h-5 w-5 text-primary-600 dark:text-primary-400" aria-hidden="true" />
-          <h3 className="!pt-2 text-base font-semibold text-gray-900 dark:text-gray-100">
+        <div className="rounded-lg border border-line bg-surface p-4">
+          <Bug className="h-5 w-5 text-accent" aria-hidden="true" />
+          <h3 className="!pt-2 text-base font-semibold text-foreground">
             Bug reports
           </h3>
           <p className="mt-1 text-sm">
             Something not working as expected? Tell us which tool, browser, and what happened.
           </p>
         </div>
-        <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
-          <Mail className="h-5 w-5 text-primary-600 dark:text-primary-400" aria-hidden="true" />
-          <h3 className="!pt-2 text-base font-semibold text-gray-900 dark:text-gray-100">
+        <div className="rounded-lg border border-line bg-surface p-4">
+          <Mail className="h-5 w-5 text-accent" aria-hidden="true" />
+          <h3 className="!pt-2 text-base font-semibold text-foreground">
             Privacy & legal questions
           </h3>
           <p className="mt-1 text-sm">Questions about our Privacy Policy or Terms of Service.</p>

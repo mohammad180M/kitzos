@@ -35,6 +35,7 @@ import {
 } from "@/lib/certificate-types";
 import { downloadBlob } from "@/lib/download";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
+import { useUnsavedWork } from "@/lib/unsaved-work";
 
 const EXPORT_SCALE = 2;
 const RESIZE_HANDLE = 10;
@@ -94,6 +95,11 @@ export default function CertificateGenerator() {
   const [config, setConfig] = useState<CertificateConfig>(() => buildDefaultConfig(defaults));
   const [fontsReady, setFontsReady] = useState(false);
   const [exporting, setExporting] = useState<"png" | "pdf" | null>(null);
+
+  useUnsavedWork(
+    Boolean(config.logoDataUrl || config.sigRight.imageDataUrl || config.sigLeft.imageDataUrl) ||
+      config.recipientName !== defaults.recipientName
+  );
 
   const dualSupported = templateSupportsDualSignatures(config.templateId);
 

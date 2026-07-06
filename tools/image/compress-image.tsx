@@ -6,6 +6,7 @@ import {
   useImageToolsExtraLabels,
   useImageToolsSharedLabels,
 } from "@/lib/i18n/use-image-tools-extra-labels";
+import { useUnsavedWork } from "@/lib/unsaved-work";
 
 function formatBytes(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
@@ -30,6 +31,8 @@ export default function CompressImage() {
   const [savingsPercent, setSavingsPercent] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useUnsavedWork(originalFile !== null);
 
   const applyResult = useCallback((file: File, candidate: Blob) => {
     if (candidate.size >= file.size) {

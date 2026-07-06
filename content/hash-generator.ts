@@ -22,7 +22,7 @@ export const faq: FaqItem[] = [
   {
     question: "Are hashes computed locally?",
     answer:
-      "Yes. MD5 uses crypto-js in the browser. SHA variants use the Web Crypto API. Nothing is sent online.",
+      "Yes. All hashes are computed locally in your browser. Nothing is sent online.",
   },
   {
     question: "Which hash should I use?",

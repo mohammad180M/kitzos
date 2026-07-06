@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, type ChangeEvent } from "react";
+import { useUnsavedWork } from "@/lib/unsaved-work";
 
 export interface ImageLoaderMessages {
   invalid: string;
@@ -14,6 +15,8 @@ export function useImageLoader(imageSessionKey?: string) {
   const [imageVersion, setImageVersion] = useState(0);
   const [hasImage, setHasImage] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useUnsavedWork(hasImage);
 
   const revokeUrl = useCallback(() => {
     if (objectUrlRef.current) {

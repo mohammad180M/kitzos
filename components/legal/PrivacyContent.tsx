@@ -10,7 +10,7 @@ export default function PrivacyContent() {
   if (locale === "ar") {
     return (
       <>
-        <p className="text-sm text-gray-500 dark:text-gray-500">
+        <p className="text-sm text-muted">
           <strong>{t.legal.lastUpdated}:</strong> {LEGAL_LAST_UPDATED}
         </p>
 
@@ -57,27 +57,19 @@ export default function PrivacyContent() {
           .
         </p>
 
-        <h3>Google AdSense</h3>
+        <h3>شركاء الإعلان</h3>
         <p>
-          قد نعرض إعلانات عبر Google AdSense. قد تستخدم Google وشركاؤها ملفات تعريف الارتباط
-          وتقنيات مشابهة لعرض إعلانات بناءً على زياراتك لهذا الموقع ومواقع أخرى، ولقياس أداء
-          الإعلانات والحد من تكرار العرض. قد تجمع AdSense معلومات مثل عنوان IP ومعرّفات الجهاز
-          وخصائص المتصفح والتفاعل مع الإعلانات.
+          قد نعرض إعلانات عبر شركاء إعلان من أطراف ثالثة (حالياً Adsterra). قد يستخدم هؤلاء
+          الشركاء ملفات تعريف الارتباط وتقنيات مشابهة لعرض الإعلانات وقياس أدائها والحد من
+          تكرار العرض. قد يجمعون معلومات مثل عنوان IP ومعرّفات الجهاز وخصائص المتصفح والتفاعل
+          مع الإعلانات وفق سياساتهم الخاصة.
         </p>
         <p>
-          لمزيد من المعلومات عن كيفية استخدام Google للبيانات من مواقع الشركاء، راجع{" "}
-          <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">
-            سياسة مواقع الشركاء
+          لمزيد من المعلومات، راجع{" "}
+          <a href="https://adsterra.com/privacy-policy/" target="_blank" rel="noopener noreferrer">
+            سياسة خصوصية Adsterra
           </a>
-          . يمكنك إلغاء الإعلانات المخصّصة عبر{" "}
-          <a href="https://adssettings.google.com/" target="_blank" rel="noopener noreferrer">
-            إعدادات إعلانات Google
-          </a>
-          ، أو زيارة{" "}
-          <a href="https://optout.aboutads.info/" target="_blank" rel="noopener noreferrer">
-            aboutads.info
-          </a>{" "}
-          لخيارات إضافية في الولايات المتحدة.
+          .
         </p>
 
         <h3>Google Analytics</h3>
@@ -94,8 +86,8 @@ export default function PrivacyContent() {
         </p>
         <ul>
           <li>
-            <strong>ملفات إعلانية</strong> (مثل Google AdSense) — لعرض الإعلانات وقياسها والحد من
-            التكرار.
+            <strong>ملفات إعلانية</strong> (مثل شركاء الإعلان الحاليين Adsterra) — لعرض الإعلانات
+            وقياسها والحد من التكرار.
           </li>
           <li>
             <strong>ملفات أساسية / بنية تحتية</strong> — قد تستخدم Cloudflare أو مزوّدون مشابهون
@@ -103,14 +95,14 @@ export default function PrivacyContent() {
           </li>
           <li>
             <strong>تفضيل المظهر</strong> — يخزّن kitzos اختيارك للوضع الفاتح/الداكن في{" "}
-            <code className="ltr rounded bg-gray-100 px-1 py-0.5 text-sm dark:bg-gray-800">
+            <code className="ltr rounded bg-surface-2 px-1 py-0.5 text-sm">
               localStorage
             </code>{" "}
             على جهازك فقط، ولا يُرسل إلى خوادمنا.
           </li>
           <li>
             <strong>تفضيل اللغة</strong> — يُخزَّن اختيارك للغة (الإنجليزية أو العربية) في{" "}
-            <code className="ltr rounded bg-gray-100 px-1 py-0.5 text-sm dark:bg-gray-800">
+            <code className="ltr rounded bg-surface-2 px-1 py-0.5 text-sm">
               localStorage
             </code>{" "}
             على جهازك فقط.
@@ -139,7 +131,7 @@ export default function PrivacyContent() {
           بيانات شخصية على أساس المصالح المشروعة (الأمان وتقديم الموقع) أو الموافقة (حيث
           تُطلَب لملفات الإعلان). وبما أن kitzos لا يجمع بيانات شخصية مباشرة عبر الأدوات أو
           الحسابات، فإن معظم الطلبات المتعلقة بالبيانات الشخصية يجب توجيهها للطرف المعني
-          (مثل Google لبيانات AdSense).
+          (مثل Adsterra لبيانات الإعلان).
         </p>
         <p>
           حسب موقعك، قد يكون لك حق الوصول والتصحيح والحذف وتقييد المعالجة أو الاعتراض. للاستفسار
@@ -179,7 +171,7 @@ export default function PrivacyContent() {
 
   return (
     <>
-      <p className="text-sm text-gray-500 dark:text-gray-500">
+      <p className="text-sm text-muted">
         <strong>Last updated:</strong> {LEGAL_LAST_UPDATED}
       </p>
 
@@ -230,28 +222,19 @@ export default function PrivacyContent() {
         .
       </p>
 
-      <h3>Google AdSense</h3>
+      <h3>Advertising partners</h3>
       <p>
-        We may display advertisements served by Google AdSense. Google and its partners may use
-        cookies and similar technologies to serve ads based on your visits to this site and other
-        sites on the Internet, to measure ad performance, and to limit how often you see an ad.
-        AdSense may collect or receive information such as your IP address, device identifiers,
-        browser characteristics, and interactions with ads.
+        We may display advertisements through third-party advertising partners (currently
+        Adsterra). These partners may use cookies and similar technologies to serve and measure
+        ads, limit repeat impressions, and may collect information such as your IP address, device
+        identifiers, browser characteristics, and interactions with ads under their own policies.
       </p>
       <p>
-        You can learn more about how Google uses data from partner sites at{" "}
-        <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">
-          Google&apos;s partner sites policy
+        For more information, see{" "}
+        <a href="https://adsterra.com/privacy-policy/" target="_blank" rel="noopener noreferrer">
+          Adsterra&apos;s Privacy Policy
         </a>
-        . You may opt out of personalized advertising by visiting{" "}
-        <a href="https://adssettings.google.com/" target="_blank" rel="noopener noreferrer">
-          Google Ads Settings
-        </a>
-        . You can also visit{" "}
-        <a href="https://optout.aboutads.info/" target="_blank" rel="noopener noreferrer">
-          aboutads.info
-        </a>{" "}
-        for additional opt-out options in the United States.
+        .
       </p>
 
       <h3>Google Analytics</h3>
@@ -269,8 +252,8 @@ export default function PrivacyContent() {
       </p>
       <ul>
         <li>
-          <strong>Advertising cookies</strong> (e.g. Google AdSense) — used to deliver and measure
-          ads, and to limit repeat impressions.
+          <strong>Advertising cookies</strong> (e.g. from current advertising partners such as
+          Adsterra) — used to deliver and measure ads, and to limit repeat impressions.
         </li>
         <li>
           <strong>Essential / infrastructure cookies</strong> — Cloudflare or similar providers may
@@ -279,14 +262,14 @@ export default function PrivacyContent() {
         <li>
           <strong>Theme preference</strong> — kitzos stores your light/dark theme choice in your
           browser&apos;s{" "}
-          <code className="ltr rounded bg-gray-100 px-1 py-0.5 text-sm dark:bg-gray-800">
+          <code className="ltr rounded bg-surface-2 px-1 py-0.5 text-sm">
             localStorage
           </code>{" "}
           on your device only. This is not sent to our servers.
         </li>
         <li>
           <strong>Language preference</strong> — your English or Arabic choice is stored in{" "}
-          <code className="ltr rounded bg-gray-100 px-1 py-0.5 text-sm dark:bg-gray-800">
+          <code className="ltr rounded bg-surface-2 px-1 py-0.5 text-sm">
             localStorage
           </code>{" "}
           on your device only.
@@ -315,8 +298,8 @@ export default function PrivacyContent() {
         providers may process personal data on grounds such as legitimate interests (security,
         site delivery) or consent (where required for advertising cookies). Because kitzos does
         not collect personal data directly through tools or accounts, most requests relating to
-        personal data should be directed to the relevant third party (for example, Google for
-        AdSense-related data).
+        personal data should be directed to the relevant third party (for example, Adsterra for
+        advertising-related data).
       </p>
       <p>
         Depending on your location, you may have rights to access, correct, delete, or restrict

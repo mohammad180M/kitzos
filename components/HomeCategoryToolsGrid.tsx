@@ -10,7 +10,8 @@ import {
   useSyncExternalStore,
 } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import type { Tool } from "@/lib/registry";
+import type { ToolLite } from "@/lib/i18n/localized-labels";
+import type { ToolCardTool } from "@/components/ToolCard";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import ToolCard from "@/components/ToolCard";
 
@@ -21,14 +22,14 @@ const SM_MQ = "(min-width: 640px)";
 const REDUCED_MOTION_MQ = "(prefers-reduced-motion: reduce)";
 
 interface HomeCategoryToolsGridProps {
-  tools: Tool[];
+  tools: ToolCardTool[];
   gridClass: string;
   paginate: boolean;
   resetKey: string;
 }
 
 const pagerBtn =
-  "inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900 disabled:cursor-not-allowed disabled:opacity-40 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-gray-100";
+  "inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-line bg-surface text-muted transition-colors hover:bg-surface-2 hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:cursor-not-allowed disabled:opacity-40";
 
 function subscribeMediaQuery(query: string, callback: () => void) {
   const mq = window.matchMedia(query);
@@ -48,15 +49,9 @@ function useMediaQuery(query: string, serverSnapshot = false) {
 function GridSlotPlaceholder() {
   return (
     <div
-      className="pointer-events-none invisible flex min-h-[5.5rem] items-start gap-3 rounded-xl border border-transparent p-4"
+      className="pointer-events-none invisible min-h-[7.5rem] rounded-lg border border-transparent"
       aria-hidden="true"
-    >
-      <div className="h-10 w-10 shrink-0" />
-      <div className="min-w-0 flex-1">
-        <div className="h-5" />
-        <div className="mt-0.5 h-10" />
-      </div>
-    </div>
+    />
   );
 }
 
@@ -91,7 +86,7 @@ export default function HomeCategoryToolsGrid({
   const reserveSlots = showPager && isSmUp;
   const fadeMs = reducedMotion ? 0 : PAGE_FADE_MS;
 
-  const slots = useMemo((): (Tool | null)[] => {
+  const slots = useMemo((): (ToolCardTool | null)[] => {
     if (!paginate) return tools;
     const start = page * HOME_TOOLS_PAGE_SIZE;
     const slice = tools.slice(start, start + HOME_TOOLS_PAGE_SIZE);
@@ -172,7 +167,7 @@ export default function HomeCategoryToolsGrid({
           </button>
 
           <span
-            className="min-w-[3rem] text-center text-sm font-medium tabular-nums text-gray-500 dark:text-gray-400"
+            className="label-mono min-w-[3rem] text-center text-sm font-medium tabular-nums text-muted"
             aria-live="polite"
             aria-atomic="true"
           >

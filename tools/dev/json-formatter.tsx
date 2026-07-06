@@ -9,6 +9,7 @@ import { useToolKeyboard } from "@/lib/hooks/use-tool-keyboard";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
 import { useDevToolsExtraLabels } from "@/lib/i18n/use-dev-tools-extra-labels";
+import { useUnsavedWork } from "@/lib/unsaved-work";
 
 const LINE_HEIGHT_PX = 20;
 
@@ -143,6 +144,8 @@ export default function JsonFormatter() {
   const t = useDevToolsExtraLabels("jsonFormatter");
   const { t: localeT } = useLocale();
   const [input, setInput] = usePersistedInput("kitzos-json-formatter-input");
+
+  useUnsavedWork(input.trim().length > 0);
   const [output, setOutput] = useState("");
   const [error, setError] = useState<JsonError | null>(null);
   const [highlightError, setHighlightError] = useState(false);
@@ -225,7 +228,7 @@ export default function JsonFormatter() {
             }}
             placeholder='{"key": "value"}'
             rows={8}
-            className={`input-field resize-y font-mono text-sm leading-5 transition-colors ${
+            className={`input-field ltr-input resize-y font-mono text-sm leading-5 transition-colors ${
               highlightError
                 ? "relative border-red-400 bg-transparent ring-0 focus:border-red-400 focus:ring-red-200"
                 : ""
@@ -275,7 +278,7 @@ export default function JsonFormatter() {
             value={output}
             readOnly
             rows={8}
-            className="input-field mt-1 resize-y font-mono text-sm bg-gray-50 dark:bg-gray-800/50 dark:bg-gray-800/80"
+            className="input-field ltr-input mt-1 resize-y font-mono text-sm bg-gray-50 dark:bg-gray-800/50 dark:bg-gray-800/80"
           />
           <CopyButton text={output} className="mt-2" />
         </div>

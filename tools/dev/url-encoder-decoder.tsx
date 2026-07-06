@@ -50,7 +50,7 @@ export default function UrlEncoderDecoder() {
           onChange={(e) => setInput(e.target.value)}
           placeholder={mode === "encode" ? t.placeholderEncode : t.placeholderDecode}
           rows={5}
-          className="input-field mt-1 w-full resize-y font-mono text-sm"
+          className="input-field ltr-input mt-1 w-full resize-y font-mono text-sm"
           dir="ltr"
           spellCheck={false}
         />
@@ -67,7 +67,7 @@ export default function UrlEncoderDecoder() {
             value={output}
             readOnly
             rows={5}
-            className="input-field mt-1 w-full resize-y font-mono text-sm bg-gray-50 dark:bg-gray-800/50"
+            className="input-field ltr-input mt-1 w-full resize-y font-mono text-sm bg-gray-50 dark:bg-gray-800/50"
             dir="ltr"
           />
           <CopyButton text={output} className="mt-2" />

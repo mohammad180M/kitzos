@@ -3,10 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { categories, type CategoryId } from "@/lib/categories";
-import { getIcon } from "@/lib/icons";
-import { getToolBySlug } from "@/lib/registry";
+import { categoryColorVar } from "@/lib/category-colors";
+import { getToolBySlugLite } from "@/lib/registry-lite";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
-import { getLocalizedCategory } from "@/lib/i18n/localized-data";
+import { getLocalizedCategory } from "@/lib/i18n/localized-labels";
 import { isValidLocale, localizedPath } from "@/lib/i18n/routing";
 
 function getActiveCategoryId(pathname: string): CategoryId | null {
@@ -15,7 +15,7 @@ function getActiveCategoryId(pathname: string): CategoryId | null {
 
   const segment = parts[1];
   if (segment === "tools" && parts[2]) {
-    const tool = getToolBySlug(parts[2]);
+    const tool = getToolBySlugLite(parts[2]);
     return tool?.category ?? null;
   }
 
@@ -43,28 +43,43 @@ export default function CategoryBar() {
   return (
     <nav
       aria-label={locale === "ar" ? "فئات الأدوات" : "Tool categories"}
-      className="sticky top-14 z-40 border-b border-gray-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 dark:border-gray-800 dark:bg-gray-950/95 dark:supports-[backdrop-filter]:bg-gray-950/80"
+      className="sticky top-14 z-40 border-b border-line bg-surface/95 backdrop-blur supports-[backdrop-filter]:bg-surface/80"
     >
       <div className="site-container">
-        <ul className="flex items-center gap-1 py-2 max-md:overflow-x-auto max-md:pb-2 md:flex-wrap md:justify-center lg:justify-between">
+        <ul className="chip-scroll-fade flex items-center gap-1 py-2 max-md:overflow-x-auto max-md:pb-2 md:flex-wrap md:justify-center lg:justify-between">
           {categories.map((category) => {
-            const Icon = getIcon(category.icon);
             const { name } = getLocalizedCategory(category, locale);
             const href = localizedPath(locale, `/${category.id}`);
             const isActive = activeId === category.id;
+            const catColor = categoryColorVar(category.id);
 
             return (
               <li key={category.id} className="shrink-0 md:shrink">
                 <Link
                   href={href}
-                  className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                  className={`label-mono inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg px-3 py-1.5 text-[11px] font-medium uppercase tracking-wide transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
                     isActive
-                      ? "bg-primary-600 text-white shadow-sm dark:bg-primary-500"
-                      : "text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100"
+                      ? "text-foreground"
+                      : "text-muted hover:bg-surface-2 hover:text-foreground"
                   }`}
+                  style={
+                    isActive
+                      ? {
+                          backgroundColor: `color-mix(in srgb, ${catColor} 12%, transparent)`,
+                          borderColor: catColor,
+                          color: catColor,
+                          borderWidth: "1px",
+                          borderStyle: "solid",
+                        }
+                      : undefined
+                  }
                   aria-current={isActive ? "page" : undefined}
                 >
-                  <Icon className="h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden="true" />
+                  <span
+                    className="h-1.5 w-1.5 shrink-0 rounded-full"
+                    style={{ backgroundColor: catColor }}
+                    aria-hidden="true"
+                  />
                   {name}
                 </Link>
               </li>

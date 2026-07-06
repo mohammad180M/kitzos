@@ -48,7 +48,7 @@ function ColorControl({
             const v = e.target.value;
             if (/^#[0-9A-Fa-f]{0,6}$/.test(v)) onChange(v.length === 7 ? v : color);
           }}
-          className="input-field flex-1 font-mono text-xs"
+          className="input-field ltr-input flex-1 font-mono text-xs"
         />
       </div>
       {showAlpha && onAlphaChange != null && alpha != null && (

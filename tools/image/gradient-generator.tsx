@@ -123,7 +123,7 @@ export default function GradientGenerator() {
                 type="text"
                 value={color}
                 onChange={(e) => updateColor(index, e.target.value)}
-                className="input-field font-mono text-sm"
+                className="input-field ltr-input font-mono text-sm"
               />
               {colors.length > 2 && (
                 <button
@@ -149,7 +149,7 @@ export default function GradientGenerator() {
           value={css}
           readOnly
           rows={2}
-          className="input-field mt-1 resize-none font-mono text-sm bg-gray-50 dark:bg-gray-800/50"
+          className="input-field ltr-input mt-1 resize-none font-mono text-sm bg-gray-50 dark:bg-gray-800/50"
         />
         <button type="button" onClick={copy} className="btn-secondary mt-2">
           {copied ? (

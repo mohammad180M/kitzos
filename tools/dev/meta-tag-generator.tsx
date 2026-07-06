@@ -81,7 +81,7 @@ export default function MetaTagGenerator() {
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           placeholder={t.placeholderUrl}
-          className="input-field mt-1 w-full font-mono text-sm"
+          className="input-field ltr-input mt-1 w-full font-mono text-sm"
           dir="ltr"
         />
       </label>
@@ -92,7 +92,7 @@ export default function MetaTagGenerator() {
           value={image}
           onChange={(e) => setImage(e.target.value)}
           placeholder={t.placeholderImage}
-          className="input-field mt-1 w-full font-mono text-sm"
+          className="input-field ltr-input mt-1 w-full font-mono text-sm"
           dir="ltr"
         />
       </label>
@@ -103,7 +103,7 @@ export default function MetaTagGenerator() {
             value={output}
             readOnly
             rows={12}
-            className="input-field mt-1 w-full resize-y font-mono text-sm bg-gray-50 dark:bg-gray-800/50"
+            className="input-field ltr-input mt-1 w-full resize-y font-mono text-sm bg-gray-50 dark:bg-gray-800/50"
             dir="ltr"
             spellCheck={false}
           />

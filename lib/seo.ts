@@ -139,7 +139,8 @@ export function getBaseMetadata(): Metadata {
   };
 }
 
-/** Metadata for the domain root `/` (served with full head for crawlers). */
+/** Metadata for the domain root `/` (served with full head for crawlers).
+ *  Canonical + x-default point at /en/ so `/` does not compete with the English home as a duplicate. */
 export function getRootMetadata(): Metadata {
   const title = getDictionary(DEFAULT_LOCALE).home.title;
   const description = getHomeMetaDescription(DEFAULT_LOCALE);

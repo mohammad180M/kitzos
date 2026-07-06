@@ -1,9 +1,20 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import JSZip from "jszip";
 import { Download, FileText, Loader2, Upload } from "lucide-react";
 import { usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
+import { useUnsavedWork } from "@/lib/unsaved-work";
+
+function loadJSZipModule() {
+  return import("jszip");
+}
+
+let jsZipModulePromise: ReturnType<typeof loadJSZipModule> | undefined;
+
+function getJSZipModule() {
+  if (!jsZipModulePromise) jsZipModulePromise = loadJSZipModule();
+  return jsZipModulePromise;
+}
 
 type PdfJsLib = typeof import("pdfjs-dist");
 
@@ -50,6 +61,8 @@ export default function PdfToJpg() {
   const [workerReady, setWorkerReady] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  useUnsavedWork(file !== null);
+
   useEffect(() => {
     import("pdfjs-dist").then((pdfjs) => {
       pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
@@ -89,6 +102,7 @@ export default function PdfToJpg() {
         const blob = await renderPageToJpeg(pdfjs, pdf, singlePage);
         downloadBlob(blob, `${baseName}-page-${singlePage}.jpg`);
       } else {
+        const JSZip = (await getJSZipModule()).default;
         const zip = new JSZip();
         for (let i = 1; i <= pdf.numPages; i++) {
           const blob = await renderPageToJpeg(pdfjs, pdf, i);

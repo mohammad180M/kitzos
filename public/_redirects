@@ -1,50 +1,47 @@
-# Cloudflare Pages — 301 redirects for LEGACY URLs only
-# (الروابط القديمة قبل هيكلة /en/ و /ar/ — ليست قائمة كل لغات الموقع)
+# Cloudflare Pages — legacy URL redirects (single-hop guarantee)
 #
-# قبل التحديث كانت الروابط بدون لغة: /tools/merge-pdf ، /pdf ، /
-# لم يكن هناك /ar/ قديم — لذلك نوجّه القديم → /en/ كـ x-default لجوجل والروابط المحفوظة.
+# GOAL: Every legacy path (no /en/ or /ar/ prefix) reaches its FINAL URL in ONE 301.
+# Final form = absolute URL, locale prefix /en/, trailing slash (matches trailingSlash: true).
 #
-# العربي مفهرس بالكامل عبر:
-#   • https://kitzos.com/ar/...  (227+ URLs in sitemap.xml)
-#   • hreflang على كل صفحة en + ar
-#   • لا يوجد أي redirect يمنع /ar/ — هذه المسارات تُخدم مباشرة
+# Rules:
+#   • Targets use https://kitzos.com/en/.../  so Next.js never adds a second trailing-slash hop.
+#   • No rule targets a URL that itself redirects (all destinations are 200 on curl -sI).
+#   • /ar/... paths are NOT listed — Arabic is served directly from the sitemap.
+#   • / is NOT redirected here (favicon + canonical for crawlers; user redirect via JS in app/page.tsx).
 #
-# لا تضف هنا /ar/ → شيء — العربي يعمل أصلاً بدون تحويل.
-
-# لا تحوّل / → /en/ هنا: جوجل يقرأ favicon من HTML الصفحة الرئيسية (/)
-# و index.html في out/ يحتوي <link rel="icon">. تحويل 301 يمنع ذلك ويُظهر أيقونة
-# الكرة الأرضية في نتائج البحث. التوجيه للمستخدم يتم عبر app/page.tsx (JS + meta refresh).
+# After deploy, each legacy URL below: 1× 301 → 200 (over HTTPS).
+# Note: http:// requests still get a separate Always Use HTTPS hop first (Cloudflare dashboard).
 
 # Tools (legacy → English default)
-/tools/:slug  /en/tools/:slug/  301
-/tools/:slug/  /en/tools/:slug/  301
+/tools/:slug    https://kitzos.com/en/tools/:slug/    301
+/tools/:slug/   https://kitzos.com/en/tools/:slug/    301
 
 # Categories (legacy)
-/pdf  /en/pdf/  301
-/pdf/  /en/pdf/  301
-/image  /en/image/  301
-/image/  /en/image/  301
-/text  /en/text/  301
-/text/  /en/text/  301
-/dev  /en/dev/  301
-/dev/  /en/dev/  301
-/calculators  /en/calculators/  301
-/calculators/  /en/calculators/  301
-/converters  /en/converters/  301
-/converters/  /en/converters/  301
-/misc  /en/misc/  301
-/misc/  /en/misc/  301
-/audio  /en/audio/  301
-/audio/  /en/audio/  301
-/vision  /en/vision/  301
-/vision/  /en/vision/  301
+/pdf            https://kitzos.com/en/pdf/            301
+/pdf/           https://kitzos.com/en/pdf/            301
+/image          https://kitzos.com/en/image/          301
+/image/         https://kitzos.com/en/image/          301
+/text           https://kitzos.com/en/text/           301
+/text/          https://kitzos.com/en/text/           301
+/dev            https://kitzos.com/en/dev/            301
+/dev/           https://kitzos.com/en/dev/            301
+/calculators    https://kitzos.com/en/calculators/    301
+/calculators/   https://kitzos.com/en/calculators/    301
+/converters     https://kitzos.com/en/converters/     301
+/converters/    https://kitzos.com/en/converters/     301
+/misc           https://kitzos.com/en/misc/           301
+/misc/          https://kitzos.com/en/misc/           301
+/audio          https://kitzos.com/en/audio/          301
+/audio/         https://kitzos.com/en/audio/          301
+/vision         https://kitzos.com/en/vision/         301
+/vision/        https://kitzos.com/en/vision/         301
 
 # Legal / info (legacy)
-/about  /en/about/  301
-/about/  /en/about/  301
-/privacy  /en/privacy/  301
-/privacy/  /en/privacy/  301
-/terms  /en/terms/  301
-/terms/  /en/terms/  301
-/contact  /en/contact/  301
-/contact/  /en/contact/  301
+/about          https://kitzos.com/en/about/          301
+/about/         https://kitzos.com/en/about/          301
+/privacy        https://kitzos.com/en/privacy/        301
+/privacy/       https://kitzos.com/en/privacy/        301
+/terms          https://kitzos.com/en/terms/          301
+/terms/         https://kitzos.com/en/terms/          301
+/contact        https://kitzos.com/en/contact/        301
+/contact/       https://kitzos.com/en/contact/        301

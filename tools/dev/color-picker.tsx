@@ -262,7 +262,7 @@ export default function ColorPicker() {
           value={hexInput}
           onChange={(e) => handleHexInput(e.target.value)}
           placeholder="#000000"
-          className="input-field mt-1 font-mono uppercase"
+          className="input-field ltr-input mt-1 font-mono uppercase"
           maxLength={7}
         />
       </div>

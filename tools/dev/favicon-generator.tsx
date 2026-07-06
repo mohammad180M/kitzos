@@ -1,11 +1,21 @@
 "use client";
 
 import { useRef, useState } from "react";
-import JSZip from "jszip";
 import { Download, Loader2, Upload } from "lucide-react";
 import { setupCanvas } from "@/lib/canvas-utils";
 import { downloadBlob } from "@/lib/audio-utils";
 import { useDevToolsExtraLabels } from "@/lib/i18n/use-dev-tools-extra-labels";
+
+function loadJSZipModule() {
+  return import("jszip");
+}
+
+let jsZipModulePromise: ReturnType<typeof loadJSZipModule> | undefined;
+
+function getJSZipModule() {
+  if (!jsZipModulePromise) jsZipModulePromise = loadJSZipModule();
+  return jsZipModulePromise;
+}
 
 const SIZES = [16, 32, 48, 192, 512] as const;
 
@@ -27,6 +37,7 @@ export default function FaviconGenerator() {
         img.src = url;
       });
 
+      const JSZip = (await getJSZipModule()).default;
       const zip = new JSZip();
       for (const size of SIZES) {
         const canvas = document.createElement("canvas");

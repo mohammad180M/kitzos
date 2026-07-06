@@ -1,10 +1,30 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { PDFDocument } from "pdf-lib";
-import JSZip from "jszip";
 import { Download, FileText, Loader2, Upload } from "lucide-react";
 import { usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
+import { useUnsavedWork } from "@/lib/unsaved-work";
+
+function loadPdfLib() {
+  return import("pdf-lib");
+}
+
+function loadJSZipModule() {
+  return import("jszip");
+}
+
+let pdfLibPromise: ReturnType<typeof loadPdfLib> | undefined;
+let jsZipModulePromise: ReturnType<typeof loadJSZipModule> | undefined;
+
+function getPdfLib() {
+  if (!pdfLibPromise) pdfLibPromise = loadPdfLib();
+  return pdfLibPromise;
+}
+
+function getJSZipModule() {
+  if (!jsZipModulePromise) jsZipModulePromise = loadJSZipModule();
+  return jsZipModulePromise;
+}
 
 type SplitMode = "each" | "ranges";
 
@@ -60,9 +80,12 @@ export default function SplitPdf() {
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  useUnsavedWork(file !== null);
+
   const loadPdf = async (pdfFile: File) => {
     setError(null);
     try {
+      const { PDFDocument } = await getPdfLib();
       const bytes = await pdfFile.arrayBuffer();
       const pdf = await PDFDocument.load(bytes);
       setFile(pdfFile);
@@ -82,6 +105,7 @@ export default function SplitPdf() {
     setError(null);
 
     try {
+      const { PDFDocument } = await getPdfLib();
       const sourceBytes = await file.arrayBuffer();
       const sourcePdf = await PDFDocument.load(sourceBytes);
 
@@ -124,6 +148,7 @@ export default function SplitPdf() {
           outputs[0].name
         );
       } else {
+        const JSZip = (await getJSZipModule()).default;
         const zip = new JSZip();
         outputs.forEach(({ name, bytes }) => zip.file(name, bytes));
         const zipBlob = await zip.generateAsync({ type: "blob" });

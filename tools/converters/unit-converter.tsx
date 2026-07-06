@@ -162,7 +162,7 @@ export default function UnitConverter() {
               </option>
             ))}
           </select>
-          <div className="input-field mt-2 flex min-h-[42px] items-center bg-gray-50 font-mono text-sm dark:bg-gray-800/80">
+          <div className="input-field ltr-input mt-2 flex min-h-[42px] items-center bg-gray-50 font-mono text-sm dark:bg-gray-800/80">
             {result !== null
               ? result.toLocaleString(undefined, { maximumFractionDigits: 8 })
               : "—"}

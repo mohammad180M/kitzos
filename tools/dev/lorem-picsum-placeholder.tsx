@@ -95,7 +95,7 @@ export default function LoremPicsumPlaceholder() {
               type="text"
               value={color}
               onChange={(e) => setColor(e.target.value)}
-              className="input-field flex-1 font-mono uppercase"
+              className="input-field ltr-input flex-1 font-mono uppercase"
               dir="ltr"
             />
           </div>

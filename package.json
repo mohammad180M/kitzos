@@ -6,14 +6,13 @@
     "dev": "npm run generate:assets && next dev",
     "generate:assets": "tsx scripts/generate-assets.ts",
     "generate:llms": "npm run generate:assets",
-    "build": "npm run generate:assets && next build && tsx scripts/fix-html-lang.ts",
+    "build": "npm run generate:assets && tsx scripts/validate-i18n-keys.ts && next build && tsx scripts/fix-html-lang.ts",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
     "@breezystack/lamejs": "^1.2.7",
     "@neslinesli93/qpdf-wasm": "^0.3.0",
-    "crypto-js": "^4.2.0",
     "diff": "^9.0.0",
     "dompurify": "^3.4.11",
     "exifr": "^7.1.3",
@@ -30,12 +29,13 @@
     "qrcode": "^1.5.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "spark-md5": "^3.0.2",
     "sql-formatter": "^15.8.2",
     "terser": "^5.48.0",
     "tesseract.js": "^7.0.0"
   },
   "devDependencies": {
-    "@types/crypto-js": "^4.2.2",
+    "@next/bundle-analyzer": "^16.2.10",
     "@types/diff": "^7.0.2",
     "@types/dompurify": "^3.0.5",
     "@types/figlet": "^1.7.0",
@@ -43,6 +43,7 @@
     "@types/qrcode": "^1.5.5",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
+    "@types/spark-md5": "^3.0.5",
     "autoprefixer": "^10.4.20",
     "eslint": "^8.57.1",
     "eslint-config-next": "^14.2.35",

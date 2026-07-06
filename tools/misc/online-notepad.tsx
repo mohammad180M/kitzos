@@ -80,7 +80,7 @@ export default function OnlineNotepad() {
         onChange={(e) => setText(e.target.value)}
         placeholder={t.placeholder}
         rows={14}
-        className="input-field resize-y font-mono text-sm leading-relaxed"
+        className="input-field ltr-input resize-y font-mono text-sm leading-relaxed"
         aria-label={t.ariaLabel}
       />
 

@@ -11,6 +11,7 @@ import {
   isAudioFile,
 } from "@/lib/audio-utils";
 import { useAudioToolLabels } from "@/lib/i18n/use-audio-tool-labels";
+import { useUnsavedWork } from "@/lib/unsaved-work";
 
 interface AudioItem {
   id: string;
@@ -25,6 +26,8 @@ export default function AudioMerger() {
   const [format, setFormat] = useState<"mp3" | "wav">("mp3");
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useUnsavedWork(items.length > 0);
 
   const addFiles = (files: FileList | File[]) => {
     const audioFiles = Array.from(files).filter(isAudioFile);

@@ -6,6 +6,7 @@ import { setupCanvas, canvasToBlob } from "@/lib/canvas-utils";
 import { downloadBlob } from "@/lib/download";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
 import { useDevToolsExtraLabels } from "@/lib/i18n/use-dev-tools-extra-labels";
+import { useUnsavedWork } from "@/lib/unsaved-work";
 
 const W = 1200;
 const H = 630;
@@ -47,6 +48,8 @@ export default function OgImageGenerator() {
   const [bgImage, setBgImage] = useState<string | null>(null);
   const [layers, setLayers] = useState<TextLayer[]>(DEFAULT_LAYERS);
   const [fontsReady, setFontsReady] = useState(false);
+
+  useUnsavedWork(bgImage !== null || title !== "Your Page Title" || subtitle !== "kitzos.com");
 
   useEffect(() => {
     const link = document.createElement("link");

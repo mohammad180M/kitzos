@@ -149,7 +149,7 @@ export default function QrCodeGenerator() {
                 type="text"
                 value={foreground}
                 onChange={(e) => setForeground(e.target.value)}
-                className="input-field font-mono uppercase"
+                className="input-field ltr-input font-mono uppercase"
                 maxLength={7}
               />
             </div>
@@ -170,7 +170,7 @@ export default function QrCodeGenerator() {
                 type="text"
                 value={background}
                 onChange={(e) => setBackground(e.target.value)}
-                className="input-field font-mono uppercase"
+                className="input-field ltr-input font-mono uppercase"
                 maxLength={7}
               />
             </div>

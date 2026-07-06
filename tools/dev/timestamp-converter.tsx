@@ -123,7 +123,7 @@ export default function TimestampConverter() {
             value={timestampInput}
             onChange={(e) => handleTimestampChange(e.target.value)}
             placeholder={t.placeholderTimestamp}
-            className="input-field mt-1 font-mono"
+            className="input-field ltr-input mt-1 font-mono"
           />
           {parsedTs && dateFromTs && (
             <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">

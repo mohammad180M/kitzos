@@ -42,7 +42,7 @@ export default function HtaccessRedirectGenerator() {
           value={from}
           onChange={(e) => setFrom(e.target.value)}
           placeholder={t.placeholderFrom}
-          className="input-field mt-1 w-full font-mono text-sm"
+          className="input-field ltr-input mt-1 w-full font-mono text-sm"
           dir="ltr"
         />
       </label>
@@ -53,7 +53,7 @@ export default function HtaccessRedirectGenerator() {
           value={to}
           onChange={(e) => setTo(e.target.value)}
           placeholder={t.placeholderTo}
-          className="input-field mt-1 w-full font-mono text-sm"
+          className="input-field ltr-input mt-1 w-full font-mono text-sm"
           dir="ltr"
         />
       </label>
@@ -79,7 +79,7 @@ export default function HtaccessRedirectGenerator() {
             value={output}
             readOnly
             rows={4}
-            className="input-field mt-1 w-full resize-y font-mono text-sm bg-gray-50 dark:bg-gray-800/50"
+            className="input-field ltr-input mt-1 w-full resize-y font-mono text-sm bg-gray-50 dark:bg-gray-800/50"
             dir="ltr"
             spellCheck={false}
           />

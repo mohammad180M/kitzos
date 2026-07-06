@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Check, Copy, Upload } from "lucide-react";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
 import { useDevToolsExtraLabels } from "@/lib/i18n/use-dev-tools-extra-labels";
+import { useUnsavedWork } from "@/lib/unsaved-work";
 
 type Mode = "encode" | "decode";
 type InputMode = "text" | "image";
@@ -35,6 +36,8 @@ export default function Base64Tool() {
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+
+  useUnsavedWork(Boolean(input.trim() || output));
 
   const handleTextInput = (value: string) => {
     setInput(value);
@@ -153,7 +156,7 @@ export default function Base64Tool() {
               : t.placeholderDecode
           }
           rows={5}
-          className="input-field resize-y font-mono text-sm"
+          className="input-field ltr-input resize-y font-mono text-sm"
           aria-label={mode === "encode" ? t.ariaEncode : t.ariaDecode}
         />
       )}
@@ -174,7 +177,7 @@ export default function Base64Tool() {
             value={output}
             readOnly
             rows={5}
-            className="input-field mt-1 resize-y font-mono text-sm bg-gray-50 dark:bg-gray-800/50 dark:bg-gray-800/80"
+            className="input-field ltr-input mt-1 resize-y font-mono text-sm bg-gray-50 dark:bg-gray-800/50 dark:bg-gray-800/80"
           />
           <button type="button" onClick={copy} className="btn-secondary mt-2">
             {copied ? (

@@ -1,13 +1,24 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import JSZip from "jszip";
 import { Download, Upload } from "lucide-react";
 import { downloadBlob } from "@/lib/download";
 import {
   useImageToolsExtraLabels,
   useImageToolsSharedLabels,
 } from "@/lib/i18n/use-image-tools-extra-labels";
+import { useUnsavedWork } from "@/lib/unsaved-work";
+
+function loadJSZipModule() {
+  return import("jszip");
+}
+
+let jsZipModulePromise: ReturnType<typeof loadJSZipModule> | undefined;
+
+function getJSZipModule() {
+  if (!jsZipModulePromise) jsZipModulePromise = loadJSZipModule();
+  return jsZipModulePromise;
+}
 
 type OutputFormat = "image/png" | "image/jpeg" | "image/webp";
 
@@ -73,6 +84,8 @@ export default function ImageConverter() {
   const [quality, setQuality] = useState(92);
   const [outputs, setOutputs] = useState<{ blob: Blob; ext: string }[]>([]);
   const [error, setError] = useState<string | null>(null);
+
+  useUnsavedWork(originalFile !== null);
   const [converting, setConverting] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -136,6 +149,7 @@ export default function ImageConverter() {
       return;
     }
 
+    const JSZip = (await getJSZipModule()).default;
     const zip = new JSZip();
     for (const out of outputs) {
       zip.file(`${base}.${out.ext}`, out.blob);

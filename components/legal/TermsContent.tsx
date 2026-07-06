@@ -11,7 +11,7 @@ export default function TermsContent() {
   if (locale === "ar") {
     return (
       <>
-        <p className="text-sm text-gray-500 dark:text-gray-500">
+        <p className="text-sm text-muted">
           <strong>{t.legal.lastUpdated}:</strong> {LEGAL_LAST_UPDATED}
         </p>
 
@@ -119,7 +119,7 @@ export default function TermsContent() {
 
   return (
     <>
-      <p className="text-sm text-gray-500 dark:text-gray-500">
+      <p className="text-sm text-muted">
         <strong>Last updated:</strong> {LEGAL_LAST_UPDATED}
       </p>
 

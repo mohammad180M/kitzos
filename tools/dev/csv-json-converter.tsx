@@ -14,6 +14,7 @@ import {
 } from "@/lib/csv-json";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
+import { useUnsavedWork } from "@/lib/unsaved-work";
 
 type Direction = "csvToJson" | "jsonToCsv";
 
@@ -26,6 +27,8 @@ export default function CsvJsonConverter() {
   const [direction, setDirection] = useState<Direction>("csvToJson");
   const [delimiter, setDelimiter] = useState<CsvDelimiter>(",");
   const [input, setInput] = usePersistedInput("kitzos-csv-json-input");
+
+  useUnsavedWork(input.trim().length > 0);
 
   const { output, error } = useMemo(() => {
     if (!input.trim()) {
@@ -153,7 +156,7 @@ export default function CsvJsonConverter() {
           onChange={(e) => setInput(e.target.value)}
           placeholder={direction === "csvToJson" ? ui.csvPlaceholder : ui.jsonPlaceholder}
           rows={8}
-          className="input-field resize-y font-mono text-sm"
+          className="input-field ltr-input resize-y font-mono text-sm"
           spellCheck={false}
           dir="ltr"
         />
@@ -188,7 +191,7 @@ export default function CsvJsonConverter() {
           value={output}
           readOnly
           rows={8}
-          className="input-field resize-y bg-gray-50 font-mono text-sm dark:bg-gray-800/50"
+          className="input-field ltr-input resize-y bg-gray-50 font-mono text-sm dark:bg-gray-800/50"
           spellCheck={false}
           dir="ltr"
         />

@@ -6,6 +6,7 @@ import {
   useImageToolsExtraLabels,
   useImageToolsSharedLabels,
 } from "@/lib/i18n/use-image-tools-extra-labels";
+import { useUnsavedWork } from "@/lib/unsaved-work";
 
 export default function ImageResizer() {
   const shared = useImageToolsSharedLabels();
@@ -19,6 +20,8 @@ export default function ImageResizer() {
   const [lockAspect, setLockAspect] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useUnsavedWork(file !== null);
 
   const aspectRatio = originalWidth / originalHeight || 1;
 

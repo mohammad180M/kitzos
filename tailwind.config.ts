@@ -11,6 +11,14 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        canvas: "var(--bg)",
+        surface: "var(--surface)",
+        "surface-2": "var(--surface-2)",
+        line: "var(--line)",
+        foreground: "var(--text)",
+        muted: "var(--muted)",
+        accent: "var(--accent)",
+        "accent-ink": "var(--accent-ink)",
         primary: {
           50: "#eff6ff",
           100: "#dbeafe",
@@ -23,6 +31,23 @@ const config: Config = {
           800: "#1e40af",
           900: "#1e3a8a",
         },
+      },
+      textColor: {
+        foreground: "var(--text)",
+      },
+      borderColor: {
+        line: "var(--line)",
+      },
+      backgroundColor: {
+        canvas: "var(--bg)",
+        surface: "var(--surface)",
+        "surface-2": "var(--surface-2)",
+      },
+      ringColor: {
+        accent: "var(--accent)",
+      },
+      ringOffsetColor: {
+        canvas: "var(--bg)",
       },
     },
   },

@@ -25,11 +25,17 @@
     "toggleLanguage": "Toggle language",
     "switchToLightMode": "Switch to light mode",
     "switchToDarkMode": "Switch to dark mode",
-    "toggleTheme": "Toggle theme"
+    "toggleTheme": "Toggle theme",
+    "unsavedWorkTitle": "You have unsaved work",
+    "unsavedWorkBody": "Switching language will reload the tool and clear your current files and data.",
+    "unsavedWorkConfirm": "Switch anyway",
+    "unsavedWorkCancel": "Cancel"
   },
   "home": {
-    "title": "Kitzos Tools",
+    "title": "Keep your data yours.",
     "subtitle": "Fast, private tools that run in your browser. No signup required.",
+    "heroEyebrow": "{count} tools · runs in your browser",
+    "searchShortcut": "Ctrl K",
     "searchPlaceholder": "Search tools…",
     "searchAria": "Search tools",
     "clearSearch": "Clear search",
@@ -48,6 +54,10 @@
     "faq": "Frequently Asked Questions",
     "breadcrumbAria": "Breadcrumb",
     "advertisementAria": "Advertisement"
+  },
+  "ads": {
+    "label": "Advertisement",
+    "supportMessage": "This ad helps us keep every tool free 💙"
   },
   "footer": {
     "tagline": "Free online tools that run in your browser. No signup, no uploads to our servers — your files stay private.",

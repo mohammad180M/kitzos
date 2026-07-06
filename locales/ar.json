@@ -25,11 +25,17 @@
     "toggleLanguage": "تبديل اللغة",
     "switchToLightMode": "التبديل إلى الوضع الفاتح",
     "switchToDarkMode": "التبديل إلى الوضع الداكن",
-    "toggleTheme": "تبديل المظهر"
+    "toggleTheme": "تبديل المظهر",
+    "unsavedWorkTitle": "عندك شغل غير محفوظ",
+    "unsavedWorkBody": "تبديل اللغة رح يعيد تحميل الأداة ويمسح الملفات والبيانات الحالية.",
+    "unsavedWorkConfirm": "بدّل اللغة",
+    "unsavedWorkCancel": "إلغاء"
   },
   "home": {
-    "title": "أدوات Kitzos",
+    "title": "ابقِ بياناتك ملكك.",
     "subtitle": "أدوات سريعة وخاصة تعمل في متصفحك.",
+    "heroEyebrow": "{count} أداة · تعمل في متصفحك",
+    "searchShortcut": "Ctrl K",
     "searchPlaceholder": "ابحث عن الأدوات…",
     "searchAria": "البحث في الأدوات",
     "clearSearch": "مسح البحث",
@@ -48,6 +54,10 @@
     "faq": "الأسئلة الشائعة",
     "breadcrumbAria": "مسار التنقل",
     "advertisementAria": "إعلان"
+  },
+  "ads": {
+    "label": "إعلان",
+    "supportMessage": "هذا الإعلان يساعدنا نقدّم كل الأدوات مجاناً 💙"
   },
   "footer": {
     "tagline": "أدوات مجانية تعمل في متصفحك وبدون رفع ملفات إلى خوادمنا — ملفاتك تبقى خاصة.",

@@ -13,90 +13,90 @@
 - [Image Resizer](https://kitzos.com/en/tools/image-resizer/): Resize images to exact pixel dimensions with optional aspect ratio lock.
 - [Crop Image](https://kitzos.com/en/tools/crop-image/): Crop images with a draggable selection and optional fixed aspect ratios.
 - [Image Converter](https://kitzos.com/en/tools/image-converter/): Convert images between PNG, JPG, and WebP formats in your browser.
-- [CSS Gradient Generator](https://kitzos.com/en/tools/gradient-generator/): Create linear and radial CSS gradients with a live preview and copy-ready code.
-- [Remove EXIF Data](https://kitzos.com/en/tools/exif-remover/): Strip GPS, camera, and metadata from photos by re-exporting through canvas.
 - [Meme Generator](https://kitzos.com/en/tools/meme-generator/): Add top and bottom text to any image. Classic meme layout, export as PNG.
-- [Image Rotator & Flipper](https://kitzos.com/en/tools/image-rotator/): Rotate images 90°, 180°, or 270° and flip horizontally or vertically. Download as PNG.
 - [Add Text to Image](https://kitzos.com/en/tools/add-text-to-image/): Overlay custom text on any image with size, color, and position controls. Export PNG.
 - [Image Collage Maker](https://kitzos.com/en/tools/image-collage/): Combine 2–4 photos into a grid collage with adjustable gap. Download as one PNG.
-- [Pixelate Images](https://kitzos.com/en/tools/pixelate-image/): Pixelate a selected region or the full image for privacy. Process locally in browser.
-- [Image to ASCII Art](https://kitzos.com/en/tools/image-to-ascii/): Convert photos to ASCII art using brightness sampling. Copy or download as text.
+- [Remove EXIF Data](https://kitzos.com/en/tools/exif-remover/): Strip GPS, camera, and metadata from photos by re-exporting through canvas.
+- [Image Rotator & Flipper](https://kitzos.com/en/tools/image-rotator/): Rotate images 90°, 180°, or 270° and flip horizontally or vertically. Download as PNG.
 - [Image Border Adder](https://kitzos.com/en/tools/image-border-adder/): Add colored borders, padding, and optional drop shadow to images. Download PNG.
+- [Pixelate Images](https://kitzos.com/en/tools/pixelate-image/): Pixelate a selected region or the full image for privacy. Process locally in browser.
+- [Certificate Generator](https://kitzos.com/en/tools/certificate-generator/): Create a professional achievement or project certificate. Customize text, colors, and logo with a live preview, then download as PNG or PDF. Runs entirely in your browser.
+- [Signature Generator PNG](https://kitzos.com/en/tools/signature-pad/): Draw a transparent signature and download as PNG for documents and forms.
+- [Image to ASCII Art](https://kitzos.com/en/tools/image-to-ascii/): Convert photos to ASCII art using brightness sampling. Copy or download as text.
 - [Word Counter](https://kitzos.com/en/tools/word-counter/): Count words, characters, sentences, paragraphs, and estimated reading time.
 - [Case Converter](https://kitzos.com/en/tools/case-converter/): Convert text to uppercase, lowercase, title case, camelCase, and more.
 - [Password Generator](https://kitzos.com/en/tools/password-generator/): Create strong random passwords with customizable length and character sets.
+- [Find and Replace](https://kitzos.com/en/tools/find-and-replace/): Search and replace text with optional regex support. Replace all matches at once.
+- [Remove Line Breaks](https://kitzos.com/en/tools/remove-line-breaks/): Clean up text by removing line breaks, extra spaces, or converting breaks to spaces.
+- [Whitespace Remover](https://kitzos.com/en/tools/whitespace-remover/): Trim lines, collapse extra spaces, and remove blank lines from messy text.
 - [Markdown to HTML](https://kitzos.com/en/tools/markdown-to-html/): Convert Markdown to HTML with a live preview and copy-ready output.
 - [Lorem Ipsum Generator](https://kitzos.com/en/tools/lorem-ipsum-generator/): Generate placeholder paragraphs, sentences, or words for mockups and drafts.
 - [Text Diff Checker](https://kitzos.com/en/tools/text-diff-checker/): Compare two texts side by side with highlighted additions and deletions.
-- [Remove Line Breaks](https://kitzos.com/en/tools/remove-line-breaks/): Clean up text by removing line breaks, extra spaces, or converting breaks to spaces.
-- [Word Frequency Counter](https://kitzos.com/en/tools/word-frequency-counter/): Count how often each word appears in text and sort results by frequency.
+- [Slug Generator](https://kitzos.com/en/tools/slug-generator/): Convert titles to clean URL slugs with lowercase letters and hyphens.
 - [Arabic Diacritics Remover](https://kitzos.com/en/tools/arabic-diacritics-remover/): Remove Arabic tashkeel (harakat) from text instantly. Fully client-side.
 - [Line Sorter](https://kitzos.com/en/tools/line-sorter/): Sort lines alphabetically, reverse order, or randomly. Optionally remove duplicate lines.
+- [Word Frequency Counter](https://kitzos.com/en/tools/word-frequency-counter/): Count how often each word appears in text and sort results by frequency.
+- [Online Notepad](https://kitzos.com/en/tools/online-notepad/): A simple notepad that auto-saves to your browser. Word and character count included.
 - [Text Reverser](https://kitzos.com/en/tools/text-reverser/): Reverse entire text, individual lines, or word order. Useful for puzzles and testing.
-- [Slug Generator](https://kitzos.com/en/tools/slug-generator/): Convert titles to clean URL slugs with lowercase letters and hyphens.
-- [Find and Replace](https://kitzos.com/en/tools/find-and-replace/): Search and replace text with optional regex support. Replace all matches at once.
-- [Whitespace Remover](https://kitzos.com/en/tools/whitespace-remover/): Trim lines, collapse extra spaces, and remove blank lines from messy text.
 - [Text to ASCII Art](https://kitzos.com/en/tools/text-to-ascii-art/): Convert text to ASCII art banners using figlet fonts. Runs in your browser.
 - [Character Map](https://kitzos.com/en/tools/character-map/): Browse special Unicode characters and symbols. Click to copy any character instantly.
 - [QR Code Generator](https://kitzos.com/en/tools/qr-code-generator/): Generate QR codes from text or URLs. Download as PNG or SVG.
+- [Barcode Generator](https://kitzos.com/en/tools/barcode-generator/): Generate CODE128, EAN13, UPC, and CODE39 barcodes from text. Download as PNG.
 - [JSON Formatter](https://kitzos.com/en/tools/json-formatter/): Format, validate, and minify JSON with clear error messages.
 - [Base64 Encoder / Decoder](https://kitzos.com/en/tools/base64/): Encode and decode text or images to Base64. Works entirely offline.
-- [Color Picker](https://kitzos.com/en/tools/color-picker/): Pick a color and convert between HEX, RGB, and HSL formats.
-- [Timestamp Converter](https://kitzos.com/en/tools/timestamp-converter/): Convert Unix timestamps to dates and back. Supports seconds and milliseconds.
 - [Hash Generator](https://kitzos.com/en/tools/hash-generator/): Generate MD5, SHA-1, SHA-256, and SHA-512 hashes from any text.
+- [UUID Generator](https://kitzos.com/en/tools/uuid-generator/): Generate random UUID v4 identifiers. Create 1–20 UUIDs and copy them all at once.
+- [Color Picker](https://kitzos.com/en/tools/color-picker/): Pick a color and convert between HEX, RGB, and HSL formats.
+- [Color Code Converter](https://kitzos.com/en/tools/color-code-converter/): Convert between HEX, RGB, HSL, and HSV color formats from a single input value.
+- [Color Palette Generator](https://kitzos.com/en/tools/color-palette-generator/): Generate complementary, analogous, and triadic color palettes from a base color.
+- [Regex Tester](https://kitzos.com/en/tools/regex-tester/): Test and debug regular expressions with live highlighting. See matches and groups as you type. Runs entirely in your browser.
 - [JWT Decoder](https://kitzos.com/en/tools/jwt-decoder/): Decode and inspect JSON Web Tokens. View header, payload, and signature instantly in your browser. No data leaves your device.
 - [CSV ↔ JSON Converter](https://kitzos.com/en/tools/csv-json-converter/): Convert CSV to JSON and JSON to CSV instantly in your browser. Paste data or upload a file. Nothing is uploaded to a server.
-- [Regex Tester](https://kitzos.com/en/tools/regex-tester/): Test and debug regular expressions with live highlighting. See matches and groups as you type. Runs entirely in your browser.
-- [Open Graph Image Generator](https://kitzos.com/en/tools/og-image-generator/): Create 1200×630 OG images for social sharing with custom title and colors.
-- [Favicon Generator](https://kitzos.com/en/tools/favicon-generator/): Generate favicon PNGs in multiple sizes from one image and download as ZIP.
-- [SVG Pattern Generator](https://kitzos.com/en/tools/svg-pattern-generator/): Create repeating SVG background patterns and copy the CSS code.
-- [Box Shadow Generator](https://kitzos.com/en/tools/box-shadow-generator/): Design CSS box shadows with live preview and copy ready-to-use code.
-- [Signature Generator PNG](https://kitzos.com/en/tools/signature-pad/): Draw a transparent signature and download as PNG for documents and forms.
-- [Color Palette Generator](https://kitzos.com/en/tools/color-palette-generator/): Generate complementary, analogous, and triadic color palettes from a base color.
-- [Glassmorphism Generator](https://kitzos.com/en/tools/glassmorphism-generator/): Design frosted-glass CSS effects with live preview. Copy blur, border, and background code.
+- [JSON to TypeScript](https://kitzos.com/en/tools/json-to-typescript/): Convert JSON objects to TypeScript interfaces automatically. Nested objects become named interfaces.
+- [URL Encoder / Decoder](https://kitzos.com/en/tools/url-encoder-decoder/): Encode or decode URL components with encodeURIComponent and decodeURIComponent.
 - [CSS Minifier & Formatter](https://kitzos.com/en/tools/css-minifier/): Minify or beautify CSS. Remove comments and whitespace for production or readable output.
 - [JavaScript Minifier](https://kitzos.com/en/tools/js-minifier/): Minify JavaScript with Terser in your browser. Compress and mangle for smaller bundles.
 - [XML Formatter](https://kitzos.com/en/tools/xml-formatter/): Format or minify XML markup. Pretty-print with indentation or compress for transport.
 - [SQL Formatter](https://kitzos.com/en/tools/sql-formatter/): Format SQL queries with proper indentation. Supports standard SQL syntax.
-- [URL Encoder / Decoder](https://kitzos.com/en/tools/url-encoder-decoder/): Encode or decode URL components with encodeURIComponent and decodeURIComponent.
-- [UUID Generator](https://kitzos.com/en/tools/uuid-generator/): Generate random UUID v4 identifiers. Create 1–20 UUIDs and copy them all at once.
-- [Cron Expression Parser](https://kitzos.com/en/tools/cron-expression-parser/): Parse standard 5-field cron expressions into human-readable English descriptions.
-- [Color Code Converter](https://kitzos.com/en/tools/color-code-converter/): Convert between HEX, RGB, HSL, and HSV color formats from a single input value.
+- [CSS Gradient Generator](https://kitzos.com/en/tools/gradient-generator/): Create linear and radial CSS gradients with a live preview and copy-ready code.
+- [Box Shadow Generator](https://kitzos.com/en/tools/box-shadow-generator/): Design CSS box shadows with live preview and copy ready-to-use code.
+- [Glassmorphism Generator](https://kitzos.com/en/tools/glassmorphism-generator/): Design frosted-glass CSS effects with live preview. Copy blur, border, and background code.
+- [SVG Pattern Generator](https://kitzos.com/en/tools/svg-pattern-generator/): Create repeating SVG background patterns and copy the CSS code.
+- [Open Graph Image Generator](https://kitzos.com/en/tools/og-image-generator/): Create 1200×630 OG images for social sharing with custom title and colors.
+- [Favicon Generator](https://kitzos.com/en/tools/favicon-generator/): Generate favicon PNGs in multiple sizes from one image and download as ZIP.
 - [Meta Tag Generator](https://kitzos.com/en/tools/meta-tag-generator/): Generate HTML meta, Open Graph, and Twitter Card tags from title, description, URL, and image.
+- [Click Ripple Effect Generator](https://kitzos.com/en/tools/interaction-fx/): Preview material-style ripple clicks and export CSS + JS using Pointer Events.
 - [.htaccess Redirect Generator](https://kitzos.com/en/tools/htaccess-redirect-generator/): Generate Apache mod_rewrite 301 or 302 redirect rules for .htaccess files.
+- [Cron Expression Parser](https://kitzos.com/en/tools/cron-expression-parser/): Parse standard 5-field cron expressions into human-readable English descriptions.
 - [Placeholder Image Generator](https://kitzos.com/en/tools/lorem-picsum-placeholder/): Create custom-size placeholder PNG images with dimensions text. No external API required.
-- [JSON to TypeScript](https://kitzos.com/en/tools/json-to-typescript/): Convert JSON objects to TypeScript interfaces automatically. Nested objects become named interfaces.
+- [Percentage Calculator](https://kitzos.com/en/tools/percentage-calculator/): Find percentages, percent of a number, and percentage increase or decrease between values.
+- [Tip Calculator](https://kitzos.com/en/tools/tip-calculator/): Calculate tip amount and split a restaurant bill evenly between any number of people.
+- [Discount Calculator](https://kitzos.com/en/tools/discount-calculator/): Calculate sale price after a percentage discount and see how much you save.
 - [BMI Calculator](https://kitzos.com/en/tools/bmi-calculator/): Calculate your Body Mass Index from height and weight. Supports metric and imperial units.
 - [Calorie Calculator](https://kitzos.com/en/tools/calorie-calculator/): Estimate daily calories using the Mifflin-St Jeor equation. BMR and TDEE for maintain, lose, or gain.
-- [Percentage Calculator](https://kitzos.com/en/tools/percentage-calculator/): Find percentages, percent of a number, and percentage increase or decrease between values.
 - [Loan Calculator](https://kitzos.com/en/tools/loan-calculator/): Calculate monthly payments, total interest, and total cost for fixed-rate loans.
-- [Due Date Calculator](https://kitzos.com/en/tools/due-date-calculator/): Estimate pregnancy due date from your last menstrual period and see current pregnancy week.
-- [Date Difference Calculator](https://kitzos.com/en/tools/date-difference/): Find the difference between two dates in days, weeks, months, and years. Count days until or since a date.
-- [Age Calculator](https://kitzos.com/en/tools/age-calculator/): Calculate your exact age in years, months, and days from your birth date. See days until your next birthday.
-- [Tip Calculator](https://kitzos.com/en/tools/tip-calculator/): Calculate tip amount and split a restaurant bill evenly between any number of people.
-- [GPA Calculator](https://kitzos.com/en/tools/gpa-calculator/): Calculate weighted GPA on a 4.0 scale from course credits and letter grades.
-- [Compound Interest Calculator](https://kitzos.com/en/tools/compound-interest/): Project investment growth with compound interest. Choose compounding frequency and see total returns.
 - [Mortgage Calculator](https://kitzos.com/en/tools/mortgage-calculator/): Estimate monthly mortgage payments, total interest, and view an amortization schedule with down payment.
+- [Compound Interest Calculator](https://kitzos.com/en/tools/compound-interest/): Project investment growth with compound interest. Choose compounding frequency and see total returns.
+- [Age Calculator](https://kitzos.com/en/tools/age-calculator/): Calculate your exact age in years, months, and days from your birth date. See days until your next birthday.
+- [Date Difference Calculator](https://kitzos.com/en/tools/date-difference/): Find the difference between two dates in days, weeks, months, and years. Count days until or since a date.
+- [Due Date Calculator](https://kitzos.com/en/tools/due-date-calculator/): Estimate pregnancy due date from your last menstrual period and see current pregnancy week.
+- [GPA Calculator](https://kitzos.com/en/tools/gpa-calculator/): Calculate weighted GPA on a 4.0 scale from course credits and letter grades.
 - [Fuel Cost Calculator](https://kitzos.com/en/tools/fuel-cost-calculator/): Estimate fuel needed and trip cost from distance, consumption (L/100km or MPG), and fuel price.
-- [Discount Calculator](https://kitzos.com/en/tools/discount-calculator/): Calculate sale price after a percentage discount and see how much you save.
 - [Aspect Ratio Calculator](https://kitzos.com/en/tools/aspect-ratio-calculator/): Find image and video aspect ratios, use presets like 16:9, and scale width or height proportionally.
-- [Number Base Converter](https://kitzos.com/en/tools/number-base-converter/): Convert numbers between binary, octal, decimal, and hexadecimal instantly in your browser.
 - [Unit Converter](https://kitzos.com/en/tools/unit-converter/): Convert length, weight, temperature, area, and volume between common units instantly.
+- [Temperature Converter](https://kitzos.com/en/tools/temperature-converter/): Convert Celsius, Fahrenheit, and Kelvin with helpful reference notes.
+- [Cooking Unit Converter](https://kitzos.com/en/tools/cooking-converter/): Convert cups, tablespoons, teaspoons, milliliters, and grams for recipes.
+- [Data Unit Converter](https://kitzos.com/en/tools/data-unit-converter/): Convert bits, bytes, storage sizes, and network speeds (Mbps, Gbps) instantly.
+- [File Size Converter](https://kitzos.com/en/tools/file-size-converter/): Convert between bytes, KB, MB, GB, TB using binary (1024) or decimal (1000) bases.
 - [Roman Numeral Converter](https://kitzos.com/en/tools/roman-numeral-converter/): Convert between Arabic numerals and Roman numerals (I, V, X, L, C, D, M). Supports 1–3999.
 - [Number to Words — Tafqit](https://kitzos.com/en/tools/number-to-words/): Convert numbers to words in English or Arabic (tafqit). Supports large numbers up to billions.
-- [File Size Converter](https://kitzos.com/en/tools/file-size-converter/): Convert between bytes, KB, MB, GB, TB using binary (1024) or decimal (1000) bases.
-- [Temperature Converter](https://kitzos.com/en/tools/temperature-converter/): Convert Celsius, Fahrenheit, and Kelvin with helpful reference notes.
-- [Data Unit Converter](https://kitzos.com/en/tools/data-unit-converter/): Convert bits, bytes, storage sizes, and network speeds (Mbps, Gbps) instantly.
-- [Cooking Unit Converter](https://kitzos.com/en/tools/cooking-converter/): Convert cups, tablespoons, teaspoons, milliliters, and grams for recipes.
 - [Hijri Gregorian Converter](https://kitzos.com/en/tools/hijri-gregorian-converter/): Convert dates between Hijri (Islamic) and Gregorian calendars. Fully client-side.
+- [Timestamp Converter](https://kitzos.com/en/tools/timestamp-converter/): Convert Unix timestamps to dates and back. Supports seconds and milliseconds.
+- [Number Base Converter](https://kitzos.com/en/tools/number-base-converter/): Convert numbers between binary, octal, decimal, and hexadecimal instantly in your browser.
 - [Pomodoro Timer](https://kitzos.com/en/tools/pomodoro-timer/): Focus timer with work and break cycles. Customizable durations, cycle counter, and sound alerts.
+- [Stopwatch & Countdown Timer](https://kitzos.com/en/tools/stopwatch-timer/): Online stopwatch with lap times and countdown timer with audio alert. Fully client-side.
 - [Random Picker & Number Generator](https://kitzos.com/en/tools/random-picker/): Pick a random name or option from a list, or generate a random number in any range.
 - [Typing Speed Test](https://kitzos.com/en/tools/typing-speed-test/): Measure your typing speed in WPM and accuracy with a live typing test.
-- [Online Notepad](https://kitzos.com/en/tools/online-notepad/): A simple notepad that auto-saves to your browser. Word and character count included.
-- [Click Ripple Effect Generator](https://kitzos.com/en/tools/interaction-fx/): Preview material-style ripple clicks and export CSS + JS using Pointer Events.
-- [Barcode Generator](https://kitzos.com/en/tools/barcode-generator/): Generate CODE128, EAN13, UPC, and CODE39 barcodes from text. Download as PNG.
-- [Stopwatch & Countdown Timer](https://kitzos.com/en/tools/stopwatch-timer/): Online stopwatch with lap times and countdown timer with audio alert. Fully client-side.
-- [Certificate Generator](https://kitzos.com/en/tools/certificate-generator/): Create a professional achievement or project certificate. Customize text, colors, and logo with a live preview, then download as PNG or PDF. Runs entirely in your browser.
 - [MP3 Cutter Online](https://kitzos.com/en/tools/mp3-cutter/): Cut and trim audio files in your browser. Export as MP3 or WAV — no upload required.
 - [Audio Converter](https://kitzos.com/en/tools/audio-converter/): Convert WAV to MP3 and other audio formats locally using Web Audio API.
 - [Audio Merger](https://kitzos.com/en/tools/audio-merger/): Merge multiple audio files into one track. Combine clips in order and download.
@@ -114,90 +114,90 @@
 - [تغيير حجم الصور](https://kitzos.com/ar/tools/image-resizer/): غيّر أبعاد الصور إلى أبعاد بكسل محددة مع خيار قفل نسبة العرض إلى الارتفاع.
 - [قص الصور](https://kitzos.com/ar/tools/crop-image/): اقص الصور بمنطقة تحديد قابلة للسحب مع نسب عرض إلى ارتفاع ثابتة اختيارية.
 - [محوّل الصور](https://kitzos.com/ar/tools/image-converter/): حوّل الصور بين صيغ PNG وJPG وWebP في متصفحك.
-- [مولّد تدرجات CSS](https://kitzos.com/ar/tools/gradient-generator/): أنشئ تدرجات CSS خطية ودائرية مع معاينة مباشرة وكود جاهز للنسخ.
-- [إزالة بيانات EXIF](https://kitzos.com/ar/tools/exif-remover/): أزل بيانات GPS والكاميرا والميتاداتا من الصور بإعادة رسمها على canvas.
 - [مولّد ميمز](https://kitzos.com/ar/tools/meme-generator/): أضف نصاً علوياً وسفلياً لأي صورة وصدّر ميم كلاسيكي PNG.
-- [تدوير وقلب الصور](https://kitzos.com/ar/tools/image-rotator/): دوّر الصور 90° أو 180° أو 270° واقلبها أفقياً أو عمودياً. نزّل PNG.
 - [إضافة نص على الصورة](https://kitzos.com/ar/tools/add-text-to-image/): ضع نصاً مخصصاً على أي صورة مع التحكم بالحجم واللون والموضع. صدّر PNG.
 - [صانع كولاج الصور](https://kitzos.com/ar/tools/image-collage/): ادمج 2–4 صور في شبكة كولاج مع فجوة قابلة للضبط. نزّل PNG واحداً.
-- [بكسلة الصور](https://kitzos.com/ar/tools/pixelate-image/): بكسلة مناطق محددة أو الصورة كاملة لحماية الخصوصية. معالجة محلية في المتصفح.
-- [تحويل الصورة إلى ASCII](https://kitzos.com/ar/tools/image-to-ascii/): حوّل الصور إلى فن ASCII بأخذ عينات السطوع. انسخ أو نزّل كنص.
+- [إزالة بيانات EXIF](https://kitzos.com/ar/tools/exif-remover/): أزل بيانات GPS والكاميرا والميتاداتا من الصور بإعادة رسمها على canvas.
+- [تدوير وقلب الصور](https://kitzos.com/ar/tools/image-rotator/): دوّر الصور 90° أو 180° أو 270° واقلبها أفقياً أو عمودياً. نزّل PNG.
 - [إضافة إطار للصورة](https://kitzos.com/ar/tools/image-border-adder/): أضف حدوداً ملونة وحشواً وظلاً اختيارياً للصور. نزّل PNG.
+- [بكسلة الصور](https://kitzos.com/ar/tools/pixelate-image/): بكسلة مناطق محددة أو الصورة كاملة لحماية الخصوصية. معالجة محلية في المتصفح.
+- [مولّد شهادات إنجاز](https://kitzos.com/ar/tools/certificate-generator/): أنشئ شهادة إنجاز أو مشروع احترافية. خصّص النصوص والألوان والشعار مع معاينة حية، ثم نزّلها بصيغة PNG أو PDF. تعمل بالكامل في متصفحك.
+- [مولّد توقيع شفاف](https://kitzos.com/ar/tools/signature-pad/): ارسم توقيعاً بخلفية شفافة ونزّله PNG للمستندات والنماذج.
+- [تحويل الصورة إلى ASCII](https://kitzos.com/ar/tools/image-to-ascii/): حوّل الصور إلى فن ASCII بأخذ عينات السطوع. انسخ أو نزّل كنص.
 - [عداد الكلمات](https://kitzos.com/ar/tools/word-counter/): احسب الكلمات والأحرف والجمل والفقرات ووقت القراءة التقديري.
 - [محوّل حالة الأحرف](https://kitzos.com/ar/tools/case-converter/): حوّل النص إلى أحرف كبيرة أو صغيرة أو عنوان أو camelCase والمزيد.
 - [مولّد كلمات المرور](https://kitzos.com/ar/tools/password-generator/): أنشئ كلمات مرور عشوائية قوية بطول ومجموعات أحرف قابلة للتخصيص.
+- [بحث واستبدال](https://kitzos.com/ar/tools/find-and-replace/): ابحث واستبدل النص مع دعم regex اختياري. استبدل كل التطابقات دفعة واحدة.
+- [إزالة فواصل الأسطر](https://kitzos.com/ar/tools/remove-line-breaks/): نظّف النص بإزالة فواصل الأسطر والمسافات الزائدة أو بتحويل الفواصل إلى مسافات.
+- [إزالة المسافات الزائدة](https://kitzos.com/ar/tools/whitespace-remover/): قصّ الأسطر واضغط المسافات المتعددة وأزل الأسطر الفارغة من النص غير المنظم.
 - [تحويل Markdown إلى HTML](https://kitzos.com/ar/tools/markdown-to-html/): حوّل Markdown إلى HTML مع معاينة مباشرة ومخرجات جاهزة للنسخ.
 - [مولّد لوريم إيبسوم](https://kitzos.com/ar/tools/lorem-ipsum-generator/): أنشئ فقرات أو جمل أو كلمات وهمية للنماذج والمسودات.
 - [مقارن النصوص](https://kitzos.com/ar/tools/text-diff-checker/): قارن نصين جنباً إلى جنب مع تمييز الإضافات والحذف.
-- [إزالة فواصل الأسطر](https://kitzos.com/ar/tools/remove-line-breaks/): نظّف النص بإزالة فواصل الأسطر والمسافات الزائدة أو بتحويل الفواصل إلى مسافات.
-- [عداد تكرار الكلمات](https://kitzos.com/ar/tools/word-frequency-counter/): احسب عدد مرات ظهور كل كلمة في النص ورتّب النتائج حسب التكرار. مفيد لتحليل SEO والكتابة.
+- [مولّد Slug للروابط](https://kitzos.com/ar/tools/slug-generator/): حوّل العناوين إلى slugs نظيفة للروابط بأحرف صغيرة وشرطات. مثالي لـ SEO والروابط الدائمة.
 - [إزالة التشكيل العربي](https://kitzos.com/ar/tools/arabic-diacritics-remover/): أزل الحركات والتشكيل (tashkeel) من النص العربي فوراً. يعمل بالكامل في متصفحك دون رفع.
 - [ترتيب الأسطر](https://kitzos.com/ar/tools/line-sorter/): رتّب الأسطر أبجدياً أو عكسياً أو عشوائياً. أزل الأسطر المكررة اختيارياً.
+- [عداد تكرار الكلمات](https://kitzos.com/ar/tools/word-frequency-counter/): احسب عدد مرات ظهور كل كلمة في النص ورتّب النتائج حسب التكرار. مفيد لتحليل SEO والكتابة.
+- [مفكرة على الإنترنت](https://kitzos.com/ar/tools/online-notepad/): مفكرة بسيطة تحفظ تلقائياً في متصفحك. تتضمن عد الكلمات والأحرف.
 - [عكس النص](https://kitzos.com/ar/tools/text-reverser/): اعكس النص بالكامل أو كل سطر أو ترتيب الكلمات. مفيد للألغاز والاختبار.
-- [مولّد Slug للروابط](https://kitzos.com/ar/tools/slug-generator/): حوّل العناوين إلى slugs نظيفة للروابط بأحرف صغيرة وشرطات. مثالي لـ SEO والروابط الدائمة.
-- [بحث واستبدال](https://kitzos.com/ar/tools/find-and-replace/): ابحث واستبدل النص مع دعم regex اختياري. استبدل كل التطابقات دفعة واحدة.
-- [إزالة المسافات الزائدة](https://kitzos.com/ar/tools/whitespace-remover/): قصّ الأسطر واضغط المسافات المتعددة وأزل الأسطر الفارغة من النص غير المنظم.
 - [تحويل النص إلى ASCII Art](https://kitzos.com/ar/tools/text-to-ascii-art/): حوّل النص إلى بanners ASCII بخطوط figlet. يعمل في متصفحك.
 - [خريطة الأحرف والرموز](https://kitzos.com/ar/tools/character-map/): تصفّح رموز Unicode الخاصة والرموز. انقر لنسخ أي حرف فوراً.
 - [مولّد رمز QR](https://kitzos.com/ar/tools/qr-code-generator/): أنشئ رموز QR من نص أو روابط. نزّلها بصيغة PNG أو SVG.
+- [مولّد الباركود](https://kitzos.com/ar/tools/barcode-generator/): ولّد باركود CODE128 أو EAN13 أو UPC أو CODE39. نزّل SVG أو PNG للملصقات والمخزون.
 - [منسّق JSON](https://kitzos.com/ar/tools/json-formatter/): نسّق وتحقق من صحة JSON وصغّره مع رسائل خطأ واضحة.
 - [مشفّر / فك تشفير Base64](https://kitzos.com/ar/tools/base64/): شفّر وفك تشفير النص أو الصور إلى Base64. يعمل بالكامل دون اتصال.
-- [منتقي الألوان](https://kitzos.com/ar/tools/color-picker/): اختر لوناً وحوّله بين صيغ HEX وRGB وHSL.
-- [محوّل الطوابع الزمنية](https://kitzos.com/ar/tools/timestamp-converter/): حوّل الطوابع الزمنية Unix إلى تواريخ والعكس. يدعم الثواني والميلي ثانية.
 - [مولّد التجزئة](https://kitzos.com/ar/tools/hash-generator/): أنشئ تجزئات MD5 وSHA-1 وSHA-256 وSHA-512 من أي نص.
+- [مولّد UUID](https://kitzos.com/ar/tools/uuid-generator/): ولّد معرفات UUID v4 عشوائية. أنشئ 1–20 معرفاً وانسخها دفعة واحدة.
+- [منتقي الألوان](https://kitzos.com/ar/tools/color-picker/): اختر لوناً وحوّله بين صيغ HEX وRGB وHSL.
+- [محوّل أكواد الألوان](https://kitzos.com/ar/tools/color-code-converter/): حوّل بين HEX و RGB و HSL و HSV من قيمة إدخال واحدة.
+- [مولّد لوحة ألوان](https://kitzos.com/ar/tools/color-palette-generator/): ولّد تناسقات ألوان مكمّلة ومتجاورة وثلاثية من لون أساسي.
+- [اختبار Regex](https://kitzos.com/ar/tools/regex-tester/): اختبر ونقّح التعابير النمطية مع تظليل حيّ. شاهد التطابقات والمجموعات أثناء الكتابة. يعمل بالكامل في متصفحك.
 - [فك تشفير JWT](https://kitzos.com/ar/tools/jwt-decoder/): فك وتحليل رموز JWT. اعرض الـ header والـ payload والتوقيع فوراً في متصفحك. لا تغادر بياناتك جهازك.
 - [محوّل CSV ↔ JSON](https://kitzos.com/ar/tools/csv-json-converter/): حوّل CSV إلى JSON و JSON إلى CSV فوراً في متصفحك. الصق البيانات أو ارفع ملفاً. لا شيء يُرفع إلى أي خادم.
-- [اختبار Regex](https://kitzos.com/ar/tools/regex-tester/): اختبر ونقّح التعابير النمطية مع تظليل حيّ. شاهد التطابقات والمجموعات أثناء الكتابة. يعمل بالكامل في متصفحك.
-- [مولّد صورة OG](https://kitzos.com/ar/tools/og-image-generator/): أنشئ صور Open Graph 1200×630 للمشاركة على الشبكات الاجتماعية.
-- [مولّد فافيكون](https://kitzos.com/ar/tools/favicon-generator/): ولّد أيقونات PNG بأحجام متعددة من صورة واحدة ونزّلها كملف ZIP.
-- [مولّد باترن SVG](https://kitzos.com/ar/tools/svg-pattern-generator/): أنشئ أنماط خلفية SVG متكررة وانسخ كود CSS جاهز.
-- [مولّد ظل CSS](https://kitzos.com/ar/tools/box-shadow-generator/): صمّم ظلال box-shadow بمعاينة حية وانسخ الكود مباشرة.
-- [مولّد توقيع شفاف](https://kitzos.com/ar/tools/signature-pad/): ارسم توقيعاً بخلفية شفافة ونزّله PNG للمستندات والنماذج.
-- [مولّد لوحة ألوان](https://kitzos.com/ar/tools/color-palette-generator/): ولّد تناسقات ألوان مكمّلة ومتجاورة وثلاثية من لون أساسي.
-- [مولّد زجاجي CSS](https://kitzos.com/ar/tools/glassmorphism-generator/): صمّم تأثير زجاجي ضبابي بمعاينة حية وانسخ كود CSS.
+- [JSON إلى TypeScript](https://kitzos.com/ar/tools/json-to-typescript/): حوّل كائنات JSON إلى واجهات TypeScript تلقائياً. الكائنات المتداخلة تصبح واجهات مسماة.
+- [مُرمّز / مُفكّك URL](https://kitzos.com/ar/tools/url-encoder-decoder/): رمّز أو فكّ ترميز مكوّنات URL باستخدام encodeURIComponent.
 - [ضاغط ومُنسّق CSS](https://kitzos.com/ar/tools/css-minifier/): اضغط أو جمّل CSS. أزل التعليقات والمسافات للإنتاج أو للقراءة.
 - [ضاغط JavaScript](https://kitzos.com/ar/tools/js-minifier/): اضغط JavaScript باستخدام Terser في متصفحك. ضغط وتشويش للحزم الأصغر.
 - [مُنسّق XML](https://kitzos.com/ar/tools/xml-formatter/): نسّق أو اضغط XML. طباعة جميلة بمسافات بادئة أو ضغط للنقل.
 - [مُنسّق SQL](https://kitzos.com/ar/tools/sql-formatter/): نسّق استعلامات SQL بمسافات بادئة صحيحة. يدعم SQL القياسي.
-- [مُرمّز / مُفكّك URL](https://kitzos.com/ar/tools/url-encoder-decoder/): رمّز أو فكّ ترميز مكوّنات URL باستخدام encodeURIComponent.
-- [مولّد UUID](https://kitzos.com/ar/tools/uuid-generator/): ولّد معرفات UUID v4 عشوائية. أنشئ 1–20 معرفاً وانسخها دفعة واحدة.
-- [محلّل تعبير Cron](https://kitzos.com/ar/tools/cron-expression-parser/): حوّل تعبيرات cron بخمسة حقول إلى وصف إنجليزي مقروء.
-- [محوّل أكواد الألوان](https://kitzos.com/ar/tools/color-code-converter/): حوّل بين HEX و RGB و HSL و HSV من قيمة إدخال واحدة.
+- [مولّد تدرجات CSS](https://kitzos.com/ar/tools/gradient-generator/): أنشئ تدرجات CSS خطية ودائرية مع معاينة مباشرة وكود جاهز للنسخ.
+- [مولّد ظل CSS](https://kitzos.com/ar/tools/box-shadow-generator/): صمّم ظلال box-shadow بمعاينة حية وانسخ الكود مباشرة.
+- [مولّد زجاجي CSS](https://kitzos.com/ar/tools/glassmorphism-generator/): صمّم تأثير زجاجي ضبابي بمعاينة حية وانسخ كود CSS.
+- [مولّد باترن SVG](https://kitzos.com/ar/tools/svg-pattern-generator/): أنشئ أنماط خلفية SVG متكررة وانسخ كود CSS جاهز.
+- [مولّد صورة OG](https://kitzos.com/ar/tools/og-image-generator/): أنشئ صور Open Graph 1200×630 للمشاركة على الشبكات الاجتماعية.
+- [مولّد فافيكون](https://kitzos.com/ar/tools/favicon-generator/): ولّد أيقونات PNG بأحجام متعددة من صورة واحدة ونزّلها كملف ZIP.
 - [مولّد وسوم Meta](https://kitzos.com/ar/tools/meta-tag-generator/): ولّد وسوم HTML meta و Open Graph و Twitter Card من العنوان والوصف والرابط والصورة.
+- [مولّد تأثيرات النقر](https://kitzos.com/ar/tools/interaction-fx/): عاين تأثير ripple وصدّر CSS وJS يعمل باللمس والماوس.
 - [مولّد تحويل .htaccess](https://kitzos.com/ar/tools/htaccess-redirect-generator/): ولّد قواعد تحويل Apache mod_rewrite 301 أو 302 لملف .htaccess.
+- [محلّل تعبير Cron](https://kitzos.com/ar/tools/cron-expression-parser/): حوّل تعبيرات cron بخمسة حقول إلى وصف إنجليزي مقروء.
 - [مولّد صور Placeholder](https://kitzos.com/ar/tools/lorem-picsum-placeholder/): أنشئ صور PNG placeholder بأبعاد مخصصة ونص الأبعاد. بدون API خارجي.
-- [JSON إلى TypeScript](https://kitzos.com/ar/tools/json-to-typescript/): حوّل كائنات JSON إلى واجهات TypeScript تلقائياً. الكائنات المتداخلة تصبح واجهات مسماة.
+- [حاسبة النسب المئوية](https://kitzos.com/ar/tools/percentage-calculator/): احسب النسب المئوية ونسبة رقم من آخر والزيادة أو النقصان المئوي بين قيمتين.
+- [حاسبة البقشيش](https://kitzos.com/ar/tools/tip-calculator/): احسب البقشиш وقسّم الفاتورة بالتساوي بين أي عدد من الأشخاص.
+- [حاسبة الخصم](https://kitzos.com/ar/tools/discount-calculator/): احسب السعر بعد الخصم كنسبة مئوية واعرف المبلغ الذي توفره.
 - [حاسبة مؤشر كتلة الجسم](https://kitzos.com/ar/tools/bmi-calculator/): احسب مؤشر كتلة الجسم من الطول والوزن. يدعم الوحدات المترية والإمبراطورية.
 - [حاسبة السعرات الحرارية](https://kitzos.com/ar/tools/calorie-calculator/): قدّر السعرات اليومية بمعادلة Mifflin-St Jeor. معدل الأيض الأساسي والإجمالي للحفاظ أو الخسارة أو الزيادة.
-- [حاسبة النسب المئوية](https://kitzos.com/ar/tools/percentage-calculator/): احسب النسب المئوية ونسبة رقم من آخر والزيادة أو النقصان المئوي بين قيمتين.
 - [حاسبة القروض](https://kitzos.com/ar/tools/loan-calculator/): احسب الدفعات الشهرية وإجمالي الفائدة والتكلفة الإجمالية للقروض ذات الفائدة الثابتة.
-- [حاسبة موعد الولادة](https://kitzos.com/ar/tools/due-date-calculator/): قدّر موعد الولادة من آخر دورة شهرية واعرض أسبوع الحمل الحالي.
-- [حاسبة فرق التواريخ](https://kitzos.com/ar/tools/date-difference/): احسب الفرق بين تاريخين بالأيام والأسابيع والأشهر والسنوات. عد الأيام حتى أو منذ تاريخ.
-- [حاسبة العمر](https://kitzos.com/ar/tools/age-calculator/): احسب عمرك بالسنوات والأشهر والأيام من تاريخ ميلادك. اعرف كم يوماً متبقياً على عيد ميلادك القادم.
-- [حاسبة البقشيش](https://kitzos.com/ar/tools/tip-calculator/): احسب البقشиш وقسّم الفاتورة بالتساوي بين أي عدد من الأشخاص.
-- [حاسبة المعدل التراكمي](https://kitzos.com/ar/tools/gpa-calculator/): احسب المعدل التراكمي GPA على مقياس 4.0 من ساعات المواد ودرجات الحروف.
-- [حاسبة الفائدة المركّبة](https://kitzos.com/ar/tools/compound-interest/): توقّع نمو الاستثمار بالفائدة المركّبة. اختر تكرار المركّب واعرض العائد الإجمالي.
 - [حاسبة القرض العقاري](https://kitzos.com/ar/tools/mortgage-calculator/): قدّر القسط الشهري للرهن العقاري وإجمالي الفائدة مع جدول سداد ودفعة أولى.
+- [حاسبة الفائدة المركّبة](https://kitzos.com/ar/tools/compound-interest/): توقّع نمو الاستثمار بالفائدة المركّبة. اختر تكرار المركّب واعرض العائد الإجمالي.
+- [حاسبة العمر](https://kitzos.com/ar/tools/age-calculator/): احسب عمرك بالسنوات والأشهر والأيام من تاريخ ميلادك. اعرف كم يوماً متبقياً على عيد ميلادك القادم.
+- [حاسبة فرق التواريخ](https://kitzos.com/ar/tools/date-difference/): احسب الفرق بين تاريخين بالأيام والأسابيع والأشهر والسنوات. عد الأيام حتى أو منذ تاريخ.
+- [حاسبة موعد الولادة](https://kitzos.com/ar/tools/due-date-calculator/): قدّر موعد الولادة من آخر دورة شهرية واعرض أسبوع الحمل الحالي.
+- [حاسبة المعدل التراكمي](https://kitzos.com/ar/tools/gpa-calculator/): احسب المعدل التراكمي GPA على مقياس 4.0 من ساعات المواد ودرجات الحروف.
 - [حاسبة تكلفة الوقود](https://kitzos.com/ar/tools/fuel-cost-calculator/): قدّر الوقود المطلوب وتكلفة الرحلة من المسافة والاستهلاك (لتر/100كم أو MPG) وسعر الوقود.
-- [حاسبة الخصم](https://kitzos.com/ar/tools/discount-calculator/): احسب السعر بعد الخصم كنسبة مئوية واعرف المبلغ الذي توفره.
 - [حاسبة نسبة الأبعاد](https://kitzos.com/ar/tools/aspect-ratio-calculator/): احسب نسبة أبعاد الصور والفيديو، استخدم 16:9 وغيرها، وقِس العرض أو الارتفاع تناسبياً.
-- [محوّل أنظمة الأرقام](https://kitzos.com/ar/tools/number-base-converter/): حوّل الأرقام بين الثنائي والثماني والعشري والست عشري فوراً في متصفحك.
 - [محوّل الوحدات](https://kitzos.com/ar/tools/unit-converter/): حوّل الطول والوزن ودرجة الحرارة والمساحة والحجم بين الوحدات الشائعة فوراً.
+- [محوّل درجة الحرارة](https://kitzos.com/ar/tools/temperature-converter/): حوّل بين مئوية وفهرنهايت وكلفن مع ملاحظات مرجعية مفيدة.
+- [محوّل وحدات الطبخ](https://kitzos.com/ar/tools/cooking-converter/): حوّل أكواب وملاعق وملليلترات وغرامات للوصفات.
+- [محوّل وحدات البيانات](https://kitzos.com/ar/tools/data-unit-converter/): حوّل بين بت وبايت وأحجام التخزين وسرعات الشبكة (Mbps, Gbps) فوراً.
+- [محوّل حجم الملفات](https://kitzos.com/ar/tools/file-size-converter/): حوّل بين بايت وKB وMB وGB وTB باستخدام الأساس الثنائي (1024) أو العشري (1000).
 - [محوّل الأرقام الرومانية](https://kitzos.com/ar/tools/roman-numeral-converter/): حوّل بين الأرقام العربية والرومانية (I, V, X, L, C, D, M) للنطاق 1–3999.
 - [تحويل الأرقام إلى كلمات — تفقيط](https://kitzos.com/ar/tools/number-to-words/): حوّل الأرقام إلى كلمات بالإنجليزية أو العربية (تفقيط). يدعم أعداداً كبيرة حتى المليارات.
-- [محوّل حجم الملفات](https://kitzos.com/ar/tools/file-size-converter/): حوّل بين بايت وKB وMB وGB وTB باستخدام الأساس الثنائي (1024) أو العشري (1000).
-- [محوّل درجة الحرارة](https://kitzos.com/ar/tools/temperature-converter/): حوّل بين مئوية وفهرنهايت وكلفن مع ملاحظات مرجعية مفيدة.
-- [محوّل وحدات البيانات](https://kitzos.com/ar/tools/data-unit-converter/): حوّل بين بت وبايت وأحجام التخزين وسرعات الشبكة (Mbps, Gbps) فوراً.
-- [محوّل وحدات الطبخ](https://kitzos.com/ar/tools/cooking-converter/): حوّل أكواب وملاعق وملليلترات وغرامات للوصفات.
 - [محوّل التاريخ الهجري والميلادي](https://kitzos.com/ar/tools/hijri-gregorian-converter/): حوّل التواريخ بين التقويم الهجري الإسلامي والميلادي. يعمل بالكامل في المتصفح.
+- [محوّل الطوابع الزمنية](https://kitzos.com/ar/tools/timestamp-converter/): حوّل الطوابع الزمنية Unix إلى تواريخ والعكس. يدعم الثواني والميلي ثانية.
+- [محوّل أنظمة الأرقام](https://kitzos.com/ar/tools/number-base-converter/): حوّل الأرقام بين الثنائي والثماني والعشري والست عشري فوراً في متصفحك.
 - [مؤقت بومودورو](https://kitzos.com/ar/tools/pomodoro-timer/): مؤقت تركيز بدورات عمل واستراحة. مدد قابلة للتخصيص وعداد الدورات وتنبيهات صوتية.
+- [ساعة إيقاف وعداد تنازلي](https://kitzos.com/ar/tools/stopwatch-timer/): ساعة إيقاف مع لفات وتوقيت، أو عداد تنازلي مع صوت عند الانتهاء. يعمل في المتصفح.
 - [منتقي عشوائي ومولّد أرقام](https://kitzos.com/ar/tools/random-picker/): اختر اسماً أو خياراً عشوائياً من قائمة، أو أنشئ رقماً عشوائياً ضمن نطاق.
 - [اختبار سرعة الكتابة](https://kitzos.com/ar/tools/typing-speed-test/): قِس سرعة كتابتك بالكلمات في الدقيقة ودقة الإدخال باختبار مباشر.
-- [مفكرة على الإنترنت](https://kitzos.com/ar/tools/online-notepad/): مفكرة بسيطة تحفظ تلقائياً في متصفحك. تتضمن عد الكلمات والأحرف.
-- [مولّد تأثيرات النقر](https://kitzos.com/ar/tools/interaction-fx/): عاين تأثير ripple وصدّر CSS وJS يعمل باللمس والماوس.
-- [مولّد الباركود](https://kitzos.com/ar/tools/barcode-generator/): ولّد باركود CODE128 أو EAN13 أو UPC أو CODE39. نزّل SVG أو PNG للملصقات والمخزون.
-- [ساعة إيقاف وعداد تنازلي](https://kitzos.com/ar/tools/stopwatch-timer/): ساعة إيقاف مع لفات وتوقيت، أو عداد تنازلي مع صوت عند الانتهاء. يعمل في المتصفح.
-- [مولّد شهادات إنجاز](https://kitzos.com/ar/tools/certificate-generator/): أنشئ شهادة إنجاز أو مشروع احترافية. خصّص النصوص والألوان والشعار مع معاينة حية، ثم نزّلها بصيغة PNG أو PDF. تعمل بالكامل في متصفحك.
 - [قص ملف MP3](https://kitzos.com/ar/tools/mp3-cutter/): قص وتقصير ملفات الصوت في متصفحك. تصدير MP3 أو WAV دون رفع الملفات.
 - [محوّل الصوت](https://kitzos.com/ar/tools/audio-converter/): حوّل WAV إلى MP3 وصيغ أخرى محلياً عبر Web Audio API.
 - [دمج ملفات صوتية](https://kitzos.com/ar/tools/audio-merger/): ادمج عدة ملفات صوتية في مسار واحد بالترتيب الذي تختاره.

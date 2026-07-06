@@ -3,46 +3,125 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --bg: #f7f8fa;
+    --surface: #ffffff;
+    --surface-2: #f0f2f6;
+    --line: #e4e8ef;
+    --text: #14181f;
+    --muted: #5c6675;
+    --accent: #ffb020;
+    --accent-ink: #1a1205;
+
+    --cat-pdf: #f87171;
+    --cat-image: #34d399;
+    --cat-text: #60a5fa;
+    --cat-dev: #a78bfa;
+    --cat-calculators: #a3e635;
+    --cat-converters: #2dd4bf;
+    --cat-misc: #f472b6;
+    --cat-audio: #fb923c;
+    --cat-vision: #22d3ee;
+  }
+
+  .dark {
+    --bg: #0b0e14;
+    --surface: #121722;
+    --surface-2: #182031;
+    --line: #1f2733;
+    --text: #e8ecf2;
+    --muted: #8b95a7;
+    --accent: #ffb020;
+    --accent-ink: #1a1205;
+  }
+
   html {
     scroll-behavior: smooth;
   }
 
   body {
-    @apply bg-gray-50 text-gray-900 antialiased dark:bg-gray-950 dark:text-gray-100;
+    @apply bg-canvas text-foreground antialiased;
+    font-family: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  }
+
+  [dir="rtl"] body {
+    font-family: var(--font-plex-arabic), ui-sans-serif, system-ui, sans-serif;
   }
 }
 
 @layer components {
+  .font-display {
+    font-family: var(--font-archivo), var(--font-plex-sans), ui-sans-serif, sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  [dir="rtl"] .font-display {
+    font-family: var(--font-plex-arabic), ui-sans-serif, sans-serif;
+    letter-spacing: 0;
+  }
+
+  .font-mono-label {
+    font-family: var(--font-plex-mono), ui-monospace, monospace;
+    font-feature-settings: "tnum" 1;
+  }
+
+  /** Latin/digits in mono; Arabic glyphs in Plex Sans Arabic (technical label feel). */
+  .label-mono {
+    font-family: var(--font-plex-mono), ui-monospace, monospace;
+    font-feature-settings: "tnum" 1;
+  }
+
+  [dir="rtl"] .label-mono {
+    font-family: var(--font-plex-arabic), ui-sans-serif, system-serif;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    font-feature-settings: normal;
+  }
+
   .site-container {
     @apply mx-auto w-full max-w-7xl px-4 sm:px-6 xl:max-w-[1400px] xl:px-8 2xl:max-w-[1536px];
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-primary-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-primary-600 dark:hover:bg-primary-500 dark:focus:ring-primary-400 dark:focus:ring-offset-gray-950;
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-sm font-medium text-accent-ink transition-colors hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-canvas disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 dark:focus:ring-primary-400 dark:focus:ring-offset-gray-950;
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-line bg-surface px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-surface-2 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-canvas disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .input-field {
-    @apply w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-primary-400 dark:focus:ring-primary-500/30;
+    @apply w-full rounded-lg border border-line bg-canvas px-3 py-2.5 text-sm text-foreground placeholder:text-muted focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent;
+  }
+
+  /* Inputs inside the tool workbench need contrast against the card surface */
+  .tool-bench-card .input-field {
+    @apply bg-surface-2;
   }
 
   .card {
-    @apply rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900 dark:shadow-none;
+    @apply rounded-xl border border-line bg-surface p-5 shadow-sm;
+  }
+
+  .tool-bench-card {
+    @apply rounded-xl border-2 border-line bg-surface p-6 shadow-sm;
   }
 
   .info-prose {
-    @apply space-y-6 text-gray-600 dark:text-gray-400;
+    @apply max-w-[65ch] space-y-6 text-base leading-relaxed text-muted;
   }
 
   .info-prose h2 {
-    @apply pt-2 text-xl font-semibold text-gray-900 dark:text-gray-100;
+    @apply font-display flex items-center gap-2 pt-4 text-xl font-semibold text-foreground;
+  }
+
+  .info-prose h2::before {
+    content: "";
+    @apply h-1 w-1 shrink-0 bg-accent;
   }
 
   .info-prose h3 {
-    @apply pt-1 text-lg font-medium text-gray-900 dark:text-gray-100;
+    @apply pt-2 text-lg font-medium text-foreground;
   }
 
   .info-prose p {
@@ -54,7 +133,7 @@
     @apply ms-5 space-y-2;
   }
 
-  /* Technical output stays LTR even in RTL layout */
+  /* Technical output stays LTR even in RTL layout — scoped, not all .font-mono */
   .ltr {
     direction: ltr;
     unicode-bidi: isolate;
@@ -66,13 +145,15 @@
     unicode-bidi: isolate;
   }
 
-  /* Keep numbers, code, and technical output LTR in Arabic layout */
-  [dir="rtl"] .font-mono,
+  [dir="rtl"] .ltr,
+  [dir="rtl"] .ltr-input,
+  [dir="rtl"] .font-mono-label,
   [dir="rtl"] code,
   [dir="rtl"] pre,
-  [dir="rtl"] textarea.font-mono,
-  [dir="rtl"] .input-field.font-mono,
-  [dir="rtl"] .tabular-nums {
+  [dir="rtl"] .tabular-nums,
+  [dir="rtl"] p.font-mono,
+  [dir="rtl"] span.font-mono,
+  [dir="rtl"] .input-field.ltr-input {
     direction: ltr;
     text-align: left;
     unicode-bidi: isolate;
@@ -87,11 +168,77 @@
   }
 
   .info-prose a {
-    @apply font-medium text-primary-600 underline-offset-2 hover:underline dark:text-primary-400;
+    @apply font-medium text-accent underline-offset-2 hover:underline;
   }
 
   .info-prose strong {
-    @apply font-semibold text-gray-900 dark:text-gray-100;
+    @apply font-semibold text-foreground;
+  }
+
+  /* Homepage hero blueprint grid */
+  .hero-blueprint {
+    background-image:
+      linear-gradient(color-mix(in srgb, var(--line) 55%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--line) 55%, transparent) 1px, transparent 1px);
+    background-size: 24px 24px;
+    mask-image: linear-gradient(to bottom, black 0%, black 45%, transparent 100%);
+  }
+
+  /* Category chip horizontal scroll — edge fade */
+  .chip-scroll-fade {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 1.25rem,
+      black calc(100% - 1.25rem),
+      transparent
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 1.25rem,
+      black calc(100% - 1.25rem),
+      transparent
+    );
+  }
+
+  [dir="rtl"] .chip-scroll-fade {
+    -webkit-mask-image: linear-gradient(
+      to left,
+      transparent,
+      black 1.25rem,
+      black calc(100% - 1.25rem),
+      transparent
+    );
+    mask-image: linear-gradient(
+      to left,
+      transparent,
+      black 1.25rem,
+      black calc(100% - 1.25rem),
+      transparent
+    );
+  }
+
+  /* Tool card category spine */
+  .tool-card-spine {
+    width: 3px;
+    transition: width 150ms ease-out, background-color 150ms ease-out;
+  }
+
+  .group:hover .tool-card-spine,
+  .group:focus-visible .tool-card-spine {
+    width: 5px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tool-card-spine {
+      transition: background-color 150ms ease-out;
+    }
+
+    .group:hover .tool-card-spine,
+    .group:focus-visible .tool-card-spine {
+      width: 3px;
+    }
   }
 }
 
@@ -172,5 +319,41 @@
 
   .home-category-page-grid--hidden {
     opacity: 1;
+  }
+}
+
+/* Unsaved-work language-switch dialog */
+.unsaved-dialog-overlay {
+  animation: unsaved-dialog-overlay-in 150ms ease-out;
+}
+
+.unsaved-dialog-panel {
+  animation: unsaved-dialog-panel-in 150ms ease-out;
+}
+
+@keyframes unsaved-dialog-overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes unsaved-dialog-panel-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .unsaved-dialog-overlay,
+  .unsaved-dialog-panel {
+    animation: none;
   }
 }

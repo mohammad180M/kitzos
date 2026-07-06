@@ -1,10 +1,10 @@
 "use client";
 
-import { LayoutGrid } from "lucide-react";
+import type { CSSProperties } from "react";
 import { categories, type CategoryId } from "@/lib/categories";
-import { getIcon } from "@/lib/icons";
+import { categoryColorVar } from "@/lib/category-colors";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
-import { getLocalizedCategory } from "@/lib/i18n/localized-data";
+import { getLocalizedCategory } from "@/lib/i18n/localized-labels";
 
 export type CategoryFilter = CategoryId | "all";
 
@@ -13,35 +13,52 @@ interface CategoryFilterBarProps {
   onChange: (value: CategoryFilter) => void;
 }
 
+function ColorDot({ color }: { color: string }) {
+  return (
+    <span
+      className="h-1.5 w-1.5 shrink-0 rounded-full"
+      style={{ backgroundColor: color }}
+      aria-hidden="true"
+    />
+  );
+}
+
+function chipStyle(active: boolean, color: string): CSSProperties | undefined {
+  if (!active) return undefined;
+  return {
+    backgroundColor: `color-mix(in srgb, ${color} 12%, transparent)`,
+    borderColor: color,
+    color,
+  };
+}
+
 const chipBase =
-  "inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-2 text-sm font-medium shadow-sm transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900";
+  "label-mono inline-flex shrink-0 items-center gap-2 rounded-full border border-line bg-surface px-3 py-1.5 text-[11px] font-medium uppercase tracking-wide text-muted transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-canvas";
 
-const chipIdle =
-  "border-gray-200 bg-white text-gray-600 hover:border-primary-300 hover:bg-primary-50 hover:text-primary-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-primary-600 dark:hover:bg-primary-950/40 dark:hover:text-primary-400";
-
-const chipActive =
-  "border-primary-500 bg-primary-50 text-primary-700 ring-2 ring-primary-500/25 shadow-[0_0_14px_rgba(37,99,235,0.22)] dark:border-primary-400 dark:bg-primary-950/50 dark:text-primary-300 dark:shadow-[0_0_16px_rgba(96,165,250,0.28)]";
+const chipIdle = "hover:border-muted hover:bg-surface-2 hover:text-foreground";
 
 export default function CategoryFilterBar({ value, onChange }: CategoryFilterBarProps) {
   const { locale, t } = useLocale();
+  const allColor = "var(--accent)";
 
   return (
     <nav aria-label={t.home.filterAria} className="mt-8">
-      <ul className="flex flex-wrap items-center justify-center gap-2 max-md:-mx-1 max-md:flex-nowrap max-md:justify-start max-md:overflow-x-auto max-md:pb-1">
+      <ul className="chip-scroll-fade -mx-4 flex flex-nowrap items-center gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:justify-center sm:overflow-visible sm:px-0">
         <li>
           <button
             type="button"
             aria-pressed={value === "all"}
             onClick={() => onChange("all")}
-            className={`${chipBase} ${value === "all" ? chipActive : chipIdle}`}
+            className={`${chipBase} ${value === "all" ? "" : chipIdle}`}
+            style={chipStyle(value === "all", allColor)}
           >
-            <LayoutGrid className="h-4 w-4 shrink-0 opacity-70" aria-hidden="true" />
+            <ColorDot color={allColor} />
             {t.home.filterAll}
           </button>
         </li>
         {categories.map((category) => {
-          const Icon = getIcon(category.icon);
           const { name } = getLocalizedCategory(category, locale);
+          const color = categoryColorVar(category.id);
           const isActive = value === category.id;
           return (
             <li key={category.id}>
@@ -49,9 +66,10 @@ export default function CategoryFilterBar({ value, onChange }: CategoryFilterBar
                 type="button"
                 aria-pressed={isActive}
                 onClick={() => onChange(category.id)}
-                className={`${chipBase} ${isActive ? chipActive : chipIdle}`}
+                className={`${chipBase} ${isActive ? "" : chipIdle}`}
+                style={chipStyle(isActive, color)}
               >
-                <Icon className="h-4 w-4 shrink-0 opacity-70" aria-hidden="true" />
+                <ColorDot color={color} />
                 {name}
               </button>
             </li>

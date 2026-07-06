@@ -1,23 +1,19 @@
-import { tools, type Tool } from "@/lib/registry";
+import { toolsLite, type ToolLite } from "@/lib/registry-lite";
 import type { Locale } from "./types";
-import { getArabicKeywords } from "./localized-data";
-import toolsAr from "@/locales/tools.ar.json";
 
-type ToolAr = { title: string; description: string; keywords?: string[] };
-const toolsArMap = toolsAr as Record<string, ToolAr>;
-
-export function searchToolsLocalized(query: string, locale: Locale): Tool[] {
+export function searchToolsLocalized(query: string, locale: Locale): ToolLite[] {
   const q = query.trim().toLowerCase();
-  if (!q) return tools;
+  if (!q) return toolsLite;
 
-  return tools.filter((tool) => {
-    const ar = locale === "ar" ? toolsArMap[tool.slug] : undefined;
+  return toolsLite.filter((tool) => {
     const haystack = [
       tool.title,
       tool.description,
       tool.category,
       ...tool.keywords,
-      ...(ar ? [ar.title, ar.description, ...(ar.keywords ?? getArabicKeywords(tool.slug))] : []),
+      ...(locale === "ar"
+        ? [tool.titleAr, tool.descriptionAr, ...tool.keywordsAr]
+        : []),
     ]
       .join(" ")
       .toLowerCase();
@@ -26,3 +22,5 @@ export function searchToolsLocalized(query: string, locale: Locale): Tool[] {
     return terms.every((term) => haystack.includes(term));
   });
 }
+
+export type { ToolLite };

@@ -51,8 +51,8 @@ export default function CertificateTemplateThumb({
       onClick={onSelect}
       className={`overflow-hidden rounded-lg border text-left transition-colors ${
         active
-          ? "border-primary-500 ring-2 ring-primary-500/30 dark:border-primary-400"
-          : "border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600"
+          ? "border-accent ring-2 ring-accent"
+          : "border-line hover:border-muted"
       }`}
     >
       <canvas
@@ -63,7 +63,7 @@ export default function CertificateTemplateThumb({
         style={{ aspectRatio: `${THUMB_WIDTH} / ${THUMB_HEIGHT}` }}
         aria-hidden="true"
       />
-      <span className="block px-2 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-300">
+      <span className="block px-2 py-1.5 text-xs font-medium text-foreground">
         {label}
       </span>
     </button>

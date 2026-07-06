@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
 import { useTextToolLabels } from "@/lib/i18n/use-text-tool-labels";
+import { useUnsavedWork } from "@/lib/unsaved-work";
 
 export default function MarkdownToHtml() {
   const labels = useCommonLabels();
@@ -11,6 +12,8 @@ export default function MarkdownToHtml() {
   const [markdown, setMarkdown] = useState("# Hello\n\nWrite **Markdown** here.");
   const [html, setHtml] = useState("");
   const [copied, setCopied] = useState(false);
+
+  useUnsavedWork(markdown.trim().length > 0);
 
   useEffect(() => {
     let cancelled = false;
@@ -60,7 +63,7 @@ export default function MarkdownToHtml() {
             value={markdown}
             onChange={(e) => setMarkdown(e.target.value)}
             rows={14}
-            className="input-field mt-1 resize-y font-mono text-sm"
+            className="input-field ltr-input mt-1 resize-y font-mono text-sm"
             spellCheck={false}
             placeholder={t.placeholder}
           />

@@ -12,6 +12,7 @@ import {
 } from "@/lib/audio-utils";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
 import { useAudioToolLabels } from "@/lib/i18n/use-audio-tool-labels";
+import { useUnsavedWork } from "@/lib/unsaved-work";
 
 export default function Mp3Cutter() {
   const labels = useCommonLabels();
@@ -24,6 +25,8 @@ export default function Mp3Cutter() {
   const [format, setFormat] = useState<"mp3" | "wav">("mp3");
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useUnsavedWork(file !== null);
   const bufferRef = useRef<AudioBuffer | null>(null);
 
   const loadFile = useCallback(async (f: File) => {

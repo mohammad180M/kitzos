@@ -31,32 +31,30 @@ export default function InfoPageLayout({
     <>
       <JsonLd data={breadcrumbSchema} />
       <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14">
-        <nav aria-label={t.tool.breadcrumbAria} className="mb-8">
-          <ol className="flex flex-wrap items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
+        <nav aria-label={t.tool.breadcrumbAria} className="label-mono mb-8 text-xs uppercase tracking-wide text-muted">
+          <ol className="flex flex-wrap items-center gap-1">
             <li className="flex items-center gap-1">
               <Link
                 href={localizedPath(locale, "/")}
-                className="hover:text-primary-600 dark:hover:text-primary-400"
+                className="transition-colors hover:text-foreground"
               >
                 {t.common.home}
               </Link>
             </li>
             <li className="flex items-center gap-1">
               <ChevronRight className="h-3.5 w-3.5 rtl:rotate-180" aria-hidden="true" />
-              <span className="font-medium text-gray-900 dark:text-gray-100" aria-current="page">
+              <span className="font-medium text-foreground" aria-current="page">
                 {title}
               </span>
             </li>
           </ol>
         </nav>
 
-        <header className="mb-10 border-b border-gray-200 pb-8 dark:border-gray-800">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl">
+        <header className="mb-10 border-b border-line pb-8">
+          <h1 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
             {title}
           </h1>
-          {description && (
-            <p className="mt-3 text-lg text-gray-600 dark:text-gray-400">{description}</p>
-          )}
+          {description && <p className="mt-3 text-lg leading-relaxed text-muted">{description}</p>}
         </header>
 
         <article className="info-prose">{children}</article>

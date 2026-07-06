@@ -6,6 +6,7 @@ import {
   useImageToolsExtraLabels,
   useImageToolsSharedLabels,
 } from "@/lib/i18n/use-image-tools-extra-labels";
+import { useUnsavedWork } from "@/lib/unsaved-work";
 
 type AspectPreset = "free" | "1:1" | "4:3" | "16:9";
 
@@ -38,6 +39,8 @@ export default function CropImage() {
   const imgRef = useRef<HTMLImageElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const imageVersionRef = useRef(0);
+
+  useUnsavedWork(imageUrl !== null);
 
   const measureDisplay = useCallback(() => {
     const img = imgRef.current;

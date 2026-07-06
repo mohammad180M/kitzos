@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useState } from "react";
-import JSZip from "jszip";
 import { Download, Loader2, ShieldAlert, Upload } from "lucide-react";
 import { downloadBlob } from "@/lib/download";
 import {
@@ -14,6 +13,18 @@ import {
   useImageToolsExtraLabels,
   useImageToolsSharedLabels,
 } from "@/lib/i18n/use-image-tools-extra-labels";
+import { useUnsavedWork } from "@/lib/unsaved-work";
+
+function loadJSZipModule() {
+  return import("jszip");
+}
+
+let jsZipModulePromise: ReturnType<typeof loadJSZipModule> | undefined;
+
+function getJSZipModule() {
+  if (!jsZipModulePromise) jsZipModulePromise = loadJSZipModule();
+  return jsZipModulePromise;
+}
 
 interface FileEntry {
   file: File;
@@ -32,6 +43,8 @@ export default function ExifRemover() {
   const [cleaning, setCleaning] = useState(false);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
+
+  useUnsavedWork(entries.length > 0);
   const [done, setDone] = useState(false);
 
   const active = entries[activeIndex] ?? null;
@@ -113,6 +126,7 @@ export default function ExifRemover() {
       if (cleaned.length === 1) {
         downloadBlob(cleaned[0].blob, cleaned[0].name);
       } else {
+        const JSZip = (await getJSZipModule()).default;
         const zip = new JSZip();
         for (const c of cleaned) zip.file(c.name, c.blob);
         const zipBlob = await zip.generateAsync({ type: "blob" });

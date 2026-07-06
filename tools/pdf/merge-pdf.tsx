@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useRef, useState, type DragEvent } from "react";
-import { PDFDocument } from "pdf-lib";
 import {
   Download,
   FileText,
@@ -11,6 +10,18 @@ import {
   Loader2,
 } from "lucide-react";
 import { usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
+import { useUnsavedWork } from "@/lib/unsaved-work";
+
+function loadPdfLib() {
+  return import("pdf-lib");
+}
+
+let pdfLibPromise: ReturnType<typeof loadPdfLib> | undefined;
+
+function getPdfLib() {
+  if (!pdfLibPromise) pdfLibPromise = loadPdfLib();
+  return pdfLibPromise;
+}
 
 interface PdfFile {
   id: string;
@@ -33,6 +44,8 @@ export default function MergePdf() {
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useUnsavedWork(files.length > 0);
 
   const addFiles = useCallback(
     (newFiles: FileList | File[]) => {
@@ -111,6 +124,7 @@ export default function MergePdf() {
     setError(null);
 
     try {
+      const { PDFDocument } = await getPdfLib();
       const mergedPdf = await PDFDocument.create();
 
       for (const pdfFile of files) {

@@ -73,7 +73,7 @@ export default function JwtDecoder() {
           onChange={(e) => setToken(e.target.value)}
           placeholder={ui.tokenPlaceholder}
           rows={4}
-          className="input-field mt-1 resize-y font-mono text-sm"
+          className="input-field ltr-input mt-1 resize-y font-mono text-sm"
           spellCheck={false}
           autoComplete="off"
           dir="ltr"

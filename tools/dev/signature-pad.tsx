@@ -1,17 +1,21 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Download } from "lucide-react";
 import { setupCanvas, canvasToBlob } from "@/lib/canvas-utils";
 import { downloadBlob } from "@/lib/audio-utils";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
 import { useDevToolsExtraLabels } from "@/lib/i18n/use-dev-tools-extra-labels";
+import { useUnsavedWork } from "@/lib/unsaved-work";
 
 export default function SignaturePad() {
   const labels = useCommonLabels();
   const t = useDevToolsExtraLabels("signaturePad");
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const drawing = useRef(false);
+  const [hasDrawing, setHasDrawing] = useState(false);
+
+  useUnsavedWork(hasDrawing);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -25,6 +29,7 @@ export default function SignaturePad() {
 
   const onDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
     drawing.current = true;
+    setHasDrawing(true);
     canvasRef.current?.setPointerCapture(e.pointerId);
     const ctx = canvasRef.current?.getContext("2d");
     const { x, y } = getPos(e);
@@ -54,6 +59,7 @@ export default function SignaturePad() {
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     ctx?.clearRect(0, 0, canvas.width, canvas.height);
+    setHasDrawing(false);
   };
 
   const exportPng = async () => {

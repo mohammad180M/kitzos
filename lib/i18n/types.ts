@@ -32,10 +32,16 @@ export interface Dictionary {
     switchToLightMode: string;
     switchToDarkMode: string;
     toggleTheme: string;
+    unsavedWorkTitle: string;
+    unsavedWorkBody: string;
+    unsavedWorkConfirm: string;
+    unsavedWorkCancel: string;
   };
   home: {
     title: string;
     subtitle: string;
+    heroEyebrow: string;
+    searchShortcut: string;
     searchPlaceholder: string;
     searchAria: string;
     clearSearch: string;
@@ -54,6 +60,10 @@ export interface Dictionary {
     faq: string;
     breadcrumbAria: string;
     advertisementAria: string;
+  };
+  ads: {
+    label: string;
+    supportMessage: string;
   };
   footer: {
     tagline: string;

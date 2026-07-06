@@ -9,6 +9,7 @@ import {
   useImageToolsExtraLabels,
   useImageToolsSharedLabels,
 } from "@/lib/i18n/use-image-tools-extra-labels";
+import { useUnsavedWork } from "@/lib/unsaved-work";
 
 type Layout = "2-cols" | "2-rows" | "3-cols" | "2x2";
 
@@ -68,6 +69,8 @@ export default function ImageCollage() {
   const [layout, setLayout] = useState<Layout>("2-cols");
   const [gap, setGap] = useState(8);
   const [error, setError] = useState<string | null>(null);
+
+  useUnsavedWork(images.length > 0);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [dragging, setDragging] = useState(false);
   const dragStart = useRef<{ x: number; y: number; panX: number; panY: number } | null>(null);

@@ -1,10 +1,36 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { PDFDocument, rgb, degrees } from "pdf-lib";
 import { Download, Loader2, Upload } from "lucide-react";
 import { downloadBlob } from "@/lib/audio-utils";
 import { usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
+import { useUnsavedWork } from "@/lib/unsaved-work";
+
+interface WatermarkPage {
+  getSize(): { width: number; height: number };
+  drawText(
+    text: string,
+    options: {
+      x: number;
+      y: number;
+      size: number;
+      color: ReturnType<(typeof import("pdf-lib"))["rgb"]>;
+      opacity: number;
+      rotate: ReturnType<(typeof import("pdf-lib"))["degrees"]>;
+    }
+  ): void;
+}
+
+function loadPdfLib() {
+  return import("pdf-lib");
+}
+
+let pdfLibPromise: ReturnType<typeof loadPdfLib> | undefined;
+
+function getPdfLib() {
+  if (!pdfLibPromise) pdfLibPromise = loadPdfLib();
+  return pdfLibPromise;
+}
 
 export default function PdfWatermark() {
   const t = usePdfToolLabels("pdfWatermark");
@@ -17,12 +43,16 @@ export default function PdfWatermark() {
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  useUnsavedWork(file !== null);
+
   const drawWatermark = (
-    page: ReturnType<PDFDocument["getPages"]>[number],
+    page: WatermarkPage,
     watermarkText: string,
     size: number,
     alpha: number,
-    tiled: boolean
+    tiled: boolean,
+    rgb: (typeof import("pdf-lib"))["rgb"],
+    degrees: (typeof import("pdf-lib"))["degrees"]
   ) => {
     const { width, height } = page.getSize();
     const textWidth = watermarkText.length * size * 0.55;
@@ -60,10 +90,11 @@ export default function PdfWatermark() {
     setProcessing(true);
     setError(null);
     try {
+      const { PDFDocument, rgb, degrees } = await getPdfLib();
       const pdfDoc = await PDFDocument.load(await file.arrayBuffer());
       const pages = pdfDoc.getPages();
       for (const page of pages) {
-        drawWatermark(page, text, fontSize, opacity, tile);
+        drawWatermark(page, text, fontSize, opacity, tile, rgb, degrees);
       }
       const out = await pdfDoc.save();
       downloadBlob(new Blob([out as BlobPart], { type: "application/pdf" }), `watermarked-${file.name}`);

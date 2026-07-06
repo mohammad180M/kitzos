@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { Download, Eye, EyeOff, Loader2, Upload } from "lucide-react";
 import { downloadBlob } from "@/lib/audio-utils";
 import { usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
+import { useUnsavedWork } from "@/lib/unsaved-work";
 
 export default function PdfProtect() {
   const t = usePdfToolLabels("pdfProtect");
@@ -13,6 +14,8 @@ export default function PdfProtect() {
   const [showPassword, setShowPassword] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useUnsavedWork(file !== null);
 
   const protect = async () => {
     if (!file || !password) {

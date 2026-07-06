@@ -33,7 +33,7 @@ export default function ColorCodeConverter() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder={t.placeholder}
-          className="input-field mt-1 w-full font-mono"
+          className="input-field ltr-input mt-1 w-full font-mono"
           dir="ltr"
           spellCheck={false}
         />

@@ -1,9 +1,25 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import CryptoJS from "crypto-js";
 import { Check, Copy } from "lucide-react";
 import { useDevToolsExtraLabels } from "@/lib/i18n/use-dev-tools-extra-labels";
+
+function loadSparkMd5() {
+  return import("spark-md5");
+}
+
+let sparkMd5Promise: ReturnType<typeof loadSparkMd5> | undefined;
+
+function getSparkMd5() {
+  if (!sparkMd5Promise) sparkMd5Promise = loadSparkMd5();
+  return sparkMd5Promise;
+}
+
+async function md5Hash(text: string): Promise<string> {
+  const { default: SparkMD5 } = await getSparkMd5();
+  const bytes = new TextEncoder().encode(text);
+  return SparkMD5.ArrayBuffer.hash(bytes.buffer);
+}
 
 type HashAlgo = "MD5" | "SHA-1" | "SHA-256" | "SHA-512";
 
@@ -21,6 +37,7 @@ async function shaHash(algo: "SHA-1" | "SHA-256" | "SHA-512", text: string): Pro
 }
 
 async function computeHashes(text: string): Promise<HashResult[]> {
+  const md5 = await md5Hash(text);
   const [sha1, sha256, sha512] = await Promise.all([
     shaHash("SHA-1", text),
     shaHash("SHA-256", text),
@@ -28,7 +45,7 @@ async function computeHashes(text: string): Promise<HashResult[]> {
   ]);
 
   return [
-    { algo: "MD5", value: CryptoJS.MD5(text).toString() },
+    { algo: "MD5", value: md5 },
     { algo: "SHA-1", value: sha1 },
     { algo: "SHA-256", value: sha256 },
     { algo: "SHA-512", value: sha512 },
@@ -76,7 +93,7 @@ export default function HashGenerator() {
           onChange={(e) => setInput(e.target.value)}
           rows={4}
           placeholder={t.placeholder}
-          className="input-field mt-1 resize-y font-mono text-sm"
+          className="input-field ltr-input mt-1 resize-y font-mono text-sm"
           spellCheck={false}
         />
       </div>

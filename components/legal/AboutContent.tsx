@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { categories } from "@/lib/categories";
-import { getToolsByCategory } from "@/lib/registry";
+import { getToolsByCategoryLite } from "@/lib/registry-lite";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
-import { getLocalizedCategory, getLocalizedTool } from "@/lib/i18n/localized-data";
+import { getLocalizedCategory, getLocalizedTool } from "@/lib/i18n/localized-labels";
 import { localizedPath } from "@/lib/i18n/routing";
 
 export default function AboutContent() {
@@ -33,8 +33,8 @@ export default function AboutContent() {
           خصوصية أصغر — ملفاتك تبقى معك.
         </p>
         <p>
-          قد يعرض الموقع إعلانات لإبقاء الأدوات مجانية. الإعلان من أطراف ثالثة (مثل Google
-          AdSense) منفصل عن عمل الأدوات نفسها. راجع{" "}
+          قد يعرض الموقع إعلانات لإبقاء الأدوات مجانية. الإعلان من شركاء إعلان من أطراف ثالثة
+          (حالياً Adsterra) منفصل عن عمل الأدوات نفسها. راجع{" "}
           <Link href={localizedPath(locale, "/privacy")}>سياسة الخصوصية</Link> للتفاصيل.
         </p>
 
@@ -45,17 +45,17 @@ export default function AboutContent() {
 
         <div className="space-y-6 !mt-8">
           {categories.map((category) => {
-            const categoryTools = getToolsByCategory(category.id);
+            const categoryTools = getToolsByCategoryLite(category.id);
             const { name, description } = getLocalizedCategory(category, locale);
             return (
               <div
                 key={category.id}
-                className="rounded-xl border border-gray-200 bg-gray-50 p-5 dark:border-gray-700 dark:bg-gray-800/50"
+                className="rounded-xl border border-line bg-surface p-5"
               >
-                <h3 className="!pt-0 text-lg font-semibold text-gray-900 dark:text-gray-100">
+                <h3 className="!pt-0 text-lg font-semibold text-foreground">
                   <Link
                     href={localizedPath(locale, `/${category.id}`)}
-                    className="hover:text-primary-600 dark:hover:text-primary-400"
+                    className="hover:text-accent"
                   >
                     {name}
                   </Link>
@@ -68,7 +68,7 @@ export default function AboutContent() {
                       <li key={tool.slug} className="list-none">
                         <Link
                           href={localizedPath(locale, `/tools/${tool.slug}`)}
-                          className="text-sm text-primary-600 hover:underline dark:text-primary-400"
+                          className="text-sm text-accent hover:underline"
                         >
                           {title}
                         </Link>
@@ -120,8 +120,8 @@ export default function AboutContent() {
         you.
       </p>
       <p>
-        The site may show ads to help keep the tools free. Advertising is provided by third parties
-        (such as Google AdSense) and is separate from how the tools themselves work. See our{" "}
+        The site may show ads to help keep the tools free. Advertising is provided by third-party
+        advertising partners (currently Adsterra) and is separate from how the tools themselves work. See our{" "}
         <Link href={localizedPath(locale, "/privacy")}>Privacy Policy</Link> for details.
       </p>
 
@@ -133,16 +133,16 @@ export default function AboutContent() {
 
       <div className="space-y-6 !mt-8">
         {categories.map((category) => {
-          const categoryTools = getToolsByCategory(category.id);
+          const categoryTools = getToolsByCategoryLite(category.id);
           return (
             <div
               key={category.id}
-              className="rounded-xl border border-gray-200 bg-gray-50 p-5 dark:border-gray-700 dark:bg-gray-800/50"
+              className="rounded-xl border border-line bg-surface p-5"
             >
-              <h3 className="!pt-0 text-lg font-semibold text-gray-900 dark:text-gray-100">
+              <h3 className="!pt-0 text-lg font-semibold text-foreground">
                 <Link
                   href={localizedPath(locale, `/${category.id}`)}
-                  className="hover:text-primary-600 dark:hover:text-primary-400"
+                  className="hover:text-accent"
                 >
                   {category.name}
                 </Link>
@@ -153,7 +153,7 @@ export default function AboutContent() {
                   <li key={tool.slug} className="list-none">
                     <Link
                       href={localizedPath(locale, `/tools/${tool.slug}`)}
-                      className="text-sm text-primary-600 hover:underline dark:text-primary-400"
+                      className="text-sm text-accent hover:underline"
                     >
                       {tool.title}
                     </Link>

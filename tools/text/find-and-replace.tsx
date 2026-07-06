@@ -58,7 +58,7 @@ export default function FindAndReplace() {
             value={find}
             onChange={(e) => setFind(e.target.value)}
             placeholder={t.findPlaceholder}
-            className="input-field mt-1 w-full font-mono"
+            className="input-field ltr-input mt-1 w-full font-mono"
             dir="ltr"
           />
         </label>
@@ -69,7 +69,7 @@ export default function FindAndReplace() {
             value={replacement}
             onChange={(e) => setReplacement(e.target.value)}
             placeholder={t.replacePlaceholder}
-            className="input-field mt-1 w-full font-mono"
+            className="input-field ltr-input mt-1 w-full font-mono"
             dir="ltr"
           />
         </label>

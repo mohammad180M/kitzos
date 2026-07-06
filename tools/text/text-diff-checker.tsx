@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import * as Diff from "diff";
 import { useTextToolLabels } from "@/lib/i18n/use-text-tool-labels";
+import { useUnsavedWork } from "@/lib/unsaved-work";
 
 const CONTEXT_LINES = 3;
 const MIN_LINES_FOR_CONTEXT = 24;
@@ -229,6 +230,8 @@ export default function TextDiffChecker() {
   const [original, setOriginal] = useState("The quick brown fox\njumps over the lazy dog.");
   const [changed, setChanged] = useState("The quick brown fox\nleaps over the lazy dog.");
 
+  useUnsavedWork(Boolean(original.trim() || changed.trim()));
+
   const displayRows = useMemo(() => {
     if (!original && !changed) return [];
     const rows = buildDiffRows(original, changed);
@@ -251,7 +254,7 @@ export default function TextDiffChecker() {
             value={original}
             onChange={(e) => setOriginal(e.target.value)}
             rows={10}
-            className="input-field mt-1 resize-y font-mono text-sm"
+            className="input-field ltr-input mt-1 resize-y font-mono text-sm"
             spellCheck={false}
           />
         </div>
@@ -264,7 +267,7 @@ export default function TextDiffChecker() {
             value={changed}
             onChange={(e) => setChanged(e.target.value)}
             rows={10}
-            className="input-field mt-1 resize-y font-mono text-sm"
+            className="input-field ltr-input mt-1 resize-y font-mono text-sm"
             spellCheck={false}
           />
         </div>

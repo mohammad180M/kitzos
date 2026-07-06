@@ -88,7 +88,7 @@ export default function RegexTester() {
           value={pattern}
           onChange={(e) => setPattern(e.target.value)}
           placeholder={ui.patternPlaceholder}
-          className="input-field font-mono text-sm"
+          className="input-field ltr-input font-mono text-sm"
           spellCheck={false}
           dir="ltr"
         />

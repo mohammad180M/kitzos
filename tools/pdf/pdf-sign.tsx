@@ -1,12 +1,23 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { PDFDocument } from "pdf-lib";
 import { Download, Loader2, Upload } from "lucide-react";
 import { setupCanvas } from "@/lib/canvas-utils";
 import { downloadBlob } from "@/lib/download";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
 import { usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
+import { useUnsavedWork } from "@/lib/unsaved-work";
+
+function loadPdfLib() {
+  return import("pdf-lib");
+}
+
+let pdfLibPromise: ReturnType<typeof loadPdfLib> | undefined;
+
+function getPdfLib() {
+  if (!pdfLibPromise) pdfLibPromise = loadPdfLib();
+  return pdfLibPromise;
+}
 
 const PAD_WIDTH = 400;
 const PAD_HEIGHT = 150;
@@ -45,6 +56,8 @@ export default function PdfSign() {
   const [pageRange, setPageRange] = useState("1");
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useUnsavedWork(pdfFile !== null);
 
   const startDraw = (e: React.PointerEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
@@ -97,6 +110,7 @@ export default function PdfSign() {
     setPdfFile(file);
     setError(null);
     try {
+      const { PDFDocument } = await getPdfLib();
       const pdfDoc = await PDFDocument.load(await file.arrayBuffer());
       const count = pdfDoc.getPageCount();
       setPageCount(count);
@@ -126,6 +140,7 @@ export default function PdfSign() {
     setProcessing(true);
     setError(null);
     try {
+      const { PDFDocument } = await getPdfLib();
       const sigBlob = await new Promise<Blob>((resolve, reject) => {
         canvasRef.current!.toBlob((b) => (b ? resolve(b) : reject()), "image/png");
       });

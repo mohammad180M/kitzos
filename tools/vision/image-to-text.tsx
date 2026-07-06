@@ -5,6 +5,7 @@ import { Copy, Loader2, RotateCw, Upload } from "lucide-react";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { loadImageFromFile, prepareOcrCanvas } from "@/lib/ocr-preprocess";
+import { useUnsavedWork } from "@/lib/unsaved-work";
 
 type OcrLang = "eng" | "ara" | "eng+ara";
 
@@ -29,6 +30,8 @@ export default function ImageToText() {
   const [ocrLang, setOcrLang] = useState<OcrLang>(locale === "ar" ? "ara" : "eng");
   const [enhanceImage, setEnhanceImage] = useState(true);
   const [rotation, setRotation] = useState(0);
+
+  useUnsavedWork(preview !== null);
 
   const ocr = t.imageToText;
 
@@ -227,7 +230,7 @@ export default function ImageToText() {
             readOnly
             value={text}
             rows={10}
-            className="input-field font-mono text-sm"
+            className="input-field ltr-input font-mono text-sm"
             aria-label={ocr.extractedText}
             dir="auto"
           />

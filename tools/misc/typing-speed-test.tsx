@@ -95,7 +95,7 @@ export default function TypingSpeedTest() {
         disabled={finished}
         placeholder={t.placeholder}
         rows={4}
-        className="input-field resize-none font-mono text-sm"
+        className="input-field ltr-input resize-none font-mono text-sm"
         spellCheck={false}
         autoComplete="off"
         autoCorrect="off"

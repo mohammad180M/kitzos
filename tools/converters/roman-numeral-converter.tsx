@@ -43,7 +43,7 @@ export default function RomanNumeralConverter() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder={mode === "to-roman" ? t.placeholderNum : t.placeholderRoman}
-          className="input-field mt-1 w-full font-mono"
+          className="input-field ltr-input mt-1 w-full font-mono"
           dir="ltr"
         />
       </label>

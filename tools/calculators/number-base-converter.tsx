@@ -18,7 +18,7 @@ export default function NumberBaseConverter() {
     <div className="space-y-4">
       <label className="block">
         <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.input}</span>
-        <input type="text" value={value} onChange={(e) => setValue(e.target.value.toUpperCase())} className="input-field mt-1 w-full font-mono" dir="ltr" />
+        <input type="text" value={value} onChange={(e) => setValue(e.target.value.toUpperCase())} className="input-field ltr-input mt-1 w-full font-mono" dir="ltr" />
       </label>
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="block">

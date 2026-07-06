@@ -5,6 +5,7 @@ import { Download, Loader2, Mic, Square } from "lucide-react";
 import { downloadBlob } from "@/lib/download";
 import { decodeAudioFile, encodeMp3, encodeWav } from "@/lib/audio-utils";
 import { useAudioToolLabels } from "@/lib/i18n/use-audio-tool-labels";
+import { useUnsavedWork } from "@/lib/unsaved-work";
 
 type ExportFormat = "webm" | "mp3" | "wav";
 
@@ -14,6 +15,8 @@ export default function VoiceRecorder() {
   const [blob, setBlob] = useState<Blob | null>(null);
   const [playbackUrl, setPlaybackUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  useUnsavedWork(blob !== null);
   const [seconds, setSeconds] = useState(0);
   const [exporting, setExporting] = useState(false);
   const recorderRef = useRef<MediaRecorder | null>(null);

@@ -1,4 +1,5 @@
 declare module "piexifjs" {
+  // Unmaintained package — pinned deliberately; see exif-remover tool.
   interface ExifObject {
     "0th"?: Record<number, unknown>;
     Exif?: Record<number, unknown>;

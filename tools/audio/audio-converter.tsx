@@ -10,6 +10,7 @@ import {
   isAudioFile,
 } from "@/lib/audio-utils";
 import { useAudioToolLabels } from "@/lib/i18n/use-audio-tool-labels";
+import { useUnsavedWork } from "@/lib/unsaved-work";
 
 type OutputFormat = "mp3" | "wav";
 
@@ -20,6 +21,8 @@ export default function AudioConverter() {
   const [output, setOutput] = useState<OutputFormat>("mp3");
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useUnsavedWork(file !== null);
 
   const convert = async (f: File) => {
     if (!isAudioFile(f)) {

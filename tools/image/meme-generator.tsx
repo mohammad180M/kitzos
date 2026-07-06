@@ -6,6 +6,7 @@ import { setupCanvas, canvasToBlob } from "@/lib/canvas-utils";
 import { downloadBlob } from "@/lib/download";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
 import { useImageToolsExtraLabels } from "@/lib/i18n/use-image-tools-extra-labels";
+import { useUnsavedWork } from "@/lib/unsaved-work";
 
 const CANVAS_WIDTH = 600;
 
@@ -29,6 +30,8 @@ export default function MemeGenerator() {
   const [bottomText, setBottomText] = useState("BOTTOM TEXT");
   const [fontId, setFontId] = useState<(typeof FONT_OPTIONS)[number]["id"]>("impact");
   const [hasImage, setHasImage] = useState(false);
+
+  useUnsavedWork(hasImage);
 
   const fontCss = FONT_OPTIONS.find((f) => f.id === fontId)?.css ?? FONT_OPTIONS[0].css;
 
