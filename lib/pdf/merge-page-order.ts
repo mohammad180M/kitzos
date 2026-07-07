@@ -49,7 +49,6 @@ export const MERGE_FILE_COLORS = [
   "var(--cat-converters)",
   "var(--cat-calculators)",
   "var(--cat-audio)",
-  "var(--cat-vision)",
   "var(--cat-misc)",
 ] as const;
 

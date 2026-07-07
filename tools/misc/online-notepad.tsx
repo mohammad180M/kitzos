@@ -83,10 +83,6 @@ export default function OnlineNotepad() {
         className="input-field ltr-input resize-y font-mono text-sm leading-relaxed"
         aria-label={t.ariaLabel}
       />
-
-      <p className="text-xs text-gray-400 dark:text-gray-500">
-        {t.storageHint}
-      </p>
     </div>
   );
 }

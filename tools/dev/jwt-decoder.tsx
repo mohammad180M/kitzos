@@ -55,11 +55,6 @@ export default function JwtDecoder() {
 
   return (
     <div className="space-y-4" dir={locale === "ar" ? "rtl" : "ltr"}>
-      <div className="tool-notice tool-notice--warning tool-notice--dev" role="note">
-        <p className="font-medium">{ui.securityNoticeTitle}</p>
-        <p className="mt-1">{ui.securityNotice}</p>
-      </div>
-
       <div>
         <label htmlFor="jwt-input" className="text-sm font-medium text-gray-700 dark:text-gray-300">
           {ui.tokenLabel}

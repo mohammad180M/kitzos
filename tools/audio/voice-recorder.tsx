@@ -165,9 +165,6 @@ export default function VoiceRecorder() {
         </p>
       )}
 
-      <p className="tool-notice tool-notice--audio">
-        {t.privacyNote}
-      </p>
     </div>
   );
 }

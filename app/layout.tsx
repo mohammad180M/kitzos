@@ -10,7 +10,6 @@ import { fontVariables } from "@/lib/fonts";
 
 export const metadata: Metadata = {
   ...getBaseMetadata(),
-  manifest: "/site.webmanifest",
   icons: getSiteIconsMetadata(),
 };
 
@@ -31,6 +30,7 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://www.highperformanceformat.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://www.highperformanceformat.com" />
+        <link rel="manifest" href="/site.webmanifest" />
         <link rel="alternate" type="application/rss+xml" title="kitzos tools feed" href="/feed.xml" />
         <script
           id="kitzos-theme-init"

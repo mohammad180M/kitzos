@@ -4,39 +4,39 @@ export const howTo: HowToStep[] = [
   {
     title: "Paste your text",
     description:
-      "Paste or type text that contains unwanted line breaks or extra spacing.",
+      "Paste or type text with unwanted line breaks, extra spaces, or blank lines.",
   },
   {
-    title: "Select a cleaning option",
+    title: "Choose cleanup toggles",
     description:
-      "Remove all line breaks, remove extra spaces while keeping paragraphs, or convert breaks to single spaces.",
+      "Turn on the options you need — remove line breaks, collapse spaces, drop blank lines, or trim line edges. Each works independently and updates live.",
   },
   {
     title: "Copy the result",
     description:
-      "The cleaned text appears instantly below. Click Copy to use it elsewhere.",
+      "The cleaned text appears instantly below with before/after character and line counts. Click Copy to use it elsewhere.",
   },
 ];
 
 export const faq: FaqItem[] = [
   {
-    question: "When should I remove all line breaks?",
+    question: "What does each toggle do?",
     answer:
-      "Use this when text copied from a PDF or email has hard wraps and you need one continuous line.",
+      "Remove line breaks joins lines into one block (optionally with a space between them). Collapse multiple spaces turns runs of spaces and tabs into a single space. Remove blank lines drops empty lines. Trim line edges removes leading and trailing whitespace on each line.",
   },
   {
-    question: "What does remove extra spaces do?",
+    question: "Should I join lines directly or replace breaks with a space?",
     answer:
-      "It collapses multiple spaces and tabs into one while keeping paragraph breaks intact.",
+      "Join directly when you want one continuous string (e.g. text copied from a PDF). Replace breaks with a space when words on separate lines should stay separated — like turning hard-wrapped paragraphs into normal sentences.",
   },
   {
-    question: "Is this useful for CSV or code?",
+    question: "Is Arabic text safe?",
     answer:
-      "It helps clean prose and pasted content. For structured data, review the output carefully before use.",
+      "Yes. This tool only changes whitespace characters (spaces, tabs, and line breaks). Arabic letters and diacritics (tashkeel) are left untouched.",
   },
   {
     question: "Is my text stored anywhere?",
     answer:
-      "No. All processing happens in your browser and nothing is saved.",
+      "No. All processing happens in your browser and nothing is saved or uploaded.",
   },
 ];

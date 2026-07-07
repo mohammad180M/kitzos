@@ -680,44 +680,31 @@ export const toolsLite: ToolLite[] = [
     "category": "text",
     "icon": "WrapText",
     "title": "Remove Line Breaks",
-    "description": "Clean up text by removing line breaks, extra spaces, or converting breaks to spaces.",
+    "description": "Remove line breaks, extra spaces, and blank lines from text instantly.",
     "keywords": [
       "remove line breaks",
       "delete line breaks",
       "clean text",
-      "remove newlines"
+      "remove newlines",
+      "remove whitespace",
+      "trim lines",
+      "clean spaces",
+      "remove blank lines",
+      "extra spaces"
     ],
     "titleAr": "إزالة فواصل الأسطر",
-    "descriptionAr": "نظّف النص بإزالة فواصل الأسطر والمسافات الزائدة أو بتحويل الفواصل إلى مسافات.",
+    "descriptionAr": "أزل فواصل الأسطر والمسافات الزائدة والأسطر الفارغة من النص فوراً.",
     "keywordsAr": [
       "إزالة فواصل الأسطر",
       "حذف فواصل الأسطر",
       "تنظيف النص",
-      "إزالة الأسطر الجديدة"
-    ]
-  },
-  {
-    "slug": "whitespace-remover",
-    "category": "text",
-    "icon": "WrapText",
-    "title": "Whitespace Remover",
-    "description": "Trim lines, collapse extra spaces, and remove blank lines from messy text.",
-    "keywords": [
-      "remove whitespace",
-      "trim lines",
-      "clean spaces",
-      "remove blank lines"
-    ],
-    "titleAr": "إزالة المسافات الزائدة",
-    "descriptionAr": "قصّ الأسطر واضغط المسافات المتعددة وأزل الأسطر الفارغة من النص غير المنظم.",
-    "keywordsAr": [
+      "إزالة الأسطر الجديدة",
       "ازالة مسافات",
-      "تنظيف نص",
-      "trim lines",
+      "تنظيف مسافات",
       "حذف اسطر فارغة",
-      "تنظيف مسافات"
-    ],
-    "isNew": true
+      "قص اسطر",
+      "مسافات زائدة"
+    ]
   },
   {
     "slug": "markdown-to-html",
@@ -2339,31 +2326,6 @@ export const toolsLite: ToolLite[] = [
       "مسجل صوت",
       "تسجيل ميكروفون",
       "مذكرة صوتية"
-    ]
-  },
-  {
-    "slug": "image-to-text",
-    "category": "vision",
-    "icon": "ScanLine",
-    "title": "Image to Text — Extract Text from Images (OCR)",
-    "description": "Convert image to text for free. Extract Arabic and English text from images right in your browser. No upload, no sign-up, no limits — fully private.",
-    "keywords": [
-      "image to text",
-      "convert image to text",
-      "extract text from image",
-      "ocr online free",
-      "arabic ocr",
-      "image to text ocr"
-    ],
-    "titleAr": "تحويل الصورة إلى نص — استخراج النص من الصور (OCR)",
-    "descriptionAr": "حوّل الصورة إلى نص مجاناً واستخرج النص العربي والإنجليزي من الصور مباشرة في متصفحك. بدون رفع، بدون تسجيل، وبدون حدود — خصوصية كاملة.",
-    "keywordsAr": [
-      "تحويل الصورة الى نص",
-      "استخراج النص من الصور",
-      "استخراج نص من صورة عربي",
-      "تحويل صورة لنص اونلاين مجانا",
-      "ocr عربي",
-      "تفريغ نص صورة"
     ]
   }
 ] as ToolLite[];

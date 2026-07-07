@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import type { FaqItem } from "@/lib/seo";
-import { generateFaqSchema } from "@/lib/seo";
 
 interface FaqAccordionProps {
   faqs: FaqItem[];
@@ -16,15 +15,8 @@ export default function FaqAccordion({
 }: FaqAccordionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
-  const faqSchema = generateFaqSchema(faqs);
-
   return (
     <section aria-labelledby="faq-heading">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
-
       <h2 id="faq-heading" className="font-display text-xl font-semibold text-foreground">
         {title}
       </h2>

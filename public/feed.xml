@@ -183,13 +183,7 @@
       <title>Remove Line Breaks</title>
       <link>https://kitzos.com/en/tools/remove-line-breaks/</link>
       <guid isPermaLink="true">https://kitzos.com/en/tools/remove-line-breaks/</guid>
-      <description>Clean up text by removing line breaks, extra spaces, or converting breaks to spaces.</description>
-    </item>
-    <item>
-      <title>Whitespace Remover</title>
-      <link>https://kitzos.com/en/tools/whitespace-remover/</link>
-      <guid isPermaLink="true">https://kitzos.com/en/tools/whitespace-remover/</guid>
-      <description>Trim lines, collapse extra spaces, and remove blank lines from messy text.</description>
+      <description>Remove line breaks, extra spaces, and blank lines from text instantly.</description>
     </item>
     <item>
       <title>Markdown to HTML</title>
@@ -628,12 +622,6 @@
       <link>https://kitzos.com/en/tools/voice-recorder/</link>
       <guid isPermaLink="true">https://kitzos.com/en/tools/voice-recorder/</guid>
       <description>Record voice from your microphone and download instantly. Private browser recording.</description>
-    </item>
-    <item>
-      <title>Image to Text — Extract Text from Images (OCR)</title>
-      <link>https://kitzos.com/en/tools/image-to-text/</link>
-      <guid isPermaLink="true">https://kitzos.com/en/tools/image-to-text/</guid>
-      <description>Convert image to text for free. Extract Arabic and English text from images right in your browser. No upload, no sign-up, no limits — fully private.</description>
     </item>
   </channel>
 </rss>

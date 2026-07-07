@@ -6,8 +6,7 @@ export type CategoryId =
   | "calculators"
   | "converters"
   | "misc"
-  | "audio"
-  | "vision";
+  | "audio";
 
 export interface Category {
   id: CategoryId;
@@ -64,12 +63,6 @@ export const categories: Category[] = [
     name: "Audio Tools",
     icon: "Mic",
     description: "Cut, convert, merge, and record audio entirely in your browser.",
-  },
-  {
-    id: "vision",
-    name: "Vision & OCR",
-    icon: "ScanLine",
-    description: "Extract text from images with optical character recognition.",
   },
 ];
 

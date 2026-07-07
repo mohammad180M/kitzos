@@ -53,7 +53,8 @@
     "relatedTools": "Related tools",
     "faq": "Frequently Asked Questions",
     "breadcrumbAria": "Breadcrumb",
-    "advertisementAria": "Advertisement"
+    "advertisementAria": "Advertisement",
+    "privacyBadge": "Runs locally — nothing is uploaded"
   },
   "ads": {
     "label": "Advertisement",
@@ -91,8 +92,6 @@
     "copyHeader": "Copy header",
     "copyPayload": "Copy payload",
     "expired": "Expired",
-    "securityNoticeTitle": "Security notice",
-    "securityNotice": "This tool decodes tokens only — it does not verify signatures. Nothing is sent to any server. Do not paste sensitive production tokens.",
     "claimExp": "Expires (exp)",
     "claimIat": "Issued at (iat)",
     "claimNbf": "Not before (nbf)",
@@ -157,20 +156,5 @@
         "caseInsensitive": false
       }
     ]
-  },
-  "imageToText": {
-    "ocrLanguage": "OCR language",
-    "langEng": "English",
-    "langAra": "Arabic",
-    "langBoth": "English + Arabic",
-    "enhance": "Enhance image before OCR",
-    "tip": "For best accuracy: use a clear image with large text and good lighting. Avoid tilted or faded photos.",
-    "upload": "Upload image to extract text",
-    "extract": "Extract text",
-    "rotate": "Rotate 90°",
-    "progress": "Processing…",
-    "extractedText": "Extracted text",
-    "error": "OCR failed. Try a clearer image or another language.",
-    "previewAlt": "Uploaded for OCR"
   }
 }

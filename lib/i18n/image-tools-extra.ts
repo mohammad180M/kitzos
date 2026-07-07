@@ -104,8 +104,6 @@ export const imageToolsExtraEn = {
     outputSize: "Converted",
     downloadJpg: "Download JPG",
     downloadZip: (n: number) => `Download ${n} images (ZIP)`,
-    localNote:
-      "Conversion runs 100% in your browser — files never leave your device.",
     errConvertFailed: "Conversion failed. Try another file.",
     errInvalidFiles: "Please upload HEIC or HEIF files.",
     converting: "Converting…",
@@ -131,7 +129,7 @@ export const imageToolsExtraEn = {
     removeSelected: (n: number) => `Remove selected (${n}) & download`,
     doneSingle: "Clean image downloaded successfully.",
     doneMultiple: "Clean images downloaded successfully.",
-    privacyNote:
+    selectionHint:
       "Sensitive fields (GPS, serial numbers, comments) are pre-selected. JPEG files keep unchecked metadata; PNG/WebP are re-encoded without all metadata.",
     errInvalidFiles: "Please upload valid image files.",
     errReadMetadata: "Could not read metadata from files.",
@@ -176,8 +174,6 @@ export const imageToolsExtraEn = {
     regions: "Regions",
     regionItem: (n: number) => `Region ${n}`,
     deleteRegion: "Remove",
-    privacyNote:
-      "All processing happens in your browser. Your image never leaves your device.",
   },
   imageWatermark: {
     watermarkText: "Watermark text",
@@ -347,8 +343,6 @@ export const imageToolsExtraAr = {
     outputSize: "المحوّل",
     downloadJpg: "تنزيل JPG",
     downloadZip: (n: number) => `تنزيل ${n} صور (ZIP)`,
-    localNote:
-      "التحويل يتم بالكامل في متصفحك — الملفات لا تغادر جهازك أبداً.",
     errConvertFailed: "فشل التحويل. جرّب ملفاً آخر.",
     errInvalidFiles: "يرجى رفع ملفات HEIC أو HEIF.",
     converting: "جاري التحويل…",
@@ -374,7 +368,7 @@ export const imageToolsExtraAr = {
     removeSelected: (n: number) => `إزالة المحدد (${n}) وتنزيل`,
     doneSingle: "تم تنزيل الصورة النظيفة بنجاح.",
     doneMultiple: "تم تنزيل الصور النظيفة بنجاح.",
-    privacyNote:
+    selectionHint:
       "الحقول الحساسة (GPS، الأرقام التسلسلية، التعليقات) محددة مسبقاً. JPEG يحتفظ بالبيانات غير المحددة؛ PNG/WebP تُعاد ترميزها بدون كل البيانات الوصفية.",
     errInvalidFiles: "يرجى رفع ملفات صور صالحة.",
     errReadMetadata: "تعذّر قراءة البيانات الوصفية من الملفات.",
@@ -419,7 +413,6 @@ export const imageToolsExtraAr = {
     regions: "المناطق",
     regionItem: (n: number) => `منطقة ${n}`,
     deleteRegion: "إزالة",
-    privacyNote: "كل المعالجة تتم في متصفحك. صورتك لا تغادر جهازك أبداً.",
   },
   imageWatermark: {
     watermarkText: "نص العلامة المائية",

@@ -118,8 +118,6 @@ export const pdfToolsEn = {
     protectAndDownload: "Protect & Download",
     errNeedPassword: "Upload a PDF and enter a password.",
     errProtectFailed: "Could not protect PDF. Try a different file or password.",
-    privacyNote:
-      "Uses qpdf (WASM) locally in your browser — standard PDF password encryption, nothing uploaded.",
   },
   rotatePdf: {
     uploadHint: "Upload a PDF to rotate",
@@ -308,8 +306,6 @@ export const pdfToolsAr = {
     protectAndDownload: "حماية وتنزيل",
     errNeedPassword: "ارفع PDF وأدخل كلمة مرور.",
     errProtectFailed: "تعذّر حماية PDF. جرّب ملفاً أو كلمة مرور مختلفة.",
-    privacyNote:
-      "يستخدم qpdf (WASM) محلياً في متصفحك — تشفير PDF قياسي، لا يُرفع شيء إلى خوادمنا.",
   },
   rotatePdf: {
     uploadHint: "ارفع PDF للتدوير",

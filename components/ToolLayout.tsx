@@ -6,6 +6,7 @@ import { getCategoryById } from "@/lib/categories";
 import { categoryColorVar } from "@/lib/category-colors";
 import {
   generateBreadcrumbSchema,
+  generateFaqSchema,
   generateHowToSchema,
   generateSoftwareApplicationSchema,
   generateToolBreadcrumbs,
@@ -17,6 +18,7 @@ import { localizedPath } from "@/lib/i18n/routing";
 import type { Locale } from "@/lib/i18n/types";
 import FaqAccordion from "./FaqAccordion";
 import JsonLd from "./JsonLd";
+import PrivacyBadge from "./PrivacyBadge";
 import ToolCard from "./ToolCard";
 import ToolPageAd from "./ToolPageAd";
 import Footer from "./Footer";
@@ -50,7 +52,13 @@ export default function ToolLayout({
   const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs);
   const softwareSchema = generateSoftwareApplicationSchema(tool, locale);
   const howToSchema = generateHowToSchema(tool, locale, howTo);
-  const jsonLd = [breadcrumbSchema, softwareSchema, ...(howToSchema ? [howToSchema] : [])];
+  const faqSchema = faq.length > 0 ? generateFaqSchema(faq) : null;
+  const jsonLd = [
+    breadcrumbSchema,
+    softwareSchema,
+    ...(howToSchema ? [howToSchema] : []),
+    ...(faqSchema ? [faqSchema] : []),
+  ];
 
   const displayCrumbs = [
     { name: t.common.home, href: localizedPath(locale, "/") },
@@ -97,6 +105,10 @@ export default function ToolLayout({
             {title}
           </h1>
           <p className="mt-2 text-lg text-muted">{description}</p>
+          {/* Privacy messaging lives HERE only — never add per-tool privacy notices. */}
+          <div className="mt-3">
+            <PrivacyBadge locale={locale} category={tool.category} />
+          </div>
         </header>
 
         <div className="tool-bench-card mb-8">{children}</div>

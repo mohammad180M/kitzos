@@ -304,10 +304,6 @@ export default function BlurImage() {
           </button>
         </>
       )}
-
-      <p className="tool-notice tool-notice--image">
-        {t.privacyNote}
-      </p>
     </div>
   );
 }

@@ -60,6 +60,7 @@ export interface Dictionary {
     faq: string;
     breadcrumbAria: string;
     advertisementAria: string;
+    privacyBadge: string;
   };
   ads: {
     label: string;
@@ -97,8 +98,6 @@ export interface Dictionary {
     copyHeader: string;
     copyPayload: string;
     expired: string;
-    securityNoticeTitle: string;
-    securityNotice: string;
     claimExp: string;
     claimIat: string;
     claimNbf: string;
@@ -149,20 +148,5 @@ export interface Dictionary {
       text: string;
       caseInsensitive: boolean;
     }>;
-  };
-  imageToText: {
-    ocrLanguage: string;
-    langEng: string;
-    langAra: string;
-    langBoth: string;
-    enhance: string;
-    tip: string;
-    upload: string;
-    extract: string;
-    rotate: string;
-    progress: string;
-    extractedText: string;
-    error: string;
-    previewAlt: string;
   };
 }

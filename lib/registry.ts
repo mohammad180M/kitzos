@@ -219,10 +219,21 @@ const toolDefinitions: Tool[] = [
   {
     slug: "remove-line-breaks",
     title: "Remove Line Breaks",
-    description: "Clean up text by removing line breaks, extra spaces, or converting breaks to spaces.",
+    description:
+      "Remove line breaks, extra spaces, and blank lines from text instantly.",
     category: "text",
     icon: "WrapText",
-    keywords: ["remove line breaks", "delete line breaks", "clean text", "remove newlines"],
+    keywords: [
+      "remove line breaks",
+      "delete line breaks",
+      "clean text",
+      "remove newlines",
+      "remove whitespace",
+      "trim lines",
+      "clean spaces",
+      "remove blank lines",
+      "extra spaces",
+    ],
   },
   {
     slug: "word-frequency-counter",
@@ -276,15 +287,6 @@ const toolDefinitions: Tool[] = [
     category: "text",
     icon: "Search",
     keywords: ["find and replace", "text replace", "regex replace", "bulk replace"],
-    isNew: true,
-  },
-  {
-    slug: "whitespace-remover",
-    title: "Whitespace Remover",
-    description: "Trim lines, collapse extra spaces, and remove blank lines from messy text.",
-    category: "text",
-    icon: "WrapText",
-    keywords: ["remove whitespace", "trim lines", "clean spaces", "remove blank lines"],
     isNew: true,
   },
   {
@@ -651,22 +653,6 @@ const toolDefinitions: Tool[] = [
     category: "audio",
     icon: "Mic",
     keywords: ["online voice recorder", "record audio online", "microphone recorder", "voice memo online"],
-  },
-  {
-    slug: "image-to-text",
-    title: "Image to Text — Extract Text from Images (OCR)",
-    description:
-      "Convert image to text for free. Extract Arabic and English text from images right in your browser. No upload, no sign-up, no limits — fully private.",
-    category: "vision",
-    icon: "ScanLine",
-    keywords: [
-      "image to text",
-      "convert image to text",
-      "extract text from image",
-      "ocr online free",
-      "arabic ocr",
-      "image to text ocr",
-    ],
   },
   {
     slug: "rotate-pdf",

@@ -50,61 +50,6 @@ export const extraToolContent: Record<string, ToolContent> = {
       { question: "Which browsers work?", answer: "Modern Chrome, Firefox, Safari, and Edge with MediaRecorder support." },
     ]
   ),
-  "image-to-text": content(
-    [
-      {
-        title: "Choose text language",
-        description:
-          "Select English, Arabic, or both for mixed documents. For best Arabic accuracy, choose Arabic only.",
-      },
-      {
-        title: "Upload your image",
-        description:
-          "Drop a clear photo or screenshot (JPG, PNG, WebP). Processing happens in your browser — your image is never uploaded to any server.",
-      },
-      {
-        title: "Improve accuracy (optional)",
-        description:
-          "Enable image enhancement or rotate a tilted photo for a more accurate result.",
-      },
-      {
-        title: "Copy the text",
-        description: "Review the extracted text and copy it with one click.",
-      },
-    ],
-    [
-      {
-        question: "How do I convert an image to text for free?",
-        answer:
-          "Upload the image, choose the language, and the tool will extract text automatically using OCR. Completely free, no sign-up, and runs right in your browser.",
-      },
-      {
-        question: "Does the tool support extracting Arabic text from images?",
-        answer:
-          'Yes, it supports Arabic and English. For best Arabic accuracy, choose "Arabic only" and use a clear image with readable text.',
-      },
-      {
-        question: "Are my images uploaded to a server?",
-        answer:
-          "No. All processing happens entirely inside your browser, and your image never leaves your device — complete privacy, unlike tools that upload your files.",
-      },
-      {
-        question: "Is there a limit on the number or size of images?",
-        answer:
-          "There is no limit on the number of images. The tool has no daily caps and no subscription, unlike many sites that limit you to a few images per hour.",
-      },
-      {
-        question: "How accurate is Arabic text extraction?",
-        answer:
-          "Accuracy is good on clear text. For best results, use a high-quality image with large text and enable image enhancement. Tilted or faded images reduce accuracy.",
-      },
-      {
-        question: "What image formats are supported?",
-        answer:
-          "JPG, PNG, WebP, and screenshots. You can upload any image that contains readable text.",
-      },
-    ]
-  ),
   "pdf-sign": content(
     [
       { title: "Upload PDF", description: "Select the PDF you want to sign." },
@@ -617,17 +562,6 @@ export const extraToolContent: Record<string, ToolContent> = {
     [
       { question: "Does regex mode use JavaScript syntax?", answer: "Yes. Patterns follow JavaScript RegExp rules with global replace." },
       { question: "Can I undo a replace?", answer: "Use your browser undo in the textarea or re-paste the original text." },
-    ]
-  ),
-  "whitespace-remover": content(
-    [
-      { title: "Paste messy text", description: "Enter text with extra spaces, trailing whitespace, or blank lines." },
-      { title: "Choose cleanup options", description: "Trim lines, collapse multiple spaces, and remove empty lines." },
-      { title: "Copy clean text", description: "Use the normalized output in code, forms, or documents." },
-    ],
-    [
-      { question: "Are tabs handled?", answer: "Extra spaces and tabs within lines can be collapsed to single spaces." },
-      { question: "Will paragraph breaks remain?", answer: "Blank-line removal is optional; enable only when you want tighter text." },
     ]
   ),
   "text-to-ascii-art": content(

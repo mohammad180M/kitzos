@@ -32,8 +32,7 @@
 - [Case Converter](https://kitzos.com/en/tools/case-converter/): Convert text to uppercase, lowercase, title case, camelCase, and more.
 - [Password Generator](https://kitzos.com/en/tools/password-generator/): Create strong random passwords with customizable length and character sets.
 - [Find and Replace](https://kitzos.com/en/tools/find-and-replace/): Search and replace text with optional regex support. Replace all matches at once.
-- [Remove Line Breaks](https://kitzos.com/en/tools/remove-line-breaks/): Clean up text by removing line breaks, extra spaces, or converting breaks to spaces.
-- [Whitespace Remover](https://kitzos.com/en/tools/whitespace-remover/): Trim lines, collapse extra spaces, and remove blank lines from messy text.
+- [Remove Line Breaks](https://kitzos.com/en/tools/remove-line-breaks/): Remove line breaks, extra spaces, and blank lines from text instantly.
 - [Markdown to HTML](https://kitzos.com/en/tools/markdown-to-html/): Convert Markdown to HTML with a live preview and copy-ready output.
 - [Lorem Ipsum Generator](https://kitzos.com/en/tools/lorem-ipsum-generator/): Generate placeholder paragraphs, sentences, or words for mockups and drafts.
 - [Text Diff Checker](https://kitzos.com/en/tools/text-diff-checker/): Compare two texts side by side with highlighted additions and deletions.
@@ -107,7 +106,6 @@
 - [Audio Converter](https://kitzos.com/en/tools/audio-converter/): Convert WAV to MP3 and other audio formats locally using Web Audio API.
 - [Audio Merger](https://kitzos.com/en/tools/audio-merger/): Merge multiple audio files into one track. Combine clips in order and download.
 - [Online Voice Recorder](https://kitzos.com/en/tools/voice-recorder/): Record voice from your microphone and download instantly. Private browser recording.
-- [Image to Text — Extract Text from Images (OCR)](https://kitzos.com/en/tools/image-to-text/): Convert image to text for free. Extract Arabic and English text from images right in your browser. No upload, no sign-up, no limits — fully private.
 
 ## Tools (العربية)
 - [دمج PDF](https://kitzos.com/ar/tools/merge-pdf/): اجمع عدة ملفات PDF في مستند واحد. اسحب لإعادة ترتيب الصفحات.
@@ -139,8 +137,7 @@
 - [محوّل حالة الأحرف](https://kitzos.com/ar/tools/case-converter/): حوّل النص إلى أحرف كبيرة أو صغيرة أو عنوان أو camelCase والمزيد.
 - [مولّد كلمات المرور](https://kitzos.com/ar/tools/password-generator/): أنشئ كلمات مرور عشوائية قوية بطول ومجموعات أحرف قابلة للتخصيص.
 - [بحث واستبدال](https://kitzos.com/ar/tools/find-and-replace/): ابحث واستبدل النص مع دعم regex اختياري. استبدل كل التطابقات دفعة واحدة.
-- [إزالة فواصل الأسطر](https://kitzos.com/ar/tools/remove-line-breaks/): نظّف النص بإزالة فواصل الأسطر والمسافات الزائدة أو بتحويل الفواصل إلى مسافات.
-- [إزالة المسافات الزائدة](https://kitzos.com/ar/tools/whitespace-remover/): قصّ الأسطر واضغط المسافات المتعددة وأزل الأسطر الفارغة من النص غير المنظم.
+- [إزالة فواصل الأسطر](https://kitzos.com/ar/tools/remove-line-breaks/): أزل فواصل الأسطر والمسافات الزائدة والأسطر الفارغة من النص فوراً.
 - [تحويل Markdown إلى HTML](https://kitzos.com/ar/tools/markdown-to-html/): حوّل Markdown إلى HTML مع معاينة مباشرة ومخرجات جاهزة للنسخ.
 - [مولّد لوريم إيبسوم](https://kitzos.com/ar/tools/lorem-ipsum-generator/): أنشئ فقرات أو جمل أو كلمات وهمية للنماذج والمسودات.
 - [مقارن النصوص](https://kitzos.com/ar/tools/text-diff-checker/): قارن نصين جنباً إلى جنب مع تمييز الإضافات والحذف.
@@ -209,12 +206,11 @@
 - [ساعة إيقاف وعداد تنازلي](https://kitzos.com/ar/tools/stopwatch-timer/): ساعة إيقاف مع لفات وتوقيت، أو عداد تنازلي مع صوت عند الانتهاء. يعمل في المتصفح.
 - [منتقي عشوائي ومولّد أرقام](https://kitzos.com/ar/tools/random-picker/): اختر اسماً أو خياراً عشوائياً من قائمة، أو أنشئ رقماً عشوائياً ضمن نطاق.
 - [اختبار سرعة الكتابة](https://kitzos.com/ar/tools/typing-speed-test/): قِس سرعة كتابتك بالكلمات في الدقيقة ودقة الإدخال باختبار مباشر.
-- [Signature Generator PNG](https://kitzos.com/ar/tools/signature-pad/): Draw a transparent signature and download as PNG for documents and forms.
+- [مولّد توقيع شفاف](https://kitzos.com/ar/tools/signature-pad/): ارسم توقيعاً بخلفية شفافة ونزّله PNG للمستندات والنماذج.
 - [قص ملف MP3](https://kitzos.com/ar/tools/mp3-cutter/): قص وتقصير ملفات الصوت في متصفحك. تصدير MP3 أو WAV دون رفع الملفات.
 - [محوّل الصوت](https://kitzos.com/ar/tools/audio-converter/): حوّل WAV إلى MP3 وصيغ أخرى محلياً عبر Web Audio API.
 - [دمج ملفات صوتية](https://kitzos.com/ar/tools/audio-merger/): ادمج عدة ملفات صوتية في مسار واحد بالترتيب الذي تختاره.
 - [تسجيل صوت أونلاين](https://kitzos.com/ar/tools/voice-recorder/): سجّل صوتك من الميكروفون ونزّل التسجيل فوراً. خاص وآمن في المتصفح.
-- [تحويل الصورة إلى نص — استخراج النص من الصور (OCR)](https://kitzos.com/ar/tools/image-to-text/): حوّل الصورة إلى نص مجاناً واستخرج النص العربي والإنجليزي من الصور مباشرة في متصفحك. بدون رفع، بدون تسجيل، وبدون حدود — خصوصية كاملة.
 
 ## Categories (English)
 - [PDF Tools](https://kitzos.com/en/pdf/): Merge, split, and work with PDF files entirely in your browser.
@@ -225,7 +221,6 @@
 - [Converters](https://kitzos.com/en/converters/): Convert units, measurements, and values instantly.
 - [Utilities](https://kitzos.com/en/misc/): Handy everyday utilities and productivity tools.
 - [Audio Tools](https://kitzos.com/en/audio/): Cut, convert, merge, and record audio entirely in your browser.
-- [Vision & OCR](https://kitzos.com/en/vision/): Extract text from images with optical character recognition.
 
 ## Categories (العربية)
 - [أدوات PDF](https://kitzos.com/ar/pdf/): دمج وتقسيم ومعالجة ملفات PDF بالكامل في متصفحك.
@@ -236,7 +231,6 @@
 - [محولات الوحدات](https://kitzos.com/ar/converters/): تحويل الوحدات والقياسات والقيم فوراً.
 - [منوعات](https://kitzos.com/ar/misc/): أدوات يومية عملية لزيادة الإنتاجية.
 - [أدوات الصوت](https://kitzos.com/ar/audio/): قص وتحويل ودمج وتسجيل الصوت بالكامل في متصفحك.
-- [الرؤية واستخراج النص](https://kitzos.com/ar/vision/): استخراج النص من الصور بتقنية التعرف الضوئي على الحروف.
 
 ## About
 - [About](https://kitzos.com/en/about/) | [من نحن](https://kitzos.com/ar/about/)

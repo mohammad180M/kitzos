@@ -103,9 +103,6 @@ export default function AudioConverter() {
         </p>
       )}
 
-      <p className="tool-notice tool-notice--audio">
-        {t.privacyNote}
-      </p>
     </div>
   );
 }

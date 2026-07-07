@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import { Download, Loader2, Shield, Upload } from "lucide-react";
+import { Download, Loader2, Upload } from "lucide-react";
 import { downloadBlob } from "@/lib/download";
 import { useImageToolsExtraLabels } from "@/lib/i18n/use-image-tools-extra-labels";
 import { useUnsavedWork } from "@/lib/unsaved-work";
@@ -159,11 +159,6 @@ export default function HeicToJpg() {
           }}
         />
       </div>
-
-      <p className="tool-notice tool-notice--image" role="status">
-        <Shield className="tool-notice__icon" aria-hidden="true" />
-        {t.localNote}
-      </p>
 
       {error && (
         <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300" role="alert">

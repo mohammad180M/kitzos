@@ -10,7 +10,6 @@ export const CATEGORY_COLORS: Record<CategoryId, string> = {
   converters: "var(--cat-converters)",
   misc: "var(--cat-misc)",
   audio: "var(--cat-audio)",
-  vision: "var(--cat-vision)",
 };
 
 export function categoryColorVar(id: CategoryId): string {

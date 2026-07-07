@@ -53,7 +53,8 @@
     "relatedTools": "أدوات ذات صلة",
     "faq": "الأسئلة الشائعة",
     "breadcrumbAria": "مسار التنقل",
-    "advertisementAria": "إعلان"
+    "advertisementAria": "إعلان",
+    "privacyBadge": "يعمل محلياً — ملفاتك لا تُرفع"
   },
   "ads": {
     "label": "إعلان",
@@ -91,8 +92,6 @@
     "copyHeader": "نسخ الـ header",
     "copyPayload": "نسخ الـ payload",
     "expired": "منتهي",
-    "securityNoticeTitle": "تنبيه أمني",
-    "securityNotice": "هذه الأداة تفك التوكن فقط ولا تتحقق من صحة التوقيع. لا يُرسل أي شيء إلى خادم. لا تلصق توكنات إنتاجية حساسة.",
     "claimExp": "انتهاء الصلاحية (exp)",
     "claimIat": "وقت الإصدار (iat)",
     "claimNbf": "لا يُقبل قبل (nbf)",
@@ -157,20 +156,5 @@
         "caseInsensitive": false
       }
     ]
-  },
-  "imageToText": {
-    "ocrLanguage": "لغة الاستخراج",
-    "langEng": "الإنجليزية",
-    "langAra": "العربية",
-    "langBoth": "عربي + إنجليزي",
-    "enhance": "تحسين الصورة قبل الاستخراج",
-    "tip": "للحصول على أفضل دقة: استخدم صورة واضحة بخط كبير وإضاءة جيدة، وتجنّب الصور المائلة أو الباهتة.",
-    "upload": "ارفع صورة لاستخراج النص",
-    "extract": "استخراج النص",
-    "rotate": "تدوير 90°",
-    "progress": "جاري المعالجة…",
-    "extractedText": "النص المستخرج",
-    "error": "فشل الاستخراج. جرّب صورة أوضح أو لغة أخرى.",
-    "previewAlt": "صورة مرفوعة للاستخراج"
   }
 }

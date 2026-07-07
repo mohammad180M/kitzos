@@ -1,3 +1,5 @@
+import { parseJsonSafe } from "@/lib/safe-json";
+
 export type CsvDelimiter = "," | ";" | "\t";
 
 export type CsvJsonError = "EMPTY_CSV" | "INVALID_JSON" | "NOT_ARRAY" | "NOT_OBJECTS";
@@ -95,12 +97,9 @@ export function jsonToCsv(
   const trimmed = jsonText.trim();
   if (!trimmed) return { csv: "" };
 
-  let parsed: unknown;
-  try {
-    parsed = JSON.parse(trimmed);
-  } catch {
-    return { error: "INVALID_JSON" };
-  }
+  const parsedResult = parseJsonSafe(trimmed);
+  if (!parsedResult.ok) return { error: "INVALID_JSON" };
+  const parsed = parsedResult.value;
 
   if (!Array.isArray(parsed)) {
     return { error: "NOT_ARRAY" };

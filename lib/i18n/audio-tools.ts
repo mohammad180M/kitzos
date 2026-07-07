@@ -21,8 +21,6 @@ export const audioToolsEn = {
     uploadHint: "Upload audio (WAV, MP3, M4A, OGG…)",
     lastConverted: (name: string) => `Last converted: ${name}`,
     errConvertFailed: "Conversion failed. Try another file or WAV output.",
-    privacyNote:
-      "Decodes in your browser via Web Audio API. MP3 encoding uses lamejs locally — nothing is uploaded.",
   },
   audioMerger: {
     addFiles: "Add audio files",
@@ -36,8 +34,6 @@ export const audioToolsEn = {
     stop: "Stop",
     errMicDenied: "Microphone access denied or unavailable.",
     errExportFailed: (format: string) => `Could not export as ${format}. Try WebM instead.`,
-    privacyNote:
-      "Recording stays on your device. Export as WebM, MP3, or WAV — nothing is uploaded.",
   },
 } as const;
 
@@ -64,8 +60,6 @@ export const audioToolsAr = {
     uploadHint: "ارفع صوتاً (WAV، MP3، M4A، OGG…)",
     lastConverted: (name: string) => `آخر تحويل: ${name}`,
     errConvertFailed: "فشل التحويل. جرّب ملفاً آخر أو مخرجات WAV.",
-    privacyNote:
-      "يُفك الترميز في متصفحك عبر Web Audio API. ترميز MP3 يستخدم lamejs محلياً — لا يُرفع شيء.",
   },
   audioMerger: {
     addFiles: "إضافة ملفات صوتية",
@@ -79,8 +73,6 @@ export const audioToolsAr = {
     stop: "إيقاف",
     errMicDenied: "تم رفض الوصول للميكروفون أو أنه غير متاح.",
     errExportFailed: (format: string) => `تعذّر التصدير كـ ${format}. جرّب WebM.`,
-    privacyNote:
-      "يبقى التسجيل على جهازك. صدّر كـ WebM أو MP3 أو WAV — لا يُرفع شيء.",
   },
 } as const;
 

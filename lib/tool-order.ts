@@ -39,7 +39,6 @@ const CATEGORY_SLUG_ORDER: Record<CategoryId, string[]> = {
     "password-generator",
     "find-and-replace",
     "remove-line-breaks",
-    "whitespace-remover",
     "markdown-to-html",
     "lorem-ipsum-generator",
     "text-diff-checker",
@@ -113,7 +112,6 @@ const CATEGORY_SLUG_ORDER: Record<CategoryId, string[]> = {
   ],
   misc: ["pomodoro-timer", "stopwatch-timer", "random-picker", "typing-speed-test", "signature-pad"],
   audio: ["mp3-cutter", "audio-converter", "audio-merger", "voice-recorder"],
-  vision: ["image-to-text"],
 };
 
 export function sortToolsByCategory<T extends SortableTool>(tools: T[]): T[] {

@@ -42,6 +42,24 @@
 /ar/tools/pixelate-image    https://kitzos.com/ar/tools/blur-image/    301
 /ar/tools/pixelate-image/   https://kitzos.com/ar/tools/blur-image/    301
 
+# whitespace-remover merged into remove-line-breaks (301, single-hop)
+/en/tools/whitespace-remover    https://kitzos.com/en/tools/remove-line-breaks/    301
+/en/tools/whitespace-remover/   https://kitzos.com/en/tools/remove-line-breaks/    301
+/ar/tools/whitespace-remover    https://kitzos.com/ar/tools/remove-line-breaks/    301
+/ar/tools/whitespace-remover/   https://kitzos.com/ar/tools/remove-line-breaks/    301
+
+# image-to-text deleted → image category (301, single-hop)
+/en/tools/image-to-text    https://kitzos.com/en/image/    301
+/en/tools/image-to-text/   https://kitzos.com/en/image/    301
+/ar/tools/image-to-text    https://kitzos.com/ar/image/    301
+/ar/tools/image-to-text/   https://kitzos.com/ar/image/    301
+
+# vision category dissolved → homepage (301, single-hop)
+/en/vision    https://kitzos.com/en/    301
+/en/vision/   https://kitzos.com/en/    301
+/ar/vision    https://kitzos.com/ar/    301
+/ar/vision/   https://kitzos.com/ar/    301
+
 # jpg-to-pdf merged into pdf-to-jpg (301, single-hop)
 /en/tools/jpg-to-pdf    https://kitzos.com/en/tools/pdf-to-jpg/    301
 /en/tools/jpg-to-pdf/   https://kitzos.com/en/tools/pdf-to-jpg/    301
@@ -69,8 +87,8 @@
 /misc/          https://kitzos.com/en/misc/           301
 /audio          https://kitzos.com/en/audio/          301
 /audio/         https://kitzos.com/en/audio/          301
-/vision         https://kitzos.com/en/vision/         301
-/vision/        https://kitzos.com/en/vision/         301
+/vision         https://kitzos.com/en/                301
+/vision/        https://kitzos.com/en/                301
 
 # Legal / info (legacy)
 /about          https://kitzos.com/en/about/          301

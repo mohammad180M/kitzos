@@ -7,5 +7,5 @@ export const POPULAR_TOOL_SLUGS = [
   "qr-code-generator",
   "password-generator",
   "jwt-decoder",
-  "image-to-text",
+  "base64",
 ] as const;

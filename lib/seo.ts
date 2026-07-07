@@ -91,9 +91,9 @@ function buildCanonicalAlternates(locale: Locale, path: string) {
 /** Meta description for the home page (~150–160 chars, natural sentence per locale). */
 export function getHomeMetaDescription(locale: Locale): string {
   if (locale === "ar") {
-    return "أدوات مجانية تعمل بالكامل في متصفحك — بدون تسجيل وبدون رفع ملفات إلى خوادمنا. PDF، صور، نصوص، مطورين، حاسبات، محولات، صوت، OCR والمزيد.";
+    return "أدوات مجانية تعمل بالكامل في متصفحك — بدون تسجيل وبدون رفع ملفات إلى خوادمنا. PDF، صور، نصوص، مطورين، حاسبات، محولات، صوت والمزيد.";
   }
-  return "Free online tools that run entirely in your browser — no signup, no uploads. PDF, images, text, dev tools, calculators, converters, audio, OCR, and more.";
+  return "Free online tools that run entirely in your browser — no signup, no uploads. PDF, images, text, dev tools, calculators, converters, audio, and more.";
 }
 
 export function getBaseMetadata(): Metadata {

@@ -1,3 +1,5 @@
+import { parseJsonSafe } from "@/lib/safe-json";
+
 function isObject(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -64,10 +66,13 @@ function renderInterface(name: string, props: Record<string, string>): string {
 }
 
 export function jsonToTypeScript(json: string, rootName = "Root"): { code: string; error?: string } {
-  try {
-    const parsed = JSON.parse(json) as unknown;
+  const parsedResult = parseJsonSafe(json);
+  if (!parsedResult.ok) {
+    return { code: "", error: "Invalid JSON" };
+  }
+  const parsed = parsedResult.value;
 
-    if (!isObject(parsed)) {
+  if (!isObject(parsed)) {
       const type = typeOfValue(parsed);
       return { code: `type ${rootName} = ${type};` };
     }
@@ -81,7 +86,4 @@ export function jsonToTypeScript(json: string, rootName = "Root"): { code: strin
     });
 
     return { code: blocks.join("\n\n") };
-  } catch {
-    return { code: "", error: "Invalid JSON" };
-  }
 }

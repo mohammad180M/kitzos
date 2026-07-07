@@ -109,7 +109,6 @@ export const miscToolsExtraEn = {
     clearConfirm: "Clear all notes? This cannot be undone.",
     placeholder: "Start typing… Your notes are saved automatically in this browser.",
     ariaLabel: "Notepad",
-    storageHint: "Notes are stored in your browser's local storage only — they are not uploaded to any server and will not sync across devices.",
   },
 } as const;
 
@@ -224,7 +223,6 @@ export const miscToolsExtraAr = {
     clearConfirm: "مسح كل الملاحظات؟ لا يمكن التراجع عن ذلك.",
     placeholder: "ابدأ الكتابة… تُحفظ ملاحظاتك تلقائياً في هذا المتصفح.",
     ariaLabel: "المفكرة",
-    storageHint: "تُخزَّن الملاحظات في التخزين المحلي للمتصفح فقط — لا تُرفع إلى أي خادم ولن تتزامن بين الأجهزة.",
   },
 } as const;
 
