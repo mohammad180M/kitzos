@@ -11,6 +11,7 @@ import {
   releasePdfDocument,
   renderPdfPageThumb,
 } from "@/lib/pdf/thumbnails";
+import { bytesForPdfLoad, pdfBytesToBlob, readPdfFileBytes } from "@/lib/pdf/bytes";
 import { useUnsavedWork } from "@/lib/unsaved-work";
 
 function loadPdfLib() {
@@ -134,8 +135,8 @@ export default function OrganizePdf() {
 
     try {
       const { PDFDocument } = await getPdfLib();
-      const sourceBytes = await file.arrayBuffer();
-      const sourcePdf = await PDFDocument.load(sourceBytes);
+      const sourceBytes = await readPdfFileBytes(file);
+      const sourcePdf = await PDFDocument.load(bytesForPdfLoad(sourceBytes));
       const outPdf = await PDFDocument.create();
       const indices = kept.map((p) => p.sourceIndex);
       const copied = await outPdf.copyPages(sourcePdf, indices);
@@ -143,7 +144,7 @@ export default function OrganizePdf() {
 
       const bytes = await outPdf.save();
       const baseName = file.name.replace(/\.pdf$/i, "") || "document";
-      downloadBlob(new Blob([new Uint8Array(bytes)], { type: "application/pdf" }), `${baseName}-organized.pdf`);
+      downloadBlob(pdfBytesToBlob(bytes), `${baseName}-organized.pdf`);
     } catch {
       setError(t.errOrganizeFailed);
     } finally {

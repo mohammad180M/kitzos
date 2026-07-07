@@ -11,6 +11,7 @@ import {
   renderPdfBytesPageThumb,
   renderPdfPageThumb,
 } from "@/lib/pdf/thumbnails";
+import { bytesForPdfLoad, pdfBytesToBlob, readPdfFileBytes } from "@/lib/pdf/bytes";
 import { useUnsavedWork } from "@/lib/unsaved-work";
 
 function loadPdfLib() {
@@ -57,7 +58,7 @@ function yieldToMain(): Promise<void> {
 
 async function compressOptimize(sourceBytes: Uint8Array): Promise<Uint8Array> {
   const { PDFDocument } = await getPdfLib();
-  const pdf = await PDFDocument.load(sourceBytes);
+  const pdf = await PDFDocument.load(bytesForPdfLoad(sourceBytes));
   return pdf.save({ useObjectStreams: true });
 }
 
@@ -140,9 +141,9 @@ export default function CompressPdf() {
     setResult(null);
     setProgress(0);
     try {
-      const bytes = new Uint8Array(await pdfFile.arrayBuffer());
+      const bytes = await readPdfFileBytes(pdfFile);
       const { PDFDocument } = await getPdfLib();
-      await PDFDocument.load(bytes);
+      await PDFDocument.load(bytesForPdfLoad(bytes));
       originalBytesRef.current = bytes;
       setFile(pdfFile);
       await loadPdfDocument(pdfFile);
@@ -273,10 +274,7 @@ export default function CompressPdf() {
 
       {file && mode === "strong" && (
         <>
-          <p
-            className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-200"
-            role="status"
-          >
+          <p className="tool-notice tool-notice--warning tool-notice--pdf" role="status">
             {t.strongWarning}
           </p>
           <div>
@@ -323,7 +321,7 @@ export default function CompressPdf() {
               onClick={() => {
                 const baseName = file?.name.replace(/\.pdf$/i, "") || "document";
                 downloadBlob(
-                  new Blob([new Uint8Array(result.bytes)], { type: "application/pdf" }),
+                  pdfBytesToBlob(result.bytes),
                   `${baseName}-compressed.pdf`
                 );
               }}
@@ -408,7 +406,7 @@ export default function CompressPdf() {
                       onClick={() => {
                         const baseName = file.name.replace(/\.pdf$/i, "") || "document";
                         downloadBlob(
-                          new Blob([new Uint8Array(result.bytes)], { type: "application/pdf" }),
+                          pdfBytesToBlob(result.bytes),
                           `${baseName}-compressed.pdf`
                         );
                       }}

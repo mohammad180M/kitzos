@@ -19,6 +19,8 @@ export const pdfToolsEn = {
     errInvalidFiles: "Please select valid PDF files.",
     errNeedTwo: "Add at least two PDF files to merge.",
     errMergeFailed: "Failed to merge PDFs. Make sure all files are valid, unencrypted PDFs.",
+    pagesReorderedByFiles: "Pages were reordered to match file order",
+    pageMovedAnnounce: (pos: number) => `Page moved to position ${pos}`,
   },
   splitPdf: {
     uploadHint: "Upload a PDF to split",
@@ -207,6 +209,8 @@ export const pdfToolsAr = {
     errInvalidFiles: "يرجى اختيار ملفات PDF صالحة.",
     errNeedTwo: "أضف ملفين PDF على الأقل للدمج.",
     errMergeFailed: "فشل دمج PDF. تأكد أن جميع الملفات صالحة وغير مشفّرة.",
+    pagesReorderedByFiles: "أُعيد ترتيب الصفحات حسب ترتيب الملفات",
+    pageMovedAnnounce: (pos: number) => `نُقلت الصفحة إلى الموضع ${pos}`,
   },
   splitPdf: {
     uploadHint: "ارفع PDF للتقسيم",

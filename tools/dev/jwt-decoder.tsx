@@ -55,10 +55,7 @@ export default function JwtDecoder() {
 
   return (
     <div className="space-y-4" dir={locale === "ar" ? "rtl" : "ltr"}>
-      <div
-        className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-amber-200"
-        role="note"
-      >
+      <div className="tool-notice tool-notice--warning tool-notice--dev" role="note">
         <p className="font-medium">{ui.securityNoticeTitle}</p>
         <p className="mt-1">{ui.securityNotice}</p>
       </div>

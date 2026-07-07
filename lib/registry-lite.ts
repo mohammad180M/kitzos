@@ -290,20 +290,27 @@ export const toolsLite: ToolLite[] = [
     "category": "image",
     "icon": "Crop",
     "title": "Crop Image",
-    "description": "Crop images with a draggable selection and optional fixed aspect ratios.",
+    "description": "Crop images with a rectangle, circle, or rounded frame — right in your browser.",
     "keywords": [
       "crop image",
       "image cropper",
       "trim image",
-      "cut image"
+      "cut image",
+      "circle crop",
+      "round profile picture",
+      "circular crop",
+      "rounded square crop"
     ],
     "titleAr": "قص الصور",
-    "descriptionAr": "اقص الصور بمنطقة تحديد قابلة للسحب مع نسب عرض إلى ارتفاع ثابتة اختيارية.",
+    "descriptionAr": "قص الصور بإطار مستطيل أو دائري أو مستدير الزوايا — كل شيء في متصفحك.",
     "keywordsAr": [
       "قص الصور",
       "أداة قص الصور",
       "تقليم الصور",
-      "قطع الصور"
+      "قطع الصور",
+      "قص دائري",
+      "صورة شخصية دائرية",
+      "قص مربع مستدير"
     ]
   },
   {
@@ -330,24 +337,121 @@ export const toolsLite: ToolLite[] = [
     ]
   },
   {
-    "slug": "meme-generator",
+    "slug": "heic-to-jpg",
     "category": "image",
-    "icon": "Smile",
-    "title": "Meme Generator",
-    "description": "Add top and bottom text to any image. Classic meme layout, export as PNG.",
+    "icon": "ImageDown",
+    "title": "HEIC to JPG Converter",
+    "description": "Convert iPhone HEIC photos to JPG locally. Batch convert and download as ZIP.",
     "keywords": [
-      "meme generator",
-      "meme maker",
-      "add text to image meme",
-      "meme creator online"
+      "heic to jpg",
+      "convert heic",
+      "iphone photo to jpg",
+      "heic converter"
     ],
-    "titleAr": "مولّد ميمز",
-    "descriptionAr": "أضف نصاً علوياً وسفلياً لأي صورة وصدّر ميم كلاسيكي PNG.",
+    "titleAr": "تحويل HEIC إلى JPG",
+    "descriptionAr": "حوّل صور iPhone بصيغة HEIC إلى JPG محلياً. تحويل دفعي وتنزيل ZIP.",
     "keywordsAr": [
-      "مولد ميمز",
-      "صانع ميم",
-      "نص على صورة ميم"
-    ]
+      "heic الى jpg",
+      "تحويل heic",
+      "صورة ايفون jpg",
+      "محول heic"
+    ],
+    "isNew": true
+  },
+  {
+    "slug": "flip-image",
+    "category": "image",
+    "icon": "FlipHorizontal2",
+    "title": "Flip Image",
+    "description": "Flip images horizontally, vertically, or both. Instant preview, keeps PNG or JPG format.",
+    "keywords": [
+      "flip image",
+      "mirror image",
+      "flip photo horizontal",
+      "flip vertical"
+    ],
+    "titleAr": "قلب صورة",
+    "descriptionAr": "اقلب الصورة أفقياً أو عمودياً أو بالاتجاهين. معاينة فورية مع الحفاظ على PNG أو JPG.",
+    "keywordsAr": [
+      "قلب صورة",
+      "عكس صورة",
+      "mirror image",
+      "flip photo"
+    ],
+    "isNew": true
+  },
+  {
+    "slug": "image-rotator",
+    "category": "image",
+    "icon": "RotateCw",
+    "title": "Image Rotator",
+    "description": "Rotate images 90°, 180°, or 270° in your browser. Download as PNG.",
+    "keywords": [
+      "rotate image",
+      "image rotator",
+      "turn image",
+      "rotate photo"
+    ],
+    "titleAr": "تدوير الصور",
+    "descriptionAr": "دوّر الصور 90° أو 180° أو 270° في متصفحك. نزّل PNG.",
+    "keywordsAr": [
+      "تدوير صورة",
+      "أداة تدوير الصور",
+      "rotate image",
+      "image rotator",
+      "تدوير الصور"
+    ],
+    "isNew": true
+  },
+  {
+    "slug": "blur-image",
+    "category": "image",
+    "icon": "ScanFace",
+    "title": "Blur & Pixelate Image",
+    "description": "Draw rectangles to blur or pixelate sensitive areas before sharing. 100% local processing.",
+    "keywords": [
+      "blur part of image",
+      "pixelate image",
+      "pixelate region",
+      "censor image",
+      "hide face in photo",
+      "privacy blur",
+      "blur face"
+    ],
+    "titleAr": "تمويه وبكسلة الصور",
+    "descriptionAr": "ارسم مستطيلات لتمويه أو تبكسل المناطق الحساسة قبل المشاركة. معالجة محلية 100%.",
+    "keywordsAr": [
+      "تمويه جزء من صورة",
+      "بكسلة صور",
+      "اخفاء وجه",
+      "censor image",
+      "pixelate image",
+      "خصوصية صورة",
+      "تمويه وجه"
+    ],
+    "isNew": true
+  },
+  {
+    "slug": "image-watermark",
+    "category": "image",
+    "icon": "Droplets",
+    "title": "Image Watermark",
+    "description": "Add draggable text watermarks with opacity, rotation, and tile mode. Export in original format.",
+    "keywords": [
+      "image watermark",
+      "add watermark to photo",
+      "text watermark",
+      "watermark maker"
+    ],
+    "titleAr": "علامة مائية على صورة",
+    "descriptionAr": "أضف علامة مائية نصية قابلة للسحب مع الشفافية والتدوير ووضع التكرار. صدّر بنفس الصيغة.",
+    "keywordsAr": [
+      "علامة مائية",
+      "watermark صورة",
+      "نص على صورة",
+      "حماية صورة"
+    ],
+    "isNew": true
   },
   {
     "slug": "add-text-to-image",
@@ -396,6 +500,72 @@ export const toolsLite: ToolLite[] = [
     "isNew": true
   },
   {
+    "slug": "passport-photo",
+    "category": "image",
+    "icon": "IdCard",
+    "title": "Passport Photo Maker",
+    "description": "Crop to official passport sizes at 300 DPI. Export single photo or printable sheet.",
+    "keywords": [
+      "passport photo maker",
+      "id photo size",
+      "2x2 photo",
+      "35x45mm photo"
+    ],
+    "titleAr": "صور شخصية بمقاسات رسمية",
+    "descriptionAr": "اقصِ لأحجام جواز السفر الرسمية بدقة 300 DPI. صورة واحدة أو ورقة طباعة 4×6.",
+    "keywordsAr": [
+      "صورة جواز سفر",
+      "صورة شخصية 35x45",
+      "2x2 photo",
+      "صورة هوية"
+    ],
+    "isNew": true
+  },
+  {
+    "slug": "gif-maker",
+    "category": "image",
+    "icon": "Film",
+    "title": "GIF Maker from Images",
+    "description": "Combine up to 50 images into an animated GIF with frame delay and loop control.",
+    "keywords": [
+      "gif maker",
+      "images to gif",
+      "animated gif creator",
+      "slideshow gif"
+    ],
+    "titleAr": "صانع GIF من صور",
+    "descriptionAr": "اجمع حتى 50 صورة في GIF متحرك مع تأخير الإطارات والتحكم بالتكرار.",
+    "keywordsAr": [
+      "صانع gif",
+      "صور الى gif",
+      "animated gif",
+      "slideshow gif"
+    ],
+    "isNew": true
+  },
+  {
+    "slug": "image-color-picker",
+    "category": "image",
+    "icon": "Pipette",
+    "title": "Image Color Picker",
+    "description": "Click any pixel to get HEX, RGB, and HSL values. Copy colors with session history.",
+    "keywords": [
+      "image color picker",
+      "pick color from image",
+      "eyedropper online",
+      "hex from photo"
+    ],
+    "titleAr": "التقاط لون من صورة",
+    "descriptionAr": "انقر أي بكسل للحصول على HEX و RGB و HSL. انسخ الألوان مع سجل الجلسة.",
+    "keywordsAr": [
+      "منتقي لون من صورة",
+      "eyedropper",
+      "hex من صورة",
+      "التقاط لون"
+    ],
+    "isNew": true
+  },
+  {
     "slug": "exif-remover",
     "category": "image",
     "icon": "Eraser",
@@ -414,140 +584,6 @@ export const toolsLite: ToolLite[] = [
       "حذف ميتاداتا الصور",
       "إزالة موقع الصورة"
     ]
-  },
-  {
-    "slug": "image-rotator",
-    "category": "image",
-    "icon": "RotateCw",
-    "title": "Image Rotator & Flipper",
-    "description": "Rotate images 90°, 180°, or 270° and flip horizontally or vertically. Download as PNG.",
-    "keywords": [
-      "rotate image",
-      "flip image",
-      "image rotator",
-      "mirror image online"
-    ],
-    "titleAr": "تدوير وقلب الصور",
-    "descriptionAr": "دوّر الصور 90° أو 180° أو 270° واقلبها أفقياً أو عمودياً. نزّل PNG.",
-    "keywordsAr": [
-      "تدوير صورة",
-      "قلب صورة",
-      "rotate image",
-      "مرآة صورة",
-      "image rotator"
-    ],
-    "isNew": true
-  },
-  {
-    "slug": "image-border-adder",
-    "category": "image",
-    "icon": "Box",
-    "title": "Image Border Adder",
-    "description": "Add colored borders, padding, and optional drop shadow to images. Download PNG.",
-    "keywords": [
-      "add border to image",
-      "image frame",
-      "photo border online",
-      "image shadow"
-    ],
-    "titleAr": "إضافة إطار للصورة",
-    "descriptionAr": "أضف حدوداً ملونة وحشواً وظلاً اختيارياً للصور. نزّل PNG.",
-    "keywordsAr": [
-      "اطار صورة",
-      "border صورة",
-      "frame photo",
-      "ظل صورة",
-      "padding صورة"
-    ],
-    "isNew": true
-  },
-  {
-    "slug": "pixelate-image",
-    "category": "image",
-    "icon": "Grid3x3",
-    "title": "Pixelate Images",
-    "description": "Pixelate a selected region or the full image for privacy. Process locally in browser.",
-    "keywords": [
-      "pixelate image",
-      "blur face",
-      "censor image",
-      "privacy blur photo"
-    ],
-    "titleAr": "بكسلة الصور",
-    "descriptionAr": "بكسلة مناطق محددة أو الصورة كاملة لحماية الخصوصية. معالجة محلية في المتصفح.",
-    "keywordsAr": [
-      "بكسلة صور",
-      "blur face",
-      "تمويه وجه",
-      "censor image",
-      "خصوصية صورة"
-    ],
-    "isNew": true
-  },
-  {
-    "slug": "certificate-generator",
-    "category": "image",
-    "icon": "Award",
-    "title": "Certificate Generator",
-    "description": "Create a professional achievement or project certificate. Customize text, colors, and logo with a live preview, then download as PNG or PDF. Runs entirely in your browser.",
-    "keywords": [
-      "certificate generator",
-      "achievement certificate maker",
-      "project certificate",
-      "certificate template",
-      "download certificate pdf"
-    ],
-    "titleAr": "مولّد شهادات إنجاز",
-    "descriptionAr": "أنشئ شهادة إنجاز أو مشروع احترافية. خصّص النصوص والألوان والشعار مع معاينة حية، ثم نزّلها بصيغة PNG أو PDF. تعمل بالكامل في متصفحك.",
-    "keywordsAr": [
-      "مولد شهادات",
-      "مولد شهادة انجاز",
-      "شهادة مشروع",
-      "قالب شهادة",
-      "تحميل شهادة pdf"
-    ]
-  },
-  {
-    "slug": "signature-pad",
-    "category": "image",
-    "icon": "PenLine",
-    "title": "Signature Generator PNG",
-    "description": "Draw a transparent signature and download as PNG for documents and forms.",
-    "keywords": [
-      "signature generator png",
-      "draw signature online",
-      "transparent signature",
-      "signature pad"
-    ],
-    "titleAr": "مولّد توقيع شفاف",
-    "descriptionAr": "ارسم توقيعاً بخلفية شفافة ونزّله PNG للمستندات والنماذج.",
-    "keywordsAr": [
-      "مولد توقيع شفاف",
-      "توقيع png",
-      "لوحة توقيع"
-    ]
-  },
-  {
-    "slug": "image-to-ascii",
-    "category": "image",
-    "icon": "Type",
-    "title": "Image to ASCII Art",
-    "description": "Convert photos to ASCII art using brightness sampling. Copy or download as text.",
-    "keywords": [
-      "image to ascii",
-      "photo to ascii art",
-      "ascii image converter",
-      "text art from image"
-    ],
-    "titleAr": "تحويل الصورة إلى ASCII",
-    "descriptionAr": "حوّل الصور إلى فن ASCII بأخذ عينات السطوع. انسخ أو نزّل كنص.",
-    "keywordsAr": [
-      "صورة الى ascii",
-      "ascii art صورة",
-      "photo to ascii",
-      "فن نصي من صورة"
-    ],
-    "isNew": true
   },
   {
     "slug": "word-counter",
@@ -2197,6 +2233,26 @@ export const toolsLite: ToolLite[] = [
       "اختبار الكتابة",
       "كلمات في الدقيقة",
       "دقة الكتابة"
+    ]
+  },
+  {
+    "slug": "signature-pad",
+    "category": "misc",
+    "icon": "PenLine",
+    "title": "Signature Generator PNG",
+    "description": "Draw a transparent signature and download as PNG for documents and forms.",
+    "keywords": [
+      "signature generator png",
+      "draw signature online",
+      "transparent signature",
+      "signature pad"
+    ],
+    "titleAr": "مولّد توقيع شفاف",
+    "descriptionAr": "ارسم توقيعاً بخلفية شفافة ونزّله PNG للمستندات والنماذج.",
+    "keywordsAr": [
+      "مولد توقيع شفاف",
+      "توقيع png",
+      "لوحة توقيع"
     ]
   },
   {

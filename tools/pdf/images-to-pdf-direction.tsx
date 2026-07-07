@@ -12,6 +12,7 @@ import PdfPreviewPane, { type PreviewPage } from "@/components/pdf/PdfPreviewPan
 import PdfWorkbenchLayout from "@/components/pdf/PdfWorkbenchLayout";
 import { usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
 import { renderImagePdfPagePreview } from "@/lib/pdf/image-page-preview";
+import { pdfBytesToBlob } from "@/lib/pdf/bytes";
 
 function loadPdfLib() {
   return import("pdf-lib");
@@ -256,7 +257,7 @@ export default function ImagesToPdfDirection({ onDirtyChange }: ImagesToPdfDirec
       }
 
       const bytes = await pdf.save();
-      downloadBlob(new Blob([new Uint8Array(bytes)], { type: "application/pdf" }), "images.pdf");
+      downloadBlob(pdfBytesToBlob(bytes), "images.pdf");
     } catch {
       setError(t.errCreateFailed);
     } finally {

@@ -130,19 +130,13 @@ export default function TextToAsciiArt() {
           {error}
         </p>
       ) : mode === "arabic-only" ? (
-        <div
-          className="rounded-xl border border-primary-200 bg-primary-50/80 px-4 py-4 text-sm leading-relaxed text-primary-900 dark:border-primary-800 dark:bg-primary-950/40 dark:text-primary-100"
-          role="status"
-        >
+        <div className="tool-notice tool-notice--text" role="status">
           {t.arabicOnlyNotice}
         </div>
       ) : art ? (
         <div className="space-y-3">
           {mode === "mixed" && (
-            <p
-              className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-600 dark:border-gray-700 dark:bg-gray-800/50 dark:text-gray-300"
-              role="status"
-            >
+            <p className="tool-notice tool-notice--text" role="status">
               {t.mixedNotice}
             </p>
           )}

@@ -10,6 +10,7 @@ import {
   releasePdfDocument,
   renderPdfPageThumb,
 } from "@/lib/pdf/thumbnails";
+import { bytesForPdfLoad, pdfBytesToBlob, readPdfFileBytes } from "@/lib/pdf/bytes";
 import { useUnsavedWork } from "@/lib/unsaved-work";
 
 function loadPdfLib() {
@@ -146,8 +147,8 @@ export default function SplitPdf() {
     if (file) releasePdfDocument(file);
     try {
       const { PDFDocument } = await getPdfLib();
-      const bytes = await pdfFile.arrayBuffer();
-      const pdf = await PDFDocument.load(bytes);
+      const bytes = await readPdfFileBytes(pdfFile);
+      const pdf = await PDFDocument.load(bytesForPdfLoad(bytes));
       const count = pdf.getPageCount();
       setFile(pdfFile);
       setPageCount(count);
@@ -168,8 +169,8 @@ export default function SplitPdf() {
 
     try {
       const { PDFDocument } = await getPdfLib();
-      const sourceBytes = await file.arrayBuffer();
-      const sourcePdf = await PDFDocument.load(sourceBytes);
+      const sourceBytes = await readPdfFileBytes(file);
+      const sourcePdf = await PDFDocument.load(bytesForPdfLoad(sourceBytes));
 
       let groups: { start: number; end: number }[];
 
@@ -206,7 +207,7 @@ export default function SplitPdf() {
 
       if (outputs.length === 1) {
         downloadBlob(
-          new Blob([new Uint8Array(outputs[0].bytes)], { type: "application/pdf" }),
+          pdfBytesToBlob(outputs[0].bytes),
           outputs[0].name
         );
       } else {

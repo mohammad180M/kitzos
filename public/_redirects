@@ -12,6 +12,36 @@
 # After deploy, each legacy URL below: 1× 301 → 200 (over HTTPS).
 # Note: http:// requests still get a separate Always Use HTTPS hop first (Cloudflare dashboard).
 
+# Deleted image tools → redirects (301, single-hop)
+/en/tools/image-to-ascii    https://kitzos.com/en/tools/text-to-ascii-art/    301
+/en/tools/image-to-ascii/   https://kitzos.com/en/tools/text-to-ascii-art/    301
+/ar/tools/image-to-ascii    https://kitzos.com/ar/tools/text-to-ascii-art/    301
+/ar/tools/image-to-ascii/   https://kitzos.com/ar/tools/text-to-ascii-art/    301
+/en/tools/meme-generator    https://kitzos.com/en/tools/add-text-to-image/    301
+/en/tools/meme-generator/   https://kitzos.com/en/tools/add-text-to-image/    301
+/ar/tools/meme-generator    https://kitzos.com/ar/tools/add-text-to-image/    301
+/ar/tools/meme-generator/   https://kitzos.com/ar/tools/add-text-to-image/    301
+/en/tools/certificate-generator    https://kitzos.com/en/image/    301
+/en/tools/certificate-generator/   https://kitzos.com/en/image/    301
+/ar/tools/certificate-generator    https://kitzos.com/ar/image/    301
+/ar/tools/certificate-generator/   https://kitzos.com/ar/image/    301
+/en/tools/background-remover    https://kitzos.com/en/image/    301
+/en/tools/background-remover/   https://kitzos.com/en/image/    301
+/ar/tools/background-remover    https://kitzos.com/ar/image/    301
+/ar/tools/background-remover/   https://kitzos.com/ar/image/    301
+/en/tools/image-border-adder    https://kitzos.com/en/image/    301
+/en/tools/image-border-adder/   https://kitzos.com/en/image/    301
+/ar/tools/image-border-adder    https://kitzos.com/ar/image/    301
+/ar/tools/image-border-adder/   https://kitzos.com/ar/image/    301
+/en/tools/circle-crop    https://kitzos.com/en/tools/crop-image/    301
+/en/tools/circle-crop/   https://kitzos.com/en/tools/crop-image/    301
+/ar/tools/circle-crop    https://kitzos.com/ar/tools/crop-image/    301
+/ar/tools/circle-crop/   https://kitzos.com/ar/tools/crop-image/    301
+/en/tools/pixelate-image    https://kitzos.com/en/tools/blur-image/    301
+/en/tools/pixelate-image/   https://kitzos.com/en/tools/blur-image/    301
+/ar/tools/pixelate-image    https://kitzos.com/ar/tools/blur-image/    301
+/ar/tools/pixelate-image/   https://kitzos.com/ar/tools/blur-image/    301
+
 # jpg-to-pdf merged into pdf-to-jpg (301, single-hop)
 /en/tools/jpg-to-pdf    https://kitzos.com/en/tools/pdf-to-jpg/    301
 /en/tools/jpg-to-pdf/   https://kitzos.com/en/tools/pdf-to-jpg/    301

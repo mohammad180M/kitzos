@@ -165,7 +165,7 @@ export default function VoiceRecorder() {
         </p>
       )}
 
-      <p className="text-xs text-gray-400 dark:text-gray-500">
+      <p className="tool-notice tool-notice--audio">
         {t.privacyNote}
       </p>
     </div>

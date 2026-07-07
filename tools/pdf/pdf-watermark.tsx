@@ -12,6 +12,7 @@ import {
   releasePdfDocument,
 } from "@/lib/pdf/thumbnails";
 import { useDebouncedValue } from "@/lib/use-debounced-value";
+import { bytesForPdfLoad, pdfBytesToBlob, readPdfFileBytes } from "@/lib/pdf/bytes";
 import { useUnsavedWork } from "@/lib/unsaved-work";
 
 function loadPdfLib() {
@@ -89,7 +90,8 @@ export default function PdfWatermark() {
     setError(null);
     try {
       const { PDFDocument, rgb, degrees } = await loadPdfLib();
-      const pdfDoc = await PDFDocument.load(await file.arrayBuffer());
+      const pdfBytes = await readPdfFileBytes(file);
+      const pdfDoc = await PDFDocument.load(bytesForPdfLoad(pdfBytes));
       const pages = pdfDoc.getPages();
       for (const page of pages) {
         const { width, height } = page.getSize();
@@ -122,7 +124,7 @@ export default function PdfWatermark() {
       }
       const out = await pdfDoc.save();
       const { downloadBlob } = await import("@/lib/audio-utils");
-      downloadBlob(new Blob([out as BlobPart], { type: "application/pdf" }), `watermarked-${file.name}`);
+      downloadBlob(pdfBytesToBlob(out), `watermarked-${file.name}`);
     } catch {
       setError(t.errWatermarkFailed);
     } finally {

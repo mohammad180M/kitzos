@@ -4,17 +4,22 @@ export const howTo: HowToStep[] = [
   {
     title: "Upload an image",
     description:
-      "Choose any common image format (PNG, JPG, WebP, etc.). A preview appears with a crop box over it.",
+      "Choose any common image format (PNG, JPG, WebP, etc.). A preview appears with a crop selection over it.",
+  },
+  {
+    title: "Pick a shape mode",
+    description:
+      "Select Rectangle for freeform or fixed aspect ratios (1:1, 4:3, 16:9), Circle for profile photos, or Rounded square with an adjustable corner radius.",
   },
   {
     title: "Adjust the crop area",
     description:
-      "Drag the box to reposition it. Drag the corner handle to resize. Pick an aspect ratio preset or use freeform cropping.",
+      "Drag the selection to reposition it. Drag the corner handle to resize. Circle and rounded modes keep a square selection.",
   },
   {
     title: "Download the crop",
     description:
-      "Click Download cropped image to save only the selected region as a PNG file.",
+      "Rectangle mode exports in the source format when possible. Circle and rounded-square modes export PNG with transparency outside the shape.",
   },
 ];
 
@@ -25,14 +30,19 @@ export const faq: FaqItem[] = [
       "No. The image is processed on a canvas in your browser. Nothing is uploaded.",
   },
   {
-    question: "What aspect ratios are available?",
+    question: "What aspect ratios are available for rectangles?",
     answer:
       "Free (any shape), 1:1 (square), 4:3, and 16:9. The crop box adjusts when you switch presets.",
   },
   {
-    question: "What format is the output?",
+    question: "Does circle or rounded export keep transparency?",
     answer:
-      "Cropped images download as PNG to preserve quality. Transparency is kept when the source image supports it.",
+      "Yes. Circle and rounded-square modes export PNG with real alpha outside the shape — ideal for profile pictures and stickers.",
+  },
+  {
+    question: "What format is rectangle output?",
+    answer:
+      "Rectangle crops download as PNG or JPEG depending on the source format. Transparency is preserved when the source supports it.",
   },
   {
     question: "Can I crop very large images?",

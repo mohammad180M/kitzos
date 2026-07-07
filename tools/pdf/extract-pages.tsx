@@ -12,6 +12,7 @@ import {
   releasePdfDocument,
   renderPdfPageThumb,
 } from "@/lib/pdf/thumbnails";
+import { bytesForPdfLoad, pdfBytesToBlob, readPdfFileBytes } from "@/lib/pdf/bytes";
 import { useUnsavedWork } from "@/lib/unsaved-work";
 
 function loadPdfLib() {
@@ -155,8 +156,8 @@ export default function ExtractPages() {
     setError(null);
     try {
       const { PDFDocument } = await getPdfLib();
-      const bytes = await file.arrayBuffer();
-      const srcDoc = await PDFDocument.load(bytes);
+      const bytes = await readPdfFileBytes(file);
+      const srcDoc = await PDFDocument.load(bytesForPdfLoad(bytes));
       const indices = Array.from(selected)
         .sort((a, b) => a - b)
         .map((p) => p - 1);
@@ -167,10 +168,7 @@ export default function ExtractPages() {
         const copied = await outDoc.copyPages(srcDoc, indices);
         copied.forEach((page) => outDoc.addPage(page));
         const out = await outDoc.save();
-        downloadBlob(
-          new Blob([out as BlobPart], { type: "application/pdf" }),
-          `${baseName}-extracted.pdf`
-        );
+        downloadBlob(pdfBytesToBlob(out), `${baseName}-extracted.pdf`);
       } else {
         const JSZip = (await getJSZipModule()).default;
         const zip = new JSZip();

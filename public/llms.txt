@@ -15,18 +15,19 @@
 - [Password Protect PDF](https://kitzos.com/en/tools/pdf-protect/): Encrypt a PDF with a password. Lock your document before sharing.
 - [Compress Image](https://kitzos.com/en/tools/compress-image/): Reduce JPG and PNG file size with adjustable quality. No upload required.
 - [Image Resizer](https://kitzos.com/en/tools/image-resizer/): Resize images to exact pixel dimensions with optional aspect ratio lock.
-- [Crop Image](https://kitzos.com/en/tools/crop-image/): Crop images with a draggable selection and optional fixed aspect ratios.
+- [Crop Image](https://kitzos.com/en/tools/crop-image/): Crop images with a rectangle, circle, or rounded frame — right in your browser.
 - [Image Converter](https://kitzos.com/en/tools/image-converter/): Convert images between PNG, JPG, and WebP formats in your browser.
-- [Meme Generator](https://kitzos.com/en/tools/meme-generator/): Add top and bottom text to any image. Classic meme layout, export as PNG.
+- [HEIC to JPG Converter](https://kitzos.com/en/tools/heic-to-jpg/): Convert iPhone HEIC photos to JPG locally. Batch convert and download as ZIP.
+- [Flip Image](https://kitzos.com/en/tools/flip-image/): Flip images horizontally, vertically, or both. Instant preview, keeps PNG or JPG format.
+- [Image Rotator](https://kitzos.com/en/tools/image-rotator/): Rotate images 90°, 180°, or 270° in your browser. Download as PNG.
+- [Blur & Pixelate Image](https://kitzos.com/en/tools/blur-image/): Draw rectangles to blur or pixelate sensitive areas before sharing. 100% local processing.
+- [Image Watermark](https://kitzos.com/en/tools/image-watermark/): Add draggable text watermarks with opacity, rotation, and tile mode. Export in original format.
 - [Add Text to Image](https://kitzos.com/en/tools/add-text-to-image/): Overlay custom text on any image with size, color, and position controls. Export PNG.
 - [Image Collage Maker](https://kitzos.com/en/tools/image-collage/): Combine 2–4 photos into a grid collage with adjustable gap. Download as one PNG.
+- [Passport Photo Maker](https://kitzos.com/en/tools/passport-photo/): Crop to official passport sizes at 300 DPI. Export single photo or printable sheet.
+- [GIF Maker from Images](https://kitzos.com/en/tools/gif-maker/): Combine up to 50 images into an animated GIF with frame delay and loop control.
+- [Image Color Picker](https://kitzos.com/en/tools/image-color-picker/): Click any pixel to get HEX, RGB, and HSL values. Copy colors with session history.
 - [Remove EXIF Data](https://kitzos.com/en/tools/exif-remover/): Strip GPS, camera, and metadata from photos by re-exporting through canvas.
-- [Image Rotator & Flipper](https://kitzos.com/en/tools/image-rotator/): Rotate images 90°, 180°, or 270° and flip horizontally or vertically. Download as PNG.
-- [Image Border Adder](https://kitzos.com/en/tools/image-border-adder/): Add colored borders, padding, and optional drop shadow to images. Download PNG.
-- [Pixelate Images](https://kitzos.com/en/tools/pixelate-image/): Pixelate a selected region or the full image for privacy. Process locally in browser.
-- [Certificate Generator](https://kitzos.com/en/tools/certificate-generator/): Create a professional achievement or project certificate. Customize text, colors, and logo with a live preview, then download as PNG or PDF. Runs entirely in your browser.
-- [Signature Generator PNG](https://kitzos.com/en/tools/signature-pad/): Draw a transparent signature and download as PNG for documents and forms.
-- [Image to ASCII Art](https://kitzos.com/en/tools/image-to-ascii/): Convert photos to ASCII art using brightness sampling. Copy or download as text.
 - [Word Counter](https://kitzos.com/en/tools/word-counter/): Count words, characters, sentences, paragraphs, and estimated reading time.
 - [Case Converter](https://kitzos.com/en/tools/case-converter/): Convert text to uppercase, lowercase, title case, camelCase, and more.
 - [Password Generator](https://kitzos.com/en/tools/password-generator/): Create strong random passwords with customizable length and character sets.
@@ -101,6 +102,7 @@
 - [Stopwatch & Countdown Timer](https://kitzos.com/en/tools/stopwatch-timer/): Online stopwatch with lap times and countdown timer with audio alert. Fully client-side.
 - [Random Picker & Number Generator](https://kitzos.com/en/tools/random-picker/): Pick a random name or option from a list, or generate a random number in any range.
 - [Typing Speed Test](https://kitzos.com/en/tools/typing-speed-test/): Measure your typing speed in WPM and accuracy with a live typing test.
+- [Signature Generator PNG](https://kitzos.com/en/tools/signature-pad/): Draw a transparent signature and download as PNG for documents and forms.
 - [MP3 Cutter Online](https://kitzos.com/en/tools/mp3-cutter/): Cut and trim audio files in your browser. Export as MP3 or WAV — no upload required.
 - [Audio Converter](https://kitzos.com/en/tools/audio-converter/): Convert WAV to MP3 and other audio formats locally using Web Audio API.
 - [Audio Merger](https://kitzos.com/en/tools/audio-merger/): Merge multiple audio files into one track. Combine clips in order and download.
@@ -120,18 +122,19 @@
 - [حماية PDF بكلمة سر](https://kitzos.com/ar/tools/pdf-protect/): شفّر ملف PDF بكلمة مرور قبل مشاركته.
 - [ضغط الصور](https://kitzos.com/ar/tools/compress-image/): قلّل حجم ملفات JPG وPNG بجودة قابلة للتعديل. لا حاجة لرفع الملفات.
 - [تغيير حجم الصور](https://kitzos.com/ar/tools/image-resizer/): غيّر أبعاد الصور إلى أبعاد بكسل محددة مع خيار قفل نسبة العرض إلى الارتفاع.
-- [قص الصور](https://kitzos.com/ar/tools/crop-image/): اقص الصور بمنطقة تحديد قابلة للسحب مع نسب عرض إلى ارتفاع ثابتة اختيارية.
+- [قص الصور](https://kitzos.com/ar/tools/crop-image/): قص الصور بإطار مستطيل أو دائري أو مستدير الزوايا — كل شيء في متصفحك.
 - [محوّل الصور](https://kitzos.com/ar/tools/image-converter/): حوّل الصور بين صيغ PNG وJPG وWebP في متصفحك.
-- [مولّد ميمز](https://kitzos.com/ar/tools/meme-generator/): أضف نصاً علوياً وسفلياً لأي صورة وصدّر ميم كلاسيكي PNG.
+- [تحويل HEIC إلى JPG](https://kitzos.com/ar/tools/heic-to-jpg/): حوّل صور iPhone بصيغة HEIC إلى JPG محلياً. تحويل دفعي وتنزيل ZIP.
+- [قلب صورة](https://kitzos.com/ar/tools/flip-image/): اقلب الصورة أفقياً أو عمودياً أو بالاتجاهين. معاينة فورية مع الحفاظ على PNG أو JPG.
+- [تدوير الصور](https://kitzos.com/ar/tools/image-rotator/): دوّر الصور 90° أو 180° أو 270° في متصفحك. نزّل PNG.
+- [تمويه وبكسلة الصور](https://kitzos.com/ar/tools/blur-image/): ارسم مستطيلات لتمويه أو تبكسل المناطق الحساسة قبل المشاركة. معالجة محلية 100%.
+- [علامة مائية على صورة](https://kitzos.com/ar/tools/image-watermark/): أضف علامة مائية نصية قابلة للسحب مع الشفافية والتدوير ووضع التكرار. صدّر بنفس الصيغة.
 - [إضافة نص على الصورة](https://kitzos.com/ar/tools/add-text-to-image/): ضع نصاً مخصصاً على أي صورة مع التحكم بالحجم واللون والموضع. صدّر PNG.
 - [صانع كولاج الصور](https://kitzos.com/ar/tools/image-collage/): ادمج 2–4 صور في شبكة كولاج مع فجوة قابلة للضبط. نزّل PNG واحداً.
+- [صور شخصية بمقاسات رسمية](https://kitzos.com/ar/tools/passport-photo/): اقصِ لأحجام جواز السفر الرسمية بدقة 300 DPI. صورة واحدة أو ورقة طباعة 4×6.
+- [صانع GIF من صور](https://kitzos.com/ar/tools/gif-maker/): اجمع حتى 50 صورة في GIF متحرك مع تأخير الإطارات والتحكم بالتكرار.
+- [التقاط لون من صورة](https://kitzos.com/ar/tools/image-color-picker/): انقر أي بكسل للحصول على HEX و RGB و HSL. انسخ الألوان مع سجل الجلسة.
 - [إزالة بيانات EXIF](https://kitzos.com/ar/tools/exif-remover/): أزل بيانات GPS والكاميرا والميتاداتا من الصور بإعادة رسمها على canvas.
-- [تدوير وقلب الصور](https://kitzos.com/ar/tools/image-rotator/): دوّر الصور 90° أو 180° أو 270° واقلبها أفقياً أو عمودياً. نزّل PNG.
-- [إضافة إطار للصورة](https://kitzos.com/ar/tools/image-border-adder/): أضف حدوداً ملونة وحشواً وظلاً اختيارياً للصور. نزّل PNG.
-- [بكسلة الصور](https://kitzos.com/ar/tools/pixelate-image/): بكسلة مناطق محددة أو الصورة كاملة لحماية الخصوصية. معالجة محلية في المتصفح.
-- [مولّد شهادات إنجاز](https://kitzos.com/ar/tools/certificate-generator/): أنشئ شهادة إنجاز أو مشروع احترافية. خصّص النصوص والألوان والشعار مع معاينة حية، ثم نزّلها بصيغة PNG أو PDF. تعمل بالكامل في متصفحك.
-- [مولّد توقيع شفاف](https://kitzos.com/ar/tools/signature-pad/): ارسم توقيعاً بخلفية شفافة ونزّله PNG للمستندات والنماذج.
-- [تحويل الصورة إلى ASCII](https://kitzos.com/ar/tools/image-to-ascii/): حوّل الصور إلى فن ASCII بأخذ عينات السطوع. انسخ أو نزّل كنص.
 - [عداد الكلمات](https://kitzos.com/ar/tools/word-counter/): احسب الكلمات والأحرف والجمل والفقرات ووقت القراءة التقديري.
 - [محوّل حالة الأحرف](https://kitzos.com/ar/tools/case-converter/): حوّل النص إلى أحرف كبيرة أو صغيرة أو عنوان أو camelCase والمزيد.
 - [مولّد كلمات المرور](https://kitzos.com/ar/tools/password-generator/): أنشئ كلمات مرور عشوائية قوية بطول ومجموعات أحرف قابلة للتخصيص.
@@ -206,6 +209,7 @@
 - [ساعة إيقاف وعداد تنازلي](https://kitzos.com/ar/tools/stopwatch-timer/): ساعة إيقاف مع لفات وتوقيت، أو عداد تنازلي مع صوت عند الانتهاء. يعمل في المتصفح.
 - [منتقي عشوائي ومولّد أرقام](https://kitzos.com/ar/tools/random-picker/): اختر اسماً أو خياراً عشوائياً من قائمة، أو أنشئ رقماً عشوائياً ضمن نطاق.
 - [اختبار سرعة الكتابة](https://kitzos.com/ar/tools/typing-speed-test/): قِس سرعة كتابتك بالكلمات في الدقيقة ودقة الإدخال باختبار مباشر.
+- [Signature Generator PNG](https://kitzos.com/ar/tools/signature-pad/): Draw a transparent signature and download as PNG for documents and forms.
 - [قص ملف MP3](https://kitzos.com/ar/tools/mp3-cutter/): قص وتقصير ملفات الصوت في متصفحك. تصدير MP3 أو WAV دون رفع الملفات.
 - [محوّل الصوت](https://kitzos.com/ar/tools/audio-converter/): حوّل WAV إلى MP3 وصيغ أخرى محلياً عبر Web Audio API.
 - [دمج ملفات صوتية](https://kitzos.com/ar/tools/audio-merger/): ادمج عدة ملفات صوتية في مسار واحد بالترتيب الذي تختاره.
@@ -219,7 +223,7 @@
 - [Developer Tools](https://kitzos.com/en/dev/): Format JSON, encode Base64, generate QR codes, and more.
 - [Calculators](https://kitzos.com/en/calculators/): Free online calculators for health, finance, dates, and more.
 - [Converters](https://kitzos.com/en/converters/): Convert units, measurements, and values instantly.
-- [Tools & Utilities](https://kitzos.com/en/misc/): Handy everyday utilities and productivity tools.
+- [Utilities](https://kitzos.com/en/misc/): Handy everyday utilities and productivity tools.
 - [Audio Tools](https://kitzos.com/en/audio/): Cut, convert, merge, and record audio entirely in your browser.
 - [Vision & OCR](https://kitzos.com/en/vision/): Extract text from images with optical character recognition.
 
@@ -230,7 +234,7 @@
 - [أدوات المطورين](https://kitzos.com/ar/dev/): تنسيق JSON وترميز Base64 وإنشاء رموز QR والمزيد.
 - [الحاسبات](https://kitzos.com/ar/calculators/): حاسبات مجانية للصحة والمالية والتواريخ والمزيد.
 - [محولات الوحدات](https://kitzos.com/ar/converters/): تحويل الوحدات والقياسات والقيم فوراً.
-- [أدوات ومرافق](https://kitzos.com/ar/misc/): أدوات يومية عملية لزيادة الإنتاجية.
+- [منوعات](https://kitzos.com/ar/misc/): أدوات يومية عملية لزيادة الإنتاجية.
 - [أدوات الصوت](https://kitzos.com/ar/audio/): قص وتحويل ودمج وتسجيل الصوت بالكامل في متصفحك.
 - [الرؤية واستخراج النص](https://kitzos.com/ar/vision/): استخراج النص من الصور بتقنية التعرف الضوئي على الحروف.
 

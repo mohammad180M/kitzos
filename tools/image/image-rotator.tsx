@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Download, Upload } from "lucide-react";
 import { setupCanvas, canvasToBlob } from "@/lib/canvas-utils";
@@ -8,6 +9,7 @@ import { downloadBlob } from "@/lib/download";
 import { useImageLoader } from "@/lib/hooks/use-image-loader";
 import { getToolSlugFromPath, toolImageSessionKey } from "@/lib/hooks/use-tool-draft";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import {
   useImageToolsExtraLabels,
   useImageToolsSharedLabels,
@@ -20,6 +22,7 @@ export default function ImageRotator() {
   const shared = useImageToolsSharedLabels();
   const t = useImageToolsExtraLabels("imageRotator");
   const pathname = usePathname();
+  const { locale } = useLocale();
   const toolSlug = getToolSlugFromPath(pathname);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -28,8 +31,6 @@ export default function ImageRotator() {
   );
 
   const [rotation, setRotation] = useState(0);
-  const [flipH, setFlipH] = useState(false);
-  const [flipV, setFlipV] = useState(false);
 
   const messages = { invalid: shared.invalidImage, loadFailed: shared.loadFailed };
 
@@ -54,10 +55,9 @@ export default function ImageRotator() {
     ctx.save();
     ctx.translate(dispW / 2, dispH / 2);
     ctx.rotate(rad);
-    ctx.scale(flipH ? -1 : 1, flipV ? -1 : 1);
     ctx.drawImage(img, (-natW * scale) / 2, (-natH * scale) / 2, natW * scale, natH * scale);
     ctx.restore();
-  }, [rotation, flipH, flipV, imgRef]);
+  }, [rotation, imgRef]);
 
   useEffect(() => {
     if (hasImage) render();
@@ -79,7 +79,6 @@ export default function ImageRotator() {
     ctx.save();
     ctx.translate(outW / 2, outH / 2);
     ctx.rotate(rad);
-    ctx.scale(flipH ? -1 : 1, flipV ? -1 : 1);
     ctx.drawImage(img, -natW / 2, -natH / 2, natW, natH);
     ctx.restore();
 
@@ -138,20 +137,6 @@ export default function ImageRotator() {
             <button type="button" onClick={() => rotateBy(270)} className="btn-secondary text-sm">
               {t.rotate270}
             </button>
-            <button
-              type="button"
-              onClick={() => setFlipH((v) => !v)}
-              className={`btn-secondary text-sm ${flipH ? "ring-2 ring-primary-500" : ""}`}
-            >
-              {t.flipH}
-            </button>
-            <button
-              type="button"
-              onClick={() => setFlipV((v) => !v)}
-              className={`btn-secondary text-sm ${flipV ? "ring-2 ring-primary-500" : ""}`}
-            >
-              {t.flipV}
-            </button>
           </div>
 
           <button type="button" onClick={() => void exportPng()} className="btn-primary inline-flex items-center gap-2">
@@ -160,6 +145,15 @@ export default function ImageRotator() {
           </button>
         </>
       )}
+
+      <p className="text-sm text-secondary">
+        <Link
+          href={`/${locale}/tools/flip-image/`}
+          className="font-medium text-primary-600 underline hover:text-primary-700 dark:text-primary-400"
+        >
+          {t.needFlipLink}
+        </Link>
+      </p>
     </div>
   );
 }

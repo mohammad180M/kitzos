@@ -1,12 +1,16 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
-import { Download, Lock, Unlock, Upload } from "lucide-react";
+import { useCallback, useMemo, useRef, useState } from "react";
+import { Download, Upload } from "lucide-react";
+import AspectRatioConnector from "./AspectRatioConnector";
 import {
   useImageToolsExtraLabels,
   useImageToolsSharedLabels,
 } from "@/lib/i18n/use-image-tools-extra-labels";
 import { useUnsavedWork } from "@/lib/unsaved-work";
+
+const PREVIEW_MAX_W = 400;
+const PREVIEW_MAX_H = 192;
 
 export default function ImageResizer() {
   const shared = useImageToolsSharedLabels();
@@ -25,6 +29,11 @@ export default function ImageResizer() {
 
   const aspectRatio = originalWidth / originalHeight || 1;
 
+  const previewScale = useMemo(() => {
+    if (width <= 0 || height <= 0) return 1;
+    return Math.min(1, PREVIEW_MAX_W / width, PREVIEW_MAX_H / height);
+  }, [width, height]);
+
   const handleFile = useCallback(
     (f: File) => {
       if (!f.type.startsWith("image/")) {
@@ -41,6 +50,7 @@ export default function ImageResizer() {
         setOriginalHeight(img.height);
         setWidth(img.width);
         setHeight(img.height);
+        setLockAspect(true);
         setError(null);
       };
       img.onerror = () => {
@@ -115,7 +125,7 @@ export default function ImageResizer() {
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") inputRef.current?.click();
         }}
-        className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 dark:bg-gray-800/50 dark:border-gray-600 px-6 py-10 transition-colors hover:border-primary-400 hover:bg-primary-50/50 dark:hover:border-primary-500 dark:hover:bg-primary-950/30"
+        className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 px-6 py-10 transition-colors hover:border-primary-400 hover:bg-primary-50/50 dark:border-gray-600 dark:bg-gray-800/50 dark:hover:border-primary-500 dark:hover:bg-primary-950/30"
       >
         <Upload className="h-8 w-8 text-gray-400 dark:text-gray-500" aria-hidden="true" />
         <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">{shared.uploadImage}</p>
@@ -133,32 +143,40 @@ export default function ImageResizer() {
       </div>
 
       {error && (
-        <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300" role="alert">
+        <p
+          className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300"
+          role="alert"
+        >
           {error}
         </p>
       )}
 
       {previewUrl && (
         <>
-          <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800">
+          <div className="flex min-h-[12rem] items-center justify-center overflow-hidden rounded-lg border border-gray-200 bg-gray-100 dark:border-gray-700 dark:bg-gray-800">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={previewUrl}
               alt={t.previewAlt}
               loading="lazy"
               decoding="async"
-              width={800}
-              height={512}
-              className="max-h-48 w-full object-contain"
+              style={{
+                width: Math.max(1, Math.round(width * previewScale)),
+                height: Math.max(1, Math.round(height * previewScale)),
+              }}
+              className="block"
             />
           </div>
 
+          <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            {t.previewDims(width, height)}
+          </p>
           <p className="text-sm text-gray-500 dark:text-gray-400">
             {t.originalDims(originalWidth, originalHeight)}
           </p>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div>
+          <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-end">
+            <div className="min-w-0 flex-1">
               <label htmlFor="width" className="text-sm font-medium text-gray-700 dark:text-gray-300">
                 {t.width}
               </label>
@@ -171,7 +189,25 @@ export default function ImageResizer() {
                 className="input-field mt-1"
               />
             </div>
-            <div>
+
+            <div className="flex items-center justify-center sm:pb-2">
+              <AspectRatioConnector
+                connected={lockAspect}
+                onToggle={() => {
+                  setLockAspect((prev) => {
+                    const next = !prev;
+                    if (next && originalWidth > 0) {
+                      setHeight(Math.round(width / aspectRatio));
+                    }
+                    return next;
+                  });
+                }}
+                lockedLabel={t.aspectConnectorLocked}
+                unlockedLabel={t.aspectConnectorUnlocked}
+              />
+            </div>
+
+            <div className="min-w-0 flex-1">
               <label htmlFor="height" className="text-sm font-medium text-gray-700 dark:text-gray-300">
                 {t.height}
               </label>
@@ -185,20 +221,6 @@ export default function ImageResizer() {
               />
             </div>
           </div>
-
-          <button
-            type="button"
-            onClick={() => setLockAspect(!lockAspect)}
-            className="btn-secondary text-sm"
-            aria-pressed={lockAspect}
-          >
-            {lockAspect ? (
-              <Lock className="h-4 w-4" aria-hidden="true" />
-            ) : (
-              <Unlock className="h-4 w-4" aria-hidden="true" />
-            )}
-            {lockAspect ? t.aspectLocked : t.aspectUnlocked}
-          </button>
 
           <button type="button" onClick={download} className="btn-primary">
             <Download className="h-4 w-4" />

@@ -55,7 +55,7 @@ export const categories: Category[] = [
   },
   {
     id: "misc",
-    name: "Tools & Utilities",
+    name: "Utilities",
     icon: "Sparkles",
     description: "Handy everyday utilities and productivity tools.",
   },

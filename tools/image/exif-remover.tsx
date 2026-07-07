@@ -317,7 +317,7 @@ export default function ExifRemover() {
 
       {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
 
-      <p className="text-xs text-gray-400">
+      <p className="tool-notice tool-notice--image">
         {t.privacyNote}
       </p>
     </div>

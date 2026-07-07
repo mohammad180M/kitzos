@@ -134,6 +134,7 @@ export default function AboutContent() {
       <div className="space-y-6 !mt-8">
         {categories.map((category) => {
           const categoryTools = getToolsByCategoryLite(category.id);
+          const { name, description } = getLocalizedCategory(category, locale);
           return (
             <div
               key={category.id}
@@ -144,10 +145,10 @@ export default function AboutContent() {
                   href={localizedPath(locale, `/${category.id}`)}
                   className="hover:text-accent"
                 >
-                  {category.name}
+                  {name}
                 </Link>
               </h3>
-              <p className="mt-1 text-sm">{category.description}</p>
+              <p className="mt-1 text-sm">{description}</p>
               <ul className="mt-3 grid gap-1 sm:grid-cols-2">
                 {categoryTools.map((tool) => (
                   <li key={tool.slug} className="list-none">

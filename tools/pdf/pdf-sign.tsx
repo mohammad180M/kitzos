@@ -6,6 +6,7 @@ import PdfPreviewPane from "@/components/pdf/PdfPreviewPane";
 import SignaturePlacementPreview from "@/components/pdf/SignaturePlacementPreview";
 import PdfWorkbenchLayout from "@/components/pdf/PdfWorkbenchLayout";
 import { downloadBlob } from "@/lib/download";
+import { bytesForPdfLoad, pdfBytesToBlob, readPdfFileBytes } from "@/lib/pdf/bytes";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
 import { usePdfSharedLabels, usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
 import {
@@ -358,7 +359,8 @@ export default function PdfSign() {
     try {
       const { PDFDocument } = await getPdfLib();
       const sigBytes = new Uint8Array(await sigBlob.arrayBuffer());
-      const pdfDoc = await PDFDocument.load(await pdfFile.arrayBuffer());
+      const pdfBytes = await readPdfFileBytes(pdfFile);
+      const pdfDoc = await PDFDocument.load(bytesForPdfLoad(pdfBytes));
       const sigImage = await pdfDoc.embedPng(sigBytes);
       const pageIndices = getTargetPageIndices(pdfDoc.getPageCount());
 
@@ -378,7 +380,7 @@ export default function PdfSign() {
 
       const out = await pdfDoc.save();
       const baseName = pdfFile.name.replace(/\.pdf$/i, "");
-      downloadBlob(new Blob([out as BlobPart], { type: "application/pdf" }), `${baseName}-signed.pdf`);
+      downloadBlob(pdfBytesToBlob(out), `${baseName}-signed.pdf`);
     } catch {
       setError(t.errSignFailed);
     } finally {

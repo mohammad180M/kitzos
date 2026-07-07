@@ -23,6 +23,7 @@ const nextConfig = {
         crypto: false,
       };
     }
+
     return config;
   },
 };

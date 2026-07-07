@@ -17,6 +17,7 @@ const config: Config = {
         line: "var(--line)",
         foreground: "var(--text)",
         muted: "var(--muted)",
+        secondary: "var(--text-secondary)",
         accent: "var(--accent)",
         "accent-ink": "var(--accent-ink)",
         primary: {

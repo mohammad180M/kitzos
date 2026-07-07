@@ -196,17 +196,6 @@ export const extraToolContent: Record<string, ToolContent> = {
       { question: "What color format works?", answer: "Any valid CSS color, including hex with alpha like #00000040." },
     ]
   ),
-  "meme-generator": content(
-    [
-      { title: "Upload image", description: "Choose the photo for your meme." },
-      { title: "Add text", description: "Type top and bottom captions — they render in classic meme style." },
-      { title: "Download PNG", description: "Save and share your meme." },
-    ],
-    [
-      { question: "What font is used?", answer: "Impact-style bold caps with outline, the classic meme look." },
-      { question: "Is processing local?", answer: "Yes. Canvas rendering happens entirely in your browser." },
-    ]
-  ),
   "signature-pad": content(
     [
       { title: "Draw", description: "Sign with mouse, pen, or finger on the pad." },
@@ -378,52 +367,6 @@ export const extraToolContent: Record<string, ToolContent> = {
     [
       { question: "Does exported JS work on touch?", answer: "Yes. It listens to pointerdown so taps and clicks both trigger ripples." },
       { question: "Can I attach it to any button?", answer: "Call attachPressEffect(yourElement) from the exported snippet." },
-    ]
-  ),
-  "certificate-generator": content(
-    [
-      {
-        title: "Pick a template",
-        description: "Choose classic, modern, tech, or elegant — colors and frame update instantly.",
-      },
-      {
-        title: "Customize text and logo",
-        description: "Edit title, recipient name, project, description, date, and signature. Upload a logo and adjust size, opacity, and position.",
-      },
-      {
-        title: "Tune colors and size",
-        description: "Set accent, background, and text colors. Pick A4, Letter, or square; landscape or portrait.",
-      },
-      {
-        title: "Download PNG or PDF",
-        description: "Export a high-resolution certificate — everything runs locally in your browser.",
-      },
-    ],
-    [
-      {
-        question: "Is the certificate generator free?",
-        answer: "Yes. Create and download unlimited certificates with no sign-up and no watermarks from kitzos.",
-      },
-      {
-        question: "Are my images uploaded to a server?",
-        answer: "No. Your logo and certificate are processed entirely in your browser. Nothing is sent to our servers.",
-      },
-      {
-        question: "Does it support Arabic text on the certificate?",
-        answer: "Yes. Arabic names and project titles render with RTL-aware canvas text and Noto Sans Arabic for connected letter shapes.",
-      },
-      {
-        question: "What formats can I download?",
-        answer: "PNG for sharing online and PDF for printing. Both export at 2× resolution for sharp output.",
-      },
-      {
-        question: "Can I use my own logo?",
-        answer: "Yes. Upload any image as a logo, resize it, change opacity, and place it at the top or as a watermark.",
-      },
-      {
-        question: "What certificate sizes are available?",
-        answer: "A4 and US Letter in landscape or portrait, plus a square format ideal for social posts.",
-      },
     ]
   ),
   "age-calculator": content(
@@ -713,12 +656,13 @@ export const extraToolContent: Record<string, ToolContent> = {
   "image-rotator": content(
     [
       { title: "Upload an image", description: "Choose JPG, PNG, or WebP from your device." },
-      { title: "Rotate or flip", description: "Turn 90°, 180°, or 270° and mirror horizontally or vertically." },
-      { title: "Download PNG", description: "Save the transformed image locally." },
+      { title: "Rotate", description: "Turn the image 90°, 180°, or 270° with instant preview." },
+      { title: "Download PNG", description: "Save the rotated image locally." },
     ],
     [
-      { question: "Is my image uploaded?", answer: "No. Rotation and flipping happen on canvas in your browser." },
-      { question: "What format is exported?", answer: "PNG to preserve quality after transforms." },
+      { question: "Is my image uploaded?", answer: "No. Rotation happens on canvas in your browser." },
+      { question: "What format is exported?", answer: "PNG to preserve quality after rotation." },
+      { question: "Need to flip or mirror?", answer: "Use the Flip Image tool linked on the page for horizontal or vertical mirroring." },
     ]
   ),
   "add-text-to-image": content(
@@ -743,38 +687,82 @@ export const extraToolContent: Record<string, ToolContent> = {
       { question: "Are images uploaded to a server?", answer: "No. Layout and export run locally on canvas." },
     ]
   ),
-  "pixelate-image": content(
+  "heic-to-jpg": content(
     [
-      { title: "Upload image", description: "Choose the photo you want to censor or stylize." },
-      { title: "Choose mode", description: "Pixelate the entire image or drag to select a specific region." },
-      { title: "Set pixel size", description: "Adjust block size for stronger or subtler pixelation." },
-      { title: "Download result", description: "Save the pixelated PNG for privacy or creative use." },
+      { title: "Upload HEIC files", description: "Select one or more iPhone HEIC photos from your device." },
+      { title: "Set JPEG quality", description: "Use the quality slider to balance file size and visual fidelity." },
+      { title: "Download results", description: "Save each JPG individually or download all as a ZIP archive." },
     ],
     [
-      { question: "Can I pixelate part of an image?", answer: "Yes. Choose “Selected region” and drag on the preview to mark the area to pixelate." },
-      { question: "Is my photo private?", answer: "Yes. Processing happens locally; nothing leaves your device." },
+      { question: "Are files uploaded to a server?", answer: "No. Conversion runs entirely in your browser with heic2any." },
+      { question: "Can I convert multiple photos at once?", answer: "Yes. Batch upload is supported with individual or ZIP download." },
     ]
   ),
-  "image-to-ascii": content(
+  "flip-image": content(
     [
-      { title: "Upload a photo", description: "Choose an image to convert to text art." },
-      { title: "Tune settings", description: "Adjust width and character density for detail vs. size." },
-      { title: "Copy or download", description: "Copy ASCII output or save as a .txt file." },
+      { title: "Upload an image", description: "Choose a PNG or JPG photo." },
+      { title: "Pick flip direction", description: "Flip horizontally, vertically, or both with instant preview." },
+      { title: "Download", description: "Export in the same format as the original file." },
     ],
     [
-      { question: "How is ASCII generated?", answer: "Pixel brightness is sampled and mapped to characters from dark to light." },
-      { question: "Does it work on portraits?", answer: "Yes. High-contrast photos produce the clearest ASCII results." },
+      { question: "Does flip change image quality?", answer: "No. Canvas mirroring preserves the original format without recompression artifacts beyond normal export." },
+      { question: "Need rotation instead?", answer: "Use the Image Rotator tool linked on the page for 90°, 180°, or 270° turns." },
     ]
   ),
-  "image-border-adder": content(
+  "blur-image": content(
     [
-      { title: "Upload image", description: "Select the photo or graphic to frame." },
-      { title: "Style the border", description: "Set border color, padding, and optional drop shadow." },
-      { title: "Download PNG", description: "Save the framed image with your chosen styling." },
+      { title: "Upload a photo", description: "Choose the image you want to redact before sharing." },
+      { title: "Draw regions", description: "Drag rectangles over faces, license plates, or sensitive text. Add multiple regions." },
+      { title: "Pixelate or blur and export", description: "Pixelate is best for secure redaction. Adjust strength, then download PNG or JPG." },
     ],
     [
-      { question: "Can I add padding only?", answer: "Yes. Padding creates space around the image inside the border." },
-      { question: "Is export lossless?", answer: "Output is PNG; very large borders increase file dimensions, not compression artifacts." },
+      { question: "Can I redact multiple areas?", answer: "Yes. Each rectangle is listed with its size in image pixels so you can delete or refine regions." },
+      { question: "Blur or pixelate for privacy?", answer: "Use pixelate at high strength for secure redaction. Light blur may still be recoverable." },
+      { question: "Is my photo private?", answer: "Yes. All processing is local — hide sensitive info before sharing." },
+    ]
+  ),
+  "image-watermark": content(
+    [
+      { title: "Upload your image", description: "Choose the photo or graphic to watermark." },
+      { title: "Add text watermark", description: "Type your label, set size, color, opacity, and rotation. Drag on the preview to position." },
+      { title: "Export", description: "Enable tile mode for diagonal repeats, then download in the original format." },
+    ],
+    [
+      { question: "Can I move the watermark?", answer: "Yes. Drag the text overlay on the live preview to place it precisely." },
+      { question: "Does tile mode repeat the text?", answer: "Yes. Tile mode repeats your watermark diagonally across the image." },
+    ]
+  ),
+  "image-color-picker": content(
+    [
+      { title: "Upload an image", description: "Choose any photo or screenshot with colors you want to sample." },
+      { title: "Click to pick", description: "Click any pixel to capture its color. Values appear in HEX, RGB, and HSL." },
+      { title: "Copy or review history", description: "Copy any format with one click. Recent picks stay in session history." },
+    ],
+    [
+      { question: "How accurate is the picked color?", answer: "The tool reads the exact pixel under your click from the canvas image data." },
+      { question: "Need palette or conversion tools?", answer: "Follow the link to dev color tools for palettes, gradients, and format conversion." },
+    ]
+  ),
+  "passport-photo": content(
+    [
+      { title: "Choose a size preset", description: "Pick 2×2 in (US), 35×45 mm (Schengen), 40×60 mm, or enter custom dimensions at 300 DPI." },
+      { title: "Upload and crop", description: "Drag and zoom your photo under the fixed-ratio frame. Use a plain light background when possible." },
+      { title: "Export photo or sheet", description: "Download a single passport photo or tile copies onto a 4×6 in / A6 printable sheet." },
+    ],
+    [
+      { question: "What DPI is used?", answer: "Exports are rendered at 300 DPI for print-ready official photo sizes." },
+      { question: "Does this remove the background?", answer: "No. Use a white or neutral backdrop when shooting for best official-photo results." },
+    ]
+  ),
+  "gif-maker": content(
+    [
+      { title: "Add frames", description: "Upload up to 50 images. Reorder frames with the up/down controls." },
+      { title: "Set timing", description: "Adjust frame delay in milliseconds and toggle loop on or off." },
+      { title: "Encode and download", description: "Choose max dimension (480 or 720 px), encode with progress, then save the animated GIF." },
+    ],
+    [
+      { question: "How many frames are supported?", answer: "Up to 50 frames per GIF to keep encoding fast in the browser." },
+      { question: "Will encoding freeze the page?", answer: "Encoding yields between frames so the UI stays responsive during longer jobs." },
     ]
   ),
   "barcode-generator": content(

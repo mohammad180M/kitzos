@@ -6,6 +6,7 @@ import PdfPreviewPane from "@/components/pdf/PdfPreviewPane";
 import PdfWorkbenchLayout from "@/components/pdf/PdfWorkbenchLayout";
 import { usePdfSharedLabels } from "@/lib/i18n/use-pdf-tool-labels";
 import { usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
+import { bytesForPdfLoad, pdfBytesToBlob, readPdfFileBytes } from "@/lib/pdf/bytes";
 import { useUnsavedWork } from "@/lib/unsaved-work";
 
 function loadPdfLib() {
@@ -30,7 +31,8 @@ export default function PdfProtect() {
     setError(null);
     try {
       const { PDFDocument } = await loadPdfLib();
-      const doc = await PDFDocument.load(await f.arrayBuffer());
+      const fileBytes = await readPdfFileBytes(f);
+      const doc = await PDFDocument.load(bytesForPdfLoad(fileBytes));
       setPageCount(doc.getPageCount());
     } catch {
       setPageCount(0);
@@ -52,7 +54,7 @@ export default function PdfProtect() {
 
       const inputPath = "/in.pdf";
       const outputPath = "/out.pdf";
-      const bytes = new Uint8Array(await file.arrayBuffer());
+      const bytes = await readPdfFileBytes(file);
       const fs = qpdf.FS as typeof qpdf.FS & {
         writeFile: (path: string, data: Uint8Array) => void;
       };
@@ -72,7 +74,7 @@ export default function PdfProtect() {
 
       const out = qpdf.FS.readFile(outputPath);
       const { downloadBlob } = await import("@/lib/audio-utils");
-      downloadBlob(new Blob([out as BlobPart], { type: "application/pdf" }), `protected-${file.name}`);
+      downloadBlob(pdfBytesToBlob(out), `protected-${file.name}`);
     } catch {
       setError(t.errProtectFailed);
     } finally {
@@ -131,7 +133,7 @@ export default function PdfProtect() {
         {t.protectAndDownload}
       </button>
 
-      <p className="text-xs text-gray-400">{t.privacyNote}</p>
+      <p className="tool-notice tool-notice--pdf">{t.privacyNote}</p>
     </>
   );
 

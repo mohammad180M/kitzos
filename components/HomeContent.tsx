@@ -218,7 +218,7 @@ export default function HomeContent() {
                     <HomeCategoryToolsGrid
                       tools={categoryTools}
                       gridClass={gridClass}
-                      paginate={!isSearching}
+                      paginate={false}
                       resetKey={`${category.id}-${query}`}
                     />
                   </section>

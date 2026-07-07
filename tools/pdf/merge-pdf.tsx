@@ -1,18 +1,30 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState, type DragEvent } from "react";
 import {
-  Download,
-  FileText,
-  GripVertical,
-  Trash2,
-  Upload,
-  Loader2,
-} from "lucide-react";
-import PdfPreviewPane, { type PreviewPage } from "@/components/pdf/PdfPreviewPane";
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type DragEvent,
+} from "react";
+import { Download, GripVertical, Loader2, Trash2, Upload } from "lucide-react";
+import MergePdfPageGrid from "@/components/pdf/MergePdfPageGrid";
+import PdfPreviewPane, { PDF_PREVIEW_PAGE_CAP } from "@/components/pdf/PdfPreviewPane";
 import PdfWorkbenchLayout from "@/components/pdf/PdfWorkbenchLayout";
-import { usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
+import { downloadBlob } from "@/lib/download";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
+import { usePdfSharedLabels, usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
 import {
+  buildGroupedPageOrder,
+  mergeFileColor,
+  pageOrdersEqual,
+  removeFileFromPageOrder,
+  type PageRef,
+} from "@/lib/pdf/merge-page-order";
+import { bytesForPdfLoad, pdfBytesToBlob, readPdfFileBytes } from "@/lib/pdf/bytes";
+import {
+  getPdfPageCount,
   loadPdfDocument,
   releasePdfDocument,
   renderPdfPageThumb,
@@ -35,6 +47,8 @@ interface PdfFile {
   file: File;
   name: string;
   size: number;
+  pageCount: number;
+  colorIndex: number;
 }
 
 function formatBytes(bytes: number): string {
@@ -45,15 +59,20 @@ function formatBytes(bytes: number): string {
 
 export default function MergePdf() {
   const t = usePdfToolLabels("mergePdf");
+  const shared = usePdfSharedLabels();
+  const { locale } = useLocale();
   const [files, setFiles] = useState<PdfFile[]>([]);
-  const [previewPages, setPreviewPages] = useState<PreviewPage[]>([]);
-  const [totalPreviewPages, setTotalPreviewPages] = useState(0);
+  const [pageOrder, setPageOrder] = useState<PageRef[]>([]);
+  const [showFileReorderNote, setShowFileReorderNote] = useState(false);
   const [merging, setMerging] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [dragIndex, setDragIndex] = useState<number | null>(null);
-  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+  const [fileDragIndex, setFileDragIndex] = useState<number | null>(null);
+  const [fileDragOverIndex, setFileDragOverIndex] = useState<number | null>(null);
+  const [liveMessage, setLiveMessage] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const filesRef = useRef<PdfFile[]>([]);
+  const pageOrderRef = useRef<PageRef[]>([]);
+  const colorCounterRef = useRef(0);
 
   useUnsavedWork(files.length > 0);
 
@@ -62,49 +81,8 @@ export default function MergePdf() {
   }, [files]);
 
   useEffect(() => {
-    if (files.length === 0) {
-      setPreviewPages([]);
-      setTotalPreviewPages(0);
-      return;
-    }
-
-    let cancelled = false;
-
-    void (async () => {
-      const pages: PreviewPage[] = [];
-      let total = 0;
-      let order = 0;
-
-      for (const pdfFile of files) {
-        try {
-          const doc = await loadPdfDocument(pdfFile.file);
-          for (let i = 0; i < doc.numPages; i++) {
-            order++;
-            const pageNum = order;
-            const fileRef = pdfFile.file;
-            pages.push({
-              id: `${pdfFile.id}-p${i}`,
-              dividerBefore: i === 0 ? pdfFile.name : undefined,
-              label: String(pageNum),
-              render: () => renderPdfPageThumb(fileRef, i),
-            });
-          }
-          total += doc.numPages;
-        } catch {
-          // skip invalid file in preview
-        }
-      }
-
-      if (!cancelled) {
-        setPreviewPages(pages);
-        setTotalPreviewPages(total);
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [files]);
+    pageOrderRef.current = pageOrder;
+  }, [pageOrder]);
 
   useEffect(() => {
     return () => {
@@ -112,13 +90,49 @@ export default function MergePdf() {
     };
   }, []);
 
+  const totalPreviewPages = pageOrder.length;
+
   const totalSize = useMemo(
     () => formatBytes(files.reduce((sum, f) => sum + f.size, 0)),
     [files]
   );
 
+  const fileById = useMemo(() => new Map(files.map((f) => [f.id, f])), [files]);
+
+  const defaultPageOrder = useMemo(
+    () => buildGroupedPageOrder(files.map((f) => ({ id: f.id, pageCount: f.pageCount }))),
+    [files]
+  );
+
+  const gridPages = useMemo(() => {
+    const capped = pageOrder.slice(0, PDF_PREVIEW_PAGE_CAP);
+    return capped.map((ref, orderIndex) => {
+      const pdfFile = fileById.get(ref.fileId);
+      const fileRef = pdfFile?.file;
+      return {
+        ref,
+        orderIndex,
+        displayNumber: orderIndex + 1,
+        colorIndex: pdfFile?.colorIndex ?? 0,
+        render: () => {
+          if (!fileRef) return Promise.resolve("");
+          return renderPdfPageThumb(fileRef, ref.pageIndex);
+        },
+      };
+    });
+  }, [pageOrder, fileById]);
+
+  const announce = useCallback((message: string) => {
+    setLiveMessage(message);
+  }, []);
+
+  const handlePageReorder = useCallback((next: PageRef[]) => {
+    setPageOrder(next);
+    setShowFileReorderNote(false);
+  }, []);
+
   const addFiles = useCallback(
-    (newFiles: FileList | File[]) => {
+    async (newFiles: FileList | File[]) => {
       setError(null);
       const pdfFiles = Array.from(newFiles).filter(
         (f) => f.type === "application/pdf" || f.name.toLowerCase().endsWith(".pdf")
@@ -129,14 +143,38 @@ export default function MergePdf() {
         return;
       }
 
-      const items: PdfFile[] = pdfFiles.map((file) => ({
-        id: `${file.name}-${file.size}-${Date.now()}-${Math.random()}`,
-        file,
-        name: file.name,
-        size: file.size,
-      }));
+      const items: PdfFile[] = [];
+      const newRefs: PageRef[] = [];
+
+      for (const file of pdfFiles) {
+        try {
+          const pageCount = await getPdfPageCount(file);
+          await loadPdfDocument(file);
+          const id = `${file.name}-${file.size}-${Date.now()}-${Math.random()}`;
+          const colorIndex = colorCounterRef.current++;
+          items.push({
+            id,
+            file,
+            name: file.name,
+            size: file.size,
+            pageCount,
+            colorIndex,
+          });
+          for (let i = 0; i < pageCount; i++) {
+            newRefs.push({ fileId: id, pageIndex: i });
+          }
+        } catch {
+          // skip invalid
+        }
+      }
+
+      if (items.length === 0) {
+        setError(t.errInvalidFiles);
+        return;
+      }
 
       setFiles((prev) => [...prev, ...items]);
+      setPageOrder((prev) => [...prev, ...newRefs]);
     },
     [t.errInvalidFiles]
   );
@@ -144,7 +182,7 @@ export default function MergePdf() {
   const handleDrop = useCallback(
     (e: DragEvent) => {
       e.preventDefault();
-      if (e.dataTransfer.files.length > 0) addFiles(e.dataTransfer.files);
+      if (e.dataTransfer.files.length > 0) void addFiles(e.dataTransfer.files);
     },
     [addFiles]
   );
@@ -155,33 +193,50 @@ export default function MergePdf() {
       if (removed) releasePdfDocument(removed.file);
       return prev.filter((f) => f.id !== id);
     });
+    setPageOrder((prev) => removeFileFromPageOrder(prev, id));
+    setShowFileReorderNote(false);
     setError(null);
   };
 
-  const handleDragStart = (index: number) => setDragIndex(index);
+  const handleFileDragStart = (index: number) => setFileDragIndex(index);
 
-  const handleDragOver = (e: DragEvent, index: number) => {
+  const handleFileDragOver = (e: DragEvent, index: number) => {
     e.preventDefault();
-    setDragOverIndex(index);
+    setFileDragOverIndex(index);
   };
 
-  const handleDropReorder = (e: DragEvent, dropIndex: number) => {
+  const handleFileDropReorder = (e: DragEvent, dropIndex: number) => {
     e.preventDefault();
     e.stopPropagation();
-    if (dragIndex === null || dragIndex === dropIndex) {
-      setDragIndex(null);
-      setDragOverIndex(null);
+    if (fileDragIndex === null || fileDragIndex === dropIndex) {
+      setFileDragIndex(null);
+      setFileDragOverIndex(null);
       return;
     }
 
+    const hadCustom = !pageOrdersEqual(pageOrderRef.current, defaultPageOrder);
+
     setFiles((prev) => {
       const updated = [...prev];
-      const [moved] = updated.splice(dragIndex, 1);
+      const [moved] = updated.splice(fileDragIndex, 1);
       updated.splice(dropIndex, 0, moved);
       return updated;
     });
-    setDragIndex(null);
-    setDragOverIndex(null);
+
+    setPageOrder(
+      buildGroupedPageOrder(
+        (() => {
+          const updated = [...files];
+          const [moved] = updated.splice(fileDragIndex, 1);
+          updated.splice(dropIndex, 0, moved);
+          return updated.map((f) => ({ id: f.id, pageCount: f.pageCount }));
+        })()
+      )
+    );
+
+    if (hadCustom) setShowFileReorderNote(true);
+    setFileDragIndex(null);
+    setFileDragOverIndex(null);
   };
 
   const mergePdfs = async () => {
@@ -196,22 +251,37 @@ export default function MergePdf() {
     try {
       const { PDFDocument } = await getPdfLib();
       const mergedPdf = await PDFDocument.create();
+      const loaded = new Map<string, Awaited<ReturnType<typeof PDFDocument.load>>>();
 
-      for (const pdfFile of files) {
-        const arrayBuffer = await pdfFile.file.arrayBuffer();
-        const pdf = await PDFDocument.load(arrayBuffer);
-        const pages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-        pages.forEach((page) => mergedPdf.addPage(page));
+      if (pageOrder.length === 0) {
+        setError(t.errMergeFailed);
+        return;
+      }
+
+      for (const { fileId, pageIndex } of pageOrder) {
+        const pdfFile = fileById.get(fileId);
+        if (!pdfFile) continue;
+
+        let source = loaded.get(fileId);
+        if (!source) {
+          const fileBytes = await readPdfFileBytes(pdfFile.file);
+          source = await PDFDocument.load(bytesForPdfLoad(fileBytes));
+          loaded.set(fileId, source);
+        }
+
+        if (pageIndex < 0 || pageIndex >= source.getPageCount()) continue;
+
+        const [page] = await mergedPdf.copyPages(source, [pageIndex]);
+        mergedPdf.addPage(page);
+      }
+
+      if (mergedPdf.getPageCount() === 0) {
+        setError(t.errMergeFailed);
+        return;
       }
 
       const mergedBytes = await mergedPdf.save();
-      const blob = new Blob([new Uint8Array(mergedBytes)], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "merged.pdf";
-      a.click();
-      URL.revokeObjectURL(url);
+      downloadBlob(pdfBytesToBlob(mergedBytes), "merged.pdf");
     } catch {
       setError(t.errMergeFailed);
     } finally {
@@ -242,14 +312,17 @@ export default function MergePdf() {
           multiple
           className="hidden"
           onChange={(e) => {
-            if (e.target.files) addFiles(e.target.files);
+            if (e.target.files) void addFiles(e.target.files);
             e.target.value = "";
           }}
         />
       </div>
 
       {error && (
-        <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300" role="alert">
+        <p
+          className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300"
+          role="alert"
+        >
           {error}
         </p>
       )}
@@ -260,24 +333,33 @@ export default function MergePdf() {
             <li
               key={pdf.id}
               draggable
-              onDragStart={() => handleDragStart(index)}
-              onDragOver={(e) => handleDragOver(e, index)}
-              onDrop={(e) => handleDropReorder(e, index)}
+              onDragStart={() => handleFileDragStart(index)}
+              onDragOver={(e) => handleFileDragOver(e, index)}
+              onDrop={(e) => handleFileDropReorder(e, index)}
               onDragEnd={() => {
-                setDragIndex(null);
-                setDragOverIndex(null);
+                setFileDragIndex(null);
+                setFileDragOverIndex(null);
               }}
               className={`flex items-center gap-3 rounded-lg border bg-white px-3 py-2.5 dark:bg-gray-800 ${
-                dragOverIndex === index
+                fileDragOverIndex === index
                   ? "border-primary-400 bg-primary-50 dark:border-primary-500 dark:bg-primary-950/40"
                   : "border-gray-200 dark:border-gray-700"
               }`}
             >
-              <GripVertical className="h-4 w-4 shrink-0 cursor-grab text-gray-400 dark:text-gray-500" aria-hidden="true" />
-              <FileText className="h-5 w-5 shrink-0 text-primary-600 dark:text-primary-400" aria-hidden="true" />
+              <GripVertical
+                className="h-4 w-4 shrink-0 cursor-grab text-gray-400 dark:text-gray-500"
+                aria-hidden="true"
+              />
+              <span
+                className="h-2.5 w-2.5 shrink-0 rounded-full border border-gray-200 dark:border-gray-600"
+                style={{ backgroundColor: mergeFileColor(pdf.colorIndex) }}
+                aria-hidden="true"
+              />
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium text-gray-900 dark:text-gray-100">{pdf.name}</p>
-                <p className="text-xs text-gray-400 dark:text-gray-500">{formatBytes(pdf.size)}</p>
+                <p className="text-xs text-gray-400 dark:text-gray-500">
+                  {formatBytes(pdf.size)} · {shared.pageCount(pdf.pageCount)}
+                </p>
               </div>
               <button
                 type="button"
@@ -294,7 +376,7 @@ export default function MergePdf() {
 
       <button
         type="button"
-        onClick={mergePdfs}
+        onClick={() => void mergePdfs()}
         disabled={merging || files.length < 2}
         className="btn-primary w-full sm:w-auto"
       >
@@ -319,11 +401,21 @@ export default function MergePdf() {
       controls={controls}
       preview={
         files.length > 0 ? (
-          <PdfPreviewPane
-            pages={previewPages}
-            totalCount={totalPreviewPages}
-            sizeBadge={totalSize}
-          />
+          <PdfPreviewPane totalCount={totalPreviewPages} sizeBadge={totalSize}>
+            <div aria-live="polite" className="sr-only">
+              {liveMessage}
+            </div>
+            {showFileReorderNote && (
+              <p className="mb-3 text-xs text-amber-700 dark:text-amber-300">{t.pagesReorderedByFiles}</p>
+            )}
+            <MergePdfPageGrid
+              pages={gridPages}
+              rtl={locale === "ar"}
+              onReorder={handlePageReorder}
+              onAnnounce={announce}
+              pageMovedLabel={t.pageMovedAnnounce}
+            />
+          </PdfPreviewPane>
         ) : null
       }
     />

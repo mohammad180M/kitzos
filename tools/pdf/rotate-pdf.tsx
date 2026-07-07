@@ -11,6 +11,7 @@ import {
   releasePdfDocument,
   renderPdfPageThumb,
 } from "@/lib/pdf/thumbnails";
+import { bytesForPdfLoad, pdfBytesToBlob, readPdfFileBytes } from "@/lib/pdf/bytes";
 import { useUnsavedWork } from "@/lib/unsaved-work";
 
 function loadPdfLib() {
@@ -105,8 +106,8 @@ export default function RotatePdf() {
 
     try {
       const { PDFDocument, degrees } = await getPdfLib();
-      const sourceBytes = await file.arrayBuffer();
-      const sourcePdf = await PDFDocument.load(sourceBytes);
+      const sourceBytes = await readPdfFileBytes(file);
+      const sourcePdf = await PDFDocument.load(bytesForPdfLoad(sourceBytes));
       const outPdf = await PDFDocument.create();
       const indices = sourcePdf.getPageIndices();
       const pages = await outPdf.copyPages(sourcePdf, indices);
@@ -121,7 +122,7 @@ export default function RotatePdf() {
 
       const bytes = await outPdf.save();
       const baseName = file.name.replace(/\.pdf$/i, "") || "document";
-      downloadBlob(new Blob([new Uint8Array(bytes)], { type: "application/pdf" }), `${baseName}-rotated.pdf`);
+      downloadBlob(pdfBytesToBlob(bytes), `${baseName}-rotated.pdf`);
     } catch {
       setError(t.errRotateFailed);
     } finally {

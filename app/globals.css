@@ -9,7 +9,8 @@
     --surface-2: #f0f2f6;
     --line: #e4e8ef;
     --text: #14181f;
-    --muted: #5c6675;
+    --muted: #4c5665;
+    --text-secondary: #3a424f;
     --accent: #ffb020;
     --accent-ink: #1a1205;
 
@@ -30,7 +31,8 @@
     --surface-2: #182031;
     --line: #1f2733;
     --text: #e8ecf2;
-    --muted: #8b95a7;
+    --muted: #a9b4c6;
+    --text-secondary: #c6cedb;
     --accent: #ffb020;
     --accent-ink: #1a1205;
   }
@@ -105,6 +107,38 @@
 
   .tool-bench-card {
     @apply rounded-xl border-2 border-line bg-surface p-6 shadow-sm;
+  }
+
+  .tool-notice {
+    @apply flex items-start gap-2 rounded-lg border border-line bg-surface-2 px-4 py-3 text-sm text-secondary;
+  }
+
+  .tool-notice--warning .tool-notice__icon {
+    @apply text-amber-600 dark:text-amber-400;
+  }
+
+  .tool-notice--image .tool-notice__icon {
+    color: var(--cat-image);
+  }
+
+  .tool-notice--pdf .tool-notice__icon {
+    color: var(--cat-pdf);
+  }
+
+  .tool-notice--audio .tool-notice__icon {
+    color: var(--cat-audio);
+  }
+
+  .tool-notice--dev .tool-notice__icon {
+    color: var(--cat-dev);
+  }
+
+  .tool-notice--text .tool-notice__icon {
+    color: var(--cat-text);
+  }
+
+  .tool-notice__icon {
+    @apply mt-0.5 h-4 w-4 shrink-0;
   }
 
   .info-prose {

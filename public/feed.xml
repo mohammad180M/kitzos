@@ -81,7 +81,7 @@
       <title>Crop Image</title>
       <link>https://kitzos.com/en/tools/crop-image/</link>
       <guid isPermaLink="true">https://kitzos.com/en/tools/crop-image/</guid>
-      <description>Crop images with a draggable selection and optional fixed aspect ratios.</description>
+      <description>Crop images with a rectangle, circle, or rounded frame — right in your browser.</description>
     </item>
     <item>
       <title>Image Converter</title>
@@ -90,10 +90,34 @@
       <description>Convert images between PNG, JPG, and WebP formats in your browser.</description>
     </item>
     <item>
-      <title>Meme Generator</title>
-      <link>https://kitzos.com/en/tools/meme-generator/</link>
-      <guid isPermaLink="true">https://kitzos.com/en/tools/meme-generator/</guid>
-      <description>Add top and bottom text to any image. Classic meme layout, export as PNG.</description>
+      <title>HEIC to JPG Converter</title>
+      <link>https://kitzos.com/en/tools/heic-to-jpg/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/heic-to-jpg/</guid>
+      <description>Convert iPhone HEIC photos to JPG locally. Batch convert and download as ZIP.</description>
+    </item>
+    <item>
+      <title>Flip Image</title>
+      <link>https://kitzos.com/en/tools/flip-image/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/flip-image/</guid>
+      <description>Flip images horizontally, vertically, or both. Instant preview, keeps PNG or JPG format.</description>
+    </item>
+    <item>
+      <title>Image Rotator</title>
+      <link>https://kitzos.com/en/tools/image-rotator/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/image-rotator/</guid>
+      <description>Rotate images 90°, 180°, or 270° in your browser. Download as PNG.</description>
+    </item>
+    <item>
+      <title>Blur &amp; Pixelate Image</title>
+      <link>https://kitzos.com/en/tools/blur-image/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/blur-image/</guid>
+      <description>Draw rectangles to blur or pixelate sensitive areas before sharing. 100% local processing.</description>
+    </item>
+    <item>
+      <title>Image Watermark</title>
+      <link>https://kitzos.com/en/tools/image-watermark/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/image-watermark/</guid>
+      <description>Add draggable text watermarks with opacity, rotation, and tile mode. Export in original format.</description>
     </item>
     <item>
       <title>Add Text to Image</title>
@@ -108,46 +132,28 @@
       <description>Combine 2–4 photos into a grid collage with adjustable gap. Download as one PNG.</description>
     </item>
     <item>
+      <title>Passport Photo Maker</title>
+      <link>https://kitzos.com/en/tools/passport-photo/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/passport-photo/</guid>
+      <description>Crop to official passport sizes at 300 DPI. Export single photo or printable sheet.</description>
+    </item>
+    <item>
+      <title>GIF Maker from Images</title>
+      <link>https://kitzos.com/en/tools/gif-maker/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/gif-maker/</guid>
+      <description>Combine up to 50 images into an animated GIF with frame delay and loop control.</description>
+    </item>
+    <item>
+      <title>Image Color Picker</title>
+      <link>https://kitzos.com/en/tools/image-color-picker/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/image-color-picker/</guid>
+      <description>Click any pixel to get HEX, RGB, and HSL values. Copy colors with session history.</description>
+    </item>
+    <item>
       <title>Remove EXIF Data</title>
       <link>https://kitzos.com/en/tools/exif-remover/</link>
       <guid isPermaLink="true">https://kitzos.com/en/tools/exif-remover/</guid>
       <description>Strip GPS, camera, and metadata from photos by re-exporting through canvas.</description>
-    </item>
-    <item>
-      <title>Image Rotator &amp; Flipper</title>
-      <link>https://kitzos.com/en/tools/image-rotator/</link>
-      <guid isPermaLink="true">https://kitzos.com/en/tools/image-rotator/</guid>
-      <description>Rotate images 90°, 180°, or 270° and flip horizontally or vertically. Download as PNG.</description>
-    </item>
-    <item>
-      <title>Image Border Adder</title>
-      <link>https://kitzos.com/en/tools/image-border-adder/</link>
-      <guid isPermaLink="true">https://kitzos.com/en/tools/image-border-adder/</guid>
-      <description>Add colored borders, padding, and optional drop shadow to images. Download PNG.</description>
-    </item>
-    <item>
-      <title>Pixelate Images</title>
-      <link>https://kitzos.com/en/tools/pixelate-image/</link>
-      <guid isPermaLink="true">https://kitzos.com/en/tools/pixelate-image/</guid>
-      <description>Pixelate a selected region or the full image for privacy. Process locally in browser.</description>
-    </item>
-    <item>
-      <title>Certificate Generator</title>
-      <link>https://kitzos.com/en/tools/certificate-generator/</link>
-      <guid isPermaLink="true">https://kitzos.com/en/tools/certificate-generator/</guid>
-      <description>Create a professional achievement or project certificate. Customize text, colors, and logo with a live preview, then download as PNG or PDF. Runs entirely in your browser.</description>
-    </item>
-    <item>
-      <title>Signature Generator PNG</title>
-      <link>https://kitzos.com/en/tools/signature-pad/</link>
-      <guid isPermaLink="true">https://kitzos.com/en/tools/signature-pad/</guid>
-      <description>Draw a transparent signature and download as PNG for documents and forms.</description>
-    </item>
-    <item>
-      <title>Image to ASCII Art</title>
-      <link>https://kitzos.com/en/tools/image-to-ascii/</link>
-      <guid isPermaLink="true">https://kitzos.com/en/tools/image-to-ascii/</guid>
-      <description>Convert photos to ASCII art using brightness sampling. Copy or download as text.</description>
     </item>
     <item>
       <title>Word Counter</title>
@@ -592,6 +598,12 @@
       <link>https://kitzos.com/en/tools/typing-speed-test/</link>
       <guid isPermaLink="true">https://kitzos.com/en/tools/typing-speed-test/</guid>
       <description>Measure your typing speed in WPM and accuracy with a live typing test.</description>
+    </item>
+    <item>
+      <title>Signature Generator PNG</title>
+      <link>https://kitzos.com/en/tools/signature-pad/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/signature-pad/</guid>
+      <description>Draw a transparent signature and download as PNG for documents and forms.</description>
     </item>
     <item>
       <title>MP3 Cutter Online</title>
