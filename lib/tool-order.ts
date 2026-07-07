@@ -4,7 +4,18 @@ import { categories } from "./categories";
 type SortableTool = { slug: string; category: CategoryId };
 
 const CATEGORY_SLUG_ORDER: Record<CategoryId, string[]> = {
-  pdf: ["merge-pdf", "split-pdf", "pdf-to-jpg", "pdf-sign", "pdf-watermark", "pdf-protect"],
+  pdf: [
+    "merge-pdf",
+    "split-pdf",
+    "pdf-to-jpg",
+    "compress-pdf",
+    "rotate-pdf",
+    "organize-pdf",
+    "extract-pages",
+    "pdf-sign",
+    "pdf-watermark",
+    "pdf-protect",
+  ],
   image: [
     "compress-image",
     "image-resizer",

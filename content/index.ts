@@ -7,6 +7,10 @@ import { extraToolContent } from "./extra-tools";
 import * as mergePdf from "./merge-pdf";
 import * as splitPdf from "./split-pdf";
 import * as pdfToJpg from "./pdf-to-jpg";
+import * as compressPdf from "./compress-pdf";
+import * as rotatePdf from "./rotate-pdf";
+import * as organizePdf from "./organize-pdf";
+import * as extractPages from "./extract-pages";
 import * as compressImage from "./compress-image";
 import * as imageResizer from "./image-resizer";
 import * as cropImage from "./crop-image";
@@ -49,6 +53,10 @@ const contentMap: Record<string, ToolContent> = {
   "merge-pdf": mergePdf,
   "split-pdf": splitPdf,
   "pdf-to-jpg": pdfToJpg,
+  "compress-pdf": compressPdf,
+  "rotate-pdf": rotatePdf,
+  "organize-pdf": organizePdf,
+  "extract-pages": extractPages,
   "compress-image": compressImage,
   "image-resizer": imageResizer,
   "crop-image": cropImage,

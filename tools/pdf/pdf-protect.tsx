@@ -1,21 +1,41 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Download, Eye, EyeOff, Loader2, Upload } from "lucide-react";
-import { downloadBlob } from "@/lib/audio-utils";
+import { Download, Eye, EyeOff, Loader2, Lock, Upload } from "lucide-react";
+import PdfPreviewPane from "@/components/pdf/PdfPreviewPane";
+import PdfWorkbenchLayout from "@/components/pdf/PdfWorkbenchLayout";
+import { usePdfSharedLabels } from "@/lib/i18n/use-pdf-tool-labels";
 import { usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
 import { useUnsavedWork } from "@/lib/unsaved-work";
 
+function loadPdfLib() {
+  return import("pdf-lib");
+}
+
 export default function PdfProtect() {
   const t = usePdfToolLabels("pdfProtect");
+  const shared = usePdfSharedLabels();
   const inputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
+  const [pageCount, setPageCount] = useState(0);
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useUnsavedWork(file !== null);
+
+  const onFile = async (f: File) => {
+    setFile(f);
+    setError(null);
+    try {
+      const { PDFDocument } = await loadPdfLib();
+      const doc = await PDFDocument.load(await f.arrayBuffer());
+      setPageCount(doc.getPageCount());
+    } catch {
+      setPageCount(0);
+    }
+  };
 
   const protect = async () => {
     if (!file || !password) {
@@ -48,11 +68,10 @@ export default function PdfProtect() {
         outputPath,
       ]);
 
-      if (code !== 0) {
-        throw new Error("qpdf failed");
-      }
+      if (code !== 0) throw new Error("qpdf failed");
 
       const out = qpdf.FS.readFile(outputPath);
+      const { downloadBlob } = await import("@/lib/audio-utils");
       downloadBlob(new Blob([out as BlobPart], { type: "application/pdf" }), `protected-${file.name}`);
     } catch {
       setError(t.errProtectFailed);
@@ -61,14 +80,17 @@ export default function PdfProtect() {
     }
   };
 
-  return (
-    <div className="space-y-4">
+  const controls = (
+    <>
       <input
         ref={inputRef}
         type="file"
         accept="application/pdf"
         className="hidden"
-        onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+        onChange={(e) => {
+          const f = e.target.files?.[0];
+          if (f) void onFile(f);
+        }}
       />
 
       <button type="button" onClick={() => inputRef.current?.click()} className="btn-secondary inline-flex items-center gap-2">
@@ -110,6 +132,27 @@ export default function PdfProtect() {
       </button>
 
       <p className="text-xs text-gray-400">{t.privacyNote}</p>
-    </div>
+    </>
+  );
+
+  return (
+    <PdfWorkbenchLayout
+      active={!!file}
+      controls={controls}
+      preview={
+        file ? (
+          <PdfPreviewPane totalCount={pageCount}>
+            <div className="flex flex-col items-center gap-3 rounded-md border border-[var(--line)] bg-[var(--surface-2)] p-6 text-center">
+              <Lock className="h-10 w-10 text-[var(--cat-pdf)]" aria-hidden="true" />
+              <div className="min-w-0">
+                <p className="truncate text-sm font-medium text-foreground">{file.name}</p>
+                <p className="mt-1 text-xs text-muted">{shared.pageCount(pageCount)}</p>
+              </div>
+              <p className="text-sm text-muted">{shared.encryptedNote}</p>
+            </div>
+          </PdfPreviewPane>
+        ) : null
+      }
+    />
   );
 }

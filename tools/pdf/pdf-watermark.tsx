@@ -1,87 +1,85 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Download, Loader2, Upload } from "lucide-react";
-import { downloadBlob } from "@/lib/audio-utils";
+import PdfPreviewPane from "@/components/pdf/PdfPreviewPane";
+import PdfWorkbenchLayout from "@/components/pdf/PdfWorkbenchLayout";
 import { usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
+import { renderWatermarkPreview } from "@/lib/pdf/preview-render";
+import {
+  getPdfPageCount,
+  loadPdfDocument,
+  releasePdfDocument,
+} from "@/lib/pdf/thumbnails";
+import { useDebouncedValue } from "@/lib/use-debounced-value";
 import { useUnsavedWork } from "@/lib/unsaved-work";
-
-interface WatermarkPage {
-  getSize(): { width: number; height: number };
-  drawText(
-    text: string,
-    options: {
-      x: number;
-      y: number;
-      size: number;
-      color: ReturnType<(typeof import("pdf-lib"))["rgb"]>;
-      opacity: number;
-      rotate: ReturnType<(typeof import("pdf-lib"))["degrees"]>;
-    }
-  ): void;
-}
 
 function loadPdfLib() {
   return import("pdf-lib");
 }
 
-let pdfLibPromise: ReturnType<typeof loadPdfLib> | undefined;
-
-function getPdfLib() {
-  if (!pdfLibPromise) pdfLibPromise = loadPdfLib();
-  return pdfLibPromise;
-}
-
 export default function PdfWatermark() {
   const t = usePdfToolLabels("pdfWatermark");
   const inputRef = useRef<HTMLInputElement>(null);
+  const fileRef = useRef<File | null>(null);
   const [file, setFile] = useState<File | null>(null);
+  const [pageCount, setPageCount] = useState(0);
+  const [previewPage, setPreviewPage] = useState(1);
   const [text, setText] = useState("CONFIDENTIAL");
   const [opacity, setOpacity] = useState(0.3);
   const [fontSize, setFontSize] = useState(48);
   const [tile, setTile] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [previewSrc, setPreviewSrc] = useState<string | null>(null);
+
+  const debouncedText = useDebouncedValue(text, 300);
+  const debouncedOpacity = useDebouncedValue(opacity, 300);
+  const debouncedFontSize = useDebouncedValue(fontSize, 300);
+  const debouncedTile = useDebouncedValue(tile, 300);
 
   useUnsavedWork(file !== null);
 
-  const drawWatermark = (
-    page: WatermarkPage,
-    watermarkText: string,
-    size: number,
-    alpha: number,
-    tiled: boolean,
-    rgb: (typeof import("pdf-lib"))["rgb"],
-    degrees: (typeof import("pdf-lib"))["degrees"]
-  ) => {
-    const { width, height } = page.getSize();
-    const textWidth = watermarkText.length * size * 0.55;
+  useEffect(() => {
+    fileRef.current = file;
+  }, [file]);
 
-    if (!tiled) {
-      page.drawText(watermarkText, {
-        x: width / 2 - textWidth / 2,
-        y: height / 2,
-        size,
-        color: rgb(0.5, 0.5, 0.5),
-        opacity: alpha,
-        rotate: degrees(-35),
-      });
+  useEffect(() => {
+    return () => {
+      if (fileRef.current) releasePdfDocument(fileRef.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!file) {
+      setPreviewSrc(null);
       return;
     }
+    let cancelled = false;
+    void renderWatermarkPreview(file, previewPage - 1, {
+      text: debouncedText,
+      fontSize: debouncedFontSize,
+      opacity: debouncedOpacity,
+      tiled: debouncedTile,
+    }).then((url) => {
+      if (!cancelled) setPreviewSrc(url);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [file, previewPage, debouncedText, debouncedFontSize, debouncedOpacity, debouncedTile]);
 
-    const stepX = textWidth + size;
-    const stepY = size * 2.5;
-    for (let y = -stepY; y < height + stepY; y += stepY) {
-      for (let x = -width; x < width * 2; x += stepX) {
-        page.drawText(watermarkText, {
-          x,
-          y,
-          size,
-          color: rgb(0.5, 0.5, 0.5),
-          opacity: alpha,
-          rotate: degrees(-35),
-        });
-      }
+  const onFile = async (f: File) => {
+    if (file) releasePdfDocument(file);
+    setFile(f);
+    setError(null);
+    try {
+      const count = await getPdfPageCount(f);
+      await loadPdfDocument(f);
+      setPageCount(count);
+      setPreviewPage(1);
+    } catch {
+      setPageCount(0);
     }
   };
 
@@ -90,13 +88,40 @@ export default function PdfWatermark() {
     setProcessing(true);
     setError(null);
     try {
-      const { PDFDocument, rgb, degrees } = await getPdfLib();
+      const { PDFDocument, rgb, degrees } = await loadPdfLib();
       const pdfDoc = await PDFDocument.load(await file.arrayBuffer());
       const pages = pdfDoc.getPages();
       for (const page of pages) {
-        drawWatermark(page, text, fontSize, opacity, tile, rgb, degrees);
+        const { width, height } = page.getSize();
+        const textWidth = text.length * fontSize * 0.55;
+        if (!tile) {
+          page.drawText(text, {
+            x: width / 2 - textWidth / 2,
+            y: height / 2,
+            size: fontSize,
+            color: rgb(0.5, 0.5, 0.5),
+            opacity,
+            rotate: degrees(-35),
+          });
+        } else {
+          const stepX = textWidth + fontSize;
+          const stepY = fontSize * 2.5;
+          for (let y = -stepY; y < height + stepY; y += stepY) {
+            for (let x = -width; x < width * 2; x += stepX) {
+              page.drawText(text, {
+                x,
+                y,
+                size: fontSize,
+                color: rgb(0.5, 0.5, 0.5),
+                opacity,
+                rotate: degrees(-35),
+              });
+            }
+          }
+        }
       }
       const out = await pdfDoc.save();
+      const { downloadBlob } = await import("@/lib/audio-utils");
       downloadBlob(new Blob([out as BlobPart], { type: "application/pdf" }), `watermarked-${file.name}`);
     } catch {
       setError(t.errWatermarkFailed);
@@ -105,14 +130,17 @@ export default function PdfWatermark() {
     }
   };
 
-  return (
-    <div className="space-y-4">
+  const controls = (
+    <>
       <input
         ref={inputRef}
         type="file"
         accept="application/pdf"
         className="hidden"
-        onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+        onChange={(e) => {
+          const f = e.target.files?.[0];
+          if (f) void onFile(f);
+        }}
       />
 
       <button type="button" onClick={() => inputRef.current?.click()} className="btn-secondary inline-flex items-center gap-2">
@@ -122,12 +150,7 @@ export default function PdfWatermark() {
 
       <label className="block text-sm">
         <span className="font-medium text-gray-700 dark:text-gray-300">{t.watermarkText}</span>
-        <input
-          type="text"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          className="input-field mt-1"
-        />
+        <input type="text" value={text} onChange={(e) => setText(e.target.value)} className="input-field mt-1" />
       </label>
 
       <label className="block text-sm">
@@ -191,6 +214,50 @@ export default function PdfWatermark() {
         {processing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
         {t.applyAndDownload}
       </button>
-    </div>
+    </>
+  );
+
+  return (
+    <PdfWorkbenchLayout
+      active={!!file}
+      controls={controls}
+      preview={
+        file ? (
+          <PdfPreviewPane totalCount={pageCount} singleColumn>
+            <div className="space-y-3">
+              {pageCount > 1 && (
+                <div className="flex items-center justify-center gap-2">
+                  <button
+                    type="button"
+                    className="btn-secondary text-xs"
+                    disabled={previewPage <= 1}
+                    onClick={() => setPreviewPage((p) => Math.max(1, p - 1))}
+                  >
+                    ‹
+                  </button>
+                  <span className="text-xs text-muted">
+                    {previewPage} / {pageCount}
+                  </span>
+                  <button
+                    type="button"
+                    className="btn-secondary text-xs"
+                    disabled={previewPage >= pageCount}
+                    onClick={() => setPreviewPage((p) => Math.min(pageCount, p + 1))}
+                  >
+                    ›
+                  </button>
+                </div>
+              )}
+              <div className="relative overflow-hidden rounded-md border border-[var(--line)] bg-[var(--surface-2)] p-2">
+                {!previewSrc && <div className="pdf-preview-shimmer aspect-[3/4] w-full rounded" aria-hidden="true" />}
+                {previewSrc && (
+                  <img src={previewSrc} alt="" className="mx-auto max-h-80 w-full object-contain" />
+                )}
+              </div>
+            </div>
+          </PdfPreviewPane>
+        ) : null
+      }
+    />
   );
 }

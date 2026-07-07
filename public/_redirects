@@ -12,6 +12,12 @@
 # After deploy, each legacy URL below: 1× 301 → 200 (over HTTPS).
 # Note: http:// requests still get a separate Always Use HTTPS hop first (Cloudflare dashboard).
 
+# jpg-to-pdf merged into pdf-to-jpg (301, single-hop)
+/en/tools/jpg-to-pdf    https://kitzos.com/en/tools/pdf-to-jpg/    301
+/en/tools/jpg-to-pdf/   https://kitzos.com/en/tools/pdf-to-jpg/    301
+/ar/tools/jpg-to-pdf    https://kitzos.com/ar/tools/pdf-to-jpg/    301
+/ar/tools/jpg-to-pdf/   https://kitzos.com/ar/tools/pdf-to-jpg/    301
+
 # Tools (legacy → English default)
 /tools/:slug    https://kitzos.com/en/tools/:slug/    301
 /tools/:slug/   https://kitzos.com/en/tools/:slug/    301

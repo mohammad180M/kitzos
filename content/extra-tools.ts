@@ -108,12 +108,15 @@ export const extraToolContent: Record<string, ToolContent> = {
   "pdf-sign": content(
     [
       { title: "Upload PDF", description: "Select the PDF you want to sign." },
-      { title: "Draw signature", description: "Use mouse or touch on the signature pad." },
-      { title: "Download signed PDF", description: "Your signature is stamped on the first page." },
+      { title: "Create your signature", description: "Draw on the pad or upload an image (PNG, JPG, WebP, and more)." },
+      { title: "Position on the preview", description: "Drag and resize the signature on the page preview to place it exactly where you want." },
+      { title: "Download signed PDF", description: "Choose which pages to sign, then download your signed document." },
     ],
     [
-      { question: "Is the PDF uploaded?", answer: "No. Signing happens locally with pdf-lib in your browser." },
-      { question: "Can I place the signature elsewhere?", answer: "This tool places the signature on the bottom-right of the first page." },
+      { question: "Is the PDF uploaded?", answer: "No. Signing happens locally with pdf-lib in your browser — nothing leaves your device." },
+      { question: "What image types can I upload as a signature?", answer: "Any image your browser can decode: PNG, JPG, WebP, GIF (first frame), SVG, and AVIF. Files are normalized to PNG before embedding." },
+      { question: "Will transparency be preserved?", answer: "Yes for PNG and images with transparency. JPEG uploads keep their white background unless you enable “Remove white background.” Drawn signatures export with a transparent background." },
+      { question: "Can I sign multiple pages?", answer: "Yes. Choose all pages, a page range, or the current page. The signature is placed at the same relative position on each target page." },
     ]
   ),
   "pdf-watermark": content(

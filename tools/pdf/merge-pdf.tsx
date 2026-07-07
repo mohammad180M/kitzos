@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState, type DragEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type DragEvent } from "react";
 import {
   Download,
   FileText,
@@ -9,7 +9,14 @@ import {
   Upload,
   Loader2,
 } from "lucide-react";
+import PdfPreviewPane, { type PreviewPage } from "@/components/pdf/PdfPreviewPane";
+import PdfWorkbenchLayout from "@/components/pdf/PdfWorkbenchLayout";
 import { usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
+import {
+  loadPdfDocument,
+  releasePdfDocument,
+  renderPdfPageThumb,
+} from "@/lib/pdf/thumbnails";
 import { useUnsavedWork } from "@/lib/unsaved-work";
 
 function loadPdfLib() {
@@ -39,13 +46,76 @@ function formatBytes(bytes: number): string {
 export default function MergePdf() {
   const t = usePdfToolLabels("mergePdf");
   const [files, setFiles] = useState<PdfFile[]>([]);
+  const [previewPages, setPreviewPages] = useState<PreviewPage[]>([]);
+  const [totalPreviewPages, setTotalPreviewPages] = useState(0);
   const [merging, setMerging] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const filesRef = useRef<PdfFile[]>([]);
 
   useUnsavedWork(files.length > 0);
+
+  useEffect(() => {
+    filesRef.current = files;
+  }, [files]);
+
+  useEffect(() => {
+    if (files.length === 0) {
+      setPreviewPages([]);
+      setTotalPreviewPages(0);
+      return;
+    }
+
+    let cancelled = false;
+
+    void (async () => {
+      const pages: PreviewPage[] = [];
+      let total = 0;
+      let order = 0;
+
+      for (const pdfFile of files) {
+        try {
+          const doc = await loadPdfDocument(pdfFile.file);
+          for (let i = 0; i < doc.numPages; i++) {
+            order++;
+            const pageNum = order;
+            const fileRef = pdfFile.file;
+            pages.push({
+              id: `${pdfFile.id}-p${i}`,
+              dividerBefore: i === 0 ? pdfFile.name : undefined,
+              label: String(pageNum),
+              render: () => renderPdfPageThumb(fileRef, i),
+            });
+          }
+          total += doc.numPages;
+        } catch {
+          // skip invalid file in preview
+        }
+      }
+
+      if (!cancelled) {
+        setPreviewPages(pages);
+        setTotalPreviewPages(total);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [files]);
+
+  useEffect(() => {
+    return () => {
+      for (const f of filesRef.current) releasePdfDocument(f.file);
+    };
+  }, []);
+
+  const totalSize = useMemo(
+    () => formatBytes(files.reduce((sum, f) => sum + f.size, 0)),
+    [files]
+  );
 
   const addFiles = useCallback(
     (newFiles: FileList | File[]) => {
@@ -74,21 +144,21 @@ export default function MergePdf() {
   const handleDrop = useCallback(
     (e: DragEvent) => {
       e.preventDefault();
-      if (e.dataTransfer.files.length > 0) {
-        addFiles(e.dataTransfer.files);
-      }
+      if (e.dataTransfer.files.length > 0) addFiles(e.dataTransfer.files);
     },
     [addFiles]
   );
 
   const removeFile = (id: string) => {
-    setFiles((prev) => prev.filter((f) => f.id !== id));
+    setFiles((prev) => {
+      const removed = prev.find((f) => f.id === id);
+      if (removed) releasePdfDocument(removed.file);
+      return prev.filter((f) => f.id !== id);
+    });
     setError(null);
   };
 
-  const handleDragStart = (index: number) => {
-    setDragIndex(index);
-  };
+  const handleDragStart = (index: number) => setDragIndex(index);
 
   const handleDragOver = (e: DragEvent, index: number) => {
     e.preventDefault();
@@ -135,9 +205,7 @@ export default function MergePdf() {
       }
 
       const mergedBytes = await mergedPdf.save();
-      const blob = new Blob([new Uint8Array(mergedBytes)], {
-        type: "application/pdf",
-      });
+      const blob = new Blob([new Uint8Array(mergedBytes)], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -151,8 +219,8 @@ export default function MergePdf() {
     }
   };
 
-  return (
-    <div className="space-y-4">
+  const controls = (
+    <>
       <div
         role="button"
         tabIndex={0}
@@ -181,10 +249,7 @@ export default function MergePdf() {
       </div>
 
       {error && (
-        <p
-          className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300"
-          role="alert"
-        >
+        <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300" role="alert">
           {error}
         </p>
       )}
@@ -208,18 +273,10 @@ export default function MergePdf() {
                   : "border-gray-200 dark:border-gray-700"
               }`}
             >
-              <GripVertical
-                className="h-4 w-4 shrink-0 cursor-grab text-gray-400 dark:text-gray-500"
-                aria-hidden="true"
-              />
-              <FileText
-                className="h-5 w-5 shrink-0 text-primary-600 dark:text-primary-400"
-                aria-hidden="true"
-              />
+              <GripVertical className="h-4 w-4 shrink-0 cursor-grab text-gray-400 dark:text-gray-500" aria-hidden="true" />
+              <FileText className="h-5 w-5 shrink-0 text-primary-600 dark:text-primary-400" aria-hidden="true" />
               <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium text-gray-900 dark:text-gray-100">
-                  {pdf.name}
-                </p>
+                <p className="truncate text-sm font-medium text-gray-900 dark:text-gray-100">{pdf.name}</p>
                 <p className="text-xs text-gray-400 dark:text-gray-500">{formatBytes(pdf.size)}</p>
               </div>
               <button
@@ -253,6 +310,22 @@ export default function MergePdf() {
           </>
         )}
       </button>
-    </div>
+    </>
+  );
+
+  return (
+    <PdfWorkbenchLayout
+      active={files.length > 0}
+      controls={controls}
+      preview={
+        files.length > 0 ? (
+          <PdfPreviewPane
+            pages={previewPages}
+            totalCount={totalPreviewPages}
+            sizeBadge={totalSize}
+          />
+        ) : null
+      }
+    />
   );
 }

@@ -10,9 +10,39 @@
     "keywords": ["تقسيم pdf", "استخراج صفحات pdf", "أداة تقسيم pdf", "فصل صفحات pdf"]
   },
   "pdf-to-jpg": {
-    "title": "تحويل PDF إلى JPG",
-    "description": "حوّل صفحات PDF إلى صور JPG. نزّل صفحة واحدة أو جميع الصفحات كملف مضغوط.",
-    "keywords": ["pdf إلى jpg", "pdf إلى صورة", "تحويل pdf إلى jpeg", "صفحة pdf إلى صورة"]
+    "title": "تحويل PDF إلى JPG والعكس",
+    "description": "حوّل صفحات PDF إلى صور JPG، أو اجمع صور JPG وPNG وWebP في ملف PDF واحد.",
+    "keywords": [
+      "pdf إلى jpg",
+      "pdf إلى صورة",
+      "تحويل pdf إلى jpeg",
+      "صفحة pdf إلى صورة",
+      "jpg إلى pdf",
+      "صورة إلى pdf",
+      "png إلى pdf",
+      "دمج صور pdf",
+      "تحويل صور pdf"
+    ]
+  },
+  "compress-pdf": {
+    "title": "ضغط PDF",
+    "description": "قلّل حجم ملف PDF بتحسين البنية أو ضغط قوي يحوّل الصفحات إلى صور.",
+    "keywords": ["ضغط pdf", "تصغير pdf", "تقليل حجم pdf", "أداة ضغط pdf", "تحسين pdf"]
+  },
+  "rotate-pdf": {
+    "title": "تدوير PDF",
+    "description": "دوّر صفحات PDF بمقدار 90°. معاينة الصور المصغرة وتدوير كل الصفحات دفعة واحدة.",
+    "keywords": ["تدوير pdf", "قلب صفحات pdf", "تدوير صفحات pdf", "أداة تدوير pdf"]
+  },
+  "organize-pdf": {
+    "title": "تنظيم PDF",
+    "description": "أعد ترتيب صفحات PDF واحذفها بالسحب والإفلات. صدّر مستنداً جديداً.",
+    "keywords": ["تنظيم pdf", "إعادة ترتيب صفحات pdf", "حذف صفحات pdf", "ترتيب pdf"]
+  },
+  "extract-pages": {
+    "title": "استخراج صفحات PDF",
+    "description": "اسحب الصفحات المحددة من PDF إلى ملف جديد أو ملفات PDF منفصلة. انقر على الصور المصغرة أو اكتب نطاق الصفحات.",
+    "keywords": ["استخراج صفحات pdf", "سحب صفحات من pdf", "نسخ صفحات pdf", "حفظ صفحات pdf"]
   },
   "compress-image": {
     "title": "ضغط الصور",

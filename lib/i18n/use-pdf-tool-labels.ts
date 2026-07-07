@@ -8,3 +8,8 @@ export function usePdfToolLabels<K extends PdfToolKey>(key: K) {
   const pack = locale === "ar" ? pdfToolsAr : pdfToolsEn;
   return { ...pack.shared, ...pack[key] };
 }
+
+export function usePdfSharedLabels() {
+  const { locale } = useLocale();
+  return locale === "ar" ? pdfToolsAr.shared : pdfToolsEn.shared;
+}

@@ -18,10 +18,34 @@
       <description>Split a PDF into separate files by page ranges or individual pages.</description>
     </item>
     <item>
-      <title>PDF to JPG</title>
+      <title>PDF to JPG &amp; JPG to PDF Converter</title>
       <link>https://kitzos.com/en/tools/pdf-to-jpg/</link>
       <guid isPermaLink="true">https://kitzos.com/en/tools/pdf-to-jpg/</guid>
-      <description>Convert PDF pages to JPG images. Download a single page or all pages as a zip.</description>
+      <description>Convert PDF pages to JPG images, or combine JPG/PNG/WebP images into a single PDF.</description>
+    </item>
+    <item>
+      <title>Compress PDF</title>
+      <link>https://kitzos.com/en/tools/compress-pdf/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/compress-pdf/</guid>
+      <description>Reduce PDF file size with lossless optimization or strong raster compression.</description>
+    </item>
+    <item>
+      <title>Rotate PDF</title>
+      <link>https://kitzos.com/en/tools/rotate-pdf/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/rotate-pdf/</guid>
+      <description>Rotate PDF pages 90° at a time. Preview thumbnails and rotate all pages at once.</description>
+    </item>
+    <item>
+      <title>Organize PDF</title>
+      <link>https://kitzos.com/en/tools/organize-pdf/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/organize-pdf/</guid>
+      <description>Reorder and delete PDF pages with drag-and-drop thumbnails. Export a new document.</description>
+    </item>
+    <item>
+      <title>Extract PDF Pages</title>
+      <link>https://kitzos.com/en/tools/extract-pages/</link>
+      <guid isPermaLink="true">https://kitzos.com/en/tools/extract-pages/</guid>
+      <description>Pull selected pages out of a PDF into a new file or separate PDFs. Click thumbnails or type page ranges.</description>
     </item>
     <item>
       <title>Sign PDF Online</title>

@@ -5,7 +5,11 @@
 ## Tools (English)
 - [Merge PDF](https://kitzos.com/en/tools/merge-pdf/): Combine multiple PDF files into one document. Drag to reorder pages.
 - [Split PDF](https://kitzos.com/en/tools/split-pdf/): Split a PDF into separate files by page ranges or individual pages.
-- [PDF to JPG](https://kitzos.com/en/tools/pdf-to-jpg/): Convert PDF pages to JPG images. Download a single page or all pages as a zip.
+- [PDF to JPG & JPG to PDF Converter](https://kitzos.com/en/tools/pdf-to-jpg/): Convert PDF pages to JPG images, or combine JPG/PNG/WebP images into a single PDF.
+- [Compress PDF](https://kitzos.com/en/tools/compress-pdf/): Reduce PDF file size with lossless optimization or strong raster compression.
+- [Rotate PDF](https://kitzos.com/en/tools/rotate-pdf/): Rotate PDF pages 90° at a time. Preview thumbnails and rotate all pages at once.
+- [Organize PDF](https://kitzos.com/en/tools/organize-pdf/): Reorder and delete PDF pages with drag-and-drop thumbnails. Export a new document.
+- [Extract PDF Pages](https://kitzos.com/en/tools/extract-pages/): Pull selected pages out of a PDF into a new file or separate PDFs. Click thumbnails or type page ranges.
 - [Sign PDF Online](https://kitzos.com/en/tools/pdf-sign/): Draw your signature and stamp it on a PDF document. No account or upload to servers.
 - [Add Watermark to PDF](https://kitzos.com/en/tools/pdf-watermark/): Add a text watermark to every page of your PDF. Adjust opacity before downloading.
 - [Password Protect PDF](https://kitzos.com/en/tools/pdf-protect/): Encrypt a PDF with a password. Lock your document before sharing.
@@ -106,7 +110,11 @@
 ## Tools (العربية)
 - [دمج PDF](https://kitzos.com/ar/tools/merge-pdf/): اجمع عدة ملفات PDF في مستند واحد. اسحب لإعادة ترتيب الصفحات.
 - [تقسيم PDF](https://kitzos.com/ar/tools/split-pdf/): قسّم ملف PDF إلى ملفات منفصلة حسب نطاقات الصفحات أو صفحات فردية.
-- [تحويل PDF إلى JPG](https://kitzos.com/ar/tools/pdf-to-jpg/): حوّل صفحات PDF إلى صور JPG. نزّل صفحة واحدة أو جميع الصفحات كملف مضغوط.
+- [تحويل PDF إلى JPG والعكس](https://kitzos.com/ar/tools/pdf-to-jpg/): حوّل صفحات PDF إلى صور JPG، أو اجمع صور JPG وPNG وWebP في ملف PDF واحد.
+- [ضغط PDF](https://kitzos.com/ar/tools/compress-pdf/): قلّل حجم ملف PDF بتحسين البنية أو ضغط قوي يحوّل الصفحات إلى صور.
+- [تدوير PDF](https://kitzos.com/ar/tools/rotate-pdf/): دوّر صفحات PDF بمقدار 90°. معاينة الصور المصغرة وتدوير كل الصفحات دفعة واحدة.
+- [تنظيم PDF](https://kitzos.com/ar/tools/organize-pdf/): أعد ترتيب صفحات PDF واحذفها بالسحب والإفلات. صدّر مستنداً جديداً.
+- [استخراج صفحات PDF](https://kitzos.com/ar/tools/extract-pages/): اسحب الصفحات المحددة من PDF إلى ملف جديد أو ملفات PDF منفصلة. انقر على الصور المصغرة أو اكتب نطاق الصفحات.
 - [توقيع PDF إلكترونياً](https://kitzos.com/ar/tools/pdf-sign/): ارسم توقيعك وختمه على مستند PDF دون رفع الملف إلى خوادمنا.
 - [علامة مائية على PDF](https://kitzos.com/ar/tools/pdf-watermark/): أضف علامة مائية نصية على كل صفحات PDF مع التحكم في الشفافية.
 - [حماية PDF بكلمة سر](https://kitzos.com/ar/tools/pdf-protect/): شفّر ملف PDF بكلمة مرور قبل مشاركته.

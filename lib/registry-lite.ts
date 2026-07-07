@@ -62,22 +62,121 @@ export const toolsLite: ToolLite[] = [
   {
     "slug": "pdf-to-jpg",
     "category": "pdf",
-    "icon": "FileImage",
-    "title": "PDF to JPG",
-    "description": "Convert PDF pages to JPG images. Download a single page or all pages as a zip.",
+    "icon": "ArrowLeftRight",
+    "title": "PDF to JPG & JPG to PDF Converter",
+    "description": "Convert PDF pages to JPG images, or combine JPG/PNG/WebP images into a single PDF.",
     "keywords": [
       "pdf to jpg",
       "pdf to image",
       "convert pdf to jpeg",
-      "pdf page to image"
+      "pdf page to image",
+      "jpg to pdf",
+      "image to pdf",
+      "png to pdf",
+      "photos to pdf",
+      "combine images pdf"
     ],
-    "titleAr": "تحويل PDF إلى JPG",
-    "descriptionAr": "حوّل صفحات PDF إلى صور JPG. نزّل صفحة واحدة أو جميع الصفحات كملف مضغوط.",
+    "titleAr": "تحويل PDF إلى JPG والعكس",
+    "descriptionAr": "حوّل صفحات PDF إلى صور JPG، أو اجمع صور JPG وPNG وWebP في ملف PDF واحد.",
     "keywordsAr": [
       "pdf إلى jpg",
       "pdf إلى صورة",
       "تحويل pdf إلى jpeg",
-      "صفحة pdf إلى صورة"
+      "صفحة pdf إلى صورة",
+      "jpg إلى pdf",
+      "صورة إلى pdf",
+      "png إلى pdf",
+      "دمج صور pdf",
+      "تحويل صور pdf"
+    ]
+  },
+  {
+    "slug": "compress-pdf",
+    "category": "pdf",
+    "icon": "Minimize2",
+    "title": "Compress PDF",
+    "description": "Reduce PDF file size with lossless optimization or strong raster compression.",
+    "keywords": [
+      "compress pdf",
+      "reduce pdf size",
+      "shrink pdf",
+      "pdf compressor",
+      "optimize pdf"
+    ],
+    "titleAr": "ضغط PDF",
+    "descriptionAr": "قلّل حجم ملف PDF بتحسين البنية أو ضغط قوي يحوّل الصفحات إلى صور.",
+    "keywordsAr": [
+      "ضغط pdf",
+      "تصغير pdf",
+      "تقليل حجم pdf",
+      "أداة ضغط pdf",
+      "تحسين pdf"
+    ]
+  },
+  {
+    "slug": "rotate-pdf",
+    "category": "pdf",
+    "icon": "RotateCw",
+    "title": "Rotate PDF",
+    "description": "Rotate PDF pages 90° at a time. Preview thumbnails and rotate all pages at once.",
+    "keywords": [
+      "rotate pdf",
+      "turn pdf pages",
+      "pdf rotation",
+      "rotate pdf online",
+      "flip pdf pages"
+    ],
+    "titleAr": "تدوير PDF",
+    "descriptionAr": "دوّر صفحات PDF بمقدار 90°. معاينة الصور المصغرة وتدوير كل الصفحات دفعة واحدة.",
+    "keywordsAr": [
+      "تدوير pdf",
+      "قلب صفحات pdf",
+      "تدوير صفحات pdf",
+      "أداة تدوير pdf"
+    ]
+  },
+  {
+    "slug": "organize-pdf",
+    "category": "pdf",
+    "icon": "LayoutGrid",
+    "title": "Organize PDF",
+    "description": "Reorder and delete PDF pages with drag-and-drop thumbnails. Export a new document.",
+    "keywords": [
+      "organize pdf",
+      "reorder pdf pages",
+      "delete pdf pages",
+      "arrange pdf",
+      "pdf page editor"
+    ],
+    "titleAr": "تنظيم PDF",
+    "descriptionAr": "أعد ترتيب صفحات PDF واحذفها بالسحب والإفلات. صدّر مستنداً جديداً.",
+    "keywordsAr": [
+      "تنظيم pdf",
+      "إعادة ترتيب صفحات pdf",
+      "حذف صفحات pdf",
+      "ترتيب pdf"
+    ]
+  },
+  {
+    "slug": "extract-pages",
+    "category": "pdf",
+    "icon": "FileOutput",
+    "title": "Extract PDF Pages",
+    "description": "Pull selected pages out of a PDF into a new file or separate PDFs. Click thumbnails or type page ranges.",
+    "keywords": [
+      "extract pdf pages",
+      "pull pages from pdf",
+      "copy pdf pages",
+      "save pdf pages",
+      "extract pages from pdf"
+    ],
+    "titleAr": "استخراج صفحات PDF",
+    "descriptionAr": "اسحب الصفحات المحددة من PDF إلى ملف جديد أو ملفات PDF منفصلة. انقر على الصور المصغرة أو اكتب نطاق الصفحات.",
+    "keywordsAr": [
+      "استخراج صفحات pdf",
+      "سحب صفحات من pdf",
+      "نسخ صفحات pdf",
+      "حفظ صفحات pdf"
     ]
   },
   {

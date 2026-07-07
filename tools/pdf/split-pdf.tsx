@@ -1,8 +1,15 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Download, FileText, Loader2, Upload } from "lucide-react";
+import PdfPreviewPane, { type PreviewPage } from "@/components/pdf/PdfPreviewPane";
+import PdfWorkbenchLayout from "@/components/pdf/PdfWorkbenchLayout";
 import { usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
+import {
+  loadPdfDocument,
+  releasePdfDocument,
+  renderPdfPageThumb,
+} from "@/lib/pdf/thumbnails";
 import { useUnsavedWork } from "@/lib/unsaved-work";
 
 function loadPdfLib() {
@@ -61,6 +68,26 @@ function parsePageRanges(
   return groups.length > 0 ? groups : null;
 }
 
+function pageOutputBadge(
+  pageIndex: number,
+  mode: SplitMode,
+  groups: { start: number; end: number }[] | null
+): { highlighted: boolean; badge?: string; dimmed: boolean } {
+  if (mode === "each") {
+    return { highlighted: true, badge: `${pageIndex + 1}`, dimmed: false };
+  }
+  if (!groups) {
+    return { highlighted: false, dimmed: true };
+  }
+  for (let g = 0; g < groups.length; g++) {
+    const { start, end } = groups[g];
+    if (pageIndex >= start && pageIndex <= end) {
+      return { highlighted: true, badge: `${g + 1}`, dimmed: false };
+    }
+  }
+  return { highlighted: false, dimmed: true };
+}
+
 function downloadBlob(blob: Blob, filename: string) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -79,18 +106,53 @@ export default function SplitPdf() {
   const [splitting, setSplitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const fileRef = useRef<File | null>(null);
 
   useUnsavedWork(file !== null);
 
+  useEffect(() => {
+    fileRef.current = file;
+  }, [file]);
+
+  useEffect(() => {
+    return () => {
+      if (fileRef.current) releasePdfDocument(fileRef.current);
+    };
+  }, []);
+
+  const rangeGroups = useMemo(() => {
+    if (mode !== "ranges" || pageCount === 0) return null;
+    return parsePageRanges(ranges, pageCount);
+  }, [mode, ranges, pageCount]);
+
+  const previewPages = useMemo((): PreviewPage[] => {
+    if (!file || pageCount === 0) return [];
+    const fileRefLocal = file;
+    return Array.from({ length: pageCount }, (_, i) => {
+      const meta = pageOutputBadge(i, mode, rangeGroups);
+      return {
+        id: `split-p${i}`,
+        label: String(i + 1),
+        highlighted: meta.highlighted,
+        dimmed: meta.dimmed,
+        badge: meta.badge,
+        render: () => renderPdfPageThumb(fileRefLocal, i),
+      };
+    });
+  }, [file, pageCount, mode, rangeGroups]);
+
   const loadPdf = async (pdfFile: File) => {
     setError(null);
+    if (file) releasePdfDocument(file);
     try {
       const { PDFDocument } = await getPdfLib();
       const bytes = await pdfFile.arrayBuffer();
       const pdf = await PDFDocument.load(bytes);
+      const count = pdf.getPageCount();
       setFile(pdfFile);
-      setPageCount(pdf.getPageCount());
-      setRanges(`1-${pdf.getPageCount()}`);
+      setPageCount(count);
+      setRanges(`1-${count}`);
+      await loadPdfDocument(pdfFile);
     } catch {
       setFile(null);
       setPageCount(0);
@@ -162,8 +224,8 @@ export default function SplitPdf() {
     }
   };
 
-  return (
-    <div className="space-y-4">
+  const controls = (
+    <>
       <div
         role="button"
         tabIndex={0}
@@ -182,7 +244,7 @@ export default function SplitPdf() {
           className="hidden"
           onChange={(e) => {
             const f = e.target.files?.[0];
-            if (f) loadPdf(f);
+            if (f) void loadPdf(f);
             e.target.value = "";
           }}
         />
@@ -235,7 +297,7 @@ export default function SplitPdf() {
             value={ranges}
             onChange={(e) => setRanges(e.target.value)}
             placeholder={t.rangesPlaceholder}
-            className="input-field mt-1"
+            className="input-field mt-1 ltr-input"
           />
           <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">{t.rangesHint}</p>
         </div>
@@ -265,6 +327,18 @@ export default function SplitPdf() {
           </>
         )}
       </button>
-    </div>
+    </>
+  );
+
+  return (
+    <PdfWorkbenchLayout
+      active={!!file && pageCount > 0}
+      controls={controls}
+      preview={
+        file && pageCount > 0 ? (
+          <PdfPreviewPane pages={previewPages} totalCount={pageCount} />
+        ) : null
+      }
+    />
   );
 }
