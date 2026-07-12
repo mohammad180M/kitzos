@@ -1,6 +1,9 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
+import { localizedPath } from "@/lib/i18n/routing";
 import { useConverterToolLabels } from "@/lib/i18n/use-converter-tool-labels";
 
 type TempUnit = "c" | "f" | "k";
@@ -19,6 +22,7 @@ function fromCelsius(c: number, to: TempUnit): number {
 
 export default function TemperatureConverter() {
   const t = useConverterToolLabels("temperature");
+  const { locale } = useLocale();
   const [value, setValue] = useState("25");
   const [from, setFrom] = useState<TempUnit>("c");
   const [to, setTo] = useState<TempUnit>("f");
@@ -70,6 +74,14 @@ export default function TemperatureConverter() {
         <p className="text-sm text-gray-500 dark:text-gray-400">{t.invalid}</p>
       )}
       <p className="text-xs text-gray-500 dark:text-gray-400">{note}</p>
+      <p className="text-center text-sm text-gray-500 dark:text-gray-400">
+        <Link
+          href={localizedPath(locale, "/tools/unit-converter")}
+          className="text-primary-600 hover:underline dark:text-primary-400"
+        >
+          {t.unitConverterLink}
+        </Link>
+      </p>
     </div>
   );
 }

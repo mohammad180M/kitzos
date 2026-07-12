@@ -1,10 +1,13 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
+import { localizedPath } from "@/lib/i18n/routing";
 import { useConverterToolLabels } from "@/lib/i18n/use-converter-tool-labels";
 
-type Category = "length" | "weight" | "temperature" | "area" | "volume";
+type Category = "length" | "weight" | "area" | "volume";
 
 interface UnitDef {
   id: string;
@@ -30,11 +33,6 @@ const UNIT_DEFS: Record<Category, UnitDef[]> = {
     { id: "oz", toBase: (v) => v * 0.0283495, fromBase: (v) => v / 0.0283495 },
     { id: "lb", toBase: (v) => v * 0.453592, fromBase: (v) => v / 0.453592 },
   ],
-  temperature: [
-    { id: "c", toBase: (v) => v, fromBase: (v) => v },
-    { id: "f", toBase: (v) => ((v - 32) * 5) / 9, fromBase: (v) => (v * 9) / 5 + 32 },
-    { id: "k", toBase: (v) => v - 273.15, fromBase: (v) => v + 273.15 },
-  ],
   area: [
     { id: "sqm", toBase: (v) => v, fromBase: (v) => v },
     { id: "sqft", toBase: (v) => v * 0.092903, fromBase: (v) => v / 0.092903 },
@@ -52,6 +50,7 @@ const UNIT_DEFS: Record<Category, UnitDef[]> = {
 
 export default function UnitConverter() {
   const t = useConverterToolLabels("unitConverter");
+  const { locale } = useLocale();
   const [category, setCategory] = useState<Category>("length");
   const [fromUnit, setFromUnit] = useState("m");
   const [toUnit, setToUnit] = useState("ft");
@@ -109,6 +108,14 @@ export default function UnitConverter() {
             </button>
           ))}
         </div>
+        <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+          <Link
+            href={localizedPath(locale, "/tools/temperature-converter")}
+            className="text-primary-600 hover:underline dark:text-primary-400"
+          >
+            {t.temperatureLink}
+          </Link>
+        </p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-[1fr_auto_1fr] sm:items-end">

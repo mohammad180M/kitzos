@@ -33,8 +33,8 @@ export default function AboutContent() {
           خصوصية أصغر — ملفاتك تبقى معك.
         </p>
         <p>
-          قد يعرض الموقع إعلانات لإبقاء الأدوات مجانية. الإعلان من شركاء إعلان من أطراف ثالثة
-          (حالياً Adsterra) منفصل عن عمل الأدوات نفسها. راجع{" "}
+          قد يعرض الموقع إعلانات لإبقاء الأدوات مجانية عند تفعيلها. الإعلان من شركاء إعلان من أطراف ثالثة
+          منفصل عن عمل الأدوات نفسها. راجع{" "}
           <Link href={localizedPath(locale, "/privacy")}>سياسة الخصوصية</Link> للتفاصيل.
         </p>
 
@@ -120,8 +120,8 @@ export default function AboutContent() {
         you.
       </p>
       <p>
-        The site may show ads to help keep the tools free. Advertising is provided by third-party
-        advertising partners (currently Adsterra) and is separate from how the tools themselves work. See our{" "}
+        The site may show ads to help keep the tools free when advertising is enabled. Advertising is provided by third-party
+        advertising partners and is separate from how the tools themselves work. See our{" "}
         <Link href={localizedPath(locale, "/privacy")}>Privacy Policy</Link> for details.
       </p>
 

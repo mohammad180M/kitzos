@@ -20,7 +20,7 @@ import FaqAccordion from "./FaqAccordion";
 import JsonLd from "./JsonLd";
 import PrivacyBadge from "./PrivacyBadge";
 import ToolCard from "./ToolCard";
-import ToolPageAd from "./ToolPageAd";
+import AdSlot from "./AdSlot";
 import Footer from "./Footer";
 
 interface ToolLayoutProps {
@@ -113,7 +113,7 @@ export default function ToolLayout({
 
         <div className="tool-bench-card mb-8">{children}</div>
 
-        <ToolPageAd />
+        <AdSlot />
 
         {howTo.length > 0 && (
           <section className="mb-10 max-w-[65ch]" aria-labelledby="how-to-heading">

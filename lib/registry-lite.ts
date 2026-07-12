@@ -1902,22 +1902,22 @@ export const toolsLite: ToolLite[] = [
     "category": "converters",
     "icon": "Ruler",
     "title": "Unit Converter",
-    "description": "Convert length, weight, temperature, area, and volume between common units instantly.",
+    "description": "Convert length, weight, area, and volume between common units instantly.",
     "keywords": [
       "unit converter",
       "length converter",
       "weight converter",
-      "temperature converter",
-      "metric converter"
+      "metric converter",
+      "volume converter"
     ],
     "titleAr": "محوّل الوحدات",
-    "descriptionAr": "حوّل الطول والوزن ودرجة الحرارة والمساحة والحجم بين الوحدات الشائعة فوراً.",
+    "descriptionAr": "حوّل الطول والوزن والمساحة والحجم بين الوحدات الشائعة فوراً.",
     "keywordsAr": [
       "محوّل الوحدات",
       "محوّل الطول",
       "محوّل الوزن",
-      "محوّل درجة الحرارة",
-      "محوّل النظام المتري"
+      "محوّل النظام المتري",
+      "محوّل الحجم"
     ]
   },
   {

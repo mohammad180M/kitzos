@@ -87,7 +87,7 @@
 - [GPA Calculator](https://kitzos.com/en/tools/gpa-calculator/): Calculate weighted GPA on a 4.0 scale from course credits and letter grades.
 - [Fuel Cost Calculator](https://kitzos.com/en/tools/fuel-cost-calculator/): Estimate fuel needed and trip cost from distance, consumption (L/100km or MPG), and fuel price.
 - [Aspect Ratio Calculator](https://kitzos.com/en/tools/aspect-ratio-calculator/): Find image and video aspect ratios, use presets like 16:9, and scale width or height proportionally.
-- [Unit Converter](https://kitzos.com/en/tools/unit-converter/): Convert length, weight, temperature, area, and volume between common units instantly.
+- [Unit Converter](https://kitzos.com/en/tools/unit-converter/): Convert length, weight, area, and volume between common units instantly.
 - [Temperature Converter](https://kitzos.com/en/tools/temperature-converter/): Convert Celsius, Fahrenheit, and Kelvin with helpful reference notes.
 - [Cooking Unit Converter](https://kitzos.com/en/tools/cooking-converter/): Convert cups, tablespoons, teaspoons, milliliters, and grams for recipes.
 - [Data Unit Converter](https://kitzos.com/en/tools/data-unit-converter/): Convert bits, bytes, storage sizes, and network speeds (Mbps, Gbps) instantly.
@@ -192,7 +192,7 @@
 - [حاسبة المعدل التراكمي](https://kitzos.com/ar/tools/gpa-calculator/): احسب المعدل التراكمي GPA على مقياس 4.0 من ساعات المواد ودرجات الحروف.
 - [حاسبة تكلفة الوقود](https://kitzos.com/ar/tools/fuel-cost-calculator/): قدّر الوقود المطلوب وتكلفة الرحلة من المسافة والاستهلاك (لتر/100كم أو MPG) وسعر الوقود.
 - [حاسبة نسبة الأبعاد](https://kitzos.com/ar/tools/aspect-ratio-calculator/): احسب نسبة أبعاد الصور والفيديو، استخدم 16:9 وغيرها، وقِس العرض أو الارتفاع تناسبياً.
-- [محوّل الوحدات](https://kitzos.com/ar/tools/unit-converter/): حوّل الطول والوزن ودرجة الحرارة والمساحة والحجم بين الوحدات الشائعة فوراً.
+- [محوّل الوحدات](https://kitzos.com/ar/tools/unit-converter/): حوّل الطول والوزن والمساحة والحجم بين الوحدات الشائعة فوراً.
 - [محوّل درجة الحرارة](https://kitzos.com/ar/tools/temperature-converter/): حوّل بين مئوية وفهرنهايت وكلفن مع ملاحظات مرجعية مفيدة.
 - [محوّل وحدات الطبخ](https://kitzos.com/ar/tools/cooking-converter/): حوّل أكواب وملاعق وملليلترات وغرامات للوصفات.
 - [محوّل وحدات البيانات](https://kitzos.com/ar/tools/data-unit-converter/): حوّل بين بت وبايت وأحجام التخزين وسرعات الشبكة (Mbps, Gbps) فوراً.

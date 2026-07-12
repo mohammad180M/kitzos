@@ -577,10 +577,10 @@ const toolDefinitions: Tool[] = [
   {
     slug: "unit-converter",
     title: "Unit Converter",
-    description: "Convert length, weight, temperature, area, and volume between common units instantly.",
+    description: "Convert length, weight, area, and volume between common units instantly.",
     category: "converters",
     icon: "Ruler",
-    keywords: ["unit converter", "length converter", "weight converter", "temperature converter", "metric converter"],
+    keywords: ["unit converter", "length converter", "weight converter", "metric converter", "volume converter"],
   },
   {
     slug: "gradient-generator",

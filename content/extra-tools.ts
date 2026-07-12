@@ -459,6 +459,7 @@ export const extraToolContent: Record<string, ToolContent> = {
     [
       { question: "How is Kelvin defined?", answer: "Kelvin starts at absolute zero. K = °C + 273.15." },
       { question: "Are negative Fahrenheit values supported?", answer: "Yes. Any valid numeric temperature converts correctly." },
+      { question: "Where can I convert length or volume?", answer: "Use the Unit Converter for length, weight, area, and volume measurements." },
     ]
   ),
   "data-unit-converter": content(
@@ -602,11 +603,20 @@ export const extraToolContent: Record<string, ToolContent> = {
   "add-text-to-image": content(
     [
       { title: "Upload image", description: "Select the photo or graphic to annotate." },
-      { title: "Customize text", description: "Set message, font size, color, and position on the canvas." },
-      { title: "Download PNG", description: "Export the image with your text overlay." },
+      {
+        title: "Add and position text layers",
+        description:
+          "Use Add text for multiple captions. Drag any layer on the preview to place it, or nudge with arrow keys.",
+      },
+      {
+        title: "Style the selected layer",
+        description:
+          "Pick a layer, then set message, font family, size, curve (Latin text only), color, and outline.",
+      },
+      { title: "Download PNG", description: "Export the image with all text layers at full resolution." },
     ],
     [
-      { question: "Can I move the text?", answer: "Yes. Drag or use position controls to place the caption." },
+      { question: "Can I move the text?", answer: "Yes. Drag any layer on the preview to place it anywhere on the image." },
       { question: "Is processing local?", answer: "Yes. Canvas rendering stays entirely in your browser." },
     ]
   ),
