@@ -44,9 +44,4 @@ export const faq: FaqItem[] = [
     answer:
       "US customary units — US fluid ounces, US cups, and US gallons. This matches common American cooking and packaging labels.",
   },
-  {
-    question: "Can I convert metric to imperial?",
-    answer:
-      "Absolutely. Pick any category and select one metric unit and one imperial unit. The converter works in both directions.",
-  },
 ];

@@ -20,14 +20,14 @@ export const howTo: HowToStep[] = [
 
 export const faq: FaqItem[] = [
   {
-    question: "Is my text sent to a server?",
+    question: "Does it show word-level changes inside a line?",
     answer:
-      "No. The diff is computed locally in your browser using the diff library.",
+      "Yes. When the same line number changes on both sides, added and removed words are highlighted within that line — not just the whole line.",
   },
   {
     question: "Does it compare word by word?",
     answer:
-      "This tool compares line by line, which works well for code, configs, and multi-line documents.",
+      "It compares line by line first, which suits code, configs, and multi-line documents. Changed lines also get word-level highlights.",
   },
   {
     question: "Can I diff very large files?",
@@ -37,6 +37,6 @@ export const faq: FaqItem[] = [
   {
     question: "What do the colors mean?",
     answer:
-      "Red with strikethrough means content removed from the original. Green means content added in the changed version.",
+      "Red with strikethrough means removed content. Green means added content. Amber means a line changed with mixed word-level edits.",
   },
 ];

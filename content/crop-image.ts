@@ -25,28 +25,23 @@ export const howTo: HowToStep[] = [
 
 export const faq: FaqItem[] = [
   {
+    question: "What crop shapes and ratios are available?",
+    answer:
+      "Rectangle, circle, or rounded square. Rectangle presets include Free, 1:1, 4:3, 16:9, 3:4, and 9:16. Zoom (100–400%) and pan to frame the crop.",
+  },
+  {
+    question: "Do circle and rounded crops keep transparency?",
+    answer:
+      "Yes. Those modes export PNG with transparent pixels outside the shape — useful for profile photos and stickers. Corner radius for rounded square is adjustable (0–48%).",
+  },
+  {
+    question: "What format does a rectangle crop download as?",
+    answer:
+      "JPEG if the source is JPEG; otherwise PNG, so transparency from PNG sources can be kept.",
+  },
+  {
     question: "Is cropping done on a server?",
     answer:
-      "No. The image is processed on a canvas in your browser. Nothing is uploaded.",
-  },
-  {
-    question: "What aspect ratios are available for rectangles?",
-    answer:
-      "Free (any shape), 1:1 (square), 4:3, and 16:9. The crop box adjusts when you switch presets.",
-  },
-  {
-    question: "Does circle or rounded export keep transparency?",
-    answer:
-      "Yes. Circle and rounded-square modes export PNG with real alpha outside the shape — ideal for profile pictures and stickers.",
-  },
-  {
-    question: "What format is rectangle output?",
-    answer:
-      "Rectangle crops download as PNG or JPEG depending on the source format. Transparency is preserved when the source supports it.",
-  },
-  {
-    question: "Can I crop very large images?",
-    answer:
-      "Yes, though very large files may take a moment to process depending on your device memory.",
+      "No. Your photo is cropped in the browser and downloaded from your device — nothing is uploaded.",
   },
 ];

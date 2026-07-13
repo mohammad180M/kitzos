@@ -27,7 +27,7 @@ export const faq: FaqItem[] = [
   {
     question: "What is lorem ipsum used for?",
     answer:
-      "Placeholder text is used in mockups and drafts to show layout without distracting real content. This tool supports both Latin Lorem Ipsum and Arabic filler text.",
+      "Placeholder text fills mockups and drafts so you can judge layout without real content. This tool supports Latin Lorem Ipsum and Arabic filler text.",
   },
   {
     question: "Can I generate Arabic placeholder text?",
@@ -43,10 +43,5 @@ export const faq: FaqItem[] = [
     question: "What is the maximum count?",
     answer:
       "Up to 50 paragraphs or sentences, or up to 500 words per generation.",
-  },
-  {
-    question: "Can I use this commercially?",
-    answer:
-      "Yes. Generated placeholder text is free to use in any project.",
   },
 ];

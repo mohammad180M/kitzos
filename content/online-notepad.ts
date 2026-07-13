@@ -25,23 +25,23 @@ export const howTo: HowToStep[] = [
 
 export const faq: FaqItem[] = [
   {
-    question: "Where are my notes saved?",
+    question: "How does auto-save work?",
     answer:
-      "Notes are stored in your browser's localStorage on this device only. They persist when you close the tab and return later in the same browser.",
+      "After you pause typing for a moment, your notes save automatically in this browser on this device. A Saving indicator appears briefly, then Saved. Live word and character counts show above the editor.",
   },
   {
-    question: "Can I access my notes on another device?",
+    question: "Can I open my notes on another device?",
     answer:
-      "No. Because notes stay in local browser storage, they do not sync across devices or browsers. Copy text manually if you need it elsewhere.",
+      "No. Notes stay in this browser on this device and do not sync across browsers or phones. Copy the text if you need it elsewhere.",
   },
   {
-    question: "Will I lose my notes if I clear browser data?",
+    question: "Will Clear or clearing browser data erase my notes?",
     answer:
-      "Yes. Clearing site data, cookies, or localStorage for this site will delete your saved notes. Export important text before clearing browser storage.",
+      "Yes. Clear asks for confirmation, then wipes the notepad and deletes the saved copy in this browser. Clearing site data for this site also removes them.",
   },
   {
-    question: "Is the online notepad private?",
+    question: "Do my notes leave my device?",
     answer:
-      "Yes. Your text never leaves your browser or gets sent to a server. Everything stays on your device.",
+      "No. Your notes are never uploaded — they remain only in this browser on your device until you clear them or remove site data.",
   },
 ];

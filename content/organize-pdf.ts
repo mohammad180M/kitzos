@@ -30,9 +30,9 @@ export const faq: FaqItem[] = [
       "Yes. Each deleted page shows an Undo button until you export or clear the file.",
   },
   {
-    question: "Are files sent to a server?",
+    question: "Does my document leave my device?",
     answer:
-      "No. Reordering and deletion are applied locally with pdf-lib and pdf.js in your browser.",
+      "No. Reordering and deletions happen on your device inside the browser — the PDF stays local until you download the new file.",
   },
   {
     question: "What happens if I delete every page?",

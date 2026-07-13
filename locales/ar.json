@@ -54,7 +54,11 @@
     "faq": "الأسئلة الشائعة",
     "breadcrumbAria": "مسار التنقل",
     "advertisementAria": "إعلان",
-    "privacyBadge": "يعمل محلياً — ملفاتك لا تُرفع"
+    "privacyBadge": "يعمل محلياً — ملفاتك لا تُرفع",
+    "guide": "دليل",
+    "readGuide": "اقرأ الدليل الكامل ←",
+    "articleCta": "وفّر وقتك — استخدم أداة {tool} مجاناً ←",
+    "articleCtaCompact": "استخدم أداة {tool} مجاناً ←"
   },
   "ads": {
     "label": "إعلان",

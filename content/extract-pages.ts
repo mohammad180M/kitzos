@@ -28,8 +28,9 @@ export const faq: FaqItem[] = [
     answer: "No. A new PDF (or ZIP of PDFs) is created. Your original file stays unchanged.",
   },
   {
-    question: "Are files uploaded to a server?",
-    answer: "No. Selection and extraction run locally with pdf-lib in your browser.",
+    question: "Is my file uploaded?",
+    answer:
+      "No. Selected pages are copied into a new PDF on your device — the source file never leaves your browser.",
   },
   {
     question: "What order are extracted pages saved in?",

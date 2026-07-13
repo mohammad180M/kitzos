@@ -1,6 +1,11 @@
+/**
+ * Generates favicons, OG images, llms.txt, feed.xml; validates article locale pairs.
+ * Run via: npm run generate:assets (also hooked by dev/build).
+ */
 import { mkdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import sharp from "sharp";
+import { listArticleSlugs, validateArticleLocalePairs } from "../lib/articles";
 import { categories } from "../lib/categories";
 import { generateLlmsTxt } from "../lib/llms-txt";
 import { tools } from "../lib/registry";
@@ -91,9 +96,28 @@ ${feedItems}
   writeFileSync(join(publicDir, "feed.xml"), feed, "utf8");
 
   generateRegistryLite();
+  validateArticles();
 
   console.log(
     `Generated assets: favicons (16–512 + apple 180 + favicon.ico), llms.txt, feed.xml, og/default.png + ${categories.length} category OG images (${tools.length} tools in feed)`
+  );
+}
+
+function validateArticles(): void {
+  const errors = validateArticleLocalePairs();
+  if (errors.length > 0) {
+    console.error("Article locale validation failed:\n");
+    for (const error of errors) {
+      console.error(`  • ${error}`);
+    }
+    console.error(
+      "\nAdd the missing content/articles/{slug}.{locale}.md file(s) and rebuild."
+    );
+    process.exit(1);
+  }
+  const slugs = listArticleSlugs();
+  console.log(
+    `Article locale validation passed (${slugs.length} slug(s) × 2 locales).`
   );
 }
 

@@ -20,23 +20,23 @@ export const howTo: HowToStep[] = [
 
 export const faq: FaqItem[] = [
   {
-    question: "Which format should I choose?",
+    question: "Which output formats can I choose?",
     answer:
-      "Use PNG or WebP for images with transparency. Use JPG for photos where smaller file size matters.",
+      "PNG, JPG, and WebP. You can select one or more; multiple formats download together as a ZIP.",
   },
   {
     question: "What happens to transparency when converting to JPG?",
     answer:
-      "JPG does not support transparency, so transparent areas are filled with a white background before export.",
+      "JPG has no transparency, so transparent areas are filled with white before export. Prefer PNG or WebP to keep alpha.",
   },
   {
-    question: "Is WebP widely supported?",
+    question: "Can I control compression quality?",
     answer:
-      "WebP is supported by all modern browsers and many design tools. It offers good compression with optional transparency.",
+      "Yes. When JPG or WebP is selected, a quality slider (50–100, default 92) applies. PNG is lossless and ignores that slider.",
   },
   {
-    question: "Are images uploaded anywhere?",
+    question: "Are images uploaded during conversion?",
     answer:
-      "No. Conversion uses the HTML canvas API entirely in your browser.",
+      "No. Format conversion runs entirely in your browser on your device.",
   },
 ];

@@ -20,14 +20,14 @@ export const howTo: HowToStep[] = [
 
 export const faq: FaqItem[] = [
   {
-    question: "Does rotation affect PDF quality?",
+    question: "Does turning pages reduce quality?",
     answer:
-      "No. Pages are rotated without re-rendering content, so text and images stay sharp.",
+      "No. Only the page orientation changes; text and images are not re-drawn, so they stay sharp.",
   },
   {
-    question: "Are my files uploaded?",
+    question: "Is it private?",
     answer:
-      "No. Rotation runs locally in your browser using pdf-lib and pdf.js.",
+      "Yes. Your PDF is rotated on your device inside the browser — pages never upload.",
   },
   {
     question: "What if a page was already rotated?",
@@ -35,8 +35,8 @@ export const faq: FaqItem[] = [
       "The tool reads the existing rotation and adds your turns on top, so the final angle is always correct.",
   },
   {
-    question: "Can I rotate password-protected PDFs?",
+    question: "What if my PDF is password-protected?",
     answer:
-      "Encrypted PDFs must be unlocked first. This tool does not support password-protected files.",
+      "Unlock it first. Encrypted files cannot be rotated here.",
   },
 ];

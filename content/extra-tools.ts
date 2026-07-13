@@ -13,8 +13,10 @@ export const extraToolContent: Record<string, ToolContent> = {
       { title: "Download", description: "Choose MP3 or WAV and download the trimmed clip instantly." },
     ],
     [
-      { question: "Is my audio uploaded?", answer: "No. Decoding and export happen locally in your browser." },
-      { question: "Which formats are supported?", answer: "Most formats your browser can decode, including MP3, WAV, M4A, and OGG." },
+      { question: "Is my audio uploaded when I trim it?", answer: "No. Decoding, cutting, and export stay in your browser — your recording or track never leaves your device." },
+      { question: "Which formats can I open?", answer: "Most audio types your browser can play, including MP3, WAV, M4A, OGG, Opus, and FLAC (and similar)." },
+      { question: "How do I set the trim range?", answer: "Use the start/end number fields or the two sliders (0.1 s steps). Export is disabled if start is not before end." },
+      { question: "What can I download after cutting?", answer: "MP3 (default, 128 kbps) or WAV (uncompressed PCM). The file is named from your original with a -cut suffix." },
     ]
   ),
   "audio-converter": content(
@@ -24,8 +26,10 @@ export const extraToolContent: Record<string, ToolContent> = {
       { title: "Download", description: "The converted file downloads automatically when ready." },
     ],
     [
-      { question: "How does WAV to MP3 work?", answer: "The file is decoded with Web Audio API, then re-encoded to MP3 using lamejs in your browser." },
-      { question: "Is quality lossless?", answer: "WAV export is lossless. MP3 uses 128 kbps compression." },
+      { question: "What formats can I convert between?", answer: "Pick MP3 or WAV as the output first, then upload a file your browser can decode (MP3, WAV, M4A, OGG, and similar)." },
+      { question: "Is the result lossless?", answer: "WAV export is uncompressed PCM. MP3 uses 128 kbps compression at 44.1 kHz, so it is smaller but lossy." },
+      { question: "When does conversion start?", answer: "As soon as you choose a file — there is no separate Convert button. Changing the output format afterward requires uploading again." },
+      { question: "Does my audio leave my device during conversion?", answer: "No. The file is decoded and re-encoded in your browser, then downloads locally." },
     ]
   ),
   "audio-merger": content(
@@ -35,19 +39,23 @@ export const extraToolContent: Record<string, ToolContent> = {
       { title: "Merge and download", description: "Click merge to concatenate clips into one file." },
     ],
     [
-      { question: "Can I reorder tracks?", answer: "Remove and re-add files in the desired order before merging." },
-      { question: "Do sample rates need to match?", answer: "Files are concatenated as decoded buffers; very mixed sources may sound best as WAV." },
+      { question: "How many tracks do I need, and in what order?", answer: "Add at least two files. They merge in the order you added them — remove and re-add to change order." },
+      { question: "What if sample rates or channels differ?", answer: "Later clips are matched to the first file’s sample rate and channel layout. Mixed sources often sound more predictable when you export WAV." },
+      { question: "Which output formats are available?", answer: "MP3 (default, 128 kbps) or WAV. The download is named merged-audio." },
+      { question: "Are my tracks uploaded when merging?", answer: "No. Concatenation and export run in your browser so your audio stays on your device." },
     ]
   ),
   "voice-recorder": content(
     [
       { title: "Allow microphone", description: "Click start and approve microphone access when prompted." },
       { title: "Record", description: "Speak into your mic, then click stop when finished." },
-      { title: "Preview and download", description: "Play back the recording and download as WebM." },
+      { title: "Preview and download", description: "Play back the recording, then download as WebM, MP3, or WAV." },
     ],
     [
-      { question: "Where is my recording stored?", answer: "Only in your browser memory until you download it. Nothing is sent to kitzos servers." },
-      { question: "Which browsers work?", answer: "Modern Chrome, Firefox, Safari, and Edge with MediaRecorder support." },
+      { question: "Where is my recording stored?", answer: "Only in your browser until you download it. Microphone audio is not sent to kitzos servers." },
+      { question: "Which browsers can I use?", answer: "Current versions of Chrome, Firefox, Safari, and Edge that allow microphone recording in the browser." },
+      { question: "What formats can I download?", answer: "After you stop, preview the clip then download WebM (original capture), MP3 (128 kbps), or WAV." },
+      { question: "Can I pause or trim inside this tool?", answer: "No. Start and stop only — there is no pause/resume or in-tool trim. Use MP3 Cutter after download if you need to shorten the file." },
     ]
   ),
   "pdf-sign": content(
@@ -58,10 +66,26 @@ export const extraToolContent: Record<string, ToolContent> = {
       { title: "Download signed PDF", description: "Choose which pages to sign, then download your signed document." },
     ],
     [
-      { question: "Is the PDF uploaded?", answer: "No. Signing happens locally with pdf-lib in your browser — nothing leaves your device." },
-      { question: "What image types can I upload as a signature?", answer: "Any image your browser can decode: PNG, JPG, WebP, GIF (first frame), SVG, and AVIF. Files are normalized to PNG before embedding." },
-      { question: "Will transparency be preserved?", answer: "Yes for PNG and images with transparency. JPEG uploads keep their white background unless you enable “Remove white background.” Drawn signatures export with a transparent background." },
-      { question: "Can I sign multiple pages?", answer: "Yes. Choose all pages, a page range, or the current page. The signature is placed at the same relative position on each target page." },
+      {
+        question: "Is the PDF uploaded?",
+        answer:
+          "No. Your signature and the document stay on your device — signing happens inside the browser with nothing uploaded.",
+      },
+      {
+        question: "What image types can I upload as a signature?",
+        answer:
+          "Any image your browser can decode: PNG, JPG, WebP, GIF (first frame), SVG, and AVIF. Files are normalized to PNG before embedding.",
+      },
+      {
+        question: "Will transparency be preserved?",
+        answer:
+          "Yes for PNG and images with transparency. JPEG uploads keep their white background unless you enable “Remove white background.” Drawn signatures export with a transparent background.",
+      },
+      {
+        question: "How do I place one signature on several pages?",
+        answer:
+          "Choose all pages, a page range, or the current page. The signature is applied at the same relative position on each selected page.",
+      },
     ]
   ),
   "pdf-watermark": content(
@@ -71,8 +95,25 @@ export const extraToolContent: Record<string, ToolContent> = {
       { title: "Download", description: "Get a copy with the watermark on every page." },
     ],
     [
-      { question: "Can I use an image watermark?", answer: "This version supports text watermarks only." },
-      { question: "Will it flatten the PDF?", answer: "The watermark is drawn onto each page when you export." },
+      {
+        question: "Can I use an image watermark?",
+        answer: "This version supports text watermarks only.",
+      },
+      {
+        question: "Does the watermark become part of the page?",
+        answer:
+          "Yes. When you export, the text is drawn onto every page of the downloaded PDF.",
+      },
+      {
+        question: "Is it private?",
+        answer:
+          "Yes. Your PDF and watermark text stay on your device — nothing is uploaded while you stamp pages.",
+      },
+      {
+        question: "What is the difference between Single and Tiled?",
+        answer:
+          "Single places one diagonal watermark near the center. Tiled (repeat) repeats the text across the page. Adjust size and opacity before exporting.",
+      },
     ]
   ),
   "pdf-protect": content(
@@ -82,8 +123,26 @@ export const extraToolContent: Record<string, ToolContent> = {
       { title: "Download locked PDF", description: "Save the encrypted copy locally." },
     ],
     [
-      { question: "Is encryption done locally?", answer: "Yes. pdf-lib encrypts the file in your browser." },
-      { question: "Can I remove a password here?", answer: "This tool only adds protection. Use a PDF reader to remove passwords if you know the original." },
+      {
+        question: "Is encryption done on my device?",
+        answer:
+          "Yes. Your PDF and password stay in the browser — the locked file is created locally and never uploaded.",
+      },
+      {
+        question: "Can I remove a password here?",
+        answer:
+          "This tool only adds protection. To unlock a file, open it in a PDF reader with the password and save an unprotected copy.",
+      },
+      {
+        question: "How strong is the protection?",
+        answer:
+          "The tool applies modern 256-bit PDF encryption. Strength still depends on a long, hard-to-guess password and sending it on a different channel than the file.",
+      },
+      {
+        question: "What if the PDF is already password-protected?",
+        answer:
+          "Unlock it first, then protect it again here. This tool expects an unprotected PDF as input.",
+      },
     ]
   ),
   "exif-remover": content(
@@ -93,8 +152,10 @@ export const extraToolContent: Record<string, ToolContent> = {
       { title: "Download", description: "Save the clean JPEG without EXIF data." },
     ],
     [
-      { question: "What metadata is removed?", answer: "GPS, camera model, timestamps, and other EXIF/IPTC embedded in the original file." },
-      { question: "Does it reduce quality?", answer: "Output is JPEG at 92% quality — visually similar but without hidden metadata." },
+      { question: "What metadata can be removed?", answer: "Fields such as GPS, camera model, timestamps, and other EXIF/IPTC tags embedded in the file. Sensitive fields are pre-selected; you can select or deselect tags before cleaning." },
+      { question: "Which formats are supported?", answer: "JPEG, PNG, and WebP, including multiple files at once (individual download or a ZIP). WebP cleaned via full re-encode is saved as JPEG." },
+      { question: "Will cleaning reduce image quality?", answer: "When the tool re-encodes (typical for PNG/WebP, or JPEG when stripping everything), JPEG output uses about 92% quality — usually close visually, without the hidden metadata. Selective JPEG tag removal can keep the original pixels." },
+      { question: "Do my photos leave my device when stripping EXIF?", answer: "No. Metadata removal runs in your browser so location and camera details stay on your device until you download the cleaned files." },
     ]
   ),
   "og-image-generator": content(
@@ -105,7 +166,9 @@ export const extraToolContent: Record<string, ToolContent> = {
     ],
     [
       { question: "What size is OG standard?", answer: "1200×630 pixels is the recommended Open Graph image size." },
-      { question: "Can I use custom fonts?", answer: "This tool uses system UI fonts for fast, reliable rendering." },
+      { question: "Can I use custom fonts?", answer: "Latin text uses system UI fonts. Arabic titles automatically use Noto Sans Arabic when Arabic characters are detected — you cannot upload your own font files." },
+      { question: "What can I customize?", answer: "Title, subtitle, background color, and text colors with a live preview." },
+      { question: "What format downloads?", answer: "PNG at 1200×630 matching the preview." },
     ]
   ),
   "favicon-generator": content(
@@ -117,6 +180,8 @@ export const extraToolContent: Record<string, ToolContent> = {
     [
       { question: "Which sizes are included?", answer: "16, 32, 48, 192, and 512 pixel PNG files." },
       { question: "Do I need a square image?", answer: "Square sources work best; non-square images are scaled to fit." },
+      { question: "How do I get all sizes?", answer: "Upload once and download a ZIP containing every PNG size." },
+      { question: "Which source formats work?", answer: "Common image types your browser can read, such as PNG or JPG." },
     ]
   ),
   "svg-pattern-generator": content(
@@ -128,6 +193,8 @@ export const extraToolContent: Record<string, ToolContent> = {
     [
       { question: "Is the pattern an SVG?", answer: "Yes. It is embedded as a data-URI SVG in the CSS background." },
       { question: "Can I use it commercially?", answer: "Patterns you generate are yours to use freely." },
+      { question: "Which pattern styles exist?", answer: "Dots, lines, or grid — each tiles as a CSS background." },
+      { question: "Can I adjust tile size and colors?", answer: "Yes. Change pattern color, background color, and tile size before copying the CSS." },
     ]
   ),
   "box-shadow-generator": content(
@@ -139,6 +206,8 @@ export const extraToolContent: Record<string, ToolContent> = {
     [
       { question: "Does it support multiple shadows?", answer: "This tool generates a single shadow layer. Duplicate the rule for stacked shadows." },
       { question: "What color format works?", answer: "Any valid CSS color, including hex with alpha like #00000040." },
+      { question: "Can I make an inset shadow?", answer: "Yes. Toggle Inset to draw the shadow inside the preview card." },
+      { question: "What does the preview show?", answer: "A live card with adjustable offset, blur, spread, shadow color/opacity, and optional inset." },
     ]
   ),
   "signature-pad": content(
@@ -149,7 +218,9 @@ export const extraToolContent: Record<string, ToolContent> = {
     ],
     [
       { question: "Is the background transparent?", answer: "Yes. PNG export keeps transparency outside the ink strokes." },
-      { question: "Works on mobile?", answer: "Yes. Pointer Events support touch drawing with touch-action disabled on the pad." },
+      { question: "Works on mobile?", answer: "Yes. Draw with finger or stylus — touch scrolling is disabled on the pad so lines stay smooth." },
+      { question: "Can I clear and redraw?", answer: "Yes. Clear wipes the pad so you can start over before downloading." },
+      { question: "What size is exported?", answer: "PNG at 500×200 pixels with transparent pixels outside your strokes." },
     ]
   ),
   "color-palette-generator": content(
@@ -161,6 +232,8 @@ export const extraToolContent: Record<string, ToolContent> = {
     [
       { question: "How is this different from the color picker?", answer: "This tool generates full harmonious palettes, not just a single color." },
       { question: "Are colors accessible?", answer: "Check contrast manually before using text/background pairs in production UI." },
+      { question: "Which harmony modes exist?", answer: "Complementary, analogous, or triadic schemes from one base color." },
+      { question: "How do I copy a swatch?", answer: "Click any palette square to copy its HEX code." },
     ]
   ),
   "glassmorphism-generator": content(
@@ -170,8 +243,10 @@ export const extraToolContent: Record<string, ToolContent> = {
       { title: "Copy CSS", description: "Paste backdrop-filter and background rules into your design." },
     ],
     [
-      { question: "Browser support?", answer: "backdrop-filter works in modern Chromium, Safari, and Firefox." },
+      { question: "Which browsers support the glass effect?", answer: "Frosted-glass blur works in current Chromium, Safari, and Firefox versions." },
       { question: "Can I use it on any element?", answer: "Yes. Apply the copied CSS to cards, modals, or nav bars over colorful backgrounds." },
+      { question: "What can I adjust?", answer: "Blur (4–40px), panel opacity, border width, and the backdrop gradient color behind the preview." },
+      { question: "What CSS is copied?", answer: "Background, backdrop-filter, border, and border-radius rules ready to paste." },
     ]
   ),
   "css-minifier": content(
@@ -183,6 +258,8 @@ export const extraToolContent: Record<string, ToolContent> = {
     [
       { question: "Is minification lossless?", answer: "Yes. Comments and whitespace are removed; rules stay functionally the same." },
       { question: "Does it run locally?", answer: "All processing happens in your browser." },
+      { question: "Can I beautify as well as minify?", answer: "Yes. Switch between Format (readable) and Minify modes before copying output." },
+      { question: "Is my stylesheet uploaded?", answer: "No. Paste stays on your device for the whole session." },
     ]
   ),
   "js-minifier": content(
@@ -192,8 +269,10 @@ export const extraToolContent: Record<string, ToolContent> = {
       { title: "Copy result", description: "Use the minified output in production bundles." },
     ],
     [
-      { question: "Which minifier is used?", answer: "Terser, loaded on demand in the browser." },
-      { question: "Is my code uploaded?", answer: "No. Minification runs entirely client-side." },
+      { question: "What does minify do to my script?", answer: "It removes whitespace and shortens names where safe, then shows the compressed output to copy." },
+      { question: "Is my code uploaded?", answer: "No. Minification runs entirely in your browser after you click Minify." },
+      { question: "When does minification start?", answer: "After you paste code and click Minify — there is no automatic run on every keystroke." },
+      { question: "What if minification fails?", answer: "A syntax error message appears; fix the script and try Minify again." },
     ]
   ),
   "xml-formatter": content(
@@ -205,6 +284,8 @@ export const extraToolContent: Record<string, ToolContent> = {
     [
       { question: "Does it validate XML?", answer: "It formats structure visually but does not perform full schema validation." },
       { question: "Can I minify for APIs?", answer: "Yes. Minify removes extra whitespace between tags." },
+      { question: "Can I beautify and minify?", answer: "Yes. Choose Format for indented output or Minify for a compact single-line style." },
+      { question: "Is my XML sent to a server?", answer: "No. Formatting and minify run locally in your browser." },
     ]
   ),
   "sql-formatter": content(
@@ -214,8 +295,10 @@ export const extraToolContent: Record<string, ToolContent> = {
       { title: "Copy output", description: "Copy the readable SQL." },
     ],
     [
-      { question: "Which SQL dialect?", answer: "Standard SQL formatting; works well for common SELECT/INSERT/UPDATE statements." },
-      { question: "Is data sent to a server?", answer: "No. Formatting runs in your browser." },
+      { question: "Which SQL dialect is supported?", answer: "Standard SQL formatting that works well for common read and write statements such as SELECT, INSERT, and UPDATE." },
+      { question: "Do I need to click Format?", answer: "Yes. Paste your query, click Format, then copy the indented output." },
+      { question: "What if formatting fails?", answer: "An error message appears. Fix the query syntax and try Format again." },
+      { question: "Is my query logged anywhere?", answer: "No. Formatting runs locally in your browser after you click Format." },
     ]
   ),
   "url-encoder-decoder": content(
@@ -225,8 +308,10 @@ export const extraToolContent: Record<string, ToolContent> = {
       { title: "Copy result", description: "Copy the encoded or decoded output." },
     ],
     [
-      { question: "Which encoding is used?", answer: "encodeURIComponent / decodeURIComponent for URL components." },
-      { question: "Spaces in URLs?", answer: "Encoded as %20 with encodeURIComponent." },
+      { question: "Which encoding is used?", answer: "Standard percent-encoding for URL components — the same rules browsers use for encodeURIComponent." },
+      { question: "Spaces in URLs?", answer: "Encoded as %20 when encoding text for URL components." },
+      { question: "Can I switch encode and decode?", answer: "Yes. Toggle modes at the top; switching clears the input so you start fresh." },
+      { question: "What if decoding fails?", answer: "Invalid percent-sequences show an error instead of partial output." },
     ]
   ),
   "uuid-generator": content(
@@ -236,8 +321,10 @@ export const extraToolContent: Record<string, ToolContent> = {
       { title: "Copy all", description: "Copy every UUID at once, one per line." },
     ],
     [
-      { question: "Which UUID version?", answer: "Version 4 (random) via crypto.randomUUID()." },
+      { question: "Which UUID version?", answer: "Version 4 (random) IDs from your browser's built-in secure random generator." },
       { question: "Are UUIDs unique?", answer: "Collision probability is negligible for practical use." },
+      { question: "How many can I generate at once?", answer: "Choose 1–20 from the count dropdown, then click Generate." },
+      { question: "Can I copy all results?", answer: "Yes. Copy all puts every UUID on its own line." },
     ]
   ),
   "cron-expression-parser": content(
@@ -248,6 +335,8 @@ export const extraToolContent: Record<string, ToolContent> = {
     [
       { question: "How many fields?", answer: "Five: minute, hour, day-of-month, month, day-of-week." },
       { question: "Example: 0 9 * * 1?", answer: "Runs at 9:00 AM every Monday." },
+      { question: "Does description update live?", answer: "Yes. The plain-English summary changes as you edit the expression." },
+      { question: "What if the expression is invalid?", answer: "The description area shows an invalid message until the five fields parse correctly." },
     ]
   ),
   "color-code-converter": content(
@@ -258,6 +347,8 @@ export const extraToolContent: Record<string, ToolContent> = {
     [
       { question: "Supported inputs?", answer: "HEX (#RRGGBB), rgb(), and hsl() strings." },
       { question: "Different from color picker?", answer: "This tool converts typed values; the picker is for visual selection." },
+      { question: "What outputs do I get?", answer: "Matching HEX, RGB, HSL, and HSV values with copy buttons for each." },
+      { question: "Does conversion update live?", answer: "Yes. Valid typed colors update all formats as you edit." },
     ]
   ),
   "meta-tag-generator": content(
@@ -266,8 +357,10 @@ export const extraToolContent: Record<string, ToolContent> = {
       { title: "Copy tags", description: "Paste meta, Open Graph, and Twitter Card tags into your HTML head." },
     ],
     [
-      { question: "Which tags are included?", answer: "title, description, canonical, og:*, and twitter:* tags." },
+      { question: "Which tags are included?", answer: "Page title, meta description, canonical link, Open Graph tags (og:*), and Twitter Card tags (twitter:*)." },
       { question: "Do I need all fields?", answer: "Fill what you have; empty fields are omitted from output." },
+      { question: "Is a Twitter card set automatically?", answer: "When you add an image URL, twitter:card is set to summary_large_image in the output." },
+      { question: "Where do I paste the output?", answer: "Inside the <head> section of your HTML page." },
     ]
   ),
   "htaccess-redirect-generator": content(
@@ -279,6 +372,8 @@ export const extraToolContent: Record<string, ToolContent> = {
     [
       { question: "Does this work on Nginx?", answer: "These are Apache mod_rewrite rules. Nginx uses a different syntax." },
       { question: "Paths with trailing slash?", answer: "Rules match optional trailing slashes on the source path." },
+      { question: "301 or 302?", answer: "Pick permanent (301) or temporary (302) before copying the rule." },
+      { question: "What do I enter for paths?", answer: "Old and new URL paths — the tool outputs ready-to-paste .htaccess lines." },
     ]
   ),
   "lorem-picsum-placeholder": content(
@@ -288,8 +383,10 @@ export const extraToolContent: Record<string, ToolContent> = {
       { title: "Download PNG", description: "Save a local placeholder image with size label." },
     ],
     [
-      { question: "External API?", answer: "No. The image is drawn on canvas entirely in your browser." },
-      { question: "Max size?", answer: "Up to 4000×4000 pixels." },
+      { question: "Does this call an external image service?", answer: "No. The placeholder is drawn locally in your browser and downloads as PNG." },
+      { question: "What is the maximum size?", answer: "Width and height each accept 1–4,000 pixels." },
+      { question: "What appears on the image?", answer: "A solid background color with centered width × height label text." },
+      { question: "Can I pick the background color?", answer: "Yes. Use the color picker; label text automatically switches to light or dark for contrast." },
     ]
   ),
   "json-to-typescript": content(
@@ -301,6 +398,8 @@ export const extraToolContent: Record<string, ToolContent> = {
     [
       { question: "Nested objects?", answer: "Each nested object becomes a named interface derived from its key." },
       { question: "Arrays?", answer: "Homogeneous arrays use element types; object arrays get dedicated interfaces." },
+      { question: "Can I name the root interface?", answer: "Yes. Set the root name field before clicking Convert." },
+      { question: "What if JSON is invalid?", answer: "An error message appears and no TypeScript is generated until the JSON parses." },
     ]
   ),
   "interaction-fx": content(
@@ -310,8 +409,10 @@ export const extraToolContent: Record<string, ToolContent> = {
       { title: "Export code", description: "Copy CSS and JS that uses Pointer Events for mobile and desktop." },
     ],
     [
-      { question: "Does exported JS work on touch?", answer: "Yes. It listens to pointerdown so taps and clicks both trigger ripples." },
-      { question: "Can I attach it to any button?", answer: "Call attachPressEffect(yourElement) from the exported snippet." },
+      { question: "Does exported code work on touch screens?", answer: "Yes. The press-effect snippet responds to both taps and mouse clicks." },
+      { question: "Can I attach the press effect to my own button?", answer: "Yes. Call attachPressEffect on the element you want from the exported snippet." },
+      { question: "Which press effect patterns are available?", answer: "Ripple, burst, shockwave, ring pulse, and ink spread — each with adjustable color, duration, and size." },
+      { question: "Can I customize cursor motion too?", answer: "Yes. Pick dot, trail, glow, or ring presets and tune color and size, then copy or download both effects together." },
     ]
   ),
   "age-calculator": content(
@@ -322,7 +423,9 @@ export const extraToolContent: Record<string, ToolContent> = {
     ],
     [
       { question: "How is age calculated?", answer: "The tool counts full years, months, and days between your birth date and the reference date, accounting for varying month lengths." },
-      { question: "Is my birth date stored?", answer: "No. All calculations run locally in your browser." },
+      { question: "Can I calculate age as of a specific date?", answer: "Yes. Pick any reference date or tap Use today to measure age as of the current day." },
+      { question: "What else does the result show?", answer: "Besides years, months, and days, you also see total days lived and how many days remain until your next birthday." },
+      { question: "Is my birth date stored?", answer: "No. Your birth and reference dates stay on your device — nothing is uploaded." },
     ]
   ),
   "tip-calculator": content(
@@ -335,6 +438,8 @@ export const extraToolContent: Record<string, ToolContent> = {
     [
       { question: "Can I split tips between people?", answer: "Yes. Enter the number of diners and the tool divides the total evenly." },
       { question: "Does this work offline?", answer: "Yes. It is a pure client-side calculator with no network requests." },
+      { question: "What totals are shown?", answer: "Tip amount, bill plus tip grand total, and each person's share." },
+      { question: "Can I use any tip percentage?", answer: "Yes. Enter any non-negative tip rate; results update instantly." },
     ]
   ),
   "gpa-calculator": content(
@@ -346,6 +451,8 @@ export const extraToolContent: Record<string, ToolContent> = {
     [
       { question: "What grading scale is used?", answer: "Standard 4.0 scale: A=4, B=3, C=2, D=1, F=0, weighted by credit hours." },
       { question: "Can I calculate semester GPA?", answer: "Yes. Enter only the courses for the term you want to evaluate." },
+      { question: "Can I add or remove courses?", answer: "Yes. Use Add course for more rows and Remove to drop a course you do not need." },
+      { question: "Are my grades saved?", answer: "No. GPA is calculated in your browser; course rows are not uploaded." },
     ]
   ),
   "compound-interest": content(
@@ -358,6 +465,8 @@ export const extraToolContent: Record<string, ToolContent> = {
     [
       { question: "What formula is used?", answer: "A = P × (1 + r/n)^(nt) where n is compounding periods per year." },
       { question: "Is tax included?", answer: "No. This shows gross compound growth before taxes or fees." },
+      { question: "Which compounding frequencies are available?", answer: "Annual, semiannual, quarterly, monthly, and daily — pick how often interest is added." },
+      { question: "What results are shown?", answer: "Final balance and total interest earned, formatted in USD based on your principal, rate, and years." },
     ]
   ),
   "mortgage-calculator": content(
@@ -370,6 +479,8 @@ export const extraToolContent: Record<string, ToolContent> = {
     [
       { question: "Does this include taxes and insurance?", answer: "No. It calculates principal and interest (P&I) only, unlike full escrow estimates." },
       { question: "How is this different from the loan calculator?", answer: "This tool uses home price and down payment and shows an amortization schedule for mortgages." },
+      { question: "Does it show an amortization schedule?", answer: "Yes. A table lists monthly payment, principal, interest, and remaining balance for the first 24 months." },
+      { question: "What summary figures are shown?", answer: "Loan amount after down payment, monthly P&I payment, total interest, and total amount paid over the term." },
     ]
   ),
   "fuel-cost-calculator": content(
@@ -382,6 +493,8 @@ export const extraToolContent: Record<string, ToolContent> = {
     [
       { question: "Which consumption units are supported?", answer: "Liters per 100 km (common in Europe/MENA) and US miles per gallon." },
       { question: "Are conversions accurate?", answer: "Yes. Distance and MPG values are converted using standard conversion factors." },
+      { question: "What do I need to enter?", answer: "Trip distance (km or miles), fuel consumption (L/100 km or MPG), and price per liter at the pump." },
+      { question: "What does the result include?", answer: "Total liters needed for the trip and the estimated fuel cost in your entered currency." },
     ]
   ),
   "discount-calculator": content(
@@ -393,6 +506,8 @@ export const extraToolContent: Record<string, ToolContent> = {
     [
       { question: "Can discount exceed 100%?", answer: "No. Valid discounts are 0–100%." },
       { question: "Does this stack multiple discounts?", answer: "This tool applies a single discount percentage. For stacked discounts, calculate step by step." },
+      { question: "What results are shown?", answer: "Final sale price and the amount you save, updated as you type." },
+      { question: "Are prices I enter stored anywhere?", answer: "No. Calculations run in your browser; your amounts are not saved or uploaded." },
     ]
   ),
   "aspect-ratio-calculator": content(
@@ -404,6 +519,8 @@ export const extraToolContent: Record<string, ToolContent> = {
     [
       { question: "What is aspect ratio?", answer: "The proportional relationship between width and height, expressed as W:H (e.g. 16:9)." },
       { question: "Are ratios simplified?", answer: "Yes. The tool reduces dimensions to the smallest whole-number ratio using GCD." },
+      { question: "What do the preset buttons do?", answer: "They fill common ratios such as 16:9, 4:3, 3:2, 1:1, and 9:16 so you can start from a standard proportion." },
+      { question: "Can I scale to a target width or height?", answer: "Yes. Enter a target width to compute the matching height, or enter a target height to compute the matching width." },
     ]
   ),
   "number-base-converter": content(
@@ -415,6 +532,8 @@ export const extraToolContent: Record<string, ToolContent> = {
     [
       { question: "Which bases are supported?", answer: "Binary (2), octal (8), decimal (10), and hexadecimal (16)." },
       { question: "Are negative numbers supported?", answer: "This tool converts non-negative integers only." },
+      { question: "What if I type invalid digits for the base?", answer: "The result area shows an invalid message until every character is valid for the selected source base." },
+      { question: "Is my number sent anywhere?", answer: "No. Base conversion runs locally in your browser." },
     ]
   ),
   "roman-numeral-converter": content(
@@ -426,6 +545,8 @@ export const extraToolContent: Record<string, ToolContent> = {
     [
       { question: "What range is supported?", answer: "Standard Roman numerals from 1 to 3999 (no vinculum notation)." },
       { question: "Is input case-sensitive?", answer: "Roman input is normalized to uppercase before parsing." },
+      { question: "Can I convert in both directions?", answer: "Yes. Switch between Arabic numeral to Roman and Roman to Arabic numeral modes." },
+      { question: "Does my input leave my device?", answer: "No. Conversion runs locally; nothing is uploaded." },
     ]
   ),
   "number-to-words": content(
@@ -437,6 +558,8 @@ export const extraToolContent: Record<string, ToolContent> = {
     [
       { question: "What is tafqit?", answer: "Arabic legal and formal spelling of numbers in words, used on checks and official documents." },
       { question: "Are decimals supported?", answer: "This tool converts whole numbers only." },
+      { question: "What number range is supported?", answer: "Whole numbers from 0 up to 999 billion in either English or Arabic output." },
+      { question: "Can I switch output language?", answer: "Yes. Choose English or Arabic (tafqit) from the language dropdown." },
     ]
   ),
   "file-size-converter": content(
@@ -448,6 +571,8 @@ export const extraToolContent: Record<string, ToolContent> = {
     [
       { question: "Binary vs decimal?", answer: "Binary (KiB-style) uses 1024 per step; decimal uses 1000. Windows often shows binary sizes." },
       { question: "Why do sizes differ from labels?", answer: "Drive makers often use decimal GB while operating systems use binary GiB." },
+      { question: "Which size units are supported?", answer: "Bytes through petabytes: B, KB, MB, GB, TB, and PB." },
+      { question: "Does my file size data leave my device?", answer: "No. Size conversions happen entirely in your browser." },
     ]
   ),
   "temperature-converter": content(
@@ -460,6 +585,7 @@ export const extraToolContent: Record<string, ToolContent> = {
       { question: "How is Kelvin defined?", answer: "Kelvin starts at absolute zero. K = °C + 273.15." },
       { question: "Are negative Fahrenheit values supported?", answer: "Yes. Any valid numeric temperature converts correctly." },
       { question: "Where can I convert length or volume?", answer: "Use the Unit Converter for length, weight, area, and volume measurements." },
+      { question: "Are impossible Kelvin values rejected?", answer: "Yes. Kelvin input below zero or results colder than absolute zero show as invalid." },
     ]
   ),
   "data-unit-converter": content(
@@ -471,6 +597,8 @@ export const extraToolContent: Record<string, ToolContent> = {
     [
       { question: "Bits vs bytes?", answer: "One byte equals 8 bits. Network speeds are usually quoted in bits per second." },
       { question: "Is storage binary?", answer: "KB, MB, and GB here use 1024-based steps (8 bits per byte)." },
+      { question: "Can I convert between storage and speed units?", answer: "Yes. Convert among bits, bytes, KB, MB, GB, Mbps, and Gbps in either direction." },
+      { question: "Are my values uploaded?", answer: "No. Numbers you enter are converted locally and never sent to a server." },
     ]
   ),
   "cooking-converter": content(
@@ -482,6 +610,8 @@ export const extraToolContent: Record<string, ToolContent> = {
     [
       { question: "US or metric cups?", answer: "This tool uses US customary cup (≈237 ml), tablespoon, and teaspoon measures." },
       { question: "Are grams exact for all ingredients?", answer: "Grams assume water density (1 ml ≈ 1 g). Flour, sugar, and oils differ." },
+      { question: "Which units can I convert?", answer: "US cup, tablespoon, teaspoon, milliliters, US fluid ounces, and grams (water equivalent)." },
+      { question: "Do my recipe amounts leave my device?", answer: "No. Conversions run entirely in your browser." },
     ]
   ),
   "hijri-gregorian-converter": content(
@@ -492,7 +622,9 @@ export const extraToolContent: Record<string, ToolContent> = {
     ],
     [
       { question: "How accurate is the Hijri date?", answer: "Uses a standard tabular algorithm. Official Umm al-Qura dates may differ by one day." },
-      { question: "Is my date uploaded?", answer: "No. All calendar math runs locally in your browser." },
+      { question: "Can I convert in both directions?", answer: "Yes. Switch between Gregorian to Hijri and Hijri to Gregorian at the top." },
+      { question: "How do I enter a Hijri date?", answer: "Type the Hijri year and day, then pick the month from the dropdown with month names in your language." },
+      { question: "Do the dates I pick leave my device?", answer: "No. Calendar conversion runs entirely in your browser; nothing is uploaded." },
     ]
   ),
   "word-frequency-counter": content(
@@ -502,9 +634,10 @@ export const extraToolContent: Record<string, ToolContent> = {
       { title: "Use the stats", description: "Check total words and unique words for SEO or writing analysis." },
     ],
     [
-      { question: "Are words case-sensitive?", answer: "Words are counted case-insensitively. Punctuation at word edges is stripped." },
-      { question: "Does it support Arabic?", answer: "Yes. Arabic and Latin letters are counted using Unicode word boundaries." },
-      { question: "Is my text uploaded?", answer: "No. Frequency counting runs entirely in your browser." },
+      { question: "Are words case-sensitive?", answer: "No. Words are lowercased before counting. Punctuation at word edges is stripped." },
+      { question: "Does it support Arabic?", answer: "Yes. Arabic and Latin letters are counted after splitting on whitespace and trimming edge punctuation." },
+      { question: "How are results sorted?", answer: "Highest count first. When two words tie, they sort alphabetically." },
+      { question: "Where does counting happen?", answer: "Entirely in your browser as you paste or type — your text is not uploaded for analysis." },
     ]
   ),
   "arabic-diacritics-remover": content(
@@ -516,6 +649,7 @@ export const extraToolContent: Record<string, ToolContent> = {
     [
       { question: "What is removed?", answer: "Arabic harakat such as fatha, damma, kasra, sukun, shadda, and tanween marks." },
       { question: "Are letters changed?", answer: "Only diacritics are removed. Base Arabic letters and spacing stay the same." },
+      { question: "Does output update as I paste?", answer: "Yes. Stripping happens instantly while you type or paste in the input area." },
       { question: "Is processing local?", answer: "Yes. Nothing is sent to kitzos servers." },
     ]
   ),
@@ -529,6 +663,8 @@ export const extraToolContent: Record<string, ToolContent> = {
     [
       { question: "Is sorting case-sensitive?", answer: "Alphabetical sort uses locale-aware comparison, which handles mixed case naturally." },
       { question: "Does random shuffle repeat?", answer: "Each shuffle produces a new random order using in-browser randomness." },
+      { question: "Can I remove duplicate lines?", answer: "Yes. Turn on Remove duplicates before sorting or shuffling to keep one copy of each line." },
+      { question: "What sort orders are available?", answer: "A–Z ascending, Z–A descending, or random shuffle." },
     ]
   ),
   "text-reverser": content(
@@ -540,6 +676,8 @@ export const extraToolContent: Record<string, ToolContent> = {
     [
       { question: "Does it work with Arabic?", answer: "Yes. Character and word reversal respect Unicode text direction." },
       { question: "Are line breaks preserved?", answer: "Line-based modes keep newline structure; full reverse flips the entire string." },
+      { question: "What reverse modes exist?", answer: "Reverse the whole string, reverse line order, or reverse word order while keeping spacing." },
+      { question: "Does output update live?", answer: "Yes. The reversed text updates as you type or paste." },
     ]
   ),
   "slug-generator": content(
@@ -549,8 +687,10 @@ export const extraToolContent: Record<string, ToolContent> = {
       { title: "Copy slug", description: "Paste the slug into URLs, CMS permalinks, or file names." },
     ],
     [
-      { question: "Are Arabic titles supported?", answer: "Non-Latin characters are transliterated or removed depending on input; Latin titles work best." },
-      { question: "What characters are removed?", answer: "Punctuation and symbols are stripped; spaces become hyphens." },
+      { question: "Are Arabic titles supported?", answer: "Yes. Arabic letters are kept in the slug. Latin accented letters are normalized; other symbols become hyphens or are removed." },
+      { question: "What characters are removed?", answer: "Punctuation and symbols are stripped; spaces and underscores become single hyphens." },
+      { question: "Does the slug update automatically?", answer: "Yes. The slug updates as you type — no separate generate button." },
+      { question: "What if my title has only symbols?", answer: "You may get an empty slug. Add letters or words first, then copy the result." },
     ]
   ),
   "find-and-replace": content(
@@ -561,8 +701,10 @@ export const extraToolContent: Record<string, ToolContent> = {
       { title: "Replace all", description: "Apply every match at once and copy the updated text." },
     ],
     [
-      { question: "Does regex mode use JavaScript syntax?", answer: "Yes. Patterns follow JavaScript RegExp rules with global replace." },
+      { question: "Does pattern mode use regular expressions?", answer: "Yes. Enable the regex checkbox for pattern-based find and replace with global matching." },
       { question: "Can I undo a replace?", answer: "Use your browser undo in the textarea or re-paste the original text." },
+      { question: "Is replacement live or on a button?", answer: "A live preview and match count appear below. Click Replace all to write the result back into the input field." },
+      { question: "What if my pattern is invalid?", answer: "An error message appears and no replacements run until you fix the pattern." },
     ]
   ),
   "text-to-ascii-art": content(
@@ -572,9 +714,10 @@ export const extraToolContent: Record<string, ToolContent> = {
       { title: "Copy or download", description: "Copy the banner or save it as a text file." },
     ],
     [
-      { question: "Does Arabic work?", answer: "Figlet is Latin-only. Arabic input uses block-letter rendering with a quality notice; Latin text uses classic figlet fonts." },
-      { question: "Which font engine is used?", answer: "Figlet fonts in the browser for Latin; custom block grids for Arabic letters." },
+      { question: "Does Arabic work?", answer: "Pure Arabic input cannot render as ASCII art — the tool explains why and asks for Latin letters. Mixed Arabic/Latin input converts the Latin parts only." },
+      { question: "Which banner styles can I pick?", answer: "For Latin text choose Standard, Big, Slant, Banner, or Block styles from the font list." },
       { question: "Does it work offline?", answer: "After the page loads, generation runs locally without network calls." },
+      { question: "Can I copy or save the result?", answer: "Yes. Copy the banner text or download it as a .txt file." },
     ]
   ),
   "character-map": content(
@@ -584,8 +727,10 @@ export const extraToolContent: Record<string, ToolContent> = {
       { title: "Click to copy", description: "Tap any symbol to copy it — a confirmation appears when copied." },
     ],
     [
-      { question: "How many symbols are included?", answer: "Hundreds of Unicode symbols organized in categories including emoji and Mac/Windows/Android key labels." },
-      { question: "Does copy work on mobile?", answer: "Yes. Tap a character to copy when the clipboard API is available." },
+      { question: "How many symbols are included?", answer: "Hundreds of symbols organized in categories including emoji and keyboard key labels for common platforms." },
+      { question: "Does copy work on mobile?", answer: "Yes. Tap a symbol to copy it when your browser allows clipboard access." },
+      { question: "Can I search in Arabic?", answer: "Yes. Search accepts English and Arabic tags such as heart, arrow, سهم, قلب, or نجمة." },
+      { question: "What categories can I browse?", answer: "Arrows, math, currency, emoji, keyboard keys, shapes, Arabic letters, legal marks, and more — or view all at once." },
     ]
   ),
   "image-rotator": content(
@@ -595,9 +740,10 @@ export const extraToolContent: Record<string, ToolContent> = {
       { title: "Download PNG", description: "Save the rotated image locally." },
     ],
     [
-      { question: "Is my image uploaded?", answer: "No. Rotation happens on canvas in your browser." },
-      { question: "What format is exported?", answer: "PNG to preserve quality after rotation." },
-      { question: "Need to flip or mirror?", answer: "Use the Flip Image tool linked on the page for horizontal or vertical mirroring." },
+      { question: "By how many degrees can I rotate?", answer: "In 90° steps only: buttons add 90°, 180°, or 270° (cumulative, wrapping at 360°). Free-angle rotation is not available." },
+      { question: "What format is exported?", answer: "Always PNG at the image’s full pixel size. Width and height swap on 90° and 270° turns." },
+      { question: "Need to flip or mirror instead?", answer: "Use the Flip Image tool linked on the page for horizontal or vertical mirroring." },
+      { question: "Is my image sent anywhere to rotate it?", answer: "No. Rotation stays in your browser and the PNG downloads to your device." },
     ]
   ),
   "add-text-to-image": content(
@@ -616,8 +762,10 @@ export const extraToolContent: Record<string, ToolContent> = {
       { title: "Download PNG", description: "Export the image with all text layers at full resolution." },
     ],
     [
-      { question: "Can I move the text?", answer: "Yes. Drag any layer on the preview to place it anywhere on the image." },
-      { question: "Is processing local?", answer: "Yes. Canvas rendering stays entirely in your browser." },
+      { question: "Can I add more than one caption?", answer: "Yes. Add up to 10 text layers. Select a layer to edit its message, font, size (12–120), color, and outline." },
+      { question: "How do I position text?", answer: "Drag any layer on the preview, or nudge the selected layer with the arrow keys. Export is always a full-resolution PNG." },
+      { question: "Does curved text work with Arabic?", answer: "Curvature (−100 to 100) is for Latin-script text. When a layer contains Arabic, curvature is disabled and forced flat." },
+      { question: "Do my photos stay private while I add text?", answer: "Yes. Text is composited in your browser — your image is not uploaded." },
     ]
   ),
   "image-collage": content(
@@ -627,8 +775,10 @@ export const extraToolContent: Record<string, ToolContent> = {
       { title: "Download collage", description: "Export the combined grid as one PNG file." },
     ],
     [
-      { question: "How many images can I use?", answer: "Between 2 and 4 photos in a single grid collage." },
-      { question: "Are images uploaded to a server?", answer: "No. Layout and export run locally on canvas." },
+      { question: "How many images can I use?", answer: "Between 2 and 4 photos. Layout options change with the count (for example 2-cols, 2-rows, 3-cols, or 2×2)." },
+      { question: "Can I adjust spacing and framing inside each cell?", answer: "Yes. Set the gap from 0 to 32px (default 8). Select a cell to zoom 0.5–2.5× and drag to pan within that cell." },
+      { question: "What size is the exported collage?", answer: "A single 800×800 PNG on a white background." },
+      { question: "Are my collage photos uploaded?", answer: "No. The grid is built and exported in your browser on your device." },
     ]
   ),
   "heic-to-jpg": content(
@@ -638,8 +788,10 @@ export const extraToolContent: Record<string, ToolContent> = {
       { title: "Download results", description: "Save each JPG individually or download all as a ZIP archive." },
     ],
     [
-      { question: "Are files uploaded to a server?", answer: "No. Conversion runs entirely in your browser with heic2any." },
-      { question: "Can I convert multiple photos at once?", answer: "Yes. Batch upload is supported with individual or ZIP download." },
+      { question: "Do my iPhone HEIC photos get uploaded?", answer: "No. HEIC/HEIF conversion runs in your browser — your photos stay on your device." },
+      { question: "Can I convert several photos at once?", answer: "Yes. Upload multiple HEIC or HEIF files, then download each JPG or one ZIP of all results." },
+      { question: "How do I balance file size and quality?", answer: "Use the JPEG quality slider from 10 to 100 (default 90). Lower values make smaller files; changing quality reconverts the loaded batch." },
+      { question: "What do I get after conversion?", answer: "Each photo becomes a JPG with the same base name. There is no on-page image preview — you see file names and sizes in the list." },
     ]
   ),
   "flip-image": content(
@@ -649,8 +801,10 @@ export const extraToolContent: Record<string, ToolContent> = {
       { title: "Download", description: "Export in the same format as the original file." },
     ],
     [
-      { question: "Does flip change image quality?", answer: "No. Canvas mirroring preserves the original format without recompression artifacts beyond normal export." },
-      { question: "Need rotation instead?", answer: "Use the Image Rotator tool linked on the page for 90°, 180°, or 270° turns." },
+      { question: "Which flip directions are supported?", answer: "Horizontal, vertical, or both at once. Toggles update the preview immediately." },
+      { question: "Does flipping reduce quality?", answer: "Mirroring does not soften the image. JPEG sources export as JPEG; other types export as PNG at full resolution." },
+      { question: "Need rotation instead of a mirror?", answer: "Use the Image Rotator link on the page for 90°, 180°, or 270° turns." },
+      { question: "Does my photo leave the browser when I flip it?", answer: "No. The flip is applied locally and you download the result from your device." },
     ]
   ),
   "blur-image": content(
@@ -660,9 +814,10 @@ export const extraToolContent: Record<string, ToolContent> = {
       { title: "Pixelate or blur and export", description: "Pixelate is best for secure redaction. Adjust strength, then download PNG or JPG." },
     ],
     [
-      { question: "Can I redact multiple areas?", answer: "Yes. Each rectangle is listed with its size in image pixels so you can delete or refine regions." },
-      { question: "Blur or pixelate for privacy?", answer: "Use pixelate at high strength for secure redaction. Light blur may still be recoverable." },
-      { question: "Is my photo private?", answer: "Yes. All processing is local — hide sensitive info before sharing." },
+      { question: "Can I redact more than one area?", answer: "Yes. Draw as many rectangles as you need; each region is listed with its size in image pixels so you can delete or refine it." },
+      { question: "Should I use blur or pixelate?", answer: "Prefer pixelate at high strength for secure redaction (default mode). Light blur can sometimes still be recoverable." },
+      { question: "What strength ranges can I set?", answer: "Pixelate intensity runs from 8 to 64 (default 16). Blur runs from 2 to 40. Export is JPEG for JPEG sources, otherwise PNG." },
+      { question: "Does my photo leave my device while redacting?", answer: "No. Regions are applied in your browser so you can hide faces, plates, or text before sharing — nothing is uploaded." },
     ]
   ),
   "image-watermark": content(
@@ -672,8 +827,10 @@ export const extraToolContent: Record<string, ToolContent> = {
       { title: "Export", description: "Enable tile mode for diagonal repeats, then download in the original format." },
     ],
     [
-      { question: "Can I move the watermark?", answer: "Yes. Drag the text overlay on the live preview to place it precisely." },
-      { question: "Does tile mode repeat the text?", answer: "Yes. Tile mode repeats your watermark diagonally across the image." },
+      { question: "Can I move the watermark?", answer: "Yes, in single mode: drag the text on the live preview. Default text is CONFIDENTIAL; empty text draws nothing." },
+      { question: "What does tile mode do?", answer: "It repeats your watermark in a diagonal pattern across the whole image. Positioning by drag is for single mode only." },
+      { question: "What styling options are available?", answer: "Font size 12–120, color, opacity 0.1–1, and rotation from −90° to 90° (default about −35°)." },
+      { question: "Are my photos uploaded to add a watermark?", answer: "No. The overlay is drawn in your browser and exported as JPEG or the source format on your device." },
     ]
   ),
   "image-color-picker": content(
@@ -683,8 +840,10 @@ export const extraToolContent: Record<string, ToolContent> = {
       { title: "Copy or review history", description: "Copy any format with one click. Recent picks stay in session history." },
     ],
     [
-      { question: "How accurate is the picked color?", answer: "The tool reads the exact pixel under your click from the canvas image data." },
-      { question: "Need palette or conversion tools?", answer: "Follow the link to dev color tools for palettes, gradients, and format conversion." },
+      { question: "How do I read a color from my image?", answer: "Upload a photo or screenshot, then click the preview. The color under the click is shown as HEX, RGB, and HSL with one-click copy." },
+      { question: "How accurate is the sampled color?", answer: "It reads the pixel under your click on the on-screen preview. Very large images are scaled down for display, so the sample matches what you see, not necessarily a full-resolution source pixel." },
+      { question: "Is there a history of recent picks?", answer: "Yes. Up to 12 recent colors stay in the session history until you load a new image." },
+      { question: "Does my image leave my device?", answer: "No. Color sampling happens in your browser — the photo is never uploaded." },
     ]
   ),
   "passport-photo": content(
@@ -694,8 +853,10 @@ export const extraToolContent: Record<string, ToolContent> = {
       { title: "Export photo or sheet", description: "Download a single passport photo or tile copies onto a 4×6 in / A6 printable sheet." },
     ],
     [
-      { question: "What DPI is used?", answer: "Exports are rendered at 300 DPI for print-ready official photo sizes." },
-      { question: "Does this remove the background?", answer: "No. Use a white or neutral backdrop when shooting for best official-photo results." },
+      { question: "Which official sizes are supported?", answer: "Presets for US 2×2 in, Schengen 35×45 mm, and 40×60 mm, plus custom width/height. Zoom and pan under the fixed frame to crop." },
+      { question: "What print resolution is used?", answer: "Exports default to 300 DPI. You can set DPI from 72 to 600; pixel size follows inches (or mm) × DPI." },
+      { question: "Can I print multiple copies on one sheet?", answer: "Yes. Download a single photo or a tiled sheet on 4×6 in or A6 paper. Output is JPEG." },
+      { question: "Do my photos leave my device?", answer: "No. Cropping and sheet layout run in your browser — your portrait stays on your device." },
     ]
   ),
   "gif-maker": content(
@@ -705,8 +866,10 @@ export const extraToolContent: Record<string, ToolContent> = {
       { title: "Encode and download", description: "Choose max dimension (480 or 720 px), encode with progress, then save the animated GIF." },
     ],
     [
-      { question: "How many frames are supported?", answer: "Up to 50 frames per GIF to keep encoding fast in the browser." },
-      { question: "Will encoding freeze the page?", answer: "Encoding yields between frames so the UI stays responsive during longer jobs." },
+      { question: "How many frames can I add?", answer: "Up to 50 images. You need at least 2 frames to encode. Reorder with the up/down controls." },
+      { question: "How do I control speed and looping?", answer: "Set frame delay from 50 to 2000 ms (default 200, step 10) and toggle loop on or off (loop defaults on)." },
+      { question: "What output size options exist?", answer: "Cap the longest side at 480px (default) or 720px. Frames are centered on a white background, so source transparency is not kept." },
+      { question: "Do my frames leave my device?", answer: "No. GIF encoding runs in your browser — your images stay on your device until you download animation.gif." },
     ]
   ),
   "barcode-generator": content(
@@ -717,7 +880,9 @@ export const extraToolContent: Record<string, ToolContent> = {
     ],
     [
       { question: "Which formats need fixed lengths?", answer: "EAN13 requires 12 digits; UPC requires 11 digits. CODE128 and CODE39 are more flexible." },
-      { question: "Is generation local?", answer: "Yes. JsBarcode renders in your browser without uploading data." },
+      { question: "Can I download the barcode as PNG?", answer: "Yes. Preview as SVG or canvas, then use Download PNG to save a white-background image." },
+      { question: "What happens if the value is invalid for the format?", answer: "An error message appears and the preview clears until you enter a valid value for the selected format." },
+      { question: "Is generation local?", answer: "Yes. Barcodes render in your browser; your text is never uploaded." },
     ]
   ),
   "stopwatch-timer": content(
@@ -729,6 +894,8 @@ export const extraToolContent: Record<string, ToolContent> = {
     [
       { question: "Does the countdown beep?", answer: "Yes. A short beep plays when the countdown reaches zero (if audio is allowed)." },
       { question: "Are lap times saved?", answer: "Laps appear in-session only; refresh clears stopwatch data." },
+      { question: "What is the difference between the two tabs?", answer: "Stopwatch counts up with lap splits; countdown counts down from minutes and seconds you set." },
+      { question: "Does the stopwatch show centiseconds?", answer: "Yes. Elapsed time displays as MM:SS.cs with hundredths of a second while running." },
     ]
   ),
 };

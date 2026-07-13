@@ -20,9 +20,9 @@ export const howTo: HowToStep[] = [
 
 export const faq: FaqItem[] = [
   {
-    question: "How secure are generated passwords?",
+    question: "What password length can I choose?",
     answer:
-      "Passwords are generated using crypto.getRandomValues(), a cryptographically secure random number generator built into modern browsers.",
+      "Use the slider to pick 8–64 characters. The strength meter updates with your length and character-type choices.",
   },
   {
     question: "What makes a strong password?",
@@ -32,7 +32,7 @@ export const faq: FaqItem[] = [
   {
     question: "Are generated passwords stored anywhere?",
     answer:
-      "No. Passwords exist only in your browser session. We do not log, store, or transmit them.",
+      "No. Each password exists only in your browser session until you copy it — nothing is logged or sent online.",
   },
   {
     question: "Can I regenerate a new password?",

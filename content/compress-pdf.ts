@@ -30,9 +30,9 @@ export const faq: FaqItem[] = [
       "Text-only or already-optimized PDFs may grow when rasterized. The tool warns you and lets you keep the original.",
   },
   {
-    question: "Are my PDFs uploaded?",
+    question: "Does my PDF leave my device?",
     answer:
-      "No. Compression runs entirely in your browser. Your file never leaves your device.",
+      "No. Compression runs on your own device inside the browser — the file you shrink never leaves your machine.",
   },
   {
     question: "Which mode should I use for scanned documents?",

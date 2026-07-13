@@ -20,23 +20,23 @@ export const howTo: HowToStep[] = [
 
 export const faq: FaqItem[] = [
   {
-    question: "Is the HTML output sanitized?",
+    question: "Is the HTML preview safe to use?",
     answer:
-      "Yes. Rendered HTML passes through DOMPurify to strip scripts and unsafe tags before preview and copy.",
+      "Yes. Scripts and unsafe tags are stripped from the rendered output before preview and before you copy the HTML.",
   },
   {
     question: "What Markdown features are supported?",
     answer:
-      "GitHub Flavored Markdown including headings, bold, italic, lists, links, code blocks, and line breaks.",
+      "Common web-style Markdown: headings, bold, italic, lists, links, code blocks, and single line breaks (GitHub-style).",
   },
   {
     question: "Can I paste HTML back into the Markdown field?",
     answer:
-      "This tool converts Markdown to HTML only, not the reverse. Paste Markdown source, not HTML.",
+      "No. This tool converts Markdown to HTML only. Paste Markdown source, not HTML.",
   },
   {
     question: "Does this work offline?",
     answer:
-      "Yes. Conversion runs locally with the marked library after the page loads.",
+      "Yes. After the page loads, conversion runs locally in your browser with no server calls.",
   },
 ];

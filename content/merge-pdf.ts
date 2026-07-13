@@ -20,23 +20,23 @@ export const howTo: HowToStep[] = [
 
 export const faq: FaqItem[] = [
   {
-    question: "Is it safe to merge PDFs online with kitzos?",
+    question: "Does my data leave my device?",
     answer:
-      "Yes. All processing happens in your browser using pdf-lib. Your files never leave your device and are not uploaded to any server.",
+      "No. The PDFs you combine stay on your device and are merged inside the browser — nothing is uploaded to any server.",
   },
   {
-    question: "How many PDF files can I merge at once?",
+    question: "How many PDFs can I combine in one go?",
     answer:
-      "There is no hard limit, but very large files or dozens of documents may slow down your browser depending on available memory.",
+      "There is no fixed cap. Very large files or dozens of documents may slow your browser depending on available memory.",
   },
   {
-    question: "Will the merged PDF keep the original quality?",
+    question: "Do images and text look the same after merging?",
     answer:
-      "Yes. Merging combines the original page content without re-compressing images, so quality stays the same as your source files.",
+      "Yes. Pages are copied as-is into the new file without re-compressing images, so quality matches your sources.",
   },
   {
     question: "Can I merge password-protected PDFs?",
     answer:
-      "Password-protected PDFs must be unlocked before merging. This tool does not support encrypted files.",
+      "Unlock them first. This tool cannot open encrypted PDFs.",
   },
 ];

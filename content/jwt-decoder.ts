@@ -22,12 +22,12 @@ export const faq: FaqItem[] = [
   {
     question: "Does this verify the JWT signature?",
     answer:
-      "No. This tool only decodes Base64URL-encoded header and payload. It does not validate the cryptographic signature.",
+      "No. It only decodes the header and payload locally in your browser. Your token is never sent to a server.",
   },
   {
-    question: "Is my token sent to a server?",
+    question: "Which time claims are highlighted?",
     answer:
-      "Never. Decoding happens entirely in your browser. Your token never leaves your device.",
+      "exp, iat, and nbf show human-readable dates. Past exp values get an expired badge — that reflects the timestamp only, not signature verification.",
   },
   {
     question: "What is Base64URL?",

@@ -61,6 +61,10 @@ export interface Dictionary {
     breadcrumbAria: string;
     advertisementAria: string;
     privacyBadge: string;
+    guide: string;
+    readGuide: string;
+    articleCta: string;
+    articleCtaCompact: string;
   };
   ads: {
     label: string;

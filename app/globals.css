@@ -233,6 +233,39 @@
     @apply font-semibold text-foreground;
   }
 
+  /* Long-form tool guide articles — document identity, ~70ch measure */
+  .article-prose {
+    @apply max-w-[70ch] space-y-5 text-base leading-relaxed text-muted;
+  }
+
+  .article-prose h2 {
+    @apply font-display pt-6 text-xl font-semibold text-foreground;
+  }
+
+  .article-prose h3 {
+    @apply pt-3 text-lg font-medium text-foreground;
+  }
+
+  .article-prose p {
+    @apply leading-relaxed;
+  }
+
+  .article-prose ul {
+    @apply ms-5 list-disc space-y-2;
+  }
+
+  .article-prose ol {
+    @apply ms-5 list-decimal space-y-2;
+  }
+
+  .article-prose a {
+    @apply font-medium text-accent underline-offset-2 hover:underline;
+  }
+
+  .article-prose strong {
+    @apply font-semibold text-foreground;
+  }
+
   /* Homepage hero blueprint grid */
   .hero-blueprint {
     background-image:

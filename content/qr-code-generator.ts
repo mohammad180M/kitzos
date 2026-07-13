@@ -37,6 +37,6 @@ export const faq: FaqItem[] = [
   {
     question: "Is there a size or length limit?",
     answer:
-      "QR codes can hold up to roughly 4,000 characters, but shorter content scans more reliably. Very long text may produce dense codes that are harder to read.",
+      "QR codes can hold up to roughly 4,000 characters depending on content type, but shorter content scans more reliably. Output size is adjustable from 128px to 512px.",
   },
 ];

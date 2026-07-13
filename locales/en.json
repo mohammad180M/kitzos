@@ -54,7 +54,11 @@
     "faq": "Frequently Asked Questions",
     "breadcrumbAria": "Breadcrumb",
     "advertisementAria": "Advertisement",
-    "privacyBadge": "Runs locally — nothing is uploaded"
+    "privacyBadge": "Runs locally — nothing is uploaded",
+    "guide": "Guide",
+    "readGuide": "Read the full guide →",
+    "articleCta": "Skip the theory — use the free {tool} tool →",
+    "articleCtaCompact": "Use the free {tool} tool →"
   },
   "ads": {
     "label": "Advertisement",

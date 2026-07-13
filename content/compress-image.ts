@@ -20,23 +20,23 @@ export const howTo: HowToStep[] = [
 
 export const faq: FaqItem[] = [
   {
-    question: "What image formats are supported?",
+    question: "What image formats can I compress?",
     answer:
-      "This tool supports JPEG and PNG images. Other formats like WebP or GIF are not supported at this time.",
+      "JPEG and PNG only. Transparent PNGs stay PNG; opaque PNGs can optionally convert to JPEG for smaller files.",
   },
   {
-    question: "How much can I reduce the file size?",
+    question: "How much smaller will my file get?",
     answer:
-      "Results depend on the original image. Photos with high resolution often shrink dramatically at 70–80% quality, while already-compressed images may see smaller gains.",
+      "It depends on the photo. Use the quality slider (10–100, default 80) — high-resolution photos often shrink a lot around 70–80%, while already-compressed images may gain less.",
   },
   {
-    question: "Are my images uploaded to a server?",
+    question: "Do my photos leave my device?",
     answer:
-      "No. Compression uses the HTML Canvas API entirely in your browser. Your images stay on your device.",
+      "No. Compression runs in your browser and the download stays on your device — nothing is uploaded.",
   },
   {
-    question: "Will compressing reduce image dimensions?",
+    question: "Does compression change the image dimensions?",
     answer:
-      "No. This tool only reduces file size through quality compression. Pixel dimensions remain unchanged. Use our Image Resizer if you need smaller dimensions.",
+      "No. Width and height stay the same; only file size/quality change. If the result is not smaller, the tool offers the original as already optimized. Use Image Resizer to change dimensions.",
   },
 ];

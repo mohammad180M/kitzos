@@ -20,8 +20,9 @@ export const howTo: HowToStep[] = [
 
 export const faq: FaqItem[] = [
   {
-    question: "Does this run on a server?",
-    answer: "No. All regex testing happens locally in your browser.",
+    question: "Which regex flags are supported?",
+    answer:
+      "g, i, m, s, u, and y — toggle them below the pattern field to change matching behavior.",
   },
   {
     question: "What if my pattern is invalid?",

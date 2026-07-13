@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { categories } from "@/lib/categories";
+import { listArticleSlugs } from "@/lib/articles";
 import { tools } from "@/lib/registry";
 import { INFO_PAGES } from "@/lib/site-config";
 import {
@@ -7,7 +8,7 @@ import {
   getSiteUrl,
 } from "@/lib/seo";
 import { localizedPath } from "@/lib/i18n/routing";
-import { DEFAULT_LOCALE, LOCALES, type Locale } from "@/lib/i18n/types";
+import { LOCALES, type Locale } from "@/lib/i18n/types";
 
 export const dynamic = "force-static";
 
@@ -67,6 +68,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     )
   );
 
+  const articlePages: MetadataRoute.Sitemap = listArticleSlugs().flatMap((slug) =>
+    LOCALES.map((locale) =>
+      localizedSitemapEntry(locale, `/tools/${slug}/article`, {
+        changeFrequency: "monthly",
+        priority: 0.7,
+      })
+    )
+  );
+
   const infoPages: MetadataRoute.Sitemap = INFO_PAGES.flatMap((page) =>
     LOCALES.map((locale) =>
       localizedSitemapEntry(locale, page.path, {
@@ -76,5 +86,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     )
   );
 
-  return [rootPage, ...homePages, ...categoryPages, ...toolPages, ...infoPages];
+  return [
+    rootPage,
+    ...homePages,
+    ...categoryPages,
+    ...toolPages,
+    ...articlePages,
+    ...infoPages,
+  ];
 }

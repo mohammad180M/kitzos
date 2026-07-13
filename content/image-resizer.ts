@@ -22,21 +22,21 @@ export const faq: FaqItem[] = [
   {
     question: "Can I resize without distorting the image?",
     answer:
-      "Yes. Enable the aspect ratio lock to automatically calculate the matching dimension when you change width or height.",
+      "Yes. Keep aspect-ratio lock on (it is on by default) so changing width or height updates the other dimension proportionally.",
   },
   {
-    question: "What is the maximum image size?",
+    question: "Is there a maximum image size?",
     answer:
-      "There is no fixed limit, but very large images (above 8000px) may be slow to process depending on your device and browser.",
+      "There is no fixed pixel limit in the tool. Very large dimensions may be slow depending on your device and browser.",
   },
   {
     question: "Does resizing lower image quality?",
     answer:
-      "Shrinking an image generally looks sharp. Enlarging beyond the original size may appear blurry because new pixels are interpolated.",
+      "Shrinking usually stays sharp. Enlarging past the original size can look soft because new pixels are invented. Export uses the same format as your source.",
   },
   {
-    question: "Is this tool free and private?",
+    question: "Are my photos uploaded when I resize?",
     answer:
-      "Completely free with no signup. All resizing happens locally — your images are never uploaded.",
+      "No. Resizing happens locally in your browser — your photos never leave your device.",
   },
 ];

@@ -20,8 +20,9 @@ export const howTo: HowToStep[] = [
 
 export const faq: FaqItem[] = [
   {
-    question: "Is my data uploaded to a server?",
-    answer: "No. Conversion runs entirely in your browser. Your data never leaves your device.",
+    question: "Can I change the CSV delimiter?",
+    answer:
+      "Yes. Pick comma, semicolon, or tab before converting CSV to JSON.",
   },
   {
     question: "How are CSV headers handled?",

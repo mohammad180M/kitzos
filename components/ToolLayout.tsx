@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import type { Tool } from "@/lib/registry";
+import { hasArticle } from "@/lib/articles";
 import { getCategoryById } from "@/lib/categories";
 import { categoryColorVar } from "@/lib/category-colors";
 import {
@@ -47,6 +48,7 @@ export default function ToolLayout({
     ? getLocalizedCategory(category, locale).name
     : tool.category;
   const catColor = categoryColorVar(tool.category);
+  const showGuideLink = hasArticle(tool.slug);
 
   const breadcrumbs = generateToolBreadcrumbs(tool, locale);
   const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbs);
@@ -149,6 +151,17 @@ export default function ToolLayout({
           <div className="mb-10 max-w-[65ch]">
             <FaqAccordion faqs={faq} title={t.tool.faq} />
           </div>
+        )}
+
+        {showGuideLink && (
+          <p className="mb-10 max-w-[65ch]">
+            <Link
+              href={localizedPath(locale, `/tools/${tool.slug}/article`)}
+              className="text-sm font-medium text-muted underline-offset-2 transition-colors hover:text-accent hover:underline"
+            >
+              {t.tool.readGuide}
+            </Link>
+          </p>
         )}
 
         {relatedTools.length > 0 && (

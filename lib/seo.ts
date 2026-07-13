@@ -280,6 +280,87 @@ export function getInfoPageMetadata(
   );
 }
 
+export function getArticleMetadata(
+  article: {
+    slug: string;
+    frontmatter: {
+      title: string;
+      description: string;
+    };
+  },
+  locale: Locale
+): Metadata {
+  const path = `/tools/${article.slug}/article`;
+  const { title, description } = article.frontmatter;
+  return withSocialImages(
+    {
+      title,
+      description,
+      alternates: buildCanonicalAlternates(locale, path),
+      openGraph: {
+        title: `${title} | ${SITE_NAME}`,
+        description,
+        url: buildLocalizedUrl(locale, path),
+        type: "article",
+        locale: locale === "ar" ? "ar_SA" : "en_US",
+      },
+      twitter: {
+        title: `${title} | ${SITE_NAME}`,
+        description,
+      },
+    },
+    title,
+    "pdf"
+  );
+}
+
+export function generateArticleSchema(
+  article: {
+    slug: string;
+    frontmatter: {
+      title: string;
+      description: string;
+      datePublished: string;
+      dateModified: string;
+    };
+  },
+  locale: Locale
+): object {
+  const canonical = buildLocalizedUrl(locale, `/tools/${article.slug}/article`);
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: article.frontmatter.title,
+    description: article.frontmatter.description,
+    inLanguage: locale === "ar" ? "ar" : "en",
+    datePublished: article.frontmatter.datePublished,
+    dateModified: article.frontmatter.dateModified,
+    author: {
+      "@type": "Organization",
+      name: "Bosala Technology",
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": canonical,
+    },
+  };
+}
+
+export function generateArticleBreadcrumbs(
+  tool: Tool,
+  locale: Locale,
+  guideLabel: string
+): { name: string; url: string }[] {
+  const toolCrumbs = generateToolBreadcrumbs(tool, locale);
+  return [
+    ...toolCrumbs,
+    {
+      name: guideLabel,
+      url: buildLocalizedUrl(locale, `/tools/${tool.slug}/article`),
+    },
+  ];
+}
+
 export type LegalPageKey = "privacy" | "terms" | "about" | "contact";
 
 export function getLegalPageMetadata(locale: Locale, page: LegalPageKey): Metadata {

@@ -30,13 +30,13 @@ export const faq: FaqItem[] = [
       "Join directly when you want one continuous string (e.g. text copied from a PDF). Replace breaks with a space when words on separate lines should stay separated — like turning hard-wrapped paragraphs into normal sentences.",
   },
   {
-    question: "Is Arabic text safe?",
+    question: "Can I combine several options at once?",
     answer:
-      "Yes. This tool only changes whitespace characters (spaces, tabs, and line breaks). Arabic letters and diacritics (tashkeel) are left untouched.",
+      "Yes. All toggles apply together in one pass — for example remove blank lines, trim edges, then join remaining lines with a space.",
   },
   {
-    question: "Is my text stored anywhere?",
+    question: "Does my pasted text leave my device?",
     answer:
-      "No. All processing happens in your browser and nothing is saved or uploaded.",
+      "No. Whitespace cleanup runs entirely in your browser; nothing is saved or uploaded.",
   },
 ];

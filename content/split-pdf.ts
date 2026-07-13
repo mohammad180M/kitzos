@@ -20,9 +20,9 @@ export const howTo: HowToStep[] = [
 
 export const faq: FaqItem[] = [
   {
-    question: "Are my PDFs uploaded to a server?",
+    question: "Is my file uploaded?",
     answer:
-      "No. Splitting runs entirely in your browser with pdf-lib. Your file never leaves your device.",
+      "No. Your PDF is split on your own device inside the browser — the document never goes to a server.",
   },
   {
     question: "How do page ranges work?",
@@ -30,9 +30,9 @@ export const faq: FaqItem[] = [
       "Use commas to separate groups. For example, 1-3, 5 creates two PDFs: pages 1–3 and page 5 alone.",
   },
   {
-    question: "Can I split a password-protected PDF?",
+    question: "What if my PDF is password-protected?",
     answer:
-      "Encrypted PDFs must be unlocked first. This tool does not support password-protected files.",
+      "Unlock it first. Encrypted files cannot be split here.",
   },
   {
     question: "What happens when I split into individual pages?",
