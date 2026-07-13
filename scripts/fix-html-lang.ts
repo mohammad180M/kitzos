@@ -1,3 +1,7 @@
+/**
+ * Post-export pass: set html lang/dir on static pages under out/.
+ * Run via: npm run build (after next build).
+ */
 import { readFileSync, readdirSync, statSync, writeFileSync } from "fs";
 import { join } from "path";
 

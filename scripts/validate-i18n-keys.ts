@@ -1,3 +1,7 @@
+/**
+ * Validates that i18n hook label keys used in tools exist in EN/AR dictionaries.
+ * Run via: npm run build.
+ */
 import { calcToolsEn, calcToolsAr } from "../lib/i18n/calc-tools";
 import { textToolsEn, textToolsAr } from "../lib/i18n/text-tools";
 import { devToolsExtraEn, devToolsExtraAr } from "../lib/i18n/dev-tools-extra";
