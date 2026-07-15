@@ -1,7 +1,8 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { Download, GripVertical, Loader2, Trash2, Upload } from "lucide-react";
+import { useState } from "react";
+import { Download, GripVertical, Loader2, Trash2 } from "lucide-react";
+import FileDropZone from "@/components/FileDropZone";
 import {
   concatBuffers,
   decodeAudioFile,
@@ -21,7 +22,6 @@ interface AudioItem {
 
 export default function AudioMerger() {
   const t = useAudioToolLabels("audioMerger");
-  const inputRef = useRef<HTMLInputElement>(null);
   const [items, setItems] = useState<AudioItem[]>([]);
   const [format, setFormat] = useState<"mp3" | "wav">("mp3");
   const [processing, setProcessing] = useState(false);
@@ -72,26 +72,14 @@ export default function AudioMerger() {
 
   return (
     <div className="space-y-4">
-      <input
-        ref={inputRef}
-        type="file"
+      <FileDropZone
         accept="audio/*,video/webm,.webm,.mp3,.wav,.m4a,.ogg,.opus,.flac"
         multiple
-        className="hidden"
-        onChange={(e) => {
-          if (e.target.files) addFiles(e.target.files);
-          e.target.value = "";
+        label={t.addFiles}
+        onFiles={(files) => {
+          addFiles(files);
         }}
       />
-
-      <button
-        type="button"
-        onClick={() => inputRef.current?.click()}
-        className="btn-secondary inline-flex items-center gap-2"
-      >
-        <Upload className="h-4 w-4" />
-        {t.addFiles}
-      </button>
 
       {items.length > 0 && (
         <ul className="space-y-2">

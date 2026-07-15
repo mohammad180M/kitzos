@@ -21,16 +21,22 @@ export default function PercentageCalculator() {
     const strB = fmt(numB);
 
     switch (mode) {
-      case "percent-of":
+      case "percent-of": {
         if (numB === 0) return null;
+        const value = (numA / 100) * numB;
         return {
-          text: t.resultPercentOf(strA, strB, fmt((numA / 100) * numB)),
+          text: t.resultPercentOf(strA, strB, fmt(value)),
+          highlight: fmt(value),
         };
-      case "what-percent":
+      }
+      case "what-percent": {
         if (numB === 0) return null;
+        const pct = (numA / numB) * 100;
         return {
-          text: t.resultWhatPercent(strA, fmt((numA / numB) * 100), strB),
+          text: t.resultWhatPercent(strA, fmt(pct), strB),
+          highlight: `${fmt(pct)}%`,
         };
+      }
       case "change": {
         if (numA === 0) return null;
         const change = ((numB - numA) / numA) * 100;
@@ -40,6 +46,7 @@ export default function PercentageCalculator() {
             change >= 0
               ? t.resultChangeIncrease(strA, strB, pct)
               : t.resultChangeDecrease(strA, strB, pct),
+          highlight: `${change >= 0 ? "+" : "−"}${pct}%`,
         };
       }
       default:
@@ -53,42 +60,29 @@ export default function PercentageCalculator() {
     change: { a: t.originalValue, b: t.newValue },
   };
 
+  const modeBtn = (active: boolean) =>
+    `rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+      active
+        ? "bg-[var(--cat-calc)] text-white"
+        : "text-[var(--muted)] hover:text-[var(--text)]"
+    }`;
+
   return (
-    <div className="space-y-4">
+    <div className="mx-auto max-w-xl space-y-4 text-center" dir="ltr">
       <div>
-        <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.mode}</p>
-        <div className="mt-2 flex flex-wrap gap-1 rounded-lg border border-gray-300 bg-white p-0.5 dark:border-gray-600 dark:bg-gray-800">
-          <button
-            type="button"
-            onClick={() => setMode("percent-of")}
-            className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-              mode === "percent-of"
-                ? "bg-primary-600 text-white"
-                : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
-            }`}
-          >
+        <p className="text-sm font-medium text-[var(--text)]">{t.mode}</p>
+        <div className="mt-2 inline-flex flex-wrap justify-center gap-1 rounded-lg border border-[var(--line)] bg-[var(--surface)] p-0.5">
+          <button type="button" onClick={() => setMode("percent-of")} className={modeBtn(mode === "percent-of")}>
             {t.modePercentOf}
           </button>
           <button
             type="button"
             onClick={() => setMode("what-percent")}
-            className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-              mode === "what-percent"
-                ? "bg-primary-600 text-white"
-                : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
-            }`}
+            className={modeBtn(mode === "what-percent")}
           >
             {t.modeWhatPercent}
           </button>
-          <button
-            type="button"
-            onClick={() => setMode("change")}
-            className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-              mode === "change"
-                ? "bg-primary-600 text-white"
-                : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
-            }`}
-          >
+          <button type="button" onClick={() => setMode("change")} className={modeBtn(mode === "change")}>
             {t.modeChange}
           </button>
         </div>
@@ -96,7 +90,7 @@ export default function PercentageCalculator() {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label htmlFor="pct-a" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label htmlFor="pct-a" className="block text-center text-sm font-medium text-[var(--text)]">
             {labels[mode].a}
           </label>
           <input
@@ -104,11 +98,11 @@ export default function PercentageCalculator() {
             type="number"
             value={a}
             onChange={(e) => setA(e.target.value)}
-            className="input-field mt-1"
+            className="input-field mt-1 text-center"
           />
         </div>
         <div>
-          <label htmlFor="pct-b" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label htmlFor="pct-b" className="block text-center text-sm font-medium text-[var(--text)]">
             {labels[mode].b}
           </label>
           <input
@@ -116,17 +110,25 @@ export default function PercentageCalculator() {
             type="number"
             value={b}
             onChange={(e) => setB(e.target.value)}
-            className="input-field mt-1"
+            className="input-field mt-1 text-center"
           />
         </div>
       </div>
 
       {result ? (
-        <div className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-4 text-center dark:border-gray-700 dark:bg-gray-800/50">
-          <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">{result.text}</p>
+        <div className="space-y-2">
+          <div className="rounded-lg border border-[var(--line)] bg-[var(--surface-2)] px-4 py-3">
+            <p className="text-base font-medium text-[var(--text)]" dir="auto">
+              {result.text}
+            </p>
+          </div>
+          <div className="rounded-lg border border-[var(--line)] bg-[var(--surface-2)] px-4 py-5">
+            <p className="text-sm text-[var(--muted)]">{t.result}</p>
+            <p className="mt-1 text-4xl font-bold text-[var(--cat-calc)]">{result.highlight}</p>
+          </div>
         </div>
       ) : (
-        <p className="text-sm text-gray-500 dark:text-gray-400">{t.invalid}</p>
+        <p className="text-sm text-[var(--muted)]">{t.invalid}</p>
       )}
     </div>
   );

@@ -1,7 +1,8 @@
 "use client";
 
+import FileDropZone from "@/components/FileDropZone";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Download, FileText, Loader2, Upload } from "lucide-react";
+import { Download, FileText, Loader2 } from "lucide-react";
 import PdfPreviewPane, { type PreviewPage } from "@/components/pdf/PdfPreviewPane";
 import PdfWorkbenchLayout from "@/components/pdf/PdfWorkbenchLayout";
 import { usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
@@ -106,7 +107,6 @@ export default function SplitPdf() {
   const [ranges, setRanges] = useState("1");
   const [splitting, setSplitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
   const fileRef = useRef<File | null>(null);
 
   useUnsavedWork(file !== null);
@@ -227,29 +227,14 @@ export default function SplitPdf() {
 
   const controls = (
     <>
-      <div
-        role="button"
-        tabIndex={0}
-        onClick={() => inputRef.current?.click()}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") inputRef.current?.click();
+      <FileDropZone
+        accept=".pdf,application/pdf"
+        label={t.uploadHint}
+        onFiles={(files) => {
+          const f = files[0];
+          if (f) void loadPdf(f);
         }}
-        className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 px-6 py-10 transition-colors hover:border-primary-400 hover:bg-primary-50/50 dark:border-gray-600 dark:bg-gray-800/50 dark:hover:border-primary-500 dark:hover:bg-primary-950/30"
-      >
-        <Upload className="h-8 w-8 text-gray-400 dark:text-gray-500" aria-hidden="true" />
-        <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">{t.uploadHint}</p>
-        <input
-          ref={inputRef}
-          type="file"
-          accept=".pdf,application/pdf"
-          className="hidden"
-          onChange={(e) => {
-            const f = e.target.files?.[0];
-            if (f) void loadPdf(f);
-            e.target.value = "";
-          }}
-        />
-      </div>
+      />
 
       {file && (
         <div className="flex items-center gap-3 rounded-lg border border-gray-200 bg-white px-4 py-3 dark:border-gray-700 dark:bg-gray-800">

@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState, type MouseEvent } from "react";
 import Link from "next/link";
-import { Check, Copy, Upload } from "lucide-react";
+import { Check, Copy } from "lucide-react";
+import FileDropZone from "@/components/FileDropZone";
 import { setupCanvas } from "@/lib/canvas-utils";
 import { useImageLoader } from "@/lib/hooks/use-image-loader";
 import { rgbToHex, rgbToHsl, type RgbColor } from "@/lib/image/color-format";
@@ -37,7 +38,7 @@ export default function ImageColorPicker() {
   const { locale } = useLocale();
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { imgRef, inputRef, hasImage, imageVersion, error, handleInputChange } = useImageLoader();
+  const { imgRef, hasImage, imageVersion, error, loadFile } = useImageLoader();
 
   const [picked, setPicked] = useState<RgbColor | null>(null);
   const [history, setHistory] = useState<RgbColor[]>([]);
@@ -113,29 +114,17 @@ export default function ImageColorPicker() {
 
   return (
     <div className="space-y-4">
-      <div
-        role="button"
-        tabIndex={0}
-        onClick={() => inputRef.current?.click()}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") inputRef.current?.click();
+      <FileDropZone
+        accept="image/*"
+        label={t.uploadHint}
+        onFiles={(files) => {
+          const f = files[0];
+          if (!f) return;
+          setPicked(null);
+          setHistory([]);
+          loadFile(f, messages);
         }}
-        className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 px-6 py-10 transition-colors hover:border-primary-400 hover:bg-primary-50/50 dark:border-gray-600 dark:bg-gray-800/50 dark:hover:border-primary-500 dark:hover:bg-primary-950/30"
-      >
-        <Upload className="h-8 w-8 text-gray-400 dark:text-gray-500" aria-hidden="true" />
-        <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">{t.uploadHint}</p>
-        <input
-          ref={inputRef}
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={(e) => {
-            setPicked(null);
-            setHistory([]);
-            handleInputChange(e, messages);
-          }}
-        />
-      </div>
+      />
 
       {error && (
         <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300" role="alert">

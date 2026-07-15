@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Check, Copy } from "lucide-react";
+import DirectionArrow from "@/components/DirectionArrow";
 import { decodeJwt, getTimeClaims, type JwtDecodeError } from "@/lib/jwt-decode";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
@@ -149,7 +150,10 @@ export default function JwtDecoder() {
                       {claimLabel(key)}:
                     </span>
                     <span className="font-mono text-gray-600 dark:text-gray-400">{info.unix}</span>
-                    <span className="text-gray-500 dark:text-gray-400">→ {info.readable}</span>
+                    <span className="inline-flex items-center gap-1 text-gray-500 dark:text-gray-400">
+                      <DirectionArrow />
+                      {info.readable}
+                    </span>
                     {info.expired && (
                       <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-semibold text-red-700 dark:bg-red-950/50 dark:text-red-300">
                         {ui.expired}

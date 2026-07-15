@@ -13,6 +13,8 @@
     --text-secondary: #3a424f;
     --accent: #ffb020;
     --accent-ink: #1a1205;
+    --success: #22c55e;
+    --success-tint: color-mix(in srgb, var(--success) 8%, transparent);
 
     --cat-pdf: #f87171;
     --cat-image: #34d399;
@@ -34,6 +36,8 @@
     --text-secondary: #c6cedb;
     --accent: #ffb020;
     --accent-ink: #1a1205;
+    --success: #4ade80;
+    --success-tint: color-mix(in srgb, var(--success) 8%, transparent);
   }
 
   html {

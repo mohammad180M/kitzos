@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { Check, Copy } from "lucide-react";
+import DirectionArrow from "@/components/DirectionArrow";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
 import { useDevToolsExtraLabels } from "@/lib/i18n/use-dev-tools-extra-labels";
 
@@ -127,7 +128,8 @@ export default function TimestampConverter() {
           />
           {parsedTs && dateFromTs && (
             <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-              → {formatDate(dateFromTs)}
+              <DirectionArrow className="me-1" />
+              {formatDate(dateFromTs)}
               <span className="mt-1 block font-mono text-xs text-gray-400 dark:text-gray-500">
                 {parsedTs.ms} ms
               </span>
@@ -147,7 +149,8 @@ export default function TimestampConverter() {
           />
           {validDate && (
             <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-              → <span className="font-mono">{Math.floor(validDate.getTime() / 1000)}</span> {t.seconds}
+              <DirectionArrow className="me-1" />
+              <span className="font-mono">{Math.floor(validDate.getTime() / 1000)}</span> {t.seconds}
               <button
                 type="button"
                 onClick={() => copy("date", String(Math.floor(validDate.getTime() / 1000)))}

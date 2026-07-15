@@ -6,7 +6,7 @@
 - [Merge PDF](https://kitzos.com/en/tools/merge-pdf/): Combine multiple PDF files into one document. Drag to reorder pages.
 - [Split PDF](https://kitzos.com/en/tools/split-pdf/): Split a PDF into separate files by page ranges or individual pages.
 - [PDF to JPG & JPG to PDF Converter](https://kitzos.com/en/tools/pdf-to-jpg/): Convert PDF pages to JPG images, or combine JPG/PNG/WebP images into a single PDF.
-- [Compress PDF](https://kitzos.com/en/tools/compress-pdf/): Reduce PDF file size with lossless optimization or strong raster compression.
+- [Compress PDF](https://kitzos.com/en/tools/compress-pdf/): Shrink PDFs by re-saving structure or rasterizing pages to JPEG (best for scans).
 - [Rotate PDF](https://kitzos.com/en/tools/rotate-pdf/): Rotate PDF pages 90° at a time. Preview thumbnails and rotate all pages at once.
 - [Organize PDF](https://kitzos.com/en/tools/organize-pdf/): Reorder and delete PDF pages with drag-and-drop thumbnails. Export a new document.
 - [Extract PDF Pages](https://kitzos.com/en/tools/extract-pages/): Pull selected pages out of a PDF into a new file or separate PDFs. Click thumbnails or type page ranges.
@@ -44,7 +44,7 @@
 - [Text Reverser](https://kitzos.com/en/tools/text-reverser/): Reverse entire text, individual lines, or word order. Useful for puzzles and testing.
 - [Text to ASCII Art](https://kitzos.com/en/tools/text-to-ascii-art/): Convert text to ASCII art banners using figlet fonts. Runs in your browser.
 - [Character Map](https://kitzos.com/en/tools/character-map/): Browse special Unicode characters and symbols. Click to copy any character instantly.
-- [QR Code Generator](https://kitzos.com/en/tools/qr-code-generator/): Generate QR codes from text or URLs. Download as PNG or SVG.
+- [QR Code Generator](https://kitzos.com/en/tools/qr-code-generator/): Create styled QR codes for links, Wi‑Fi, contacts, and more. Logo and colors stay in your browser.
 - [Barcode Generator](https://kitzos.com/en/tools/barcode-generator/): Generate CODE128, EAN13, UPC, and CODE39 barcodes from text. Download as PNG.
 - [JSON Formatter](https://kitzos.com/en/tools/json-formatter/): Format, validate, and minify JSON with clear error messages.
 - [Base64 Encoder / Decoder](https://kitzos.com/en/tools/base64/): Encode and decode text or images to Base64. Works entirely offline.
@@ -99,7 +99,7 @@
 - [Number Base Converter](https://kitzos.com/en/tools/number-base-converter/): Convert numbers between binary, octal, decimal, and hexadecimal instantly in your browser.
 - [Pomodoro Timer](https://kitzos.com/en/tools/pomodoro-timer/): Focus timer with work and break cycles. Customizable durations, cycle counter, and sound alerts.
 - [Stopwatch & Countdown Timer](https://kitzos.com/en/tools/stopwatch-timer/): Online stopwatch with lap times and countdown timer with audio alert. Fully client-side.
-- [Random Picker & Number Generator](https://kitzos.com/en/tools/random-picker/): Pick a random name or option from a list, or generate a random number in any range.
+- [Spin Wheel Picker](https://kitzos.com/en/tools/random-picker/): Spin a wheel of fortune to pick a random name or option from a list, or generate a random number in any range.
 - [Typing Speed Test](https://kitzos.com/en/tools/typing-speed-test/): Measure your typing speed in WPM and accuracy with a live typing test.
 - [Signature Generator PNG](https://kitzos.com/en/tools/signature-pad/): Draw a transparent signature and download as PNG for documents and forms.
 - [MP3 Cutter Online](https://kitzos.com/en/tools/mp3-cutter/): Cut and trim audio files in your browser. Export as MP3 or WAV — no upload required.
@@ -111,7 +111,7 @@
 - [دمج PDF](https://kitzos.com/ar/tools/merge-pdf/): اجمع عدة ملفات PDF في مستند واحد. اسحب لإعادة ترتيب الصفحات.
 - [تقسيم PDF](https://kitzos.com/ar/tools/split-pdf/): قسّم ملف PDF إلى ملفات منفصلة حسب نطاقات الصفحات أو صفحات فردية.
 - [تحويل PDF إلى JPG والعكس](https://kitzos.com/ar/tools/pdf-to-jpg/): حوّل صفحات PDF إلى صور JPG، أو اجمع صور JPG وPNG وWebP في ملف PDF واحد.
-- [ضغط PDF](https://kitzos.com/ar/tools/compress-pdf/): قلّل حجم ملف PDF بتحسين البنية أو ضغط قوي يحوّل الصفحات إلى صور.
+- [ضغط PDF](https://kitzos.com/ar/tools/compress-pdf/): صغّر ملفات PDF بإعادة حفظ البنية أو تحويل الصفحات إلى JPEG (الأنسب للممسوحات).
 - [تدوير PDF](https://kitzos.com/ar/tools/rotate-pdf/): دوّر صفحات PDF بمقدار 90°. معاينة الصور المصغرة وتدوير كل الصفحات دفعة واحدة.
 - [تنظيم PDF](https://kitzos.com/ar/tools/organize-pdf/): أعد ترتيب صفحات PDF واحذفها بالسحب والإفلات. صدّر مستنداً جديداً.
 - [استخراج صفحات PDF](https://kitzos.com/ar/tools/extract-pages/): اسحب الصفحات المحددة من PDF إلى ملف جديد أو ملفات PDF منفصلة. انقر على الصور المصغرة أو اكتب نطاق الصفحات.
@@ -149,7 +149,7 @@
 - [عكس النص](https://kitzos.com/ar/tools/text-reverser/): اعكس النص بالكامل أو كل سطر أو ترتيب الكلمات. مفيد للألغاز والاختبار.
 - [تحويل النص إلى ASCII Art](https://kitzos.com/ar/tools/text-to-ascii-art/): حوّل النص إلى بanners ASCII بخطوط figlet. يعمل في متصفحك.
 - [خريطة الأحرف والرموز](https://kitzos.com/ar/tools/character-map/): تصفّح رموز Unicode الخاصة والرموز. انقر لنسخ أي حرف فوراً.
-- [مولّد رمز QR](https://kitzos.com/ar/tools/qr-code-generator/): أنشئ رموز QR من نص أو روابط. نزّلها بصيغة PNG أو SVG.
+- [مولّد رمز QR](https://kitzos.com/ar/tools/qr-code-generator/): أنشئ رموز QR مخصّصة للروابط وWi‑Fi وجهات الاتصال والمزيد. الشعار والألوان تبقى في متصفحك.
 - [مولّد الباركود](https://kitzos.com/ar/tools/barcode-generator/): ولّد باركود CODE128 أو EAN13 أو UPC أو CODE39. نزّل SVG أو PNG للملصقات والمخزون.
 - [منسّق JSON](https://kitzos.com/ar/tools/json-formatter/): نسّق وتحقق من صحة JSON وصغّره مع رسائل خطأ واضحة.
 - [مشفّر / فك تشفير Base64](https://kitzos.com/ar/tools/base64/): شفّر وفك تشفير النص أو الصور إلى Base64. يعمل بالكامل دون اتصال.
@@ -204,7 +204,7 @@
 - [محوّل أنظمة الأرقام](https://kitzos.com/ar/tools/number-base-converter/): حوّل الأرقام بين الثنائي والثماني والعشري والست عشري فوراً في متصفحك.
 - [مؤقت بومودورو](https://kitzos.com/ar/tools/pomodoro-timer/): مؤقت تركيز بدورات عمل واستراحة. مدد قابلة للتخصيص وعداد الدورات وتنبيهات صوتية.
 - [ساعة إيقاف وعداد تنازلي](https://kitzos.com/ar/tools/stopwatch-timer/): ساعة إيقاف مع لفات وتوقيت، أو عداد تنازلي مع صوت عند الانتهاء. يعمل في المتصفح.
-- [منتقي عشوائي ومولّد أرقام](https://kitzos.com/ar/tools/random-picker/): اختر اسماً أو خياراً عشوائياً من قائمة، أو أنشئ رقماً عشوائياً ضمن نطاق.
+- [عجلة الحظ](https://kitzos.com/ar/tools/random-picker/): أدر عجلة الحظ لاختيار اسم أو خيار عشوائي من قائمة، أو أنشئ رقماً عشوائياً ضمن أي نطاق.
 - [اختبار سرعة الكتابة](https://kitzos.com/ar/tools/typing-speed-test/): قِس سرعة كتابتك بالكلمات في الدقيقة ودقة الإدخال باختبار مباشر.
 - [مولّد توقيع شفاف](https://kitzos.com/ar/tools/signature-pad/): ارسم توقيعاً بخلفية شفافة ونزّله PNG للمستندات والنماذج.
 - [قص ملف MP3](https://kitzos.com/ar/tools/mp3-cutter/): قص وتقصير ملفات الصوت في متصفحك. تصدير MP3 أو WAV دون رفع الملفات.

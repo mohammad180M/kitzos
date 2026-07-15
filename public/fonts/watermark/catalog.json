@@ -1,0 +1,312 @@
+[
+  {
+    "id": "inter",
+    "label": "Inter",
+    "family": "Wm_inter",
+    "style": "sans",
+    "arabic": false,
+    "license": "OFL",
+    "woff2": "/fonts/watermark/inter.woff2",
+    "ttf": "/fonts/watermark/inter.ttf"
+  },
+  {
+    "id": "roboto",
+    "label": "Roboto",
+    "family": "Wm_roboto",
+    "style": "sans",
+    "arabic": false,
+    "license": "Apache-2.0",
+    "woff2": "/fonts/watermark/roboto.woff2",
+    "ttf": "/fonts/watermark/roboto.ttf"
+  },
+  {
+    "id": "open-sans",
+    "label": "Open Sans",
+    "family": "Wm_open_sans",
+    "style": "sans",
+    "arabic": false,
+    "license": "OFL",
+    "woff2": "/fonts/watermark/open-sans.woff2",
+    "ttf": "/fonts/watermark/open-sans.ttf"
+  },
+  {
+    "id": "montserrat",
+    "label": "Montserrat",
+    "family": "Wm_montserrat",
+    "style": "sans",
+    "arabic": false,
+    "license": "OFL",
+    "woff2": "/fonts/watermark/montserrat.woff2",
+    "ttf": "/fonts/watermark/montserrat.ttf"
+  },
+  {
+    "id": "lato",
+    "label": "Lato",
+    "family": "Wm_lato",
+    "style": "sans",
+    "arabic": false,
+    "license": "OFL",
+    "woff2": "/fonts/watermark/lato.woff2",
+    "ttf": "/fonts/watermark/lato.ttf"
+  },
+  {
+    "id": "poppins",
+    "label": "Poppins",
+    "family": "Wm_poppins",
+    "style": "sans",
+    "arabic": false,
+    "license": "OFL",
+    "woff2": "/fonts/watermark/poppins.woff2",
+    "ttf": "/fonts/watermark/poppins.ttf"
+  },
+  {
+    "id": "nunito",
+    "label": "Nunito",
+    "family": "Wm_nunito",
+    "style": "rounded",
+    "arabic": false,
+    "license": "OFL",
+    "woff2": "/fonts/watermark/nunito.woff2",
+    "ttf": "/fonts/watermark/nunito.ttf"
+  },
+  {
+    "id": "source-sans-3",
+    "label": "Source Sans 3",
+    "family": "Wm_source_sans_3",
+    "style": "sans",
+    "arabic": false,
+    "license": "OFL",
+    "woff2": "/fonts/watermark/source-sans-3.woff2",
+    "ttf": "/fonts/watermark/source-sans-3.ttf"
+  },
+  {
+    "id": "comfortaa",
+    "label": "Comfortaa",
+    "family": "Wm_comfortaa",
+    "style": "rounded",
+    "arabic": false,
+    "license": "OFL",
+    "woff2": "/fonts/watermark/comfortaa.woff2",
+    "ttf": "/fonts/watermark/comfortaa.ttf"
+  },
+  {
+    "id": "oswald",
+    "label": "Oswald",
+    "family": "Wm_oswald",
+    "style": "condensed",
+    "arabic": false,
+    "license": "OFL",
+    "woff2": "/fonts/watermark/oswald.woff2",
+    "ttf": "/fonts/watermark/oswald.ttf"
+  },
+  {
+    "id": "barlow-condensed",
+    "label": "Barlow Condensed",
+    "family": "Wm_barlow_condensed",
+    "style": "condensed",
+    "arabic": false,
+    "license": "OFL",
+    "woff2": "/fonts/watermark/barlow-condensed.woff2",
+    "ttf": "/fonts/watermark/barlow-condensed.ttf"
+  },
+  {
+    "id": "playfair-display",
+    "label": "Playfair Display",
+    "family": "Wm_playfair_display",
+    "style": "serif",
+    "arabic": false,
+    "license": "OFL",
+    "woff2": "/fonts/watermark/playfair-display.woff2",
+    "ttf": "/fonts/watermark/playfair-display.ttf"
+  },
+  {
+    "id": "roboto-slab",
+    "label": "Roboto Slab",
+    "family": "Wm_roboto_slab",
+    "style": "slab",
+    "arabic": false,
+    "license": "Apache-2.0",
+    "woff2": "/fonts/watermark/roboto-slab.woff2",
+    "ttf": "/fonts/watermark/roboto-slab.ttf"
+  },
+  {
+    "id": "zilla-slab",
+    "label": "Zilla Slab",
+    "family": "Wm_zilla_slab",
+    "style": "slab",
+    "arabic": false,
+    "license": "OFL",
+    "woff2": "/fonts/watermark/zilla-slab.woff2",
+    "ttf": "/fonts/watermark/zilla-slab.ttf"
+  },
+  {
+    "id": "source-code-pro",
+    "label": "Source Code Pro",
+    "family": "Wm_source_code_pro",
+    "style": "mono",
+    "arabic": false,
+    "license": "OFL",
+    "woff2": "/fonts/watermark/source-code-pro.woff2",
+    "ttf": "/fonts/watermark/source-code-pro.ttf"
+  },
+  {
+    "id": "ibm-plex-mono",
+    "label": "IBM Plex Mono",
+    "family": "Wm_ibm_plex_mono",
+    "style": "mono",
+    "arabic": false,
+    "license": "OFL",
+    "woff2": "/fonts/watermark/ibm-plex-mono.woff2",
+    "ttf": "/fonts/watermark/ibm-plex-mono.ttf"
+  },
+  {
+    "id": "space-grotesk",
+    "label": "Space Grotesk",
+    "family": "Wm_space_grotesk",
+    "style": "display",
+    "arabic": false,
+    "license": "OFL",
+    "woff2": "/fonts/watermark/space-grotesk.woff2",
+    "ttf": "/fonts/watermark/space-grotesk.ttf"
+  },
+  {
+    "id": "bebas-neue",
+    "label": "Bebas Neue",
+    "family": "Wm_bebas_neue",
+    "style": "display",
+    "arabic": false,
+    "license": "OFL",
+    "woff2": "/fonts/watermark/bebas-neue.woff2",
+    "ttf": "/fonts/watermark/bebas-neue.ttf"
+  },
+  {
+    "id": "anton",
+    "label": "Anton",
+    "family": "Wm_anton",
+    "style": "display",
+    "arabic": false,
+    "license": "OFL",
+    "woff2": "/fonts/watermark/anton.woff2",
+    "ttf": "/fonts/watermark/anton.ttf"
+  },
+  {
+    "id": "pacifico",
+    "label": "Pacifico",
+    "family": "Wm_pacifico",
+    "style": "script",
+    "arabic": false,
+    "license": "OFL",
+    "woff2": "/fonts/watermark/pacifico.woff2",
+    "ttf": "/fonts/watermark/pacifico.ttf"
+  },
+  {
+    "id": "dancing-script",
+    "label": "Dancing Script",
+    "family": "Wm_dancing_script",
+    "style": "script",
+    "arabic": false,
+    "license": "OFL",
+    "woff2": "/fonts/watermark/dancing-script.woff2",
+    "ttf": "/fonts/watermark/dancing-script.ttf"
+  },
+  {
+    "id": "great-vibes",
+    "label": "Great Vibes",
+    "family": "Wm_great_vibes",
+    "style": "script",
+    "arabic": false,
+    "license": "OFL",
+    "woff2": "/fonts/watermark/great-vibes.woff2",
+    "ttf": "/fonts/watermark/great-vibes.ttf"
+  },
+  {
+    "id": "cairo",
+    "label": "Cairo",
+    "family": "Wm_cairo",
+    "style": "sans",
+    "arabic": true,
+    "license": "OFL",
+    "woff2": "/fonts/watermark/cairo.woff2",
+    "ttf": "/fonts/watermark/cairo.ttf"
+  },
+  {
+    "id": "tajawal",
+    "label": "Tajawal",
+    "family": "Wm_tajawal",
+    "style": "sans",
+    "arabic": true,
+    "license": "OFL",
+    "woff2": "/fonts/watermark/tajawal.woff2",
+    "ttf": "/fonts/watermark/tajawal.ttf"
+  },
+  {
+    "id": "almarai",
+    "label": "Almarai",
+    "family": "Wm_almarai",
+    "style": "sans",
+    "arabic": true,
+    "license": "OFL",
+    "woff2": "/fonts/watermark/almarai.woff2",
+    "ttf": "/fonts/watermark/almarai.ttf"
+  },
+  {
+    "id": "amiri",
+    "label": "Amiri",
+    "family": "Wm_amiri",
+    "style": "serif",
+    "arabic": true,
+    "license": "OFL",
+    "woff2": "/fonts/watermark/amiri.woff2",
+    "ttf": "/fonts/watermark/amiri.ttf"
+  },
+  {
+    "id": "changa",
+    "label": "Changa",
+    "family": "Wm_changa",
+    "style": "display",
+    "arabic": true,
+    "license": "OFL",
+    "woff2": "/fonts/watermark/changa.woff2",
+    "ttf": "/fonts/watermark/changa.ttf"
+  },
+  {
+    "id": "literata",
+    "label": "Literata",
+    "family": "Wm_literata",
+    "style": "serif",
+    "arabic": false,
+    "license": "OFL",
+    "woff2": "/fonts/watermark/literata.woff2",
+    "ttf": "/fonts/watermark/literata.ttf"
+  },
+  {
+    "id": "eb-garamond",
+    "label": "EB Garamond",
+    "family": "Wm_eb_garamond",
+    "style": "serif",
+    "arabic": false,
+    "license": "OFL",
+    "woff2": "/fonts/watermark/eb-garamond.woff2",
+    "ttf": "/fonts/watermark/eb-garamond.ttf"
+  },
+  {
+    "id": "jetbrains-mono",
+    "label": "JetBrains Mono",
+    "family": "Wm_jetbrains_mono",
+    "style": "mono",
+    "arabic": false,
+    "license": "OFL",
+    "woff2": "/fonts/watermark/jetbrains-mono.woff2",
+    "ttf": "/fonts/watermark/jetbrains-mono.ttf"
+  },
+  {
+    "id": "stardos-stencil",
+    "label": "Stardos Stencil",
+    "family": "Wm_stardos_stencil",
+    "style": "stencil",
+    "arabic": false,
+    "license": "OFL",
+    "woff2": "/fonts/watermark/stardos-stencil.woff2",
+    "ttf": "/fonts/watermark/stardos-stencil.ttf"
+  }
+]

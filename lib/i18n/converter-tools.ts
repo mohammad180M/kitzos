@@ -1,7 +1,9 @@
 export const converterToolsEn = {
   romanNumeral: {
-    modeArabic: "Arabic → Roman",
-    modeRoman: "Roman → Arabic",
+    modeArabicFrom: "Arabic",
+    modeArabicTo: "Roman",
+    modeRomanFrom: "Roman",
+    modeRomanTo: "Arabic",
     input: "Input",
     result: "Result",
     placeholderNum: "e.g. 2026",
@@ -71,8 +73,10 @@ export const converterToolsEn = {
     hint: "Volume conversions use US standard measures. Grams assume water density (1 ml ≈ 1 g).",
   },
   hijriGregorian: {
-    modeToHijri: "Gregorian → Hijri",
-    modeToGregorian: "Hijri → Gregorian",
+    modeToHijriFrom: "Gregorian",
+    modeToHijriTo: "Hijri",
+    modeToGregorianFrom: "Hijri",
+    modeToGregorianTo: "Gregorian",
     gregorianDate: "Gregorian date",
     hijriDate: "Hijri date",
     year: "Year",
@@ -124,8 +128,10 @@ export const converterToolsEn = {
 
 export const converterToolsAr = {
   romanNumeral: {
-    modeArabic: "عربي → روماني",
-    modeRoman: "روماني → عربي",
+    modeArabicFrom: "عربي",
+    modeArabicTo: "روماني",
+    modeRomanFrom: "روماني",
+    modeRomanTo: "عربي",
     input: "الإدخال",
     result: "النتيجة",
     placeholderNum: "مثال: 2026",
@@ -195,8 +201,10 @@ export const converterToolsAr = {
     hint: "تحويلات الحجم بمقاييس أمريكية. الغرامات تفترض كثافة الماء (1 ml ≈ 1 g).",
   },
   hijriGregorian: {
-    modeToHijri: "ميلادي → هجري",
-    modeToGregorian: "هجري → ميلادي",
+    modeToHijriFrom: "ميلادي",
+    modeToHijriTo: "هجري",
+    modeToGregorianFrom: "هجري",
+    modeToGregorianTo: "ميلادي",
     gregorianDate: "التاريخ الميلادي",
     hijriDate: "التاريخ الهجري",
     year: "السنة",

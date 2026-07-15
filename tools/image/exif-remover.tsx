@@ -1,7 +1,8 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { Download, Loader2, ShieldAlert, Upload } from "lucide-react";
+import { useState } from "react";
+import { Download, Loader2, ShieldAlert } from "lucide-react";
+import FileDropZone from "@/components/FileDropZone";
 import { downloadBlob } from "@/lib/download";
 import {
   parseExifFields,
@@ -36,7 +37,6 @@ interface FileEntry {
 export default function ExifRemover() {
   const shared = useImageToolsSharedLabels();
   const t = useImageToolsExtraLabels("exifRemover");
-  const inputRef = useRef<HTMLInputElement>(null);
   const [entries, setEntries] = useState<FileEntry[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -144,29 +144,19 @@ export default function ExifRemover() {
 
   return (
     <div className="space-y-4" dir="ltr">
-      <input
-        ref={inputRef}
-        type="file"
+      <FileDropZone
         accept="image/jpeg,image/png,image/webp"
         multiple
-        className="hidden"
-        onChange={(e) => {
-          const files = e.target.files;
-          if (files?.length) void loadFiles(files);
-          e.target.value = "";
+        label={t.uploadHint}
+        hint={t.uploadSubHint}
+        disabled={loading || cleaning}
+        icon={
+          loading ? <Loader2 className="h-8 w-8 animate-spin text-[var(--muted)]" /> : undefined
+        }
+        onFiles={(files) => {
+          if (files.length) void loadFiles(files);
         }}
       />
-
-      <button
-        type="button"
-        onClick={() => inputRef.current?.click()}
-        disabled={loading || cleaning}
-        className="flex w-full flex-col items-center gap-2 rounded-xl border-2 border-dashed border-gray-300 p-8 text-gray-500 hover:border-primary-400 dark:border-gray-600"
-      >
-        {loading ? <Loader2 className="h-8 w-8 animate-spin" /> : <Upload className="h-8 w-8" />}
-        <span>{t.uploadHint}</span>
-        <span className="text-xs text-gray-400">{t.uploadSubHint}</span>
-      </button>
 
       {entries.length > 1 && (
         <div className="flex flex-wrap gap-2">

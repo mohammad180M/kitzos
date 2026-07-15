@@ -27,7 +27,7 @@
       <title>Compress PDF</title>
       <link>https://kitzos.com/en/tools/compress-pdf/</link>
       <guid isPermaLink="true">https://kitzos.com/en/tools/compress-pdf/</guid>
-      <description>Reduce PDF file size with lossless optimization or strong raster compression.</description>
+      <description>Shrink PDFs by re-saving structure or rasterizing pages to JPEG (best for scans).</description>
     </item>
     <item>
       <title>Rotate PDF</title>
@@ -255,7 +255,7 @@
       <title>QR Code Generator</title>
       <link>https://kitzos.com/en/tools/qr-code-generator/</link>
       <guid isPermaLink="true">https://kitzos.com/en/tools/qr-code-generator/</guid>
-      <description>Generate QR codes from text or URLs. Download as PNG or SVG.</description>
+      <description>Create styled QR codes for links, Wi‑Fi, contacts, and more. Logo and colors stay in your browser.</description>
     </item>
     <item>
       <title>Barcode Generator</title>
@@ -582,10 +582,10 @@
       <description>Online stopwatch with lap times and countdown timer with audio alert. Fully client-side.</description>
     </item>
     <item>
-      <title>Random Picker &amp; Number Generator</title>
+      <title>Spin Wheel Picker</title>
       <link>https://kitzos.com/en/tools/random-picker/</link>
       <guid isPermaLink="true">https://kitzos.com/en/tools/random-picker/</guid>
-      <description>Pick a random name or option from a list, or generate a random number in any range.</description>
+      <description>Spin a wheel of fortune to pick a random name or option from a list, or generate a random number in any range.</description>
     </item>
     <item>
       <title>Typing Speed Test</title>

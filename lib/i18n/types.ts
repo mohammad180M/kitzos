@@ -22,6 +22,7 @@ export interface Dictionary {
     popularTools: string;
     emptyStateHint: string;
     keyboardHint: string;
+    dropFilesHere: string;
   };
   header: {
     categoriesAria: string;
@@ -112,8 +113,8 @@ export interface Dictionary {
     };
   };
   csvJsonConverter: {
-    csvToJson: string;
-    jsonToCsv: string;
+    csv: string;
+    json: string;
     delimiter: string;
     delimiterComma: string;
     delimiterSemicolon: string;

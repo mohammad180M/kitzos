@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { DirectionPair } from "@/components/DirectionArrow";
 import { intToRoman, romanToInt } from "@/lib/roman-numerals";
 import { useConverterToolLabels } from "@/lib/i18n/use-converter-tool-labels";
 
@@ -32,7 +33,11 @@ export default function RomanNumeralConverter() {
               mode === m ? "bg-primary-600 text-white" : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
             }`}
           >
-            {m === "to-roman" ? t.modeArabic : t.modeRoman}
+            {m === "to-roman" ? (
+              <DirectionPair from={t.modeArabicFrom} to={t.modeArabicTo} />
+            ) : (
+              <DirectionPair from={t.modeRomanFrom} to={t.modeRomanTo} />
+            )}
           </button>
         ))}
       </div>

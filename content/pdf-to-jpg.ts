@@ -4,7 +4,7 @@ export const howTo: HowToStep[] = [
   {
     title: "Choose a direction",
     description:
-      "Use the switcher at the top: PDF → Images to export pages as JPG, or Images → PDF to build a document from photos.",
+      "Use the switcher at the top: PDF to Images to export pages as JPG, or Images to PDF to build a document from photos.",
   },
   {
     title: "PDF to JPG",

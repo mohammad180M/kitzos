@@ -89,7 +89,7 @@ export async function renderPdfBytesPageThumb(
   const scale = options.scale ?? 0.35;
   const rotation = options.rotation ?? 0;
   const pdfjs = await getPdfjs();
-  const doc = await pdfjs.getDocument({ data: bytes }).promise;
+  const doc = await pdfjs.getDocument({ data: bytes.slice() }).promise;
   const page = await doc.getPage(pageIndex + 1);
   const viewport = page.getViewport({ scale, rotation });
   const canvas = document.createElement("canvas");

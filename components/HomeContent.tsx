@@ -80,7 +80,8 @@ export default function HomeContent() {
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+      // Physical KeyK (QWERTY position) — works on Arabic/other layouts, not e.key === "k".
+      if ((e.ctrlKey || e.metaKey) && e.code === "KeyK") {
         e.preventDefault();
         searchRef.current?.focus();
         return;

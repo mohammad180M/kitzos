@@ -1,6 +1,6 @@
 "use client";
 
-import { Check } from "lucide-react";
+import { Check, Download, Loader2 } from "lucide-react";
 import {
   useCallback,
   useEffect,
@@ -25,6 +25,12 @@ export interface PreviewPage {
   onClick?: () => void;
   rotation?: number;
   dividerBefore?: string;
+  /** Optional per-page action (e.g. download). */
+  action?: {
+    label: string;
+    onClick: () => void;
+    busy?: boolean;
+  };
 }
 
 interface PdfPreviewPaneProps {
@@ -133,11 +139,30 @@ function PreviewThumb({
           {page.badge}
         </span>
       )}
+      {page.action && (
+        <button
+          type="button"
+          aria-label={page.action.label}
+          disabled={page.action.busy}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            page.action?.onClick();
+          }}
+          className="absolute bottom-1 end-1 flex h-8 w-8 items-center justify-center rounded-md border border-[var(--line)] bg-[var(--surface)] text-[var(--text)] shadow-sm opacity-100 transition-opacity hover:bg-[var(--surface-2)] disabled:opacity-60 md:opacity-0 md:group-hover:opacity-100 md:focus-visible:opacity-100"
+        >
+          {page.action.busy ? (
+            <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden="true" />
+          ) : (
+            <Download className="h-3.5 w-3.5" aria-hidden="true" />
+          )}
+        </button>
+      )}
     </>
   );
 
   return (
-    <div ref={containerRef} className="min-w-0">
+    <div ref={containerRef} className="group min-w-0">
       {page.dividerBefore && (
         <p className="mb-2 truncate border-t border-[var(--line)] pt-2 text-xs font-medium text-muted">
           {page.dividerBefore}

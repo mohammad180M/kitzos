@@ -1,8 +1,10 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
-import { Download, Upload } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Download } from "lucide-react";
 import CopyButton from "@/components/CopyButton";
+import { DirectionPair } from "@/components/DirectionArrow";
+import FileDropZone from "@/components/FileDropZone";
 import ToolEmptyHint from "@/components/ToolEmptyHint";
 import { usePersistedInput } from "@/lib/hooks/use-persisted-input";
 import { useToolKeyboard } from "@/lib/hooks/use-tool-keyboard";
@@ -22,7 +24,6 @@ export default function CsvJsonConverter() {
   const { locale, t } = useLocale();
   const labels = useCommonLabels();
   const ui = t.csvJsonConverter;
-  const fileRef = useRef<HTMLInputElement>(null);
 
   const [direction, setDirection] = useState<Direction>("csvToJson");
   const [delimiter, setDelimiter] = useState<CsvDelimiter>(",");
@@ -96,14 +97,14 @@ export default function CsvJsonConverter() {
           onClick={() => setDirection("csvToJson")}
           className={direction === "csvToJson" ? "btn-primary" : "btn-secondary"}
         >
-          {ui.csvToJson}
+          <DirectionPair from={ui.csv} to={ui.json} />
         </button>
         <button
           type="button"
           onClick={() => setDirection("jsonToCsv")}
           className={direction === "jsonToCsv" ? "btn-primary" : "btn-secondary"}
         >
-          {ui.jsonToCsv}
+          <DirectionPair from={ui.json} to={ui.csv} />
         </button>
       </div>
 
@@ -130,26 +131,17 @@ export default function CsvJsonConverter() {
           <label htmlFor="csv-json-input" className="text-sm font-medium text-gray-700 dark:text-gray-300">
             {direction === "csvToJson" ? ui.inputCsv : ui.inputJson}
           </label>
-          <button
-            type="button"
-            onClick={() => fileRef.current?.click()}
-            className="btn-secondary inline-flex items-center gap-1.5 py-1.5 text-xs"
-          >
-            <Upload className="h-3.5 w-3.5" />
-            {ui.uploadFile}
-          </button>
-          <input
-            ref={fileRef}
-            type="file"
-            accept={direction === "csvToJson" ? ".csv,.txt" : ".json"}
-            className="hidden"
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) handleFile(file);
-              e.target.value = "";
-            }}
-          />
         </div>
+        <FileDropZone
+          accept={direction === "csvToJson" ? ".csv,.txt" : ".json"}
+          label={ui.uploadFile}
+          compact
+          className="mb-3"
+          onFiles={(files) => {
+            const file = files[0];
+            if (file) handleFile(file);
+          }}
+        />
         <textarea
           id="csv-json-input"
           value={input}

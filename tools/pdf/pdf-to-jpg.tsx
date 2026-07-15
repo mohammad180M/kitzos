@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { DirectionPair } from "@/components/DirectionArrow";
 import UnsavedWorkDialog from "@/components/UnsavedWorkDialog";
 import ImagesToPdfDirection from "@/tools/pdf/images-to-pdf-direction";
 import PdfToImagesDirection from "@/tools/pdf/pdf-to-images-direction";
@@ -57,8 +58,14 @@ export default function PdfToJpg() {
       >
         {(
           [
-            { id: "to-images" as const, label: t.dirToImages },
-            { id: "to-pdf" as const, label: t.dirToPdf },
+            {
+              id: "to-images" as const,
+              label: <DirectionPair from={t.dirToImagesFrom} to={t.dirToImagesTo} />,
+            },
+            {
+              id: "to-pdf" as const,
+              label: <DirectionPair from={t.dirToPdfFrom} to={t.dirToPdfTo} />,
+            },
           ] as const
         ).map(({ id, label }) => (
           <button

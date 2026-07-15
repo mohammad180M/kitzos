@@ -1,13 +1,8 @@
 "use client";
 
+import FileDropZone from "@/components/FileDropZone";
 import { useCallback, useEffect, useMemo, useRef, useState, type DragEvent } from "react";
-import {
-  Download,
-  GripVertical,
-  Loader2,
-  Trash2,
-  Upload,
-} from "lucide-react";
+import { Download, GripVertical, Loader2, Trash2 } from "lucide-react";
 import PdfPreviewPane, { type PreviewPage } from "@/components/pdf/PdfPreviewPane";
 import PdfWorkbenchLayout from "@/components/pdf/PdfWorkbenchLayout";
 import { usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
@@ -141,7 +136,6 @@ export default function ImagesToPdfDirection({ onDirtyChange }: ImagesToPdfDirec
   const [error, setError] = useState<string | null>(null);
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
   const previewUrls = useRef<string[]>([]);
 
   useEffect(() => {
@@ -178,14 +172,6 @@ export default function ImagesToPdfDirection({ onDirtyChange }: ImagesToPdfDirec
       setImages((prev) => [...prev, ...items]);
     },
     [t.errInvalidFiles]
-  );
-
-  const handleDrop = useCallback(
-    (e: DragEvent) => {
-      e.preventDefault();
-      if (e.dataTransfer.files.length > 0) addImages(e.dataTransfer.files);
-    },
-    [addImages]
   );
 
   const removeImage = (id: string) => {
@@ -280,32 +266,15 @@ export default function ImagesToPdfDirection({ onDirtyChange }: ImagesToPdfDirec
 
   const controls = (
     <>
-      <div
-        role="button"
-        tabIndex={0}
-        onDrop={handleDrop}
-        onDragOver={(e) => e.preventDefault()}
-        onClick={() => inputRef.current?.click()}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") inputRef.current?.click();
+      <FileDropZone
+        accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
+        multiple
+        label={t.dropHint}
+        hint={t.multipleSupported}
+        onFiles={(files) => {
+          addImages(files);
         }}
-        className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 px-6 py-10 transition-colors hover:border-primary-400 hover:bg-primary-50/50 dark:border-gray-600 dark:bg-gray-800/50 dark:hover:border-primary-500 dark:hover:bg-primary-950/30"
-      >
-        <Upload className="h-8 w-8 text-gray-400 dark:text-gray-500" aria-hidden="true" />
-        <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">{t.dropHint}</p>
-        <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">{t.multipleSupported}</p>
-        <input
-          ref={inputRef}
-          type="file"
-          accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
-          multiple
-          className="hidden"
-          onChange={(e) => {
-            if (e.target.files) addImages(e.target.files);
-            e.target.value = "";
-          }}
-        />
-      </div>
+      />
 
       {images.length > 0 && (
         <div className="grid gap-4 sm:grid-cols-3">

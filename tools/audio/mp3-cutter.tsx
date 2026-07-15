@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Download, Loader2, Upload } from "lucide-react";
+import { Download, Loader2 } from "lucide-react";
+import FileDropZone from "@/components/FileDropZone";
 import {
   decodeAudioFile,
   downloadBlob,
@@ -17,7 +18,6 @@ import { useUnsavedWork } from "@/lib/unsaved-work";
 export default function Mp3Cutter() {
   const labels = useCommonLabels();
   const t = useAudioToolLabels("mp3Cutter");
-  const inputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [duration, setDuration] = useState(0);
   const [start, setStart] = useState(0);
@@ -84,27 +84,15 @@ export default function Mp3Cutter() {
 
   return (
     <div className="space-y-4">
-      <input
-        ref={inputRef}
-        type="file"
-        accept="audio/*,video/webm,.webm,.mp3,.wav,.m4a,.ogg,.opus,.flac"
-        className="hidden"
-        onChange={(e) => {
-          const f = e.target.files?.[0];
-          if (f) void loadFile(f);
-          e.target.value = "";
-        }}
-      />
-
       {!file ? (
-        <button
-          type="button"
-          onClick={() => inputRef.current?.click()}
-          className="flex w-full flex-col items-center gap-2 rounded-xl border-2 border-dashed border-gray-300 p-10 text-gray-500 transition-colors hover:border-primary-400 hover:text-primary-600 dark:border-gray-600 dark:hover:border-primary-500"
-        >
-          <Upload className="h-8 w-8" />
-          <span>{t.uploadHint}</span>
-        </button>
+        <FileDropZone
+          accept="audio/*,video/webm,.webm,.mp3,.wav,.m4a,.ogg,.opus,.flac"
+          label={t.uploadHint}
+          onFiles={(files) => {
+            const f = files[0];
+            if (f) void loadFile(f);
+          }}
+        />
       ) : (
         <>
           <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -207,7 +195,6 @@ export default function Mp3Cutter() {
             onClick={() => {
               setFile(null);
               bufferRef.current = null;
-              if (inputRef.current) inputRef.current.value = "";
             }}
             className="btn-secondary"
           >

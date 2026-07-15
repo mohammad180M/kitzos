@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Download, FileText, Loader2, Upload } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Download, FileText, Loader2 } from "lucide-react";
+import FileDropZone from "@/components/FileDropZone";
 import PdfPreviewPane, { type PreviewPage } from "@/components/pdf/PdfPreviewPane";
 import PdfWorkbenchLayout from "@/components/pdf/PdfWorkbenchLayout";
 import { usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
@@ -22,8 +23,6 @@ function getJSZipModule() {
   return jsZipModulePromise;
 }
 
-type PdfJsLib = typeof import("pdfjs-dist");
-
 function downloadBlob(blob: Blob, filename: string) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -34,7 +33,6 @@ function downloadBlob(blob: Blob, filename: string) {
 }
 
 async function renderPageToJpeg(
-  pdfjs: PdfJsLib,
   pdf: import("pdfjs-dist").PDFDocumentProxy,
   pageNum: number,
   scale = 2
@@ -64,10 +62,12 @@ export default function PdfToImagesDirection({ onDirtyChange }: PdfToImagesDirec
   const t = usePdfToolLabels("pdfToJpg");
   const [file, setFile] = useState<File | null>(null);
   const [pageCount, setPageCount] = useState(0);
-  const [converting, setConverting] = useState(false);
+  const [zipping, setZipping] = useState(false);
+  const [pageBusy, setPageBusy] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
   const fileRef = useRef<File | null>(null);
+  /** High-res JPEG blobs keyed by 1-based page number — reused across downloads. */
+  const pageBlobCache = useRef(new Map<number, Blob>());
 
   useEffect(() => {
     onDirtyChange(file !== null);
@@ -83,20 +83,63 @@ export default function PdfToImagesDirection({ onDirtyChange }: PdfToImagesDirec
     };
   }, []);
 
+  const clearPageCache = () => {
+    pageBlobCache.current.clear();
+  };
+
+  const getPageBlob = useCallback(async (pageNum: number) => {
+    const cached = pageBlobCache.current.get(pageNum);
+    if (cached) return cached;
+    if (!fileRef.current) throw new Error("No file");
+    const pdf = await loadPdfDocument(fileRef.current);
+    const blob = await renderPageToJpeg(pdf, pageNum);
+    pageBlobCache.current.set(pageNum, blob);
+    return blob;
+  }, []);
+
+  const downloadPage = useCallback(
+    async (pageNum: number) => {
+      if (!fileRef.current) return;
+      setPageBusy(pageNum);
+      setError(null);
+      try {
+        const blob = await getPageBlob(pageNum);
+        const baseName = fileRef.current.name.replace(/\.pdf$/i, "") || "document";
+        downloadBlob(blob, `${baseName}-page-${pageNum}.jpg`);
+      } catch {
+        setError(t.errConvertFailed);
+      } finally {
+        setPageBusy(null);
+      }
+    },
+    [getPageBlob, t.errConvertFailed]
+  );
+
   const previewPages = useMemo((): PreviewPage[] => {
     if (!file || pageCount === 0) return [];
     const f = file;
-    return Array.from({ length: pageCount }, (_, i) => ({
-      id: `jpg-p${i}`,
-      label: String(i + 1),
-      highlighted: true,
-      render: () => renderPdfPageThumb(f, i, { scale: 0.4 }),
-    }));
-  }, [file, pageCount]);
+    return Array.from({ length: pageCount }, (_, i) => {
+      const pageNum = i + 1;
+      return {
+        id: `jpg-p${i}`,
+        label: String(pageNum),
+        highlighted: true,
+        render: () => renderPdfPageThumb(f, i, { scale: 0.4 }),
+        action: {
+          label: t.downloadThisPage,
+          busy: pageBusy === pageNum,
+          onClick: () => {
+            void downloadPage(pageNum);
+          },
+        },
+      };
+    });
+  }, [downloadPage, file, pageBusy, pageCount, t.downloadThisPage]);
 
   const loadPdf = async (pdfFile: File) => {
     setError(null);
     if (file) releasePdfDocument(file);
+    clearPageCache();
     try {
       const doc = await loadPdfDocument(pdfFile);
       setFile(pdfFile);
@@ -108,77 +151,55 @@ export default function PdfToImagesDirection({ onDirtyChange }: PdfToImagesDirec
     }
   };
 
-  const convert = async (singlePage?: number) => {
+  const downloadAllZip = async () => {
     if (!file) return;
-
-    setConverting(true);
+    setZipping(true);
     setError(null);
-
     try {
-      const pdfjs = await import("pdfjs-dist");
-      pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
-      const data = await file.arrayBuffer();
-      const pdf = await pdfjs.getDocument({ data }).promise;
+      const JSZip = (await getJSZipModule()).default;
+      const zip = new JSZip();
       const baseName = file.name.replace(/\.pdf$/i, "") || "document";
-
-      if (singlePage !== undefined) {
-        const blob = await renderPageToJpeg(pdfjs, pdf, singlePage);
-        downloadBlob(blob, `${baseName}-page-${singlePage}.jpg`);
-      } else {
-        const JSZip = (await getJSZipModule()).default;
-        const zip = new JSZip();
-        for (let i = 1; i <= pdf.numPages; i++) {
-          const blob = await renderPageToJpeg(pdfjs, pdf, i);
-          zip.file(`page-${i}.jpg`, blob);
-        }
-        const zipBlob = await zip.generateAsync({ type: "blob" });
-        downloadBlob(zipBlob, `${baseName}-pages.zip`);
+      for (let i = 1; i <= pageCount; i++) {
+        const blob = await getPageBlob(i);
+        zip.file(`${baseName}-page-${i}.jpg`, blob);
       }
+      const zipBlob = await zip.generateAsync({ type: "blob" });
+      downloadBlob(zipBlob, `${baseName}-pages.zip`);
     } catch {
       setError(t.errConvertFailed);
     } finally {
-      setConverting(false);
+      setZipping(false);
     }
   };
 
+  const busy = zipping || pageBusy !== null;
+
   const controls = (
     <>
-      <div
-        role="button"
-        tabIndex={0}
-        onClick={() => inputRef.current?.click()}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") inputRef.current?.click();
+      <FileDropZone
+        accept=".pdf,application/pdf"
+        label={t.uploadHint}
+        onFiles={(files) => {
+          const f = files[0];
+          if (f) void loadPdf(f);
         }}
-        className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 px-6 py-10 transition-colors hover:border-primary-400 hover:bg-primary-50/50 dark:border-gray-600 dark:bg-gray-800/50 dark:hover:border-primary-500 dark:hover:bg-primary-950/30"
-      >
-        <Upload className="h-8 w-8 text-gray-400 dark:text-gray-500" aria-hidden="true" />
-        <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">{t.uploadHint}</p>
-        <input
-          ref={inputRef}
-          type="file"
-          accept=".pdf,application/pdf"
-          className="hidden"
-          onChange={(e) => {
-            const f = e.target.files?.[0];
-            if (f) void loadPdf(f);
-            e.target.value = "";
-          }}
-        />
-      </div>
+      />
 
       {file && (
-        <div className="flex items-center gap-3 rounded-lg border border-gray-200 bg-white px-4 py-3 dark:border-gray-700 dark:bg-gray-800">
-          <FileText className="h-5 w-5 shrink-0 text-primary-600 dark:text-primary-400" aria-hidden="true" />
+        <div className="flex items-center gap-3 rounded-lg border border-[var(--line)] bg-[var(--surface)] px-4 py-3">
+          <FileText className="h-5 w-5 shrink-0 text-[var(--cat-pdf)]" aria-hidden="true" />
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-medium text-gray-900 dark:text-gray-100">{file.name}</p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">{t.pageCount(pageCount)}</p>
+            <p className="truncate text-sm font-medium text-[var(--text)]">{file.name}</p>
+            <p className="text-xs text-[var(--muted)]">{t.pageCount(pageCount)}</p>
           </div>
         </div>
       )}
 
       {error && (
-        <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300" role="alert">
+        <p
+          className="rounded-lg border border-[var(--line)] bg-[var(--surface-2)] px-4 py-3 text-sm text-[var(--cat-pdf)]"
+          role="alert"
+        >
           {error}
         </p>
       )}
@@ -186,8 +207,13 @@ export default function PdfToImagesDirection({ onDirtyChange }: PdfToImagesDirec
       {file && pageCount > 0 && (
         <div className="flex flex-wrap gap-2">
           {pageCount === 1 ? (
-            <button type="button" onClick={() => convert(1)} disabled={converting} className="btn-primary">
-              {converting ? (
+            <button
+              type="button"
+              onClick={() => void downloadPage(1)}
+              disabled={busy}
+              className="btn-primary"
+            >
+              {pageBusy === 1 ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
                   {t.converting}
@@ -200,25 +226,24 @@ export default function PdfToImagesDirection({ onDirtyChange }: PdfToImagesDirec
               )}
             </button>
           ) : (
-            <>
-              <button type="button" onClick={() => convert(1)} disabled={converting} className="btn-secondary">
-                <Download className="h-4 w-4" />
-                {t.pageOneJpg}
-              </button>
-              <button type="button" onClick={() => convert()} disabled={converting} className="btn-primary">
-                {converting ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    {t.converting}
-                  </>
-                ) : (
-                  <>
-                    <Download className="h-4 w-4" />
-                    {t.allPagesZip}
-                  </>
-                )}
-              </button>
-            </>
+            <button
+              type="button"
+              onClick={() => void downloadAllZip()}
+              disabled={busy}
+              className="btn-primary"
+            >
+              {zipping ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  {t.converting}
+                </>
+              ) : (
+                <>
+                  <Download className="h-4 w-4" />
+                  {t.allPagesZip}
+                </>
+              )}
+            </button>
           )}
         </div>
       )}

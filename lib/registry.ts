@@ -50,7 +50,7 @@ const toolDefinitions: Tool[] = [
   {
     slug: "compress-pdf",
     title: "Compress PDF",
-    description: "Reduce PDF file size with lossless optimization or strong raster compression.",
+    description: "Shrink PDFs by re-saving structure or rasterizing pages to JPEG (best for scans).",
     category: "pdf",
     icon: "Minimize2",
     keywords: ["compress pdf", "reduce pdf size", "shrink pdf", "pdf compressor", "optimize pdf"],
@@ -96,7 +96,6 @@ const toolDefinitions: Tool[] = [
     category: "image",
     icon: "ImageDown",
     keywords: ["heic to jpg", "convert heic", "iphone photo to jpg", "heic converter"],
-    isNew: true,
   },
   {
     slug: "flip-image",
@@ -105,7 +104,6 @@ const toolDefinitions: Tool[] = [
     category: "image",
     icon: "FlipHorizontal2",
     keywords: ["flip image", "mirror image", "flip photo horizontal", "flip vertical"],
-    isNew: true,
   },
   {
     slug: "blur-image",
@@ -122,7 +120,6 @@ const toolDefinitions: Tool[] = [
       "privacy blur",
       "blur face",
     ],
-    isNew: true,
   },
   {
     slug: "image-watermark",
@@ -131,7 +128,6 @@ const toolDefinitions: Tool[] = [
     category: "image",
     icon: "Droplets",
     keywords: ["image watermark", "add watermark to photo", "text watermark", "watermark maker"],
-    isNew: true,
   },
   {
     slug: "image-color-picker",
@@ -140,7 +136,6 @@ const toolDefinitions: Tool[] = [
     category: "image",
     icon: "Pipette",
     keywords: ["image color picker", "pick color from image", "eyedropper online", "hex from photo"],
-    isNew: true,
   },
   {
     slug: "passport-photo",
@@ -149,7 +144,6 @@ const toolDefinitions: Tool[] = [
     category: "image",
     icon: "IdCard",
     keywords: ["passport photo maker", "id photo size", "2x2 photo", "35x45mm photo"],
-    isNew: true,
   },
   {
     slug: "gif-maker",
@@ -158,7 +152,6 @@ const toolDefinitions: Tool[] = [
     category: "image",
     icon: "Film",
     keywords: ["gif maker", "images to gif", "animated gif creator", "slideshow gif"],
-    isNew: true,
   },
   {
     slug: "image-converter",
@@ -242,7 +235,6 @@ const toolDefinitions: Tool[] = [
     category: "text",
     icon: "Hash",
     keywords: ["word frequency", "word count analysis", "text frequency counter", "keyword density"],
-    isNew: true,
   },
   {
     slug: "arabic-diacritics-remover",
@@ -251,7 +243,6 @@ const toolDefinitions: Tool[] = [
     category: "text",
     icon: "SpellCheck",
     keywords: ["remove arabic diacritics", "remove tashkeel", "strip harakat", "arabic text cleaner"],
-    isNew: true,
   },
   {
     slug: "line-sorter",
@@ -260,7 +251,6 @@ const toolDefinitions: Tool[] = [
     category: "text",
     icon: "ArrowLeftRight",
     keywords: ["sort lines", "alphabetical sort", "remove duplicate lines", "line sorter"],
-    isNew: true,
   },
   {
     slug: "text-reverser",
@@ -269,7 +259,6 @@ const toolDefinitions: Tool[] = [
     category: "text",
     icon: "Shuffle",
     keywords: ["reverse text", "flip text", "reverse words", "backwards text"],
-    isNew: true,
   },
   {
     slug: "slug-generator",
@@ -278,7 +267,6 @@ const toolDefinitions: Tool[] = [
     category: "text",
     icon: "Link",
     keywords: ["slug generator", "url slug", "permalink generator", "seo slug"],
-    isNew: true,
   },
   {
     slug: "find-and-replace",
@@ -287,7 +275,6 @@ const toolDefinitions: Tool[] = [
     category: "text",
     icon: "Search",
     keywords: ["find and replace", "text replace", "regex replace", "bulk replace"],
-    isNew: true,
   },
   {
     slug: "text-to-ascii-art",
@@ -296,7 +283,6 @@ const toolDefinitions: Tool[] = [
     category: "text",
     icon: "Type",
     keywords: ["ascii art generator", "text to ascii", "figlet online", "ascii banner"],
-    isNew: true,
   },
   {
     slug: "character-map",
@@ -305,15 +291,14 @@ const toolDefinitions: Tool[] = [
     category: "text",
     icon: "Keyboard",
     keywords: ["character map", "unicode symbols", "special characters", "copy symbols"],
-    isNew: true,
   },
   {
     slug: "qr-code-generator",
     title: "QR Code Generator",
-    description: "Generate QR codes from text or URLs. Download as PNG or SVG.",
+    description: "Create styled QR codes for links, Wi‑Fi, contacts, and more. Logo and colors stay in your browser.",
     category: "dev",
     icon: "QrCode",
-    keywords: ["qr code generator", "qr code maker", "create qr code", "qr code download"],
+    keywords: ["qr code generator", "qr code maker", "create qr code", "custom qr code", "wifi qr code"],
   },
   {
     slug: "json-formatter",
@@ -437,7 +422,6 @@ const toolDefinitions: Tool[] = [
     category: "calculators",
     icon: "Cake",
     keywords: ["age calculator", "how old am i", "birthday calculator", "age in days", "calculate age"],
-    isNew: true,
   },
   {
     slug: "tip-calculator",
@@ -446,7 +430,6 @@ const toolDefinitions: Tool[] = [
     category: "calculators",
     icon: "Receipt",
     keywords: ["tip calculator", "gratuity calculator", "split bill", "restaurant tip", "bill splitter"],
-    isNew: true,
   },
   {
     slug: "gpa-calculator",
@@ -455,7 +438,6 @@ const toolDefinitions: Tool[] = [
     category: "calculators",
     icon: "GraduationCap",
     keywords: ["gpa calculator", "grade point average", "college gpa", "semester gpa", "cumulative gpa"],
-    isNew: true,
   },
   {
     slug: "compound-interest",
@@ -464,7 +446,6 @@ const toolDefinitions: Tool[] = [
     category: "calculators",
     icon: "TrendingUp",
     keywords: ["compound interest calculator", "investment calculator", "savings growth", "interest calculator"],
-    isNew: true,
   },
   {
     slug: "mortgage-calculator",
@@ -473,7 +454,6 @@ const toolDefinitions: Tool[] = [
     category: "calculators",
     icon: "Home",
     keywords: ["mortgage calculator", "home loan calculator", "amortization schedule", "house payment calculator"],
-    isNew: true,
   },
   {
     slug: "fuel-cost-calculator",
@@ -482,7 +462,6 @@ const toolDefinitions: Tool[] = [
     category: "calculators",
     icon: "Fuel",
     keywords: ["fuel cost calculator", "gas trip calculator", "fuel consumption calculator", "petrol cost"],
-    isNew: true,
   },
   {
     slug: "discount-calculator",
@@ -491,7 +470,6 @@ const toolDefinitions: Tool[] = [
     category: "calculators",
     icon: "Tag",
     keywords: ["discount calculator", "sale price calculator", "percent off calculator", "price after discount"],
-    isNew: true,
   },
   {
     slug: "aspect-ratio-calculator",
@@ -500,7 +478,6 @@ const toolDefinitions: Tool[] = [
     category: "calculators",
     icon: "Ratio",
     keywords: ["aspect ratio calculator", "16:9 calculator", "image ratio", "video aspect ratio", "resize proportion"],
-    isNew: true,
   },
   {
     slug: "number-base-converter",
@@ -509,7 +486,6 @@ const toolDefinitions: Tool[] = [
     category: "converters",
     icon: "Binary",
     keywords: ["binary converter", "hex to decimal", "decimal to binary", "octal converter", "base converter"],
-    isNew: true,
   },
   {
     slug: "roman-numeral-converter",
@@ -518,7 +494,6 @@ const toolDefinitions: Tool[] = [
     category: "converters",
     icon: "Languages",
     keywords: ["roman numeral converter", "arabic to roman", "roman to number", "MMXXVI", "numerals"],
-    isNew: true,
   },
   {
     slug: "number-to-words",
@@ -527,7 +502,6 @@ const toolDefinitions: Tool[] = [
     category: "converters",
     icon: "SpellCheck",
     keywords: ["number to words", "tafqit", "تفقيط", "numbers in words", "arabic number words"],
-    isNew: true,
   },
   {
     slug: "file-size-converter",
@@ -536,7 +510,6 @@ const toolDefinitions: Tool[] = [
     category: "converters",
     icon: "HardDrive",
     keywords: ["file size converter", "bytes to mb", "kb to gb", "binary file size", "data size"],
-    isNew: true,
   },
   {
     slug: "temperature-converter",
@@ -545,7 +518,6 @@ const toolDefinitions: Tool[] = [
     category: "converters",
     icon: "Thermometer",
     keywords: ["temperature converter", "celsius to fahrenheit", "fahrenheit to celsius", "kelvin converter"],
-    isNew: true,
   },
   {
     slug: "data-unit-converter",
@@ -554,7 +526,6 @@ const toolDefinitions: Tool[] = [
     category: "converters",
     icon: "Wifi",
     keywords: ["data unit converter", "bits to bytes", "mbps converter", "bandwidth converter", "storage units"],
-    isNew: true,
   },
   {
     slug: "cooking-converter",
@@ -563,7 +534,6 @@ const toolDefinitions: Tool[] = [
     category: "converters",
     icon: "ChefHat",
     keywords: ["cooking converter", "cup to ml", "tablespoon to ml", "recipe converter", "kitchen units"],
-    isNew: true,
   },
   {
     slug: "hijri-gregorian-converter",
@@ -572,7 +542,6 @@ const toolDefinitions: Tool[] = [
     category: "converters",
     icon: "Moon",
     keywords: ["hijri converter", "islamic calendar", "gregorian to hijri", "hijri to gregorian", "تاريخ هجري"],
-    isNew: true,
   },
   {
     slug: "unit-converter",
@@ -600,11 +569,20 @@ const toolDefinitions: Tool[] = [
   },
   {
     slug: "random-picker",
-    title: "Random Picker & Number Generator",
-    description: "Pick a random name or option from a list, or generate a random number in any range.",
+    title: "Spin Wheel Picker",
+    description:
+      "Spin a wheel of fortune to pick a random name or option from a list, or generate a random number in any range.",
     category: "misc",
     icon: "Shuffle",
-    keywords: ["random picker", "random name picker", "random number generator", "wheel picker", "lottery picker"],
+    keywords: [
+      "wheel of fortune",
+      "spin the wheel",
+      "spin wheel picker",
+      "random name picker",
+      "wheel spinner",
+      "random number generator",
+      "random picker",
+    ],
   },
   {
     slug: "typing-speed-test",
@@ -749,7 +727,6 @@ const toolDefinitions: Tool[] = [
     category: "image",
     icon: "RotateCw",
     keywords: ["rotate image", "image rotator", "turn image", "rotate photo"],
-    isNew: true,
   },
   {
     slug: "add-text-to-image",
@@ -758,7 +735,6 @@ const toolDefinitions: Tool[] = [
     category: "image",
     icon: "PenLine",
     keywords: ["add text to image", "text overlay", "caption image", "write on photo"],
-    isNew: true,
   },
   {
     slug: "image-collage",
@@ -767,7 +743,6 @@ const toolDefinitions: Tool[] = [
     category: "image",
     icon: "LayoutGrid",
     keywords: ["image collage", "photo grid", "combine photos", "collage maker online"],
-    isNew: true,
   },
   {
     slug: "signature-pad",
@@ -800,7 +775,6 @@ const toolDefinitions: Tool[] = [
     category: "dev",
     icon: "Minimize2",
     keywords: ["css minifier", "css formatter", "minify css", "beautify css"],
-    isNew: true,
   },
   {
     slug: "js-minifier",
@@ -809,7 +783,6 @@ const toolDefinitions: Tool[] = [
     category: "dev",
     icon: "Code",
     keywords: ["javascript minifier", "js minify", "terser online", "compress javascript"],
-    isNew: true,
   },
   {
     slug: "xml-formatter",
@@ -818,7 +791,6 @@ const toolDefinitions: Tool[] = [
     category: "dev",
     icon: "FileCode",
     keywords: ["xml formatter", "xml beautifier", "xml minify", "pretty print xml"],
-    isNew: true,
   },
   {
     slug: "sql-formatter",
@@ -827,7 +799,6 @@ const toolDefinitions: Tool[] = [
     category: "dev",
     icon: "Table2",
     keywords: ["sql formatter", "sql beautifier", "format sql", "pretty print sql"],
-    isNew: true,
   },
   {
     slug: "url-encoder-decoder",
@@ -836,7 +807,6 @@ const toolDefinitions: Tool[] = [
     category: "dev",
     icon: "Link",
     keywords: ["url encoder", "url decoder", "percent encode", "uri encode decode"],
-    isNew: true,
   },
   {
     slug: "uuid-generator",
@@ -845,7 +815,6 @@ const toolDefinitions: Tool[] = [
     category: "dev",
     icon: "Hash",
     keywords: ["uuid generator", "generate uuid", "uuid v4", "random uuid"],
-    isNew: true,
   },
   {
     slug: "cron-expression-parser",
@@ -854,7 +823,6 @@ const toolDefinitions: Tool[] = [
     category: "dev",
     icon: "Timer",
     keywords: ["cron parser", "cron expression", "cron to english", "crontab explain"],
-    isNew: true,
   },
   {
     slug: "color-code-converter",
@@ -863,7 +831,6 @@ const toolDefinitions: Tool[] = [
     category: "dev",
     icon: "Palette",
     keywords: ["color converter", "hex to rgb", "rgb to hsl", "color code converter"],
-    isNew: true,
   },
   {
     slug: "meta-tag-generator",
@@ -872,7 +839,6 @@ const toolDefinitions: Tool[] = [
     category: "dev",
     icon: "Tag",
     keywords: ["meta tag generator", "og tags", "open graph generator", "seo meta tags"],
-    isNew: true,
   },
   {
     slug: "htaccess-redirect-generator",
@@ -881,7 +847,6 @@ const toolDefinitions: Tool[] = [
     category: "dev",
     icon: "ArrowLeftRight",
     keywords: ["htaccess redirect", "301 redirect generator", "apache rewrite rule", "htaccess generator"],
-    isNew: true,
   },
   {
     slug: "lorem-picsum-placeholder",
@@ -890,7 +855,6 @@ const toolDefinitions: Tool[] = [
     category: "dev",
     icon: "Image",
     keywords: ["placeholder image", "lorem picsum alternative", "dummy image generator", "placeholder png"],
-    isNew: true,
   },
   {
     slug: "json-to-typescript",
@@ -899,7 +863,6 @@ const toolDefinitions: Tool[] = [
     category: "dev",
     icon: "Braces",
     keywords: ["json to typescript", "json to interface", "typescript generator", "json to ts"],
-    isNew: true,
   },
   {
     slug: "barcode-generator",
@@ -908,7 +871,6 @@ const toolDefinitions: Tool[] = [
     category: "dev",
     icon: "Barcode",
     keywords: ["barcode generator", "create barcode", "code128 generator", "ean13 barcode"],
-    isNew: true,
   },
   {
     slug: "stopwatch-timer",
@@ -917,7 +879,6 @@ const toolDefinitions: Tool[] = [
     category: "misc",
     icon: "Timer",
     keywords: ["stopwatch online", "countdown timer", "lap timer", "online timer"],
-    isNew: true,
   },
   {
     slug: "interaction-fx",

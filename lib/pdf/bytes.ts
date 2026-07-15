@@ -17,7 +17,9 @@ export function bytesForPdfLoad(bytes: Uint8Array): Uint8Array {
   return bytes.slice();
 }
 
-/** Blob from pdf-lib save() — avoids RangeError on detached or subarray backing buffers. */
+/** Blob from pdf-lib save() — always copies into a fresh buffer first. */
 export function pdfBytesToBlob(bytes: Uint8Array): Blob {
-  return new Blob([bytes.slice()], { type: "application/pdf" });
+  const copy = new Uint8Array(bytes.byteLength);
+  copy.set(bytes);
+  return new Blob([copy], { type: "application/pdf" });
 }

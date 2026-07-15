@@ -1,7 +1,8 @@
 "use client";
 
+import FileDropZone from "@/components/FileDropZone";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ArrowDown, ArrowUp, Download, Loader2, Pause, Play, Trash2, Upload } from "lucide-react";
+import { ArrowDown, ArrowUp, Download, Loader2, Pause, Play, Trash2 } from "lucide-react";
 import { downloadBlob } from "@/lib/download";
 import { encodeGifFromCanvases } from "@/lib/image/gif-encode";
 import {
@@ -75,8 +76,6 @@ export default function GifMaker() {
   const [error, setError] = useState<string | null>(null);
   const [playing, setPlaying] = useState(false);
   const [previewIndex, setPreviewIndex] = useState(0);
-
-  const inputRef = useRef<HTMLInputElement>(null);
   const framesRef = useRef<GifFrame[]>([]);
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -241,31 +240,14 @@ export default function GifMaker() {
 
   return (
     <div className="space-y-4">
-      <div
-        role="button"
-        tabIndex={0}
-        onClick={() => inputRef.current?.click()}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") inputRef.current?.click();
+      <FileDropZone
+        accept="image/*"
+        multiple
+        label={frames.length ? t.addMore : t.uploadHint}
+        onFiles={(files) => {
+          if (files.length) addFiles(files);
         }}
-        className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 px-6 py-10 transition-colors hover:border-primary-400 hover:bg-primary-50/50 dark:border-gray-600 dark:bg-gray-800/50 dark:hover:border-primary-500 dark:hover:bg-primary-950/30"
-      >
-        <Upload className="h-8 w-8 text-gray-400 dark:text-gray-500" aria-hidden="true" />
-        <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-          {frames.length ? t.addMore : t.uploadHint}
-        </p>
-        <input
-          ref={inputRef}
-          type="file"
-          accept="image/*"
-          multiple
-          className="hidden"
-          onChange={(e) => {
-            if (e.target.files?.length) addFiles(e.target.files);
-            e.target.value = "";
-          }}
-        />
-      </div>
+      />
 
       {error && (
         <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300" role="alert">

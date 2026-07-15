@@ -15,7 +15,8 @@
     "backHome": "العودة للرئيسية",
     "popularTools": "أدوات شائعة",
     "emptyStateHint": "ابدأ باللصق أو الكتابة — بياناتك تبقى في متصفحك.",
-    "keyboardHint": "اختصار: Ctrl+Enter للتشغيل، Esc للمسح"
+    "keyboardHint": "اختصار: Ctrl+Enter للتشغيل، Esc للمسح",
+    "dropFilesHere": "أفلت الملفات هنا"
   },
   "header": {
     "categoriesAria": "الفئات",
@@ -56,9 +57,9 @@
     "advertisementAria": "إعلان",
     "privacyBadge": "يعمل محلياً — ملفاتك لا تُرفع",
     "guide": "دليل",
-    "readGuide": "اقرأ الدليل الكامل ←",
-    "articleCta": "وفّر وقتك — استخدم أداة {tool} مجاناً ←",
-    "articleCtaCompact": "استخدم أداة {tool} مجاناً ←"
+    "readGuide": "اقرأ الدليل الكامل",
+    "articleCta": "وفّر وقتك — استخدم أداة {tool} مجاناً",
+    "articleCtaCompact": "استخدم أداة {tool} مجاناً"
   },
   "ads": {
     "label": "إعلان",
@@ -106,8 +107,6 @@
     }
   },
   "csvJsonConverter": {
-    "csvToJson": "CSV → JSON",
-    "jsonToCsv": "JSON → CSV",
     "delimiter": "الفاصل",
     "delimiterComma": "فاصلة (,)",
     "delimiterSemicolon": "فاصلة منقوطة (;)",
@@ -124,7 +123,9 @@
       "INVALID_JSON": "JSON غير صالح. تحقق من الصياغة وحاول مجدداً.",
       "NOT_ARRAY": "يجب أن يكون JSON مصفوفة للتحويل إلى CSV.",
       "NOT_OBJECTS": "يجب أن تكون المصفوفة من كائنات (وليس مصفوفات متداخلة أو قيم بدائية)."
-    }
+    },
+    "csv": "CSV",
+    "json": "JSON"
   },
   "regexTester": {
     "patternLabel": "النمط",

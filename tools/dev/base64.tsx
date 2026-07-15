@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Check, Copy, Upload } from "lucide-react";
+import { Check, Copy } from "lucide-react";
+import FileDropZone from "@/components/FileDropZone";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
 import { useDevToolsExtraLabels } from "@/lib/i18n/use-dev-tools-extra-labels";
 import { useUnsavedWork } from "@/lib/unsaved-work";
@@ -132,20 +133,14 @@ export default function Base64Tool() {
       </div>
 
       {mode === "encode" && inputMode === "image" ? (
-        <label className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 dark:bg-gray-800/50 dark:border-gray-600 px-6 py-8 transition-colors hover:border-primary-400">
-          <Upload className="h-6 w-6 text-gray-400 dark:text-gray-500" aria-hidden="true" />
-          <span className="mt-2 text-sm text-gray-600 dark:text-gray-400">{t.uploadImage}</span>
-          <input
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) handleImageUpload(file);
-              e.target.value = "";
-            }}
-          />
-        </label>
+        <FileDropZone
+          accept="image/*"
+          label={t.uploadImage}
+          onFiles={(files) => {
+            const file = files[0];
+            if (file) handleImageUpload(file);
+          }}
+        />
       ) : (
         <textarea
           value={input}

@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { Download, Upload } from "lucide-react";
+import { Download } from "lucide-react";
+import FileDropZone from "@/components/FileDropZone";
 import { setupCanvas, canvasToBlob } from "@/lib/canvas-utils";
 import { downloadBlob } from "@/lib/download";
 import { useImageLoader } from "@/lib/hooks/use-image-loader";
@@ -85,7 +86,7 @@ export default function ImageWatermark() {
   const previewScaleRef = useRef(1);
   const dragRef = useRef<{ grabX: number; grabY: number; pointerId: number } | null>(null);
 
-  const { imgRef, inputRef, hasImage, imageVersion, error, setError, handleInputChange } = useImageLoader(
+  const { imgRef, hasImage, imageVersion, error, setError, loadFile } = useImageLoader(
     toolSlug ? toolImageSessionKey(toolSlug) : undefined
   );
 
@@ -100,12 +101,6 @@ export default function ImageWatermark() {
   const [previewSize, setPreviewSize] = useState({ w: 0, h: 0 });
 
   const messages = { invalid: shared.invalidImage, loadFailed: shared.loadFailed };
-
-  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) setSourceMime(file.type || "image/png");
-    handleInputChange(e, messages);
-  };
 
   const render = useCallback(() => {
     const canvas = canvasRef.current;
@@ -207,25 +202,16 @@ export default function ImageWatermark() {
 
   return (
     <div className="space-y-4">
-      <div
-        role="button"
-        tabIndex={0}
-        onClick={() => inputRef.current?.click()}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") inputRef.current?.click();
+      <FileDropZone
+        accept="image/*"
+        label={shared.uploadImage}
+        onFiles={(files) => {
+          const f = files[0];
+          if (!f) return;
+          setSourceMime(f.type || "image/png");
+          loadFile(f, messages);
         }}
-        className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 px-6 py-10 transition-colors hover:border-primary-400 hover:bg-primary-50/50 dark:border-gray-600 dark:bg-gray-800/50 dark:hover:border-primary-500 dark:hover:bg-primary-950/30"
-      >
-        <Upload className="h-8 w-8 text-gray-400 dark:text-gray-500" aria-hidden="true" />
-        <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">{shared.uploadImage}</p>
-        <input
-          ref={inputRef}
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={onFileChange}
-        />
-      </div>
+      />
 
       {error && (
         <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300" role="alert">

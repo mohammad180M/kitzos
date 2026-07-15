@@ -95,7 +95,7 @@ export const toolsLite: ToolLite[] = [
     "category": "pdf",
     "icon": "Minimize2",
     "title": "Compress PDF",
-    "description": "Reduce PDF file size with lossless optimization or strong raster compression.",
+    "description": "Shrink PDFs by re-saving structure or rasterizing pages to JPEG (best for scans).",
     "keywords": [
       "compress pdf",
       "reduce pdf size",
@@ -104,7 +104,7 @@ export const toolsLite: ToolLite[] = [
       "optimize pdf"
     ],
     "titleAr": "ضغط PDF",
-    "descriptionAr": "قلّل حجم ملف PDF بتحسين البنية أو ضغط قوي يحوّل الصفحات إلى صور.",
+    "descriptionAr": "صغّر ملفات PDF بإعادة حفظ البنية أو تحويل الصفحات إلى JPEG (الأنسب للممسوحات).",
     "keywordsAr": [
       "ضغط pdf",
       "تصغير pdf",
@@ -355,8 +355,7 @@ export const toolsLite: ToolLite[] = [
       "تحويل heic",
       "صورة ايفون jpg",
       "محول heic"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "flip-image",
@@ -377,8 +376,7 @@ export const toolsLite: ToolLite[] = [
       "عكس صورة",
       "mirror image",
       "flip photo"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "image-rotator",
@@ -400,8 +398,7 @@ export const toolsLite: ToolLite[] = [
       "rotate image",
       "image rotator",
       "تدوير الصور"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "blur-image",
@@ -428,8 +425,7 @@ export const toolsLite: ToolLite[] = [
       "pixelate image",
       "خصوصية صورة",
       "تمويه وجه"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "image-watermark",
@@ -450,8 +446,7 @@ export const toolsLite: ToolLite[] = [
       "watermark صورة",
       "نص على صورة",
       "حماية صورة"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "add-text-to-image",
@@ -473,8 +468,7 @@ export const toolsLite: ToolLite[] = [
       "كتابة على صورة",
       "text overlay",
       "تعليق على صورة"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "image-collage",
@@ -496,8 +490,7 @@ export const toolsLite: ToolLite[] = [
       "photo grid",
       "collage maker",
       "شبكة صور"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "passport-photo",
@@ -518,8 +511,7 @@ export const toolsLite: ToolLite[] = [
       "صورة شخصية 35x45",
       "2x2 photo",
       "صورة هوية"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "gif-maker",
@@ -540,8 +532,7 @@ export const toolsLite: ToolLite[] = [
       "صور الى gif",
       "animated gif",
       "slideshow gif"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "image-color-picker",
@@ -562,8 +553,7 @@ export const toolsLite: ToolLite[] = [
       "eyedropper",
       "hex من صورة",
       "التقاط لون"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "exif-remover",
@@ -672,8 +662,7 @@ export const toolsLite: ToolLite[] = [
       "استبدال نص",
       "regex replace",
       "استبدال جماعي"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "remove-line-breaks",
@@ -789,8 +778,7 @@ export const toolsLite: ToolLite[] = [
       "permalink",
       "slug seo",
       "تحويل عنوان الى رابط"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "arabic-diacritics-remover",
@@ -812,8 +800,7 @@ export const toolsLite: ToolLite[] = [
       "ازالة تاشكيل",
       "تنظيف نص عربي",
       "strip harakat"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "line-sorter",
@@ -835,8 +822,7 @@ export const toolsLite: ToolLite[] = [
       "حذف اسطر مكررة",
       "sort lines",
       "ترتيب قائمة"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "word-frequency-counter",
@@ -858,8 +844,7 @@ export const toolsLite: ToolLite[] = [
       "كثافة كلمات مفتاحية",
       "عداد تكرار",
       "word frequency"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "online-notepad",
@@ -904,8 +889,7 @@ export const toolsLite: ToolLite[] = [
       "reverse text",
       "عكس كلمات",
       "نص معكوس"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "text-to-ascii-art",
@@ -927,8 +911,7 @@ export const toolsLite: ToolLite[] = [
       "figlet",
       "بانر ascii",
       "فن ascii"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "character-map",
@@ -950,28 +933,29 @@ export const toolsLite: ToolLite[] = [
       "احرف خاصة",
       "نسخ رموز",
       "character map"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "qr-code-generator",
     "category": "dev",
     "icon": "QrCode",
     "title": "QR Code Generator",
-    "description": "Generate QR codes from text or URLs. Download as PNG or SVG.",
+    "description": "Create styled QR codes for links, Wi‑Fi, contacts, and more. Logo and colors stay in your browser.",
     "keywords": [
       "qr code generator",
       "qr code maker",
       "create qr code",
-      "qr code download"
+      "custom qr code",
+      "wifi qr code"
     ],
     "titleAr": "مولّد رمز QR",
-    "descriptionAr": "أنشئ رموز QR من نص أو روابط. نزّلها بصيغة PNG أو SVG.",
+    "descriptionAr": "أنشئ رموز QR مخصّصة للروابط وWi‑Fi وجهات الاتصال والمزيد. الشعار والألوان تبقى في متصفحك.",
     "keywordsAr": [
       "مولّد رمز qr",
       "صانع رمز qr",
       "إنشاء رمز qr",
-      "تنزيل رمز qr"
+      "رمز qr مخصص",
+      "رمز wifi"
     ]
   },
   {
@@ -994,8 +978,7 @@ export const toolsLite: ToolLite[] = [
       "ean13",
       "code128",
       "باركود اونلاين"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "json-formatter",
@@ -1081,8 +1064,7 @@ export const toolsLite: ToolLite[] = [
       "توليد uuid",
       "uuid v4",
       "معرف عشوائي"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "color-picker",
@@ -1126,8 +1108,7 @@ export const toolsLite: ToolLite[] = [
       "hex الى rgb",
       "rgb الى hsl",
       "تحويل لون"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "color-palette-generator",
@@ -1232,8 +1213,7 @@ export const toolsLite: ToolLite[] = [
       "json الى interface",
       "مولد typescript",
       "json to ts"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "url-encoder-decoder",
@@ -1254,8 +1234,7 @@ export const toolsLite: ToolLite[] = [
       "فك ترميز url",
       "percent encode",
       "uri encode"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "css-minifier",
@@ -1276,8 +1255,7 @@ export const toolsLite: ToolLite[] = [
       "تنسيق css",
       "minify css",
       "تجميل css"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "js-minifier",
@@ -1298,8 +1276,7 @@ export const toolsLite: ToolLite[] = [
       "minify js",
       "terser",
       "ضغط جافاسكربت"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "xml-formatter",
@@ -1320,8 +1297,7 @@ export const toolsLite: ToolLite[] = [
       "تنسيق xml",
       "ضغط xml",
       "pretty print xml"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "sql-formatter",
@@ -1342,8 +1318,7 @@ export const toolsLite: ToolLite[] = [
       "تنسيق sql",
       "format sql",
       "تجميل sql"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "gradient-generator",
@@ -1487,8 +1462,7 @@ export const toolsLite: ToolLite[] = [
       "وسوم og",
       "open graph",
       "وسوم seo"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "interaction-fx",
@@ -1530,8 +1504,7 @@ export const toolsLite: ToolLite[] = [
       "تحويل 301",
       "apache rewrite",
       "مولد htaccess"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "cron-expression-parser",
@@ -1552,8 +1525,7 @@ export const toolsLite: ToolLite[] = [
       "تعبير cron",
       "crontab",
       "شرح cron"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "lorem-picsum-placeholder",
@@ -1574,8 +1546,7 @@ export const toolsLite: ToolLite[] = [
       "بديل lorem picsum",
       "صورة وهمية",
       "placeholder png"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "percentage-calculator",
@@ -1620,8 +1591,7 @@ export const toolsLite: ToolLite[] = [
       "تقسيم فاتورة",
       "بقشيش مطعم",
       "حاسبة gratuity"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "discount-calculator",
@@ -1642,8 +1612,7 @@ export const toolsLite: ToolLite[] = [
       "سعر بعد التخفيض",
       "نسبة خصم",
       "حاسبة تخفيضات"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "bmi-calculator",
@@ -1733,8 +1702,7 @@ export const toolsLite: ToolLite[] = [
       "قرض منزل",
       "جدول سداد",
       "قسط شهري منزل"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "compound-interest",
@@ -1755,8 +1723,7 @@ export const toolsLite: ToolLite[] = [
       "حاسبة استثمار",
       "نمو مدخرات",
       "حاسبة فائدة"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "age-calculator",
@@ -1779,8 +1746,7 @@ export const toolsLite: ToolLite[] = [
       "حساب العمر",
       "عمر بالأيام",
       "تاريخ الميلاد"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "date-difference",
@@ -1848,8 +1814,7 @@ export const toolsLite: ToolLite[] = [
       "المعدل التراكمي",
       "معدل جامعي",
       "gpa عربي"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "fuel-cost-calculator",
@@ -1870,8 +1835,7 @@ export const toolsLite: ToolLite[] = [
       "حاسبة بنزين",
       "استهلاك وقود",
       "تكلفة رحلة"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "aspect-ratio-calculator",
@@ -1894,8 +1858,7 @@ export const toolsLite: ToolLite[] = [
       "aspect ratio",
       "ابعاد صورة",
       "ابعاد فيديو"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "unit-converter",
@@ -1939,8 +1902,7 @@ export const toolsLite: ToolLite[] = [
       "مئوية الى فهرنهايت",
       "فهرنهايت الى مئوية",
       "محول كلفن"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "cooking-converter",
@@ -1963,8 +1925,7 @@ export const toolsLite: ToolLite[] = [
       "وحدات طبخ",
       "محول وصفات",
       "مقاييس مطبخ"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "data-unit-converter",
@@ -1987,8 +1948,7 @@ export const toolsLite: ToolLite[] = [
       "وحدات بيانات",
       "سرعة شبكة",
       "محول bandwidth"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "file-size-converter",
@@ -2011,8 +1971,7 @@ export const toolsLite: ToolLite[] = [
       "kb الى gb",
       "حجم ملف ثنائي",
       "محول بايت"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "roman-numeral-converter",
@@ -2035,8 +1994,7 @@ export const toolsLite: ToolLite[] = [
       "MMXXVI",
       "روماني الى عربي",
       "محول ارقام رومانية"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "number-to-words",
@@ -2059,8 +2017,7 @@ export const toolsLite: ToolLite[] = [
       "number to words",
       "تفقيط عربي",
       "كتابة الارقام بالحروف"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "hijri-gregorian-converter",
@@ -2083,8 +2040,7 @@ export const toolsLite: ToolLite[] = [
       "ميلادي الى هجري",
       "هجري الى ميلادي",
       "تاريخ هجري"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "timestamp-converter",
@@ -2127,8 +2083,7 @@ export const toolsLite: ToolLite[] = [
       "hex الى decimal",
       "decimal الى binary",
       "محول انظمة ارقام"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "pomodoro-timer",
@@ -2173,30 +2128,34 @@ export const toolsLite: ToolLite[] = [
       "stopwatch",
       "timer online",
       "مؤقت"
-    ],
-    "isNew": true
+    ]
   },
   {
     "slug": "random-picker",
     "category": "misc",
     "icon": "Shuffle",
-    "title": "Random Picker & Number Generator",
-    "description": "Pick a random name or option from a list, or generate a random number in any range.",
+    "title": "Spin Wheel Picker",
+    "description": "Spin a wheel of fortune to pick a random name or option from a list, or generate a random number in any range.",
     "keywords": [
-      "random picker",
+      "wheel of fortune",
+      "spin the wheel",
+      "spin wheel picker",
       "random name picker",
+      "wheel spinner",
       "random number generator",
-      "wheel picker",
-      "lottery picker"
+      "random picker"
     ],
-    "titleAr": "منتقي عشوائي ومولّد أرقام",
-    "descriptionAr": "اختر اسماً أو خياراً عشوائياً من قائمة، أو أنشئ رقماً عشوائياً ضمن نطاق.",
+    "titleAr": "عجلة الحظ",
+    "descriptionAr": "أدر عجلة الحظ لاختيار اسم أو خيار عشوائي من قائمة، أو أنشئ رقماً عشوائياً ضمن أي نطاق.",
     "keywordsAr": [
-      "منتقي عشوائي",
-      "اختيار اسم عشوائي",
-      "مولّد أرقام عشوائية",
-      "عجلة الاختيار",
-      "منتقي السحب"
+      "عجلة الحظ",
+      "عجلة الأسماء",
+      "اختيار عشوائي",
+      "سحب عشوائي",
+      "قرعة",
+      "مولد أرقام عشوائية",
+      "عجلة",
+      "منتقي عشوائي"
     ]
   },
   {

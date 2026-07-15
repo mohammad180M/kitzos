@@ -95,8 +95,8 @@ page.tsx (server) → ToolLayout (server: breadcrumbs, SEO, how-to, FAQ, related
 ## 7. Design System — "Instrument Panel"
 
 **Tokens (CSS vars, dark is reference):**
-- Dark: `--bg #0B0E14`, `--surface #121722`, `--surface-2 #182031`, `--line #1F2733`, `--text #E8ECF2`, `--text-secondary #C6CEDB`, `--muted #A9B4C6`, `--accent #FFB020` (amber), `--accent-ink #1A1205`.
-- Light: `--bg #F7F8FA`, `--surface #FFFFFF`, `--surface-2 #F0F2F6`, `--line #E4E8EF`, `--text #14181F`, `--text-secondary #3A424F`, `--muted #4C5665`.
+- Dark: `--bg #0B0E14`, `--surface #121722`, `--surface-2 #182031`, `--line #1F2733`, `--text #E8ECF2`, `--text-secondary #C6CEDB`, `--muted #A9B4C6`, `--accent #FFB020` (amber), `--accent-ink #1A1205`, `--success #4ADE80`, `--success-tint` (~8% success).
+- Light: `--bg #F7F8FA`, `--surface #FFFFFF`, `--surface-2 #F0F2F6`, `--line #E4E8EF`, `--text #14181F`, `--text-secondary #3A424F`, `--muted #4C5665`, `--success #22C55E`, `--success-tint` (~8% success).
 - Contrast floor: body text ≥ 4.5:1 on its surface. Fix failures at the TOKEN level.
 - Zero hardcoded hex/gray-* in components — tokens only.
 

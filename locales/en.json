@@ -15,7 +15,8 @@
     "backHome": "Back to home",
     "popularTools": "Popular tools",
     "emptyStateHint": "Start by pasting or typing — your data stays in your browser.",
-    "keyboardHint": "Tip: Ctrl+Enter to run, Esc to clear"
+    "keyboardHint": "Tip: Ctrl+Enter to run, Esc to clear",
+    "dropFilesHere": "Drop files here"
   },
   "header": {
     "categoriesAria": "Categories",
@@ -56,9 +57,9 @@
     "advertisementAria": "Advertisement",
     "privacyBadge": "Runs locally — nothing is uploaded",
     "guide": "Guide",
-    "readGuide": "Read the full guide →",
-    "articleCta": "Skip the theory — use the free {tool} tool →",
-    "articleCtaCompact": "Use the free {tool} tool →"
+    "readGuide": "Read the full guide",
+    "articleCta": "Skip the theory — use the free {tool} tool",
+    "articleCtaCompact": "Use the free {tool} tool"
   },
   "ads": {
     "label": "Advertisement",
@@ -106,8 +107,6 @@
     }
   },
   "csvJsonConverter": {
-    "csvToJson": "CSV → JSON",
-    "jsonToCsv": "JSON → CSV",
     "delimiter": "Delimiter",
     "delimiterComma": "Comma (,)",
     "delimiterSemicolon": "Semicolon (;)",
@@ -124,7 +123,9 @@
       "INVALID_JSON": "Invalid JSON. Check syntax and try again.",
       "NOT_ARRAY": "JSON must be an array to convert to CSV.",
       "NOT_OBJECTS": "JSON must be an array of objects (not nested arrays or primitives)."
-    }
+    },
+    "csv": "CSV",
+    "json": "JSON"
   },
   "regexTester": {
     "patternLabel": "Pattern",

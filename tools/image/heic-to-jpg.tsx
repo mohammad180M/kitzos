@@ -1,7 +1,9 @@
 "use client";
 
+import FileDropZone from "@/components/FileDropZone";
+import DirectionArrow from "@/components/DirectionArrow";
 import { useCallback, useRef, useState } from "react";
-import { Download, Loader2, Upload } from "lucide-react";
+import { Download, Loader2 } from "lucide-react";
 import { downloadBlob } from "@/lib/download";
 import { useImageToolsExtraLabels } from "@/lib/i18n/use-image-tools-extra-labels";
 import { useUnsavedWork } from "@/lib/unsaved-work";
@@ -44,7 +46,6 @@ interface ConvertedEntry {
 
 export default function HeicToJpg() {
   const t = useImageToolsExtraLabels("heicToJpg");
-  const inputRef = useRef<HTMLInputElement>(null);
   const originalFilesRef = useRef<File[]>([]);
   const [entries, setEntries] = useState<ConvertedEntry[]>([]);
   const [quality, setQuality] = useState(90);
@@ -134,31 +135,15 @@ export default function HeicToJpg() {
 
   return (
     <div className="space-y-4">
-      <div
-        role="button"
-        tabIndex={0}
-        onClick={() => inputRef.current?.click()}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") inputRef.current?.click();
+      <FileDropZone
+        accept=".heic,.heif,image/heic,image/heif"
+        multiple
+        label={t.uploadHint}
+        hint={t.uploadSubHint}
+        onFiles={(files) => {
+          if (files.length) handleFiles(files);
         }}
-        className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 px-6 py-10 transition-colors hover:border-primary-400 hover:bg-primary-50/50 dark:border-gray-600 dark:bg-gray-800/50 dark:hover:border-primary-500 dark:hover:bg-primary-950/30"
-      >
-        <Upload className="h-8 w-8 text-gray-400 dark:text-gray-500" aria-hidden="true" />
-        <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">{t.uploadHint}</p>
-        <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{t.uploadSubHint}</p>
-        <input
-          ref={inputRef}
-          type="file"
-          accept=".heic,.heif,image/heic,image/heif"
-          multiple
-          className="hidden"
-          onChange={(e) => {
-            const files = e.target.files;
-            if (files?.length) handleFiles(files);
-            e.target.value = "";
-          }}
-        />
-      </div>
+      />
 
       {error && (
         <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300" role="alert">
@@ -204,7 +189,8 @@ export default function HeicToJpg() {
                     {entry.originalName}
                   </p>
                   <p className="text-xs text-gray-500 dark:text-gray-400">
-                    {t.originalSize}: {formatBytes(entry.originalSize)} → {t.outputSize}:{" "}
+                    {t.originalSize}: {formatBytes(entry.originalSize)}{" "}
+                    <DirectionArrow className="mx-0.5" /> {t.outputSize}:{" "}
                     {formatBytes(entry.outputSize)}
                   </p>
                 </div>

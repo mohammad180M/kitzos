@@ -1,7 +1,8 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { Download, Eye, EyeOff, Loader2, Lock, Upload } from "lucide-react";
+import { useState } from "react";
+import { Download, Eye, EyeOff, Loader2, Lock } from "lucide-react";
+import FileDropZone from "@/components/FileDropZone";
 import PdfPreviewPane from "@/components/pdf/PdfPreviewPane";
 import PdfWorkbenchLayout from "@/components/pdf/PdfWorkbenchLayout";
 import { usePdfSharedLabels } from "@/lib/i18n/use-pdf-tool-labels";
@@ -16,7 +17,6 @@ function loadPdfLib() {
 export default function PdfProtect() {
   const t = usePdfToolLabels("pdfProtect");
   const shared = usePdfSharedLabels();
-  const inputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [pageCount, setPageCount] = useState(0);
   const [password, setPassword] = useState("");
@@ -84,21 +84,14 @@ export default function PdfProtect() {
 
   const controls = (
     <>
-      <input
-        ref={inputRef}
-        type="file"
+      <FileDropZone
         accept="application/pdf"
-        className="hidden"
-        onChange={(e) => {
-          const f = e.target.files?.[0];
+        label={file ? file.name : t.uploadPdf}
+        onFiles={(files) => {
+          const f = files[0];
           if (f) void onFile(f);
         }}
       />
-
-      <button type="button" onClick={() => inputRef.current?.click()} className="btn-secondary inline-flex items-center gap-2">
-        <Upload className="h-4 w-4" />
-        {file ? file.name : t.uploadPdf}
-      </button>
 
       <label className="block text-sm">
         <span className="font-medium text-gray-700 dark:text-gray-300">{t.password}</span>

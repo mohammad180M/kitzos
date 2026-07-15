@@ -91,28 +91,33 @@ export const extraToolContent: Record<string, ToolContent> = {
   "pdf-watermark": content(
     [
       { title: "Upload PDF", description: "Choose the document to watermark." },
-      { title: "Customize text", description: "Enter watermark text and adjust opacity." },
+      {
+        title: "Choose text or image",
+        description:
+          "Add text (with a self-hosted font) or upload a logo, then set size, opacity, rotation, and single or tiled layout.",
+      },
       { title: "Download", description: "Get a copy with the watermark on every page." },
     ],
     [
       {
         question: "Can I use an image watermark?",
-        answer: "This version supports text watermarks only.",
+        answer:
+          "Yes. Switch to Image mode, upload a PNG/JPG/WebP/SVG logo, and adjust size, opacity, rotation, and layout. Transparent PNGs keep their alpha.",
       },
       {
         question: "Does the watermark become part of the page?",
         answer:
-          "Yes. When you export, the text is drawn onto every page of the downloaded PDF.",
+          "Yes. When you export, the stamp is drawn onto every page of the downloaded PDF.",
       },
       {
-        question: "Is it private?",
+        question: "Does Arabic text look correct?",
         answer:
-          "Yes. Your PDF and watermark text stay on your device — nothing is uploaded while you stamp pages.",
+          "Yes — choose an Arabic-capable font (marked AR). Arabic is rasterized with proper joining so the export matches the preview.",
       },
       {
         question: "What is the difference between Single and Tiled?",
         answer:
-          "Single places one diagonal watermark near the center. Tiled (repeat) repeats the text across the page. Adjust size and opacity before exporting.",
+          "Single places one watermark you can reposition on the preview. Tiled repeats it across the page. Opacity and rotation apply to both.",
       },
     ]
   ),
@@ -161,13 +166,25 @@ export const extraToolContent: Record<string, ToolContent> = {
   "og-image-generator": content(
     [
       { title: "Edit text and colors", description: "Set title, subtitle, background, and text colors." },
-      { title: "Preview", description: "See the 1200×630 Open Graph layout live." },
-      { title: "Export PNG", description: "Download for Twitter, Facebook, LinkedIn, and Discord previews." },
+      {
+        title: "Upload and frame the background",
+        description:
+          "Optional image fill uses cover. Adjust focus with the 3×3 grid or horizontal/vertical sliders.",
+      },
+      { title: "Export PNG", description: "Download 1200×630 for Twitter, Facebook, LinkedIn, and Discord." },
     ],
     [
       { question: "What size is OG standard?", answer: "1200×630 pixels is the recommended Open Graph image size." },
-      { question: "Can I use custom fonts?", answer: "Latin text uses system UI fonts. Arabic titles automatically use Noto Sans Arabic when Arabic characters are detected — you cannot upload your own font files." },
-      { question: "What can I customize?", answer: "Title, subtitle, background color, and text colors with a live preview." },
+      {
+        question: "Can I reposition the background image?",
+        answer:
+          "Yes. After uploading a background, use the position grid or sliders. Preview and PNG export use the same focal point.",
+      },
+      {
+        question: "Can I use custom fonts?",
+        answer:
+          "Latin text uses system UI fonts. Arabic titles automatically use Noto Sans Arabic when Arabic characters are detected — you cannot upload your own font files.",
+      },
       { question: "What format downloads?", answer: "PNG at 1200×630 matching the preview." },
     ]
   ),
@@ -444,15 +461,43 @@ export const extraToolContent: Record<string, ToolContent> = {
   ),
   "gpa-calculator": content(
     [
-      { title: "Add courses", description: "Enter credit hours and letter grade for each course." },
-      { title: "Add or remove rows", description: "Use Add course for more subjects; remove rows you do not need." },
-      { title: "Read your GPA", description: "Your weighted GPA on a 4.0 scale updates automatically." },
+      {
+        title: "Add this term’s courses",
+        description:
+          "Optionally name each course, then enter credit hours and letter grades (plus/minus 4.0 scale).",
+      },
+      {
+        title: "Optional: cumulative GPA",
+        description:
+          "Turn on Include previous GPA, enter prior GPA and credit hours, and mark retakes with the previous grade if needed.",
+      },
+      {
+        title: "Read semester and cumulative results",
+        description:
+          "Your semester GPA updates live. With cumulative mode on, the new overall GPA is shown as the primary result.",
+      },
     ],
     [
-      { question: "What grading scale is used?", answer: "Standard 4.0 scale: A=4, B=3, C=2, D=1, F=0, weighted by credit hours." },
-      { question: "Can I calculate semester GPA?", answer: "Yes. Enter only the courses for the term you want to evaluate." },
-      { question: "Can I add or remove courses?", answer: "Yes. Use Add course for more rows and Remove to drop a course you do not need." },
-      { question: "Are my grades saved?", answer: "No. GPA is calculated in your browser; course rows are not uploaded." },
+      {
+        question: "What grading scale is used?",
+        answer:
+          "Standard 4.0 plus/minus scale: A+/A=4.0, A−=3.7, B+=3.3, B=3.0, B−=2.7, C+=2.3, C=2.0, C−=1.7, D+=1.3, D=1.0, D−=0.7, F=0.0 — weighted by credit hours.",
+      },
+      {
+        question: "How does cumulative GPA work?",
+        answer:
+          "Enter your previous GPA and prior credit hours. The tool combines them with this term’s points: (prevGPA × prevCredits + semester points) ÷ (prevCredits + semester credits), adjusted for retakes.",
+      },
+      {
+        question: "How are retakes calculated?",
+        answer:
+          "When cumulative mode is on, mark a course as a retake and choose the old grade. The calculator uses grade replacement: the old attempt’s points are removed and the credits are not double-counted. Policies vary by university.",
+      },
+      {
+        question: "Are my courses saved?",
+        answer:
+          "Yes, locally in your browser (on this device only). Nothing is uploaded. Clearing site data removes the saved rows.",
+      },
     ]
   ),
   "compound-interest": content(

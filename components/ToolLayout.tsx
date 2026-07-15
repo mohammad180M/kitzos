@@ -17,6 +17,7 @@ import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getLocalizedCategory, getLocalizedTool } from "@/lib/i18n/localized-labels";
 import { localizedPath } from "@/lib/i18n/routing";
 import type { Locale } from "@/lib/i18n/types";
+import DirectionArrow from "./DirectionArrow";
 import FaqAccordion from "./FaqAccordion";
 import JsonLd from "./JsonLd";
 import PrivacyBadge from "./PrivacyBadge";
@@ -157,9 +158,10 @@ export default function ToolLayout({
           <p className="mb-10 max-w-[65ch]">
             <Link
               href={localizedPath(locale, `/tools/${tool.slug}/article`)}
-              className="text-sm font-medium text-muted underline-offset-2 transition-colors hover:text-accent hover:underline"
+            className="inline-flex items-center text-sm font-medium text-muted underline-offset-2 transition-colors hover:text-accent hover:underline"
             >
               {t.tool.readGuide}
+              <DirectionArrow className="ms-1" />
             </Link>
           </p>
         )}

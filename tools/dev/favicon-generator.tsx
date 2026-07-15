@@ -1,7 +1,8 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { Download, Loader2, Upload } from "lucide-react";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
+import FileDropZone from "@/components/FileDropZone";
 import { setupCanvas } from "@/lib/canvas-utils";
 import { downloadBlob } from "@/lib/audio-utils";
 import { useDevToolsExtraLabels } from "@/lib/i18n/use-dev-tools-extra-labels";
@@ -21,7 +22,6 @@ const SIZES = [16, 32, 48, 192, 512] as const;
 
 export default function FaviconGenerator() {
   const t = useDevToolsExtraLabels("faviconGenerator");
-  const inputRef = useRef<HTMLInputElement>(null);
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -61,27 +61,18 @@ export default function FaviconGenerator() {
 
   return (
     <div className="space-y-4">
-      <input
-        ref={inputRef}
-        type="file"
+      <FileDropZone
         accept="image/*"
-        className="hidden"
-        onChange={(e) => {
-          const f = e.target.files?.[0];
+        label={t.uploadImage}
+        hint={t.hint}
+        disabled={processing}
+        icon={processing ? <Loader2 className="h-8 w-8 animate-spin text-[var(--muted)]" /> : undefined}
+        onFiles={(files) => {
+          const f = files[0];
           if (f) void generate(f);
         }}
       />
-      <button
-        type="button"
-        onClick={() => inputRef.current?.click()}
-        disabled={processing}
-        className="flex w-full flex-col items-center gap-2 rounded-xl border-2 border-dashed border-gray-300 p-8 dark:border-gray-600"
-      >
-        {processing ? <Loader2 className="h-8 w-8 animate-spin" /> : <Upload className="h-8 w-8" />}
-        <span>{t.uploadImage}</span>
-      </button>
       {error && <p className="text-sm text-red-600">{error}</p>}
-      <p className="text-xs text-gray-400">{t.hint}</p>
     </div>
   );
 }

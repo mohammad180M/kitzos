@@ -1,7 +1,8 @@
 "use client";
 
+import FileDropZone from "@/components/FileDropZone";
 import { useEffect, useRef, useState } from "react";
-import { Download, FileText, Loader2, Upload } from "lucide-react";
+import { Download, FileText, Loader2 } from "lucide-react";
 import PdfPreviewPane from "@/components/pdf/PdfPreviewPane";
 import PdfWorkbenchLayout from "@/components/pdf/PdfWorkbenchLayout";
 import { usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
@@ -11,7 +12,7 @@ import {
   renderPdfBytesPageThumb,
   renderPdfPageThumb,
 } from "@/lib/pdf/thumbnails";
-import { bytesForPdfLoad, pdfBytesToBlob, readPdfFileBytes } from "@/lib/pdf/bytes";
+import { bytesForPdfLoad, clonePdfBytes, pdfBytesToBlob, readPdfFileBytes } from "@/lib/pdf/bytes";
 import { useUnsavedWork } from "@/lib/unsaved-work";
 
 function loadPdfLib() {
@@ -28,13 +29,26 @@ function getPdfLib() {
 type CompressMode = "optimize" | "strong";
 type Quality = "low" | "medium" | "high";
 
-const DPI_MAP: Record<Quality, number> = { low: 96, medium: 144, high: 200 };
+/** DPI + JPEG quality per tier (diagnostic-tuned). */
+const QUALITY_TIERS: Record<Quality, { dpi: number; jpegQuality: number }> = {
+  low: { dpi: 96, jpegQuality: 0.5 },
+  medium: { dpi: 130, jpegQuality: 0.6 },
+  high: { dpi: 165, jpegQuality: 0.72 },
+};
+
+/** Measured PDF wrapper overhead ≈ 0.64% → 1.01 multiplier on projected JPEG sum. */
+const PREFLIGHT_OVERHEAD = 1.01;
 
 interface CompressResult {
   originalSize: number;
   newSize: number;
   bytes: Uint8Array;
   isLarger: boolean;
+}
+
+interface PreflightGrow {
+  projected: number;
+  originalSize: number;
 }
 
 function formatBytes(bytes: number): string {
@@ -56,43 +70,132 @@ function yieldToMain(): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, 0));
 }
 
+function samplePageIndices(pageCount: number): number[] {
+  if (pageCount <= 5) {
+    return Array.from({ length: pageCount }, (_, i) => i + 1);
+  }
+  const raw = [
+    1,
+    Math.round(pageCount * 0.25),
+    Math.round(pageCount * 0.5),
+    Math.round(pageCount * 0.75),
+    pageCount,
+  ];
+  const uniq = Array.from(
+    new Set(raw.map((n) => Math.min(pageCount, Math.max(1, n))))
+  );
+  return uniq.sort((a, b) => a - b);
+}
+
+function applyGrayscale(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
+  const { width, height } = canvas;
+  const image = ctx.getImageData(0, 0, width, height);
+  const data = image.data;
+  for (let i = 0; i < data.length; i += 4) {
+    // Rec. 601 luminance — forces chroma to zero before JPEG encode.
+    const y = (data[i]! * 0.299 + data[i + 1]! * 0.587 + data[i + 2]! * 0.114) | 0;
+    data[i] = y;
+    data[i + 1] = y;
+    data[i + 2] = y;
+  }
+  ctx.putImageData(image, 0, 0);
+}
+
+async function canvasToJpeg(
+  canvas: HTMLCanvasElement,
+  jpegQuality: number
+): Promise<Uint8Array> {
+  const jpegBlob = await new Promise<Blob>((resolve, reject) => {
+    canvas.toBlob(
+      (b) => (b ? resolve(b) : reject(new Error("JPEG failed."))),
+      "image/jpeg",
+      jpegQuality
+    );
+  });
+  return new Uint8Array(await jpegBlob.arrayBuffer());
+}
+
+async function renderPageJpeg(
+  // pdfjs PDFPageProxy — keep loose to avoid fighting RenderParameters typings
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  page: any,
+  dpi: number,
+  jpegQuality: number,
+  grayscale: boolean
+): Promise<{ jpegBytes: Uint8Array; wPt: number; hPt: number }> {
+  const base = page.getViewport({ scale: 1 });
+  const scale = dpi / 72;
+  const viewport = page.getViewport({ scale });
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.max(1, Math.floor(viewport.width));
+  canvas.height = Math.max(1, Math.floor(viewport.height));
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("Canvas not supported.");
+  await page.render({ canvasContext: ctx, viewport, canvas }).promise;
+  if (grayscale) applyGrayscale(canvas, ctx);
+  const jpegBytes = await canvasToJpeg(canvas, jpegQuality);
+  return { jpegBytes, wPt: base.width, hPt: base.height };
+}
+
 async function compressOptimize(sourceBytes: Uint8Array): Promise<Uint8Array> {
   const { PDFDocument } = await getPdfLib();
   const pdf = await PDFDocument.load(bytesForPdfLoad(sourceBytes));
   return pdf.save({ useObjectStreams: true });
 }
 
+async function loadPdfjsDocument(file: File) {
+  const pdfjs = await import("pdfjs-dist");
+  pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
+  const data = await file.arrayBuffer();
+  return pdfjs.getDocument({ data }).promise;
+}
+
+async function preflightStrong(
+  file: File,
+  quality: Quality,
+  grayscale: boolean
+): Promise<{ projected: number; pageCount: number; sampleBytes: number }> {
+  const tier = QUALITY_TIERS[quality];
+  const pdf = await loadPdfjsDocument(file);
+  const indices = samplePageIndices(pdf.numPages);
+  let sum = 0;
+  for (const i of indices) {
+    const page = await pdf.getPage(i);
+    const { jpegBytes } = await renderPageJpeg(
+      page,
+      tier.dpi,
+      tier.jpegQuality,
+      grayscale
+    );
+    sum += jpegBytes.length;
+    await yieldToMain();
+  }
+  const projected = (sum / indices.length) * pdf.numPages * PREFLIGHT_OVERHEAD;
+  return { projected, pageCount: pdf.numPages, sampleBytes: sum };
+}
+
 async function compressStrong(
   file: File,
   quality: Quality,
+  grayscale: boolean,
   onProgress: (pct: number) => void
 ): Promise<Uint8Array> {
-  const pdfjs = await import("pdfjs-dist");
-  pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
   const { PDFDocument } = await getPdfLib();
-
-  const data = await file.arrayBuffer();
-  const pdf = await pdfjs.getDocument({ data }).promise;
+  const tier = QUALITY_TIERS[quality];
+  const pdf = await loadPdfjsDocument(file);
   const outPdf = await PDFDocument.create();
-  const scale = DPI_MAP[quality] / 72;
 
   for (let i = 1; i <= pdf.numPages; i++) {
     const page = await pdf.getPage(i);
-    const viewport = page.getViewport({ scale });
-    const canvas = document.createElement("canvas");
-    canvas.width = viewport.width;
-    canvas.height = viewport.height;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) throw new Error("Canvas not supported.");
-    await page.render({ canvasContext: ctx, viewport, canvas }).promise;
-
-    const jpegBlob = await new Promise<Blob>((resolve, reject) => {
-      canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("JPEG failed."))), "image/jpeg", 0.7);
-    });
-    const jpegBytes = new Uint8Array(await jpegBlob.arrayBuffer());
+    const { jpegBytes, wPt, hPt } = await renderPageJpeg(
+      page,
+      tier.dpi,
+      tier.jpegQuality,
+      grayscale
+    );
     const image = await outPdf.embedJpg(jpegBytes);
-    const pdfPage = outPdf.addPage([viewport.width, viewport.height]);
-    pdfPage.drawImage(image, { x: 0, y: 0, width: viewport.width, height: viewport.height });
+    const pdfPage = outPdf.addPage([wPt, hPt]);
+    pdfPage.drawImage(image, { x: 0, y: 0, width: wPt, height: hPt });
 
     onProgress(Math.round((i / pdf.numPages) * 100));
     await yieldToMain();
@@ -106,12 +209,14 @@ export default function CompressPdf() {
   const [file, setFile] = useState<File | null>(null);
   const [mode, setMode] = useState<CompressMode>("optimize");
   const [quality, setQuality] = useState<Quality>("medium");
+  const [grayscale, setGrayscale] = useState(false);
   const [compressing, setCompressing] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [estimateLabel, setEstimateLabel] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<CompressResult | null>(null);
+  const [preflightGrow, setPreflightGrow] = useState<PreflightGrow | null>(null);
   const [workerReady, setWorkerReady] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
   const originalBytesRef = useRef<Uint8Array | null>(null);
   const fileRef = useRef<File | null>(null);
   const [previewSrc, setPreviewSrc] = useState<string | null>(null);
@@ -136,10 +241,16 @@ export default function CompressPdf() {
     });
   }, []);
 
-  const loadPdf = async (pdfFile: File) => {
-    setError(null);
+  const clearRunState = () => {
     setResult(null);
+    setPreflightGrow(null);
+    setEstimateLabel(null);
     setProgress(0);
+    setError(null);
+  };
+
+  const loadPdf = async (pdfFile: File) => {
+    clearRunState();
     try {
       const bytes = await readPdfFileBytes(pdfFile);
       const { PDFDocument } = await getPdfLib();
@@ -157,41 +268,72 @@ export default function CompressPdf() {
     }
   };
 
-  const runCompress = async () => {
+  const finishStrongResult = async (
+    newBytes: Uint8Array,
+    originalSize: number
+  ) => {
+    // Keep a private copy — pdf.js thumbnail load can detach the save() buffer.
+    const safeBytes = clonePdfBytes(newBytes);
+    const newSize = safeBytes.length;
+    setResult({
+      originalSize,
+      newSize,
+      bytes: safeBytes,
+      isLarger: newSize >= originalSize,
+    });
+    if (newSize < originalSize) {
+      const thumb = await renderPdfBytesPageThumb(clonePdfBytes(safeBytes), 0, { scale: 0.45 });
+      setCompressedPreviewSrc(thumb);
+    } else {
+      setCompressedPreviewSrc(null);
+    }
+  };
+
+  const runCompress = async (opts?: { force?: boolean; quality?: Quality; grayscale?: boolean }) => {
     if (!file || !originalBytesRef.current) return;
+
+    const q = opts?.quality ?? quality;
+    const gray = opts?.grayscale ?? grayscale;
+    const originalSize = originalBytesRef.current.length;
 
     setCompressing(true);
     setError(null);
     setResult(null);
+    setPreflightGrow(null);
     setProgress(0);
+    setEstimateLabel(null);
+    setCompressedPreviewSrc(null);
 
     try {
-      const originalSize = originalBytesRef.current.length;
-      let newBytes: Uint8Array;
-
       if (mode === "optimize") {
         setProgress(50);
         await yieldToMain();
-        newBytes = await compressOptimize(originalBytesRef.current);
+        const newBytes = clonePdfBytes(await compressOptimize(originalBytesRef.current));
         setProgress(100);
-      } else {
-        newBytes = await compressStrong(file, quality, setProgress);
-      }
-
-      const newSize = newBytes.length;
-      setResult({
-        originalSize,
-        newSize,
-        bytes: newBytes,
-        isLarger: newSize >= originalSize,
-      });
-
-      if (mode === "strong" && newSize < originalSize) {
-        const thumb = await renderPdfBytesPageThumb(newBytes, 0, { scale: 0.45 });
-        setCompressedPreviewSrc(thumb);
-      } else {
+        const newSize = newBytes.length;
+        setResult({
+          originalSize,
+          newSize,
+          bytes: newBytes,
+          isLarger: newSize >= originalSize,
+        });
         setCompressedPreviewSrc(null);
+        return;
       }
+
+      setEstimateLabel(t.preflightEstimating);
+      const pre = await preflightStrong(file, q, gray);
+      const projected = Math.round(pre.projected);
+      setEstimateLabel(t.estimatedSize(formatBytes(projected)));
+
+      if (projected >= originalSize && !opts?.force) {
+        setPreflightGrow({ projected, originalSize });
+        setCompressing(false);
+        return;
+      }
+
+      const newBytes = await compressStrong(file, q, gray, setProgress);
+      await finishStrongResult(newBytes, originalSize);
     } catch {
       setError(t.errCompressFailed);
     } finally {
@@ -199,74 +341,73 @@ export default function CompressPdf() {
     }
   };
 
+  const applyLowestAndRecheck = () => {
+    setQuality("low");
+    setGrayscale(true);
+    void runCompress({ quality: "low", grayscale: true });
+  };
+
   const savedPct =
     result && result.newSize < result.originalSize
       ? Math.round(((result.originalSize - result.newSize) / result.originalSize) * 100)
       : 0;
 
+  const tier = QUALITY_TIERS[quality];
+
   const controls = (
     <>
-      <div
-        role="button"
-        tabIndex={0}
-        onClick={() => inputRef.current?.click()}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") inputRef.current?.click();
+      <FileDropZone
+        accept=".pdf,application/pdf"
+        label={t.uploadHint}
+        onFiles={(files) => {
+          const f = files[0];
+          if (f) void loadPdf(f);
         }}
-        className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 px-6 py-10 transition-colors hover:border-primary-400 hover:bg-primary-50/50 dark:border-gray-600 dark:bg-gray-800/50 dark:hover:border-primary-500 dark:hover:bg-primary-950/30"
-      >
-        <Upload className="h-8 w-8 text-gray-400 dark:text-gray-500" aria-hidden="true" />
-        <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">{t.uploadHint}</p>
-        <input
-          ref={inputRef}
-          type="file"
-          accept=".pdf,application/pdf"
-          className="hidden"
-          onChange={(e) => {
-            const f = e.target.files?.[0];
-            if (f) loadPdf(f);
-            e.target.value = "";
-          }}
-        />
-      </div>
+      />
 
       {file && (
-        <div className="flex items-center gap-3 rounded-lg border border-gray-200 bg-white px-4 py-3 dark:border-gray-700 dark:bg-gray-800">
-          <FileText className="h-5 w-5 shrink-0 text-primary-600 dark:text-primary-400" aria-hidden="true" />
+        <div className="flex items-center gap-3 rounded-lg border border-[var(--line)] bg-[var(--surface)] px-4 py-3">
+          <FileText className="h-5 w-5 shrink-0 text-[var(--cat-pdf)]" aria-hidden="true" />
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-medium text-gray-900 dark:text-gray-100">{file.name}</p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">{formatBytes(file.size)}</p>
+            <p className="truncate text-sm font-medium text-[var(--text)]">{file.name}</p>
+            <p className="text-xs text-[var(--muted)]">{formatBytes(file.size)}</p>
           </div>
         </div>
       )}
 
       {file && (
         <fieldset className="space-y-3">
-          <legend className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.modeLabel}</legend>
-          <label className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-400">
+          <legend className="text-sm font-medium text-[var(--text)]">{t.modeLabel}</legend>
+          <label className="flex items-start gap-2 text-sm text-[var(--muted)]">
             <input
               type="radio"
               name="compress-mode"
               checked={mode === "optimize"}
-              onChange={() => setMode("optimize")}
-              className="mt-1 h-4 w-4 border-gray-300 text-primary-600 focus:ring-primary-500 dark:text-primary-400"
+              onChange={() => {
+                setMode("optimize");
+                clearRunState();
+              }}
+              className="mt-1 h-4 w-4 border-[var(--line)] text-[var(--cat-pdf)] focus:ring-[var(--cat-pdf)]"
             />
             <span>
-              <span className="font-medium text-gray-800 dark:text-gray-200">{t.modeOptimize}</span>
-              <span className="mt-0.5 block text-xs text-gray-500 dark:text-gray-400">{t.modeOptimizeHint}</span>
+              <span className="font-medium text-[var(--text)]">{t.modeOptimize}</span>
+              <span className="mt-0.5 block text-xs text-[var(--muted)]">{t.modeOptimizeHint}</span>
             </span>
           </label>
-          <label className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-400">
+          <label className="flex items-start gap-2 text-sm text-[var(--muted)]">
             <input
               type="radio"
               name="compress-mode"
               checked={mode === "strong"}
-              onChange={() => setMode("strong")}
-              className="mt-1 h-4 w-4 border-gray-300 text-primary-600 focus:ring-primary-500 dark:text-primary-400"
+              onChange={() => {
+                setMode("strong");
+                clearRunState();
+              }}
+              className="mt-1 h-4 w-4 border-[var(--line)] text-[var(--cat-pdf)] focus:ring-[var(--cat-pdf)]"
             />
             <span>
-              <span className="font-medium text-gray-800 dark:text-gray-200">{t.modeStrong}</span>
-              <span className="mt-0.5 block text-xs text-gray-500 dark:text-gray-400">{t.modeStrongHint}</span>
+              <span className="font-medium text-[var(--text)]">{t.modeStrong}</span>
+              <span className="mt-0.5 block text-xs text-[var(--muted)]">{t.modeStrongHint}</span>
             </span>
           </label>
         </fieldset>
@@ -278,37 +419,95 @@ export default function CompressPdf() {
             {t.strongWarning}
           </p>
           <div>
-            <label htmlFor="compress-quality" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label htmlFor="compress-quality" className="text-sm font-medium text-[var(--text)]">
               {t.qualityLabel}
             </label>
             <select
               id="compress-quality"
               value={quality}
-              onChange={(e) => setQuality(e.target.value as Quality)}
+              onChange={(e) => {
+                setQuality(e.target.value as Quality);
+                setPreflightGrow(null);
+                setEstimateLabel(null);
+              }}
               className="input-field mt-1"
             >
               <option value="low">{t.qualityLow}</option>
               <option value="medium">{t.qualityMedium}</option>
               <option value="high">{t.qualityHigh}</option>
             </select>
+            <p className="mt-1 text-xs text-[var(--muted)]">
+              {t.qualityDpiDetail(tier.dpi)}
+            </p>
           </div>
+          <label className="flex items-start gap-2 text-sm text-[var(--text)]">
+            <input
+              type="checkbox"
+              checked={grayscale}
+              onChange={(e) => {
+                setGrayscale(e.target.checked);
+                setPreflightGrow(null);
+                setEstimateLabel(null);
+              }}
+              className="mt-0.5 h-4 w-4 rounded border-[var(--line)] text-[var(--cat-pdf)] focus:ring-[var(--cat-pdf)]"
+            />
+            <span>{t.grayscaleLabel}</span>
+          </label>
         </>
       )}
 
       {compressing && (
         <div className="space-y-2">
-          <div className="h-2 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
+          <div className="h-2 overflow-hidden rounded-full bg-[var(--surface-2)]">
             <div
-              className="h-full bg-primary-600 transition-all dark:bg-primary-400"
+              className="h-full bg-[var(--cat-pdf)] transition-all"
               style={{ width: `${progress}%` }}
             />
           </div>
-          <p className="text-center text-xs text-gray-500 dark:text-gray-400">{t.progress(progress)}</p>
+          <p className="text-center text-xs text-[var(--muted)]">{t.progress(progress)}</p>
+          {estimateLabel && (
+            <p className="text-center text-xs text-[var(--muted)]">{estimateLabel}</p>
+          )}
+        </div>
+      )}
+
+      {!compressing && estimateLabel && !preflightGrow && mode === "strong" && (
+        <p className="text-xs text-[var(--muted)]" role="status">
+          {estimateLabel}
+        </p>
+      )}
+
+      {preflightGrow && (
+        <div
+          className="space-y-3 rounded-lg border border-amber-300/60 bg-amber-50 px-4 py-3 text-sm text-amber-950 dark:border-amber-700/50 dark:bg-amber-950/30 dark:text-amber-100"
+          role="status"
+        >
+          <p>
+            {t.preflightWouldGrow(
+              formatBytes(preflightGrow.projected),
+              formatBytes(preflightGrow.originalSize)
+            )}
+          </p>
+          <div className="flex flex-wrap gap-2">
+            <button type="button" onClick={applyLowestAndRecheck} className="btn-primary text-sm">
+              {t.preflightSwitchLowest}
+            </button>
+            <button
+              type="button"
+              onClick={() => void runCompress({ force: true })}
+              className="btn-secondary text-sm"
+            >
+              {t.preflightProceedAnyway}
+            </button>
+          </div>
         </div>
       )}
 
       {error && (
-        <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300" role="alert">
+        <p
+          className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300"
+          role="alert"
+        >
           {error}
         </p>
       )}
@@ -320,10 +519,7 @@ export default function CompressPdf() {
               type="button"
               onClick={() => {
                 const baseName = file?.name.replace(/\.pdf$/i, "") || "document";
-                downloadBlob(
-                  pdfBytesToBlob(result.bytes),
-                  `${baseName}-compressed.pdf`
-                );
+                downloadBlob(pdfBytesToBlob(result.bytes), `${baseName}-compressed.pdf`);
               }}
               className="btn-primary"
             >
@@ -342,7 +538,7 @@ export default function CompressPdf() {
 
       <button
         type="button"
-        onClick={runCompress}
+        onClick={() => void runCompress()}
         disabled={!file || compressing || !workerReady}
         className="btn-primary"
       >
@@ -368,13 +564,19 @@ export default function CompressPdf() {
             <div className="space-y-3">
               {previewSrc && (
                 <div className="overflow-hidden rounded-md border border-[var(--line)] bg-[var(--surface-2)] p-2">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={previewSrc} alt="" className="mx-auto max-h-64 w-full object-contain" />
                 </div>
               )}
               {compressedPreviewSrc && (
                 <div className="overflow-hidden rounded-md border border-[var(--line)] bg-[var(--surface-2)] p-2">
                   <p className="mb-1 text-center text-[11px] text-muted">{t.newSize}</p>
-                  <img src={compressedPreviewSrc} alt="" className="mx-auto max-h-64 w-full object-contain" />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={compressedPreviewSrc}
+                    alt=""
+                    className="mx-auto max-h-64 w-full object-contain"
+                  />
                 </div>
               )}
               {result && (
@@ -417,7 +619,11 @@ export default function CompressPdf() {
                     </button>
                   )}
                   {result.isLarger && (
-                    <button type="button" onClick={() => downloadBlob(file, file.name)} className="btn-primary">
+                    <button
+                      type="button"
+                      onClick={() => downloadBlob(file, file.name)}
+                      className="btn-primary"
+                    >
                       <Download className="h-4 w-4" />
                       {t.downloadOriginal}
                     </button>

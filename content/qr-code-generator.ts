@@ -2,19 +2,19 @@ import type { FaqItem, HowToStep } from "@/lib/seo";
 
 export const howTo: HowToStep[] = [
   {
-    title: "Enter text or a URL",
+    title: "Choose content type",
     description:
-      "Type any text, link, phone number, or Wi-Fi credentials into the input field. The QR code updates live.",
+      "Pick Website, Text, Wi‑Fi, Email, Phone, or vCard. For PDF, Image, or Video, paste a ready URL — nothing is uploaded or hosted here.",
   },
   {
-    title: "Preview the QR code",
+    title: "Customize the design",
     description:
-      "A scannable QR code appears instantly. Test it with your phone camera to verify it encodes the correct data.",
+      "Use Shape, Logo, Level, and Frame to style modules, colors, finders, and an optional center logo. Higher error correction (Q/H) helps when a logo is present.",
   },
   {
-    title: "Download as PNG or SVG",
+    title: "Preview and download",
     description:
-      "Save the QR code as a PNG image for general use, or as SVG for print-quality scalable graphics.",
+      "Scan the live preview with your phone, then download PNG (with logo) or SVG (vector styling).",
   },
 ];
 
@@ -22,21 +22,21 @@ export const faq: FaqItem[] = [
   {
     question: "What can I encode in a QR code?",
     answer:
-      "You can encode URLs, plain text, email addresses, phone numbers, and Wi-Fi network details. Keep text reasonably short for reliable scanning.",
+      "URLs, plain text, Wi‑Fi credentials, email, phone numbers, and vCard contact details. PDF, image, and video tabs expect a link you already host elsewhere — this tool does not upload or host files.",
+  },
+  {
+    question: "Will a logo still scan reliably?",
+    answer:
+      "Yes if you keep the logo modest and use Q or H error correction. The tool raises the level automatically when a logo is added. Always test with your phone before printing.",
   },
   {
     question: "What is the difference between PNG and SVG?",
     answer:
-      "PNG is a raster image ideal for web and social media. SVG is a vector format that scales to any size without losing quality — great for print.",
+      "PNG is a raster image and includes an embedded logo when you add one. SVG is a vector export of the stylized modules and frame; logos are omitted from SVG for reliability.",
   },
   {
-    question: "Do QR codes expire?",
+    question: "Is my data uploaded?",
     answer:
-      "Static QR codes like those generated here never expire. The encoded data is permanent unless you change the destination URL.",
-  },
-  {
-    question: "Is there a size or length limit?",
-    answer:
-      "QR codes can hold up to roughly 4,000 characters depending on content type, but shorter content scans more reliably. Output size is adjustable from 128px to 512px.",
+      "No. Generation and logo processing run entirely in your browser. Static QR codes do not expire; the encoded payload stays whatever you entered.",
   },
 ];

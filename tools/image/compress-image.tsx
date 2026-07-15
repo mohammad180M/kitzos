@@ -1,7 +1,8 @@
 "use client";
 
+import FileDropZone from "@/components/FileDropZone";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Download, ImageIcon, Upload } from "lucide-react";
+import { Download, ImageIcon } from "lucide-react";
 import {
   useImageToolsExtraLabels,
   useImageToolsSharedLabels,
@@ -73,7 +74,6 @@ export default function CompressImage() {
   const [savingsPercent, setSavingsPercent] = useState<number | null>(null);
   const [compressing, setCompressing] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
   const loadedRef = useRef<LoadedImage | null>(null);
   const compressGenRef = useRef(0);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -219,29 +219,14 @@ export default function CompressImage() {
 
   return (
     <div className="space-y-4">
-      <div
-        role="button"
-        tabIndex={0}
-        onClick={() => inputRef.current?.click()}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") inputRef.current?.click();
+      <FileDropZone
+        accept="image/jpeg,image/png,image/jpg"
+        label={t.uploadHint}
+        onFiles={(files) => {
+          const file = files[0];
+          if (file) void handleFile(file);
         }}
-        className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 px-6 py-10 transition-colors hover:border-primary-400 hover:bg-primary-50/50 dark:border-gray-600 dark:bg-gray-800/50 dark:hover:border-primary-500 dark:hover:bg-primary-950/30"
-      >
-        <Upload className="h-8 w-8 text-gray-400 dark:text-gray-500" aria-hidden="true" />
-        <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">{t.uploadHint}</p>
-        <input
-          ref={inputRef}
-          type="file"
-          accept="image/jpeg,image/png,image/jpg"
-          className="hidden"
-          onChange={(e) => {
-            const file = e.target.files?.[0];
-            if (file) void handleFile(file);
-            e.target.value = "";
-          }}
-        />
-      </div>
+      />
 
       {error && (
         <p

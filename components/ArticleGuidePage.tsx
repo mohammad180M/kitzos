@@ -13,6 +13,7 @@ import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getLocalizedCategory, getLocalizedTool } from "@/lib/i18n/localized-labels";
 import { localizedPath } from "@/lib/i18n/routing";
 import type { Locale } from "@/lib/i18n/types";
+import DirectionArrow from "./DirectionArrow";
 import JsonLd from "./JsonLd";
 import Footer from "./Footer";
 
@@ -114,7 +115,7 @@ export default function ArticleGuidePage({
         <p className="my-8">
           <Link
             href={toolHref}
-            className="block rounded-lg border border-line bg-surface-2 px-5 py-4 text-base font-semibold text-foreground transition-colors hover:border-accent"
+            className="inline-flex items-center rounded-lg border border-line bg-surface-2 px-5 py-4 text-base font-semibold text-foreground transition-colors hover:border-accent"
             style={{
               borderInlineStartWidth: 3,
               borderInlineStartStyle: "solid",
@@ -122,6 +123,7 @@ export default function ArticleGuidePage({
             }}
           >
             {primaryCta}
+            <DirectionArrow className="ms-1" />
           </Link>
         </p>
 
@@ -135,9 +137,10 @@ export default function ArticleGuidePage({
         <p className="mt-10">
           <Link
             href={toolHref}
-            className="inline-flex text-sm font-semibold text-accent underline-offset-2 hover:underline"
+            className="inline-flex items-center text-sm font-semibold text-accent underline-offset-2 hover:underline"
           >
             {compactCta}
+            <DirectionArrow className="ms-1" />
           </Link>
         </p>
 

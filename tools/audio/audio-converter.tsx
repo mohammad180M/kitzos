@@ -1,7 +1,8 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { Download, Loader2, Upload } from "lucide-react";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
+import FileDropZone from "@/components/FileDropZone";
 import {
   decodeAudioFile,
   downloadBlob,
@@ -16,7 +17,6 @@ type OutputFormat = "mp3" | "wav";
 
 export default function AudioConverter() {
   const t = useAudioToolLabels("audioConverter");
-  const inputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [output, setOutput] = useState<OutputFormat>("mp3");
   const [processing, setProcessing] = useState(false);
@@ -47,18 +47,6 @@ export default function AudioConverter() {
 
   return (
     <div className="space-y-4">
-      <input
-        ref={inputRef}
-        type="file"
-        accept="audio/*,video/webm,.webm,.mp3,.wav,.m4a,.ogg,.opus,.flac"
-        className="hidden"
-        onChange={(e) => {
-          const f = e.target.files?.[0];
-          if (f) void convert(f);
-          e.target.value = "";
-        }}
-      />
-
       <div>
         <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.convertTo}</p>
         <div className="mt-2 inline-flex rounded-lg border border-gray-300 p-0.5 dark:border-gray-600">
@@ -77,19 +65,16 @@ export default function AudioConverter() {
         </div>
       </div>
 
-      <button
-        type="button"
-        onClick={() => inputRef.current?.click()}
+      <FileDropZone
+        accept="audio/*,video/webm,.webm,.mp3,.wav,.m4a,.ogg,.opus,.flac"
+        label={t.uploadHint}
         disabled={processing}
-        className="flex w-full flex-col items-center gap-2 rounded-xl border-2 border-dashed border-gray-300 p-10 text-gray-500 transition-colors hover:border-primary-400 hover:text-primary-600 dark:border-gray-600"
-      >
-        {processing ? (
-          <Loader2 className="h-8 w-8 animate-spin" />
-        ) : (
-          <Upload className="h-8 w-8" />
-        )}
-        <span>{t.uploadHint}</span>
-      </button>
+        icon={processing ? <Loader2 className="h-8 w-8 animate-spin text-[var(--muted)]" /> : undefined}
+        onFiles={(files) => {
+          const f = files[0];
+          if (f) void convert(f);
+        }}
+      />
 
       {file && !processing && (
         <p className="text-sm text-gray-500 dark:text-gray-400">

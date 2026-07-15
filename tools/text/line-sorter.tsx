@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import CopyButton from "@/components/CopyButton";
+import { DirectionPair } from "@/components/DirectionArrow";
 import { useToolDraft } from "@/lib/hooks/use-tool-draft";
 import { useTextToolLabels } from "@/lib/i18n/use-text-tool-labels";
 
@@ -61,8 +62,14 @@ export default function LineSorter() {
       <div className="flex flex-wrap gap-1 rounded-lg border border-gray-300 bg-white p-0.5 dark:border-gray-600 dark:bg-gray-800">
         {(
           [
-            { value: "asc" as const, label: t.sortAsc },
-            { value: "desc" as const, label: t.sortDesc },
+            {
+              value: "asc" as const,
+              label: <DirectionPair from={t.sortAscFrom} to={t.sortAscTo} />,
+            },
+            {
+              value: "desc" as const,
+              label: <DirectionPair from={t.sortDescFrom} to={t.sortDescTo} />,
+            },
             { value: "random" as const, label: t.sortRandom },
           ] as const
         ).map(({ value, label }) => (

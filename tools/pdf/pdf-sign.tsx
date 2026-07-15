@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Download, Loader2, Trash2, Upload } from "lucide-react";
+import { Download, Loader2, Trash2 } from "lucide-react";
+import FileDropZone from "@/components/FileDropZone";
 import PdfPreviewPane from "@/components/pdf/PdfPreviewPane";
 import SignaturePlacementPreview from "@/components/pdf/SignaturePlacementPreview";
 import PdfWorkbenchLayout from "@/components/pdf/PdfWorkbenchLayout";
@@ -98,8 +99,6 @@ export default function PdfSign() {
   const shared = usePdfSharedLabels();
   const labels = useCommonLabels();
 
-  const pdfInputRef = useRef<HTMLInputElement>(null);
-  const sigInputRef = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fileRef = useRef<File | null>(null);
   const drawing = useRef(false);
@@ -393,35 +392,14 @@ export default function PdfSign() {
   if (!pdfFile) {
     return (
       <>
-        <input
-          ref={pdfInputRef}
-          type="file"
+        <FileDropZone
           accept="application/pdf,.pdf"
-          className="hidden"
-          onChange={(e) => {
-            const f = e.target.files?.[0];
+          label={t.uploadHint}
+          onFiles={(files) => {
+            const f = files[0];
             if (f) void loadPdf(f);
-            e.target.value = "";
           }}
         />
-        <div
-          role="button"
-          tabIndex={0}
-          onDrop={(e) => {
-            e.preventDefault();
-            const f = e.dataTransfer.files?.[0];
-            if (f) void loadPdf(f);
-          }}
-          onDragOver={(e) => e.preventDefault()}
-          onClick={() => pdfInputRef.current?.click()}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") pdfInputRef.current?.click();
-          }}
-          className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 px-6 py-10 transition-colors hover:border-primary-400 hover:bg-primary-50/50 dark:border-gray-600 dark:bg-gray-800/50 dark:hover:border-primary-500 dark:hover:bg-primary-950/30"
-        >
-          <Upload className="h-8 w-8 text-gray-400 dark:text-gray-500" aria-hidden="true" />
-          <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">{t.uploadHint}</p>
-        </div>
         {error && <p className="mt-4 text-sm text-red-600 dark:text-red-400">{error}</p>}
       </>
     );
@@ -429,25 +407,15 @@ export default function PdfSign() {
 
   const controls = (
     <>
-      <input
-        ref={pdfInputRef}
-        type="file"
+      <FileDropZone
         accept="application/pdf"
-        className="hidden"
-        onChange={(e) => {
-          const f = e.target.files?.[0];
+        label={pdfFile ? pdfFile.name : shared.uploadPdf}
+        compact
+        onFiles={(files) => {
+          const f = files[0];
           if (f) void loadPdf(f);
         }}
       />
-
-      <button
-        type="button"
-        onClick={() => pdfInputRef.current?.click()}
-        className="btn-secondary inline-flex items-center gap-2"
-      >
-        <Upload className="h-4 w-4" />
-        {pdfFile ? pdfFile.name : shared.uploadPdf}
-      </button>
 
       {pageCount > 0 && (
         <p className="text-sm text-gray-500 dark:text-gray-400">{shared.pageCount(pageCount)}</p>
@@ -534,37 +502,17 @@ export default function PdfSign() {
 
         {sigSource === "upload" && (
           <div className="space-y-3">
-            <input
-              ref={sigInputRef}
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={(e) => {
-                const f = e.target.files?.[0];
-                if (f) void handleSigUpload(f);
-                e.target.value = "";
-              }}
-            />
             {!uploadedSig ? (
-              <div
-                role="button"
-                tabIndex={0}
-                onClick={() => sigInputRef.current?.click()}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") sigInputRef.current?.click();
-                }}
-                onDrop={(e) => {
-                  e.preventDefault();
-                  const f = e.dataTransfer.files?.[0];
+              <FileDropZone
+                accept="image/*"
+                label={t.uploadSignatureHint}
+                hint={t.uploadSignatureSupported}
+                compact
+                onFiles={(files) => {
+                  const f = files[0];
                   if (f) void handleSigUpload(f);
                 }}
-                onDragOver={(e) => e.preventDefault()}
-                className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-[var(--line)] bg-[var(--surface-2)] px-4 py-8 text-center"
-              >
-                <Upload className="h-6 w-6 text-muted" aria-hidden="true" />
-                <p className="mt-2 text-sm font-medium text-foreground">{t.uploadSignatureHint}</p>
-                <p className="mt-1 text-xs text-muted">{t.uploadSignatureSupported}</p>
-              </div>
+              />
             ) : (
               <div className="flex items-center gap-3 rounded-lg border border-[var(--line)] bg-[var(--surface-2)] p-3">
                 <img

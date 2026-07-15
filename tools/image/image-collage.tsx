@@ -1,7 +1,8 @@
 "use client";
 
+import FileDropZone from "@/components/FileDropZone";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Download, Upload, X } from "lucide-react";
+import { Download, X } from "lucide-react";
 import { canvasToBlob } from "@/lib/canvas-utils";
 import { downloadBlob } from "@/lib/download";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
@@ -61,7 +62,6 @@ export default function ImageCollage() {
   const t = useImageToolsExtraLabels("imageCollage");
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
   const imagesRef = useRef<CollageImage[]>([]);
   const cellLayoutRef = useRef<{ x: number; y: number; w: number; h: number }[]>([]);
 
@@ -292,34 +292,14 @@ export default function ImageCollage() {
 
   return (
     <div className="space-y-4">
-      <div
-        role="button"
-        tabIndex={0}
-        onClick={() => inputRef.current?.click()}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") inputRef.current?.click();
+      <FileDropZone
+        accept="image/*"
+        multiple
+        label={images.length ? shared.addMore : shared.uploadImages}
+        onFiles={(files) => {
+          if (files.length) addFiles(files);
         }}
-        className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 px-6 py-10 transition-colors hover:border-primary-400 hover:bg-primary-50/50 dark:border-gray-600 dark:bg-gray-800/50 dark:hover:border-primary-500 dark:hover:bg-primary-950/30"
-      >
-        <Upload className="h-8 w-8 text-gray-400 dark:text-gray-500" aria-hidden="true" />
-        <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-          {images.length ? shared.addMore : shared.uploadImages}
-        </p>
-        <input
-          ref={inputRef}
-          type="file"
-          accept="image/*"
-          multiple
-          className="hidden"
-          onChange={(e) => {
-            if (e.target.files?.length) {
-              if (images.length === 0) addFiles(e.target.files);
-              else addFiles(e.target.files);
-            }
-            e.target.value = "";
-          }}
-        />
-      </div>
+      />
 
       {images.length > 0 && (
         <button

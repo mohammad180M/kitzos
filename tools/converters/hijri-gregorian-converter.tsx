@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, useEffect } from "react";
+import { DirectionPair } from "@/components/DirectionArrow";
 import {
   gregorianToHijri,
   hijriToGregorian,
@@ -59,7 +60,11 @@ export default function HijriGregorianConverter() {
               mode === m ? "bg-primary-600 text-white" : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
             }`}
           >
-            {m === "to-hijri" ? t.modeToHijri : t.modeToGregorian}
+            {m === "to-hijri" ? (
+              <DirectionPair from={t.modeToHijriFrom} to={t.modeToHijriTo} />
+            ) : (
+              <DirectionPair from={t.modeToGregorianFrom} to={t.modeToGregorianTo} />
+            )}
           </button>
         ))}
       </div>

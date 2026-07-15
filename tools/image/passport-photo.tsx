@@ -1,7 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Download, Upload } from "lucide-react";
+import FileDropZone from "@/components/FileDropZone";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Download } from "lucide-react";
 import { FixedFrameCropper, renderCrop } from "@/components/image/FixedFrameCropper";
 import { centeredCoverState, computeFrameSize, type CropState } from "@/lib/image/fixed-frame-crop";
 import { downloadBlob } from "@/lib/download";
@@ -79,7 +80,6 @@ export default function PassportPhoto() {
   const [exportMode, setExportMode] = useState<ExportMode>("single");
   const [cropState, setCropState] = useState<CropState>(centeredCoverState());
   const [error, setError] = useState<string | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
 
   useUnsavedWork(imageUrl !== null);
 
@@ -166,29 +166,14 @@ export default function PassportPhoto() {
 
   return (
     <div className="space-y-4">
-      <div
-        role="button"
-        tabIndex={0}
-        onClick={() => inputRef.current?.click()}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") inputRef.current?.click();
+      <FileDropZone
+        accept="image/*"
+        label={t.uploadHint}
+        onFiles={(files) => {
+          const f = files[0];
+          if (f) handleFile(f);
         }}
-        className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 px-6 py-10 transition-colors hover:border-primary-400 hover:bg-primary-50/50 dark:border-gray-600 dark:bg-gray-800/50 dark:hover:border-primary-500 dark:hover:bg-primary-950/30"
-      >
-        <Upload className="h-8 w-8 text-gray-400 dark:text-gray-500" aria-hidden="true" />
-        <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">{t.uploadHint}</p>
-        <input
-          ref={inputRef}
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={(e) => {
-            const f = e.target.files?.[0];
-            if (f) handleFile(f);
-            e.target.value = "";
-          }}
-        />
-      </div>
+      />
 
       <p className="tool-notice tool-notice--warning tool-notice--image" role="status">
         {t.bgNote}
