@@ -16,6 +16,8 @@ import {
   useImageToolsSharedLabels,
 } from "@/lib/i18n/use-image-tools-extra-labels";
 import { useUnsavedWork } from "@/lib/unsaved-work";
+import ToolModeToggle from "@/components/tools/ToolModeToggle";
+import BatchUploader, { type ToolMode, type BatchOutput } from "@/components/tools/BatchUploader";
 
 const MAX_PREVIEW = 600;
 
@@ -26,6 +28,7 @@ export default function FlipImage() {
   const { locale } = useLocale();
   const pathname = usePathname();
   const toolSlug = getToolSlugFromPath(pathname);
+  const [mode, setMode] = useState<ToolMode>("single");
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [sourceFile, setSourceFile] = useState<File | null>(null);
@@ -95,62 +98,115 @@ export default function FlipImage() {
     }
   };
 
+  const processFile = useCallback(
+    async (file: File): Promise<BatchOutput> => {
+      const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+        const url = URL.createObjectURL(file);
+        const im = new Image();
+        im.onload = () => { URL.revokeObjectURL(url); resolve(im); };
+        im.onerror = () => { URL.revokeObjectURL(url); reject(new Error(shared.loadFailed)); };
+        im.src = url;
+      });
+
+      const natW = img.naturalWidth;
+      const natH = img.naturalHeight;
+      const off = document.createElement("canvas");
+      const ctx = setupCanvas(off, natW, natH);
+      ctx.save();
+      ctx.translate(natW / 2, natH / 2);
+      ctx.scale(flipH ? -1 : 1, flipV ? -1 : 1);
+      ctx.drawImage(img, -natW / 2, -natH / 2, natW, natH);
+      ctx.restore();
+
+      const mime = file.type === "image/jpeg" ? "image/jpeg" : "image/png";
+      const ext = mime === "image/jpeg" ? "jpg" : "png";
+      const blob = await canvasToBlob(off, mime);
+      const baseName = file.name.replace(/\.[^.]+$/, "");
+      return { blob, name: `${baseName}-flipped.${ext}` };
+    },
+    [flipH, flipV, shared.loadFailed]
+  );
+
+  const flipButtons = (
+    <div className="flex flex-wrap gap-2">
+      <button
+        type="button"
+        onClick={() => setFlipH((v) => !v)}
+        className={`btn-secondary text-sm ${flipH ? "ring-2 ring-primary-500" : ""}`}
+      >
+        {t.flipH}
+      </button>
+      <button
+        type="button"
+        onClick={() => setFlipV((v) => !v)}
+        className={`btn-secondary text-sm ${flipV ? "ring-2 ring-primary-500" : ""}`}
+      >
+        {t.flipV}
+      </button>
+      <button
+        type="button"
+        onClick={toggleBoth}
+        className={`btn-secondary text-sm ${flipH && flipV ? "ring-2 ring-primary-500" : ""}`}
+      >
+        {t.flipBoth}
+      </button>
+    </div>
+  );
+
   return (
     <div className="space-y-4">
-      <FileDropZone
-        accept="image/*"
-        label={shared.uploadImage}
-        onFiles={(files) => {
-          const f = files[0];
-          if (!f) return;
-          setSourceFile(f);
-          setFlipH(false);
-          setFlipV(false);
-          loadFile(f, messages);
-        }}
-      />
+      <div className="flex justify-between items-center">
+        <ToolModeToggle mode={mode} onChange={setMode} />
+      </div>
 
-      {error && (
-        <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300" role="alert">
-          {error}
-        </p>
-      )}
-
-      {hasImage && (
+      {mode === "single" ? (
         <>
-          <div>
-            <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">{shared.preview}</p>
-            <canvas ref={canvasRef} className="mx-auto max-w-full rounded-lg border border-gray-200 dark:border-gray-700" />
+          <FileDropZone
+            accept="image/*"
+            label={shared.uploadImage}
+            onFiles={(files) => {
+              const f = files[0];
+              if (!f) return;
+              setSourceFile(f);
+              setFlipH(false);
+              setFlipV(false);
+              loadFile(f, messages);
+            }}
+          />
+
+          {error && (
+            <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300" role="alert">
+              {error}
+            </p>
+          )}
+
+          {hasImage && (
+            <>
+              <div>
+                <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">{shared.preview}</p>
+                <canvas ref={canvasRef} className="mx-auto max-w-full rounded-lg border border-gray-200 dark:border-gray-700" />
+              </div>
+
+              {flipButtons}
+
+              <button type="button" onClick={() => void exportImage()} className="btn-primary inline-flex items-center gap-2">
+                <Download className="h-4 w-4" />
+                {common.download}
+              </button>
+            </>
+          )}
+        </>
+      ) : (
+        <>
+          <div className="rounded-lg border border-[var(--line)] bg-[var(--surface)] p-4 space-y-3">
+            <p className="text-sm font-medium text-[var(--text)]">Flip Direction</p>
+            {flipButtons}
           </div>
 
-          <div className="flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={() => setFlipH((v) => !v)}
-              className={`btn-secondary text-sm ${flipH ? "ring-2 ring-primary-500" : ""}`}
-            >
-              {t.flipH}
-            </button>
-            <button
-              type="button"
-              onClick={() => setFlipV((v) => !v)}
-              className={`btn-secondary text-sm ${flipV ? "ring-2 ring-primary-500" : ""}`}
-            >
-              {t.flipV}
-            </button>
-            <button
-              type="button"
-              onClick={toggleBoth}
-              className={`btn-secondary text-sm ${flipH && flipV ? "ring-2 ring-primary-500" : ""}`}
-            >
-              {t.flipBoth}
-            </button>
-          </div>
-
-          <button type="button" onClick={() => void exportImage()} className="btn-primary inline-flex items-center gap-2">
-            <Download className="h-4 w-4" />
-            {common.download}
-          </button>
+          <BatchUploader
+            accept="image/*"
+            processFile={processFile}
+          />
         </>
       )}
 

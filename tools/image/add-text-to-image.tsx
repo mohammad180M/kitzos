@@ -27,6 +27,8 @@ import {
   sanitizeLayerPatch,
   type TextOverlayLayer,
 } from "@/lib/image/text-overlay-layers";
+import ToolModeToggle from "@/components/tools/ToolModeToggle";
+import BatchUploader, { type ToolMode, type BatchOutput } from "@/components/tools/BatchUploader";
 
 const MAX_PREVIEW = 700;
 const NUDGE_STEP = 0.01;
@@ -51,6 +53,7 @@ export default function AddTextToImage() {
   const { locale } = useLocale();
   const pathname = usePathname();
   const toolSlug = getToolSlugFromPath(pathname);
+  const [mode, setMode] = useState<ToolMode>("single");
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -308,16 +311,50 @@ export default function AddTextToImage() {
     }
   };
 
+  const processFile = useCallback(
+    async (file: File): Promise<BatchOutput> => {
+      const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+        const url = URL.createObjectURL(file);
+        const im = new Image();
+        im.onload = () => { URL.revokeObjectURL(url); resolve(im); };
+        im.onerror = () => { URL.revokeObjectURL(url); reject(new Error(shared.loadFailed)); };
+        im.src = url;
+      });
+
+      const natW = img.naturalWidth;
+      const natH = img.naturalHeight;
+      const off = document.createElement("canvas");
+      off.width = natW;
+      off.height = natH;
+      const ctx = off.getContext("2d");
+      if (!ctx) throw new Error("canvas not supported");
+
+      ctx.drawImage(img, 0, 0, natW, natH);
+      await drawAllTextLayers(ctx, layers, natW, natH, 1);
+
+      const blob = await canvasToBlob(off);
+      const baseName = file.name.replace(/\.[^.]+$/, "");
+      return { blob, name: `${baseName}-text.png` };
+    },
+    [layers, shared.loadFailed]
+  );
+
   return (
     <div className="space-y-4">
-      <FileDropZone
-        accept="image/*"
-        label={shared.uploadImage}
-        onFiles={(files) => {
-          const f = files[0];
-          if (f) loadFile(f, messages);
-        }}
-      />
+      <div className="flex justify-between items-center">
+        <ToolModeToggle mode={mode} onChange={setMode} />
+      </div>
+
+      {mode === "single" ? (
+        <FileDropZone
+          accept="image/*"
+          label={shared.uploadImage}
+          onFiles={(files) => {
+            const f = files[0];
+            if (f) loadFile(f, messages);
+          }}
+        />
+      ) : null}
 
       {error && (
         <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300" role="alert">
@@ -543,6 +580,13 @@ export default function AddTextToImage() {
             {common.download}
           </button>
         </>
+      )}
+
+      {mode === "batch" && (
+        <BatchUploader
+          accept="image/*"
+          processFile={processFile}
+        />
       )}
     </div>
   );

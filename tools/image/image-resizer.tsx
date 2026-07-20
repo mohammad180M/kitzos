@@ -9,6 +9,8 @@ import {
   useImageToolsSharedLabels,
 } from "@/lib/i18n/use-image-tools-extra-labels";
 import { useUnsavedWork } from "@/lib/unsaved-work";
+import ToolModeToggle from "@/components/tools/ToolModeToggle";
+import BatchUploader, { type ToolMode, type BatchOutput } from "@/components/tools/BatchUploader";
 
 const PREVIEW_MAX_W = 400;
 const PREVIEW_MAX_H = 192;
@@ -16,6 +18,7 @@ const PREVIEW_MAX_H = 192;
 export default function ImageResizer() {
   const shared = useImageToolsSharedLabels();
   const t = useImageToolsExtraLabels("imageResizer");
+  const [mode, setMode] = useState<ToolMode>("single");
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [originalWidth, setOriginalWidth] = useState(0);
@@ -116,101 +119,175 @@ export default function ImageResizer() {
     img.src = previewUrl;
   };
 
+  const processFile = useCallback(
+    async (f: File): Promise<BatchOutput> => {
+      const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+        const url = URL.createObjectURL(f);
+        const img = new Image();
+        img.onload = () => {
+          URL.revokeObjectURL(url);
+          resolve(img);
+        };
+        img.onerror = () => {
+          URL.revokeObjectURL(url);
+          reject(new Error(shared.loadFailed));
+        };
+        img.src = url;
+      });
+
+      let targetW = width || img.width;
+      let targetH = height || img.height;
+
+      if (lockAspect) {
+        if (width > 0) {
+          const scale = width / (originalWidth || img.width);
+          targetW = Math.round(img.width * scale);
+          targetH = Math.round(img.height * scale);
+        } else {
+          targetW = img.width;
+          targetH = img.height;
+        }
+      }
+
+      const canvas = document.createElement("canvas");
+      canvas.width = targetW;
+      canvas.height = targetH;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) throw new Error(t.errCanvasNotSupported);
+      ctx.drawImage(img, 0, 0, targetW, targetH);
+
+      const mimeType = f.type || "image/png";
+      const blob = await new Promise<Blob>((resolve, reject) => {
+        canvas.toBlob(
+          (b) => (b ? resolve(b) : reject(new Error(t.errResizeFailed))),
+          mimeType,
+          0.92
+        );
+      });
+
+      const ext = mimeType.split("/")[1] || "png";
+      const baseName = f.name.replace(/\.[^.]+$/, "");
+      return { blob, name: `${baseName}-resized.${ext}` };
+    },
+    [width, height, lockAspect, originalWidth, shared.loadFailed, t.errCanvasNotSupported, t.errResizeFailed]
+  );
+
+  const settingsPanel = (
+    <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-end rounded-lg border border-[var(--line)] bg-[var(--surface)] p-4">
+      <div className="min-w-0 flex-1">
+        <label htmlFor="width-input" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+          {t.width}
+        </label>
+        <input
+          id="width-input"
+          type="number"
+          min={1}
+          value={width || ""}
+          onChange={(e) => handleWidthChange(Number(e.target.value))}
+          className="input-field mt-1"
+        />
+      </div>
+
+      <div className="flex items-center justify-center sm:pb-2">
+        <AspectRatioConnector
+          connected={lockAspect}
+          onToggle={() => {
+            setLockAspect((prev) => {
+              const next = !prev;
+              if (next && originalWidth > 0) {
+                setHeight(Math.round(width / aspectRatio));
+              }
+              return next;
+            });
+          }}
+          lockedLabel={t.aspectConnectorLocked}
+          unlockedLabel={t.aspectConnectorUnlocked}
+        />
+      </div>
+
+      <div className="min-w-0 flex-1">
+        <label htmlFor="height-input" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+          {t.height}
+        </label>
+        <input
+          id="height-input"
+          type="number"
+          min={1}
+          value={height || ""}
+          onChange={(e) => handleHeightChange(Number(e.target.value))}
+          className="input-field mt-1"
+        />
+      </div>
+    </div>
+  );
+
   return (
     <div className="space-y-4">
-      <FileDropZone
-        accept="image/*"
-        label={shared.uploadImage}
-        onFiles={(files) => {
-          const f = files[0];
-          if (f) handleFile(f);
-        }}
-      />
+      <div className="flex justify-between items-center">
+        <ToolModeToggle mode={mode} onChange={setMode} />
+      </div>
 
-      {error && (
-        <p
-          className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300"
-          role="alert"
-        >
-          {error}
-        </p>
-      )}
-
-      {previewUrl && (
+      {mode === "single" ? (
         <>
-          <div className="flex min-h-[12rem] items-center justify-center overflow-hidden rounded-lg border border-gray-200 bg-gray-100 dark:border-gray-700 dark:bg-gray-800">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={previewUrl}
-              alt={t.previewAlt}
-              loading="lazy"
-              decoding="async"
-              style={{
-                width: Math.max(1, Math.round(width * previewScale)),
-                height: Math.max(1, Math.round(height * previewScale)),
-              }}
-              className="block"
-            />
-          </div>
+          <FileDropZone
+            accept="image/*"
+            label={shared.uploadImage}
+            onFiles={(files) => {
+              const f = files[0];
+              if (f) handleFile(f);
+            }}
+          />
 
-          <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            {t.previewDims(width, height)}
-          </p>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            {t.originalDims(originalWidth, originalHeight)}
-          </p>
+          {error && (
+            <p
+              className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300"
+              role="alert"
+            >
+              {error}
+            </p>
+          )}
 
-          <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-end">
-            <div className="min-w-0 flex-1">
-              <label htmlFor="width" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                {t.width}
-              </label>
-              <input
-                id="width"
-                type="number"
-                min={1}
-                value={width || ""}
-                onChange={(e) => handleWidthChange(Number(e.target.value))}
-                className="input-field mt-1"
-              />
-            </div>
+          {previewUrl && (
+            <>
+              <div className="flex min-h-[12rem] items-center justify-center overflow-hidden rounded-lg border border-gray-200 bg-gray-100 dark:border-gray-700 dark:bg-gray-800">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={previewUrl}
+                  alt={t.previewAlt}
+                  loading="lazy"
+                  decoding="async"
+                  style={{
+                    width: Math.max(1, Math.round(width * previewScale)),
+                    height: Math.max(1, Math.round(height * previewScale)),
+                  }}
+                  className="block"
+                />
+              </div>
 
-            <div className="flex items-center justify-center sm:pb-2">
-              <AspectRatioConnector
-                connected={lockAspect}
-                onToggle={() => {
-                  setLockAspect((prev) => {
-                    const next = !prev;
-                    if (next && originalWidth > 0) {
-                      setHeight(Math.round(width / aspectRatio));
-                    }
-                    return next;
-                  });
-                }}
-                lockedLabel={t.aspectConnectorLocked}
-                unlockedLabel={t.aspectConnectorUnlocked}
-              />
-            </div>
+              <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                {t.previewDims(width, height)}
+              </p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                {t.originalDims(originalWidth, originalHeight)}
+              </p>
 
-            <div className="min-w-0 flex-1">
-              <label htmlFor="height" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                {t.height}
-              </label>
-              <input
-                id="height"
-                type="number"
-                min={1}
-                value={height || ""}
-                onChange={(e) => handleHeightChange(Number(e.target.value))}
-                className="input-field mt-1"
-              />
-            </div>
-          </div>
+              {settingsPanel}
 
-          <button type="button" onClick={download} className="btn-primary">
-            <Download className="h-4 w-4" />
-            {t.downloadResized}
-          </button>
+              <button type="button" onClick={download} className="btn-primary">
+                <Download className="h-4 w-4" />
+                {t.downloadResized}
+              </button>
+            </>
+          )}
+        </>
+      ) : (
+        <>
+          {settingsPanel}
+
+          <BatchUploader
+            accept="image/*"
+            processFile={processFile}
+          />
         </>
       )}
     </div>

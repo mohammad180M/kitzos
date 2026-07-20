@@ -15,6 +15,8 @@ import {
   useImageToolsExtraLabels,
   useImageToolsSharedLabels,
 } from "@/lib/i18n/use-image-tools-extra-labels";
+import ToolModeToggle from "@/components/tools/ToolModeToggle";
+import BatchUploader, { type ToolMode, type BatchOutput } from "@/components/tools/BatchUploader";
 
 const MAX_PREVIEW = 600;
 
@@ -25,6 +27,7 @@ export default function ImageRotator() {
   const pathname = usePathname();
   const { locale } = useLocale();
   const toolSlug = getToolSlugFromPath(pathname);
+  const [mode, setMode] = useState<ToolMode>("single");
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { imgRef, hasImage, imageVersion, error, loadFile } = useImageLoader(
@@ -93,46 +96,100 @@ export default function ImageRotator() {
 
   const rotateBy = (deg: number) => setRotation((r) => (r + deg) % 360);
 
+  const processFile = useCallback(
+    async (file: File): Promise<BatchOutput> => {
+      const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+        const url = URL.createObjectURL(file);
+        const im = new Image();
+        im.onload = () => { URL.revokeObjectURL(url); resolve(im); };
+        im.onerror = () => { URL.revokeObjectURL(url); reject(new Error(shared.loadFailed)); };
+        im.src = url;
+      });
+
+      const rad = (rotation * Math.PI) / 180;
+      const swap = rotation === 90 || rotation === 270;
+      const outW = swap ? img.naturalHeight : img.naturalWidth;
+      const outH = swap ? img.naturalWidth : img.naturalHeight;
+
+      const off = document.createElement("canvas");
+      const ctx = setupCanvas(off, outW, outH);
+      ctx.save();
+      ctx.translate(outW / 2, outH / 2);
+      ctx.rotate(rad);
+      ctx.drawImage(img, -img.naturalWidth / 2, -img.naturalHeight / 2, img.naturalWidth, img.naturalHeight);
+      ctx.restore();
+
+      const blob = await canvasToBlob(off);
+      const baseName = file.name.replace(/\.[^.]+$/, "");
+      return { blob, name: `${baseName}-rotated.png` };
+    },
+    [rotation, shared.loadFailed]
+  );
+
+  const rotationButtons = (
+    <div className="flex flex-wrap gap-2">
+      <button type="button" onClick={() => rotateBy(90)} className="btn-secondary text-sm">
+        {t.rotate90}
+      </button>
+      <button type="button" onClick={() => rotateBy(180)} className="btn-secondary text-sm">
+        {t.rotate180}
+      </button>
+      <button type="button" onClick={() => rotateBy(270)} className="btn-secondary text-sm">
+        {t.rotate270}
+      </button>
+    </div>
+  );
+
   return (
     <div className="space-y-4">
-      <FileDropZone
-        accept="image/*"
-        label={shared.uploadImage}
-        onFiles={(files) => {
-          const f = files[0];
-          if (f) loadFile(f, messages);
-        }}
-      />
+      <div className="flex justify-between items-center">
+        <ToolModeToggle mode={mode} onChange={setMode} />
+      </div>
 
-      {error && (
-        <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300" role="alert">
-          {error}
-        </p>
-      )}
-
-      {hasImage && (
+      {mode === "single" ? (
         <>
-          <div>
-            <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">{shared.preview}</p>
-            <canvas ref={canvasRef} className="mx-auto max-w-full rounded-lg border border-gray-200 dark:border-gray-700" />
+          <FileDropZone
+            accept="image/*"
+            label={shared.uploadImage}
+            onFiles={(files) => {
+              const f = files[0];
+              if (f) loadFile(f, messages);
+            }}
+          />
+
+          {error && (
+            <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300" role="alert">
+              {error}
+            </p>
+          )}
+
+          {hasImage && (
+            <>
+              <div>
+                <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">{shared.preview}</p>
+                <canvas ref={canvasRef} className="mx-auto max-w-full rounded-lg border border-gray-200 dark:border-gray-700" />
+              </div>
+
+              {rotationButtons}
+
+              <button type="button" onClick={() => void exportPng()} className="btn-primary inline-flex items-center gap-2">
+                <Download className="h-4 w-4" />
+                {common.download}
+              </button>
+            </>
+          )}
+        </>
+      ) : (
+        <>
+          <div className="rounded-lg border border-[var(--line)] bg-[var(--surface)] p-4 space-y-3">
+            <p className="text-sm font-medium text-[var(--text)]">Rotation</p>
+            {rotationButtons}
           </div>
 
-          <div className="flex flex-wrap gap-2">
-            <button type="button" onClick={() => rotateBy(90)} className="btn-secondary text-sm">
-              {t.rotate90}
-            </button>
-            <button type="button" onClick={() => rotateBy(180)} className="btn-secondary text-sm">
-              {t.rotate180}
-            </button>
-            <button type="button" onClick={() => rotateBy(270)} className="btn-secondary text-sm">
-              {t.rotate270}
-            </button>
-          </div>
-
-          <button type="button" onClick={() => void exportPng()} className="btn-primary inline-flex items-center gap-2">
-            <Download className="h-4 w-4" />
-            {common.download}
-          </button>
+          <BatchUploader
+            accept="image/*"
+            processFile={processFile}
+          />
         </>
       )}
 

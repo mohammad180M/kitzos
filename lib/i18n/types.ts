@@ -23,6 +23,25 @@ export interface Dictionary {
     emptyStateHint: string;
     keyboardHint: string;
     dropFilesHere: string;
+    batch: {
+      singleFile: string;
+      batchMode: string;
+      dropMultipleOrFolder: string;
+      selectFiles: string;
+      selectFolder: string;
+      skippedFiles: string;
+      processAll: string;
+      processing: string;
+      progress: string;
+      downloadZip: string;
+      downloadFile: string;
+      clearAll: string;
+      statusQueued: string;
+      statusProcessing: string;
+      statusDone: string;
+      statusError: string;
+      noFiles: string;
+    };
   };
   header: {
     categoriesAria: string;

@@ -16,7 +16,26 @@
     "popularTools": "أدوات شائعة",
     "emptyStateHint": "ابدأ باللصق أو الكتابة — بياناتك تبقى في متصفحك.",
     "keyboardHint": "اختصار: Ctrl+Enter للتشغيل، Esc للمسح",
-    "dropFilesHere": "أفلت الملفات هنا"
+    "dropFilesHere": "أفلت الملفات هنا",
+    "batch": {
+      "singleFile": "ملف واحد",
+      "batchMode": "دفعة",
+      "dropMultipleOrFolder": "أفلت عدة ملفات أو مجلداً هنا",
+      "selectFiles": "اختر ملفات",
+      "selectFolder": "اختر مجلداً",
+      "skippedFiles": "تم تخطي {count} ملف (نوع غير مدعوم)",
+      "processAll": "معالجة الكل",
+      "processing": "جاري المعالجة…",
+      "progress": "تمت معالجة {done} من {total}",
+      "downloadZip": "تنزيل الكل كـ ZIP",
+      "downloadFile": "تنزيل",
+      "clearAll": "مسح الكل",
+      "statusQueued": "في الانتظار",
+      "statusProcessing": "قيد المعالجة",
+      "statusDone": "تم",
+      "statusError": "خطأ",
+      "noFiles": "أضف ملفات لبدء المعالجة الدفعية"
+    }
   },
   "header": {
     "categoriesAria": "الفئات",

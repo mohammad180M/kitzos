@@ -8,6 +8,8 @@ import {
   useImageToolsSharedLabels,
 } from "@/lib/i18n/use-image-tools-extra-labels";
 import { useUnsavedWork } from "@/lib/unsaved-work";
+import ToolModeToggle from "@/components/tools/ToolModeToggle";
+import BatchUploader, { type ToolMode, type BatchOutput } from "@/components/tools/BatchUploader";
 
 function formatBytes(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
@@ -63,6 +65,7 @@ function loadImageFromFile(file: File): Promise<LoadedImage> {
 export default function CompressImage() {
   const shared = useImageToolsSharedLabels();
   const t = useImageToolsExtraLabels("compressImage");
+  const [mode, setMode] = useState<ToolMode>("single");
   const [originalFile, setOriginalFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [quality, setQuality] = useState(80);
@@ -214,159 +217,243 @@ export default function CompressImage() {
     URL.revokeObjectURL(url);
   };
 
+  const processFile = useCallback(
+    async (file: File): Promise<BatchOutput> => {
+      const loaded = await loadImageFromFile(file);
+      const outputJpeg = !loaded.isPng || (loaded.isPng && convertPngToJpeg && !loaded.hasAlpha);
+      const mimeType = outputJpeg ? "image/jpeg" : "image/png";
+      const qualityValue = outputJpeg ? quality / 100 : undefined;
+
+      const canvas = document.createElement("canvas");
+      canvas.width = loaded.img.width;
+      canvas.height = loaded.img.height;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) throw new Error(shared.canvasNotSupported);
+      ctx.drawImage(loaded.img, 0, 0);
+
+      const blob = await new Promise<Blob>((resolve, reject) => {
+        canvas.toBlob(
+          (b) => (b ? resolve(b) : reject(new Error(t.errCompressionFailed))),
+          mimeType,
+          qualityValue
+        );
+      });
+
+      const finalBlob = blob.size >= file.size ? file : blob;
+      const isUsingOrig = blob.size >= file.size;
+      const ext = finalBlob.type === "image/jpeg" ? "jpg" : "png";
+      const baseName = file.name.replace(/\.[^.]+$/, "");
+      const outputName = isUsingOrig ? file.name : `${baseName}-compressed.${ext}`;
+
+      return { blob: finalBlob, name: outputName };
+    },
+    [quality, convertPngToJpeg, shared.canvasNotSupported, t.errCompressionFailed]
+  );
+
   const isPng = originalFile?.type === "image/png";
-  const showQualitySlider = !isPng || (isPng && convertPngToJpeg && !hasAlpha);
+  const showQualitySlider = mode === "batch" || !isPng || (isPng && convertPngToJpeg && !hasAlpha);
 
   return (
     <div className="space-y-4">
-      <FileDropZone
-        accept="image/jpeg,image/png,image/jpg"
-        label={t.uploadHint}
-        onFiles={(files) => {
-          const file = files[0];
-          if (file) void handleFile(file);
-        }}
-      />
+      <div className="flex justify-between items-center">
+        <ToolModeToggle mode={mode} onChange={setMode} />
+      </div>
 
-      {error && (
-        <p
-          className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300"
-          role="alert"
-        >
-          {error}
-        </p>
-      )}
-
-      {originalFile && (
+      {mode === "single" ? (
         <>
-          <div className="flex flex-col gap-4 sm:flex-row">
-            <div className="flex-1">
-              <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">{shared.preview}</p>
-              <div
-                className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700"
-                style={{
-                  backgroundImage:
-                    isPng && hasAlpha && !convertPngToJpeg
-                      ? "linear-gradient(45deg, #e5e7eb 25%, transparent 25%), linear-gradient(-45deg, #e5e7eb 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e5e7eb 75%), linear-gradient(-45deg, transparent 75%, #e5e7eb 75%)"
-                      : undefined,
-                  backgroundSize: isPng && hasAlpha && !convertPngToJpeg ? "16px 16px" : undefined,
-                  backgroundPosition:
-                    isPng && hasAlpha && !convertPngToJpeg ? "0 0, 0 8px, 8px -8px, -8px 0" : undefined,
-                  backgroundColor: isPng && hasAlpha && !convertPngToJpeg ? "#f9fafb" : "#f3f4f6",
-                }}
-              >
-                {previewUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={previewUrl}
-                    alt={t.previewAlt}
-                    loading="lazy"
-                    decoding="async"
-                    className="max-h-64 w-full object-contain"
-                  />
-                ) : (
-                  <div className="flex h-40 items-center justify-center text-sm text-gray-400">
-                    {compressing ? "…" : ""}
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className="flex-1 space-y-3">
-              <div className="rounded-lg bg-gray-50 p-4 dark:bg-gray-800/50">
-                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                  <ImageIcon className="h-4 w-4 shrink-0" aria-hidden="true" />
-                  <span className="truncate">{originalFile.name}</span>
-                </div>
-                <dl className="mt-3 space-y-2 text-sm">
-                  <div className="flex justify-between gap-4">
-                    <dt className="text-gray-500 dark:text-gray-400">{t.originalSize}</dt>
-                    <dd className="font-medium">{formatBytes(originalFile.size)}</dd>
-                  </div>
-                  {outputSize !== null && (
-                    <>
-                      <div className="flex justify-between gap-4">
-                        <dt className="text-gray-500 dark:text-gray-400">{t.outputSize}</dt>
-                        <dd className="font-medium text-primary-600 dark:text-primary-400">
-                          {formatBytes(outputSize)}
-                        </dd>
+          <FileDropZone
+            accept="image/jpeg,image/png,image/jpg"
+            label={t.uploadHint}
+            onFiles={(files) => {
+              const file = files[0];
+              if (file) void handleFile(file);
+            }}
+          />
+
+          {error && (
+            <p
+              className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300"
+              role="alert"
+            >
+              {error}
+            </p>
+          )}
+
+          {originalFile && (
+            <>
+              <div className="flex flex-col gap-4 sm:flex-row">
+                <div className="flex-1">
+                  <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">{shared.preview}</p>
+                  <div
+                    className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700"
+                    style={{
+                      backgroundImage:
+                        isPng && hasAlpha && !convertPngToJpeg
+                          ? "linear-gradient(45deg, #e5e7eb 25%, transparent 25%), linear-gradient(-45deg, #e5e7eb 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e5e7eb 75%), linear-gradient(-45deg, transparent 75%, #e5e7eb 75%)"
+                          : undefined,
+                      backgroundSize: isPng && hasAlpha && !convertPngToJpeg ? "16px 16px" : undefined,
+                      backgroundPosition:
+                        isPng && hasAlpha && !convertPngToJpeg ? "0 0, 0 8px, 8px -8px, -8px 0" : undefined,
+                      backgroundColor: isPng && hasAlpha && !convertPngToJpeg ? "#f9fafb" : "#f3f4f6",
+                    }}
+                  >
+                    {previewUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={previewUrl}
+                        alt={t.previewAlt}
+                        loading="lazy"
+                        decoding="async"
+                        className="max-h-64 w-full object-contain"
+                      />
+                    ) : (
+                      <div className="flex h-40 items-center justify-center text-sm text-gray-400">
+                        {compressing ? "…" : ""}
                       </div>
-                      {usingOriginal ? (
-                        <div className="space-y-1">
+                    )}
+                  </div>
+                </div>
+                <div className="flex-1 space-y-3">
+                  <div className="rounded-lg bg-gray-50 p-4 dark:bg-gray-800/50">
+                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                      <ImageIcon className="h-4 w-4 shrink-0" aria-hidden="true" />
+                      <span className="truncate">{originalFile.name}</span>
+                    </div>
+                    <dl className="mt-3 space-y-2 text-sm">
+                      <div className="flex justify-between gap-4">
+                        <dt className="text-gray-500 dark:text-gray-400">{t.originalSize}</dt>
+                        <dd className="font-medium">{formatBytes(originalFile.size)}</dd>
+                      </div>
+                      {outputSize !== null && (
+                        <>
                           <div className="flex justify-between gap-4">
-                            <dt className="text-gray-500 dark:text-gray-400">{t.status}</dt>
-                            <dd className="text-end font-medium text-amber-700 dark:text-amber-300">
-                              {t.alreadyOptimized}
+                            <dt className="text-gray-500 dark:text-gray-400">{t.outputSize}</dt>
+                            <dd className="font-medium text-primary-600 dark:text-primary-400">
+                              {formatBytes(outputSize)}
                             </dd>
                           </div>
-                          <p className="tool-notice tool-notice--warning mt-2 text-xs">
-                            {t.alreadyOptimizedHint}
-                          </p>
-                        </div>
-                      ) : (
-                        savingsPercent !== null &&
-                        savingsPercent > 0 && (
-                          <div className="flex justify-between gap-4">
-                            <dt className="text-gray-500 dark:text-gray-400">{t.saved}</dt>
-                            <dd className="font-medium text-green-600 dark:text-green-400">
-                              {savingsPercent}%
-                            </dd>
-                          </div>
-                        )
+                          {usingOriginal ? (
+                            <div className="space-y-1">
+                              <div className="flex justify-between gap-4">
+                                <dt className="text-gray-500 dark:text-gray-400">{t.status}</dt>
+                                <dd className="text-end font-medium text-amber-700 dark:text-amber-300">
+                                  {t.alreadyOptimized}
+                                </dd>
+                              </div>
+                              <p className="tool-notice tool-notice--warning mt-2 text-xs">
+                                {t.alreadyOptimizedHint}
+                              </p>
+                            </div>
+                          ) : (
+                            savingsPercent !== null &&
+                            savingsPercent > 0 && (
+                              <div className="flex justify-between gap-4">
+                                <dt className="text-gray-500 dark:text-gray-400">{t.saved}</dt>
+                                <dd className="font-medium text-green-600 dark:text-green-400">
+                                  {savingsPercent}%
+                                </dd>
+                              </div>
+                            )
+                          )}
+                        </>
                       )}
-                    </>
+                    </dl>
+                  </div>
+
+                  {isPng && !hasAlpha && (
+                    <label className="flex cursor-pointer items-start gap-2 text-sm">
+                      <input
+                        type="checkbox"
+                        checked={convertPngToJpeg}
+                        onChange={(e) => handleConvertToggle(e.target.checked)}
+                        className="mt-0.5"
+                      />
+                      <span>
+                        <span className="font-medium text-gray-700 dark:text-gray-300">{t.convertToJpeg}</span>
+                        <span className="mt-0.5 block text-xs text-gray-500 dark:text-gray-400">
+                          {t.convertToJpegHint}
+                        </span>
+                      </span>
+                    </label>
                   )}
-                </dl>
+
+                  {isPng && hasAlpha && (
+                    <p className="tool-notice tool-notice--warning tool-notice--image text-xs">{t.pngTransparentHint}</p>
+                  )}
+
+                  {isPng && !hasAlpha && !convertPngToJpeg && (
+                    <p className="tool-notice tool-notice--warning tool-notice--image text-xs">{t.pngHint}</p>
+                  )}
+
+                  {showQualitySlider && (
+                    <div>
+                      <label htmlFor="quality" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        {t.qualityLabel(quality)}
+                      </label>
+                      <input
+                        id="quality"
+                        type="range"
+                        min={10}
+                        max={100}
+                        value={quality}
+                        onChange={(e) => handleQualityChange(Number(e.target.value))}
+                        className="mt-2 w-full accent-primary-600"
+                      />
+                      <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">{t.qualityHint}</p>
+                    </div>
+                  )}
+                </div>
               </div>
 
-              {isPng && !hasAlpha && (
-                <label className="flex cursor-pointer items-start gap-2 text-sm">
-                  <input
-                    type="checkbox"
-                    checked={convertPngToJpeg}
-                    onChange={(e) => handleConvertToggle(e.target.checked)}
-                    className="mt-0.5"
-                  />
-                  <span>
-                    <span className="font-medium text-gray-700 dark:text-gray-300">{t.convertToJpeg}</span>
-                    <span className="mt-0.5 block text-xs text-gray-500 dark:text-gray-400">
-                      {t.convertToJpegHint}
-                    </span>
+              <button type="button" onClick={download} disabled={!downloadBlob} className="btn-primary">
+                <Download className="h-4 w-4" />
+                {usingOriginal ? t.downloadOriginal : t.downloadCompressed}
+              </button>
+            </>
+          )}
+        </>
+      ) : (
+        <>
+          <div className="rounded-lg border border-[var(--line)] bg-[var(--surface)] p-4 space-y-4">
+            <h3 className="text-sm font-medium text-[var(--text)]">Compression Settings</h3>
+            
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+              <label className="flex cursor-pointer items-start gap-2 text-sm flex-1">
+                <input
+                  type="checkbox"
+                  checked={convertPngToJpeg}
+                  onChange={(e) => setConvertPngToJpeg(e.target.checked)}
+                  className="mt-0.5"
+                />
+                <span>
+                  <span className="font-medium text-gray-700 dark:text-gray-300">{t.convertToJpeg}</span>
+                  <span className="mt-0.5 block text-xs text-gray-500 dark:text-gray-400">
+                    {t.convertToJpegHint}
                   </span>
+                </span>
+              </label>
+
+              <div className="flex-1">
+                <label htmlFor="quality-batch" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  {t.qualityLabel(quality)}
                 </label>
-              )}
-
-              {isPng && hasAlpha && (
-                <p className="tool-notice tool-notice--warning tool-notice--image text-xs">{t.pngTransparentHint}</p>
-              )}
-
-              {isPng && !hasAlpha && !convertPngToJpeg && (
-                <p className="tool-notice tool-notice--warning tool-notice--image text-xs">{t.pngHint}</p>
-              )}
-
-              {showQualitySlider && (
-                <div>
-                  <label htmlFor="quality" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    {t.qualityLabel(quality)}
-                  </label>
-                  <input
-                    id="quality"
-                    type="range"
-                    min={10}
-                    max={100}
-                    value={quality}
-                    onChange={(e) => handleQualityChange(Number(e.target.value))}
-                    className="mt-2 w-full accent-primary-600"
-                  />
-                  <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">{t.qualityHint}</p>
-                </div>
-              )}
+                <input
+                  id="quality-batch"
+                  type="range"
+                  min={10}
+                  max={100}
+                  value={quality}
+                  onChange={(e) => setQuality(Number(e.target.value))}
+                  className="mt-2 w-full accent-primary-600"
+                />
+              </div>
             </div>
           </div>
 
-          <button type="button" onClick={download} disabled={!downloadBlob} className="btn-primary">
-            <Download className="h-4 w-4" />
-            {usingOriginal ? t.downloadOriginal : t.downloadCompressed}
-          </button>
+          <BatchUploader
+            accept="image/jpeg,image/png,image/jpg"
+            processFile={processFile}
+          />
         </>
       )}
     </div>

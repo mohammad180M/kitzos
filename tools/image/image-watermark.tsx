@@ -13,6 +13,8 @@ import {
   useImageToolsExtraLabels,
   useImageToolsSharedLabels,
 } from "@/lib/i18n/use-image-tools-extra-labels";
+import ToolModeToggle from "@/components/tools/ToolModeToggle";
+import BatchUploader, { type ToolMode, type BatchOutput } from "@/components/tools/BatchUploader";
 
 const MAX_PREVIEW = 700;
 
@@ -80,6 +82,7 @@ export default function ImageWatermark() {
   const t = useImageToolsExtraLabels("imageWatermark");
   const pathname = usePathname();
   const toolSlug = getToolSlugFromPath(pathname);
+  const [mode, setMode] = useState<ToolMode>("single");
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -195,23 +198,137 @@ export default function ImageWatermark() {
     }
   };
 
+  const processFile = useCallback(
+    async (file: File): Promise<BatchOutput> => {
+      const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+        const url = URL.createObjectURL(file);
+        const im = new Image();
+        im.onload = () => { URL.revokeObjectURL(url); resolve(im); };
+        im.onerror = () => { URL.revokeObjectURL(url); reject(new Error(shared.loadFailed)); };
+        im.src = url;
+      });
+
+      const natW = img.naturalWidth;
+      const natH = img.naturalHeight;
+      const off = document.createElement("canvas");
+      off.width = natW;
+      off.height = natH;
+      const ctx = off.getContext("2d");
+      if (!ctx) throw new Error("canvas not supported");
+
+      ctx.drawImage(img, 0, 0, natW, natH);
+      drawWatermark(ctx, natW, natH, text, fontSize, color, opacity, rotation, position, tile);
+
+      const isJpeg = file.type === "image/jpeg";
+      const mime = isJpeg ? "image/jpeg" : "image/png";
+      const ext = isJpeg ? "jpg" : "png";
+      const blob = isJpeg
+        ? await new Promise<Blob>((resolve, reject) => {
+            off.toBlob((b) => (b ? resolve(b) : reject(new Error("export"))), mime, 0.92);
+          })
+        : await canvasToBlob(off, mime);
+      const baseName = file.name.replace(/\.[^.]+$/, "");
+      return { blob, name: `${baseName}-watermarked.${ext}` };
+    },
+    [text, fontSize, color, opacity, rotation, position, tile, shared.loadFailed]
+  );
+
   const previewFontSize = Math.max(
     8,
     Math.round(fontSize * (previewSize.w / (imgRef.current?.naturalWidth || previewSize.w || 1)))
   );
 
+  const settingsPanel = (
+    <div className="grid gap-3 sm:grid-cols-2">
+      <label className="block sm:col-span-2">
+        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.watermarkText}</span>
+        <input
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder={t.textPlaceholder}
+          className="input-field mt-1 w-full"
+        />
+      </label>
+
+      <label className="block">
+        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.fontSizeLabel(fontSize)}</span>
+        <input
+          type="range"
+          min={12}
+          max={120}
+          value={fontSize}
+          onChange={(e) => setFontSize(Number(e.target.value))}
+          className="mt-2 w-full accent-primary-600"
+        />
+      </label>
+
+      <label className="block">
+        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.color}</span>
+        <input
+          type="color"
+          value={color}
+          onChange={(e) => setColor(e.target.value)}
+          className="mt-1 h-10 w-full cursor-pointer rounded border border-gray-300 dark:border-gray-600"
+        />
+      </label>
+
+      <label className="block">
+        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+          {t.opacityLabel(Math.round(opacity * 100))}
+        </span>
+        <input
+          type="range"
+          min={0.1}
+          max={1}
+          step={0.05}
+          value={opacity}
+          onChange={(e) => setOpacity(Number(e.target.value))}
+          className="mt-2 w-full accent-primary-600"
+        />
+      </label>
+
+      <label className="block">
+        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.rotationLabel(rotation)}</span>
+        <input
+          type="range"
+          min={-90}
+          max={90}
+          value={rotation}
+          onChange={(e) => setRotation(Number(e.target.value))}
+          className="mt-2 w-full accent-primary-600"
+        />
+      </label>
+
+      <label className="flex items-center gap-2 sm:col-span-2">
+        <input
+          type="checkbox"
+          checked={tile}
+          onChange={(e) => setTile(e.target.checked)}
+          className="accent-primary-600"
+        />
+        <span className="text-sm text-gray-700 dark:text-gray-300">{t.tile}</span>
+      </label>
+    </div>
+  );
+
   return (
     <div className="space-y-4">
-      <FileDropZone
-        accept="image/*"
-        label={shared.uploadImage}
-        onFiles={(files) => {
-          const f = files[0];
-          if (!f) return;
-          setSourceMime(f.type || "image/png");
-          loadFile(f, messages);
-        }}
-      />
+      <div className="flex justify-between items-center">
+        <ToolModeToggle mode={mode} onChange={setMode} />
+      </div>
+
+      {mode === "single" ? (
+        <FileDropZone
+          accept="image/*"
+          label={shared.uploadImage}
+          onFiles={(files) => {
+            const f = files[0];
+            if (!f) return;
+            setSourceMime(f.type || "image/png");
+            loadFile(f, messages);
+          }}
+        />
+      ) : null}
 
       {error && (
         <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300" role="alert">
@@ -219,7 +336,7 @@ export default function ImageWatermark() {
         </p>
       )}
 
-      {hasImage && (
+      {hasImage && mode === "single" && (
         <>
           <div>
             <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">{shared.preview}</p>
@@ -261,81 +378,25 @@ export default function ImageWatermark() {
             )}
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-2">
-            <label className="block sm:col-span-2">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.watermarkText}</span>
-              <input
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                placeholder={t.textPlaceholder}
-                className="input-field mt-1 w-full"
-              />
-            </label>
-
-            <label className="block">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.fontSizeLabel(fontSize)}</span>
-              <input
-                type="range"
-                min={12}
-                max={120}
-                value={fontSize}
-                onChange={(e) => setFontSize(Number(e.target.value))}
-                className="mt-2 w-full accent-primary-600"
-              />
-            </label>
-
-            <label className="block">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.color}</span>
-              <input
-                type="color"
-                value={color}
-                onChange={(e) => setColor(e.target.value)}
-                className="mt-1 h-10 w-full cursor-pointer rounded border border-gray-300 dark:border-gray-600"
-              />
-            </label>
-
-            <label className="block">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                {t.opacityLabel(Math.round(opacity * 100))}
-              </span>
-              <input
-                type="range"
-                min={0.1}
-                max={1}
-                step={0.05}
-                value={opacity}
-                onChange={(e) => setOpacity(Number(e.target.value))}
-                className="mt-2 w-full accent-primary-600"
-              />
-            </label>
-
-            <label className="block">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.rotationLabel(rotation)}</span>
-              <input
-                type="range"
-                min={-90}
-                max={90}
-                value={rotation}
-                onChange={(e) => setRotation(Number(e.target.value))}
-                className="mt-2 w-full accent-primary-600"
-              />
-            </label>
-
-            <label className="flex items-center gap-2 sm:col-span-2">
-              <input
-                type="checkbox"
-                checked={tile}
-                onChange={(e) => setTile(e.target.checked)}
-                className="accent-primary-600"
-              />
-              <span className="text-sm text-gray-700 dark:text-gray-300">{t.tile}</span>
-            </label>
-          </div>
+          {settingsPanel}
 
           <button type="button" onClick={() => void exportImage()} className="btn-primary inline-flex items-center gap-2">
             <Download className="h-4 w-4" />
             {common.download}
           </button>
+        </>
+      )}
+
+      {mode === "batch" && (
+        <>
+          <div className="rounded-lg border border-[var(--line)] bg-[var(--surface)] p-4 space-y-3">
+            <p className="text-sm font-medium text-[var(--text)]">Watermark Settings</p>
+            {settingsPanel}
+          </div>
+          <BatchUploader
+            accept="image/*"
+            processFile={processFile}
+          />
         </>
       )}
     </div>

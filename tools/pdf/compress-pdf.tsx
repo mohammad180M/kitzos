@@ -1,7 +1,7 @@
 "use client";
 
 import FileDropZone from "@/components/FileDropZone";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Download, FileText, Loader2 } from "lucide-react";
 import PdfPreviewPane from "@/components/pdf/PdfPreviewPane";
 import PdfWorkbenchLayout from "@/components/pdf/PdfWorkbenchLayout";
@@ -14,6 +14,8 @@ import {
 } from "@/lib/pdf/thumbnails";
 import { bytesForPdfLoad, clonePdfBytes, pdfBytesToBlob, readPdfFileBytes } from "@/lib/pdf/bytes";
 import { useUnsavedWork } from "@/lib/unsaved-work";
+import ToolModeToggle from "@/components/tools/ToolModeToggle";
+import BatchUploader, { type ToolMode, type BatchOutput } from "@/components/tools/BatchUploader";
 
 function loadPdfLib() {
   return import("pdf-lib");
@@ -221,6 +223,7 @@ export default function CompressPdf() {
   const fileRef = useRef<File | null>(null);
   const [previewSrc, setPreviewSrc] = useState<string | null>(null);
   const [compressedPreviewSrc, setCompressedPreviewSrc] = useState<string | null>(null);
+  const [toolMode, setToolMode] = useState<ToolMode>("single");
 
   useUnsavedWork(file !== null);
 
@@ -346,6 +349,25 @@ export default function CompressPdf() {
     setGrayscale(true);
     void runCompress({ quality: "low", grayscale: true });
   };
+
+  const processFile = useCallback(
+    async (pdfFile: File): Promise<BatchOutput> => {
+      const bytes = await readPdfFileBytes(pdfFile);
+      let newBytes: Uint8Array;
+      if (mode === "optimize") {
+        newBytes = clonePdfBytes(await compressOptimize(bytes));
+      } else {
+        newBytes = await compressStrong(pdfFile, quality, grayscale, () => {});
+        newBytes = clonePdfBytes(newBytes);
+      }
+      // If the compressed version is larger, return original
+      const outputBytes = newBytes.length < bytes.length ? newBytes : new Uint8Array(bytes);
+      const blob = pdfBytesToBlob(outputBytes);
+      const baseName = pdfFile.name.replace(/\.pdf$/i, "") || "document";
+      return { blob, name: `${baseName}-compressed.pdf` };
+    },
+    [mode, quality, grayscale]
+  );
 
   const savedPct =
     result && result.newSize < result.originalSize
@@ -555,85 +577,127 @@ export default function CompressPdf() {
   );
 
   return (
-    <PdfWorkbenchLayout
-      active={!!file}
-      controls={controls}
-      preview={
-        file ? (
-          <PdfPreviewPane totalCount={1} sizeBadge={formatBytes(file.size)} singleColumn>
-            <div className="space-y-3">
-              {previewSrc && (
-                <div className="overflow-hidden rounded-md border border-[var(--line)] bg-[var(--surface-2)] p-2">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={previewSrc} alt="" className="mx-auto max-h-64 w-full object-contain" />
-                </div>
-              )}
-              {compressedPreviewSrc && (
-                <div className="overflow-hidden rounded-md border border-[var(--line)] bg-[var(--surface-2)] p-2">
-                  <p className="mb-1 text-center text-[11px] text-muted">{t.newSize}</p>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={compressedPreviewSrc}
-                    alt=""
-                    className="mx-auto max-h-64 w-full object-contain"
-                  />
-                </div>
-              )}
-              {result && (
-                <dl className="grid grid-cols-2 gap-2 text-sm">
-                  <div>
-                    <dt className="text-muted">{t.originalSize}</dt>
-                    <dd className="font-medium text-foreground">{formatBytes(result.originalSize)}</dd>
-                  </div>
-                  <div>
-                    <dt className="text-muted">{t.newSize}</dt>
-                    <dd className="font-medium text-foreground">{formatBytes(result.newSize)}</dd>
-                  </div>
-                  {!result.isLarger && (
-                    <div className="col-span-2">
-                      <dt className="text-muted">{t.saved}</dt>
-                      <dd className="font-medium text-green-700 dark:text-green-400">{savedPct}%</dd>
+    <>
+      <div className="flex justify-between items-center mb-4">
+        <ToolModeToggle mode={toolMode} onChange={setToolMode} />
+      </div>
+
+      {toolMode === "single" ? (
+        <PdfWorkbenchLayout
+          active={!!file}
+          controls={controls}
+          preview={
+            file ? (
+              <PdfPreviewPane totalCount={1} sizeBadge={formatBytes(file.size)} singleColumn>
+                <div className="space-y-3">
+                  {previewSrc && (
+                    <div className="overflow-hidden rounded-md border border-[var(--line)] bg-[var(--surface-2)] p-2">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={previewSrc} alt="" className="mx-auto max-h-64 w-full object-contain" />
                     </div>
                   )}
-                </dl>
-              )}
-              {result?.isLarger && (
-                <p className="text-sm text-amber-800 dark:text-amber-200">{t.largerWarning}</p>
-              )}
-              {result && (
-                <div className="hidden flex-wrap gap-2 lg:flex">
-                  {!result.isLarger && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const baseName = file.name.replace(/\.pdf$/i, "") || "document";
-                        downloadBlob(
-                          pdfBytesToBlob(result.bytes),
-                          `${baseName}-compressed.pdf`
-                        );
-                      }}
-                      className="btn-primary"
-                    >
-                      <Download className="h-4 w-4" />
-                      {t.downloadCompressed}
-                    </button>
+                  {compressedPreviewSrc && (
+                    <div className="overflow-hidden rounded-md border border-[var(--line)] bg-[var(--surface-2)] p-2">
+                      <p className="mb-1 text-center text-[11px] text-muted">{t.newSize}</p>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={compressedPreviewSrc}
+                        alt=""
+                        className="mx-auto max-h-64 w-full object-contain"
+                      />
+                    </div>
                   )}
-                  {result.isLarger && (
-                    <button
-                      type="button"
-                      onClick={() => downloadBlob(file, file.name)}
-                      className="btn-primary"
-                    >
-                      <Download className="h-4 w-4" />
-                      {t.downloadOriginal}
-                    </button>
+                  {result && (
+                    <dl className="grid grid-cols-2 gap-2 text-sm">
+                      <div>
+                        <dt className="text-muted">{t.originalSize}</dt>
+                        <dd className="font-medium text-foreground">{formatBytes(result.originalSize)}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-muted">{t.newSize}</dt>
+                        <dd className="font-medium text-foreground">{formatBytes(result.newSize)}</dd>
+                      </div>
+                      {!result.isLarger && (
+                        <div className="col-span-2">
+                          <dt className="text-muted">{t.saved}</dt>
+                          <dd className="font-medium text-green-700 dark:text-green-400">{savedPct}%</dd>
+                        </div>
+                      )}
+                    </dl>
+                  )}
+                  {result?.isLarger && (
+                    <p className="text-sm text-amber-800 dark:text-amber-200">{t.largerWarning}</p>
+                  )}
+                  {result && (
+                    <div className="hidden flex-wrap gap-2 lg:flex">
+                      {!result.isLarger && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const baseName = file.name.replace(/\.pdf$/i, "") || "document";
+                            downloadBlob(
+                              pdfBytesToBlob(result.bytes),
+                              `${baseName}-compressed.pdf`
+                            );
+                          }}
+                          className="btn-primary"
+                        >
+                          <Download className="h-4 w-4" />
+                          {t.downloadCompressed}
+                        </button>
+                      )}
+                      {result.isLarger && (
+                        <button
+                          type="button"
+                          onClick={() => downloadBlob(file, file.name)}
+                          className="btn-primary"
+                        >
+                          <Download className="h-4 w-4" />
+                          {t.downloadOriginal}
+                        </button>
+                      )}
+                    </div>
                   )}
                 </div>
-              )}
-            </div>
-          </PdfPreviewPane>
-        ) : null
-      }
-    />
+              </PdfPreviewPane>
+            ) : null
+          }
+        />
+      ) : (
+        <div className="space-y-4">
+          <div className="rounded-lg border border-[var(--line)] bg-[var(--surface)] p-4 space-y-3">
+            <p className="text-sm font-medium text-[var(--text)]">Compression Mode</p>
+            <fieldset className="space-y-2">
+              <legend className="sr-only">Compression Mode</legend>
+              <label className="flex items-start gap-2 text-sm text-[var(--muted)]">
+                <input type="radio" name="batch-compress-mode" checked={mode === "optimize"} onChange={() => setMode("optimize")} className="mt-1 h-4 w-4" />
+                <span><span className="font-medium text-[var(--text)]">{t.modeOptimize}</span><span className="mt-0.5 block text-xs">{t.modeOptimizeHint}</span></span>
+              </label>
+              <label className="flex items-start gap-2 text-sm text-[var(--muted)]">
+                <input type="radio" name="batch-compress-mode" checked={mode === "strong"} onChange={() => setMode("strong")} className="mt-1 h-4 w-4" />
+                <span><span className="font-medium text-[var(--text)]">{t.modeStrong}</span><span className="mt-0.5 block text-xs">{t.modeStrongHint}</span></span>
+              </label>
+            </fieldset>
+            {mode === "strong" && (
+              <div className="space-y-2">
+                <select value={quality} onChange={(e) => setQuality(e.target.value as Quality)} className="input-field">
+                  <option value="low">{t.qualityLow}</option>
+                  <option value="medium">{t.qualityMedium}</option>
+                  <option value="high">{t.qualityHigh}</option>
+                </select>
+                <label className="flex items-center gap-2 text-sm text-[var(--text)]">
+                  <input type="checkbox" checked={grayscale} onChange={(e) => setGrayscale(e.target.checked)} className="h-4 w-4" />
+                  <span>{t.grayscaleLabel}</span>
+                </label>
+              </div>
+            )}
+          </div>
+          <BatchUploader
+            accept=".pdf,application/pdf"
+            processFile={processFile}
+          />
+        </div>
+      )}
+    </>
   );
 }
