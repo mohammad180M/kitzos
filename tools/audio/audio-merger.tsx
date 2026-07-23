@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { Download, GripVertical, Loader2, Trash2 } from "lucide-react";
 import FileDropZone from "@/components/FileDropZone";
+import ProgressIndicator from "@/components/tools/ProgressIndicator";
+import { useBatchLabels } from "@/lib/i18n/use-batch-labels";
 import {
   concatBuffers,
   decodeAudioFile,
@@ -22,6 +24,7 @@ interface AudioItem {
 
 export default function AudioMerger() {
   const t = useAudioToolLabels("audioMerger");
+  const batchLabels = useBatchLabels();
   const [items, setItems] = useState<AudioItem[]>([]);
   const [format, setFormat] = useState<"mp3" | "wav">("mp3");
   const [processing, setProcessing] = useState(false);
@@ -126,6 +129,8 @@ export default function AudioMerger() {
           {error}
         </p>
       )}
+
+      <ProgressIndicator active={processing} label={batchLabels.processing} />
 
       <button
         type="button"

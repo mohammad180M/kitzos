@@ -85,8 +85,12 @@ export default function ImageWatermark() {
   const [mode, setMode] = useState<ToolMode>("single");
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const batchCanvasRef = useRef<HTMLCanvasElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
+  const batchOverlayRef = useRef<HTMLDivElement>(null);
   const previewScaleRef = useRef(1);
+  const batchScaleRef = useRef(1);
+  const batchImgRef = useRef<HTMLImageElement | null>(null);
   const dragRef = useRef<{ grabX: number; grabY: number; pointerId: number } | null>(null);
 
   const { imgRef, hasImage, imageVersion, error, setError, loadFile } = useImageLoader(
@@ -102,6 +106,11 @@ export default function ImageWatermark() {
   const [tile, setTile] = useState(false);
   const [position, setPosition] = useState<WatermarkPosition>({ xRatio: 0.5, yRatio: 0.5 });
   const [previewSize, setPreviewSize] = useState({ w: 0, h: 0 });
+  const [batchPreviewSize, setBatchPreviewSize] = useState({ w: 0, h: 0 });
+
+  const [selectedBatchId, setSelectedBatchId] = useState<string | null>(null);
+  const [selectedBatchName, setSelectedBatchName] = useState<string | null>(null);
+  const [batchImageVersion, setBatchImageVersion] = useState(0);
 
   const messages = { invalid: shared.invalidImage, loadFailed: shared.loadFailed };
 
@@ -125,18 +134,55 @@ export default function ImageWatermark() {
     drawWatermark(ctx, w, h, text, previewFontSize, color, opacity, rotation, position, tile);
   }, [text, fontSize, color, opacity, rotation, position, tile, imgRef]);
 
+  const renderBatchPreview = useCallback(() => {
+    const canvas = batchCanvasRef.current;
+    const img = batchImgRef.current;
+    if (!canvas || !img || !img.naturalWidth) return;
+
+    const natW = img.naturalWidth;
+    const natH = img.naturalHeight;
+    const scale = Math.min(1, MAX_PREVIEW / Math.max(natW, natH));
+    batchScaleRef.current = scale;
+    const w = Math.round(natW * scale);
+    const h = Math.round(natH * scale);
+    setBatchPreviewSize({ w, h });
+
+    const ctx = setupCanvas(canvas, w, h);
+    ctx.drawImage(img, 0, 0, w, h);
+
+    const previewFontSize = Math.max(8, Math.round(fontSize * scale));
+    drawWatermark(ctx, w, h, text, previewFontSize, color, opacity, rotation, position, tile);
+  }, [text, fontSize, color, opacity, rotation, position, tile]);
+
   useEffect(() => {
     setPosition({ xRatio: 0.5, yRatio: 0.5 });
   }, [imageVersion]);
 
   useEffect(() => {
-    if (hasImage) render();
-  }, [hasImage, imageVersion, text, fontSize, color, opacity, rotation, position, tile, render]);
+    if (hasImage && mode === "single") render();
+  }, [hasImage, imageVersion, text, fontSize, color, opacity, rotation, position, tile, render, mode]);
 
-  const onPointerDownDrag = (e: React.PointerEvent) => {
-    if (tile || !text.trim()) return;
-    const overlay = overlayRef.current;
-    if (!overlay) return;
+  useEffect(() => {
+    if (mode === "batch" && batchImgRef.current) renderBatchPreview();
+  }, [
+    mode,
+    batchImageVersion,
+    text,
+    fontSize,
+    color,
+    opacity,
+    rotation,
+    position,
+    tile,
+    renderBatchPreview,
+  ]);
+
+  const onPointerDownDrag = (
+    e: React.PointerEvent,
+    overlay: HTMLDivElement | null,
+    size: { w: number; h: number }
+  ) => {
+    if (tile || !text.trim() || !overlay || size.w < 1) return;
     e.stopPropagation();
     const rect = overlay.getBoundingClientRect();
     const overlayLeft = position.xRatio * rect.width;
@@ -149,9 +195,8 @@ export default function ImageWatermark() {
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
   };
 
-  const onPointerMove = (e: React.PointerEvent) => {
+  const onPointerMove = (e: React.PointerEvent, overlay: HTMLDivElement | null) => {
     const drag = dragRef.current;
-    const overlay = overlayRef.current;
     if (!drag || !overlay || drag.pointerId !== e.pointerId) return;
     const rect = overlay.getBoundingClientRect();
     if (rect.width < 1 || rect.height < 1) return;
@@ -203,8 +248,14 @@ export default function ImageWatermark() {
       const img = await new Promise<HTMLImageElement>((resolve, reject) => {
         const url = URL.createObjectURL(file);
         const im = new Image();
-        im.onload = () => { URL.revokeObjectURL(url); resolve(im); };
-        im.onerror = () => { URL.revokeObjectURL(url); reject(new Error(shared.loadFailed)); };
+        im.onload = () => {
+          URL.revokeObjectURL(url);
+          resolve(im);
+        };
+        im.onerror = () => {
+          URL.revokeObjectURL(url);
+          reject(new Error(shared.loadFailed));
+        };
         im.src = url;
       });
 
@@ -233,9 +284,59 @@ export default function ImageWatermark() {
     [text, fontSize, color, opacity, rotation, position, tile, shared.loadFailed]
   );
 
-  const previewFontSize = Math.max(
+  const clearBatchPreview = useCallback(() => {
+    setSelectedBatchId(null);
+    setSelectedBatchName(null);
+    batchImgRef.current = null;
+    setBatchPreviewSize({ w: 0, h: 0 });
+    setBatchImageVersion((v) => v + 1);
+  }, []);
+
+  const onSelectBatchFile = useCallback(
+    (f: File | null, id: string | null) => {
+      if (!f || !id) {
+        clearBatchPreview();
+        return;
+      }
+      setSelectedBatchId(id);
+      setSelectedBatchName(f.name);
+      const url = URL.createObjectURL(f);
+      const img = new Image();
+      const loadId = id;
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        // Ignore stale loads if the user clicked another file.
+        setSelectedBatchId((current) => {
+          if (current !== loadId) return current;
+          batchImgRef.current = img;
+          setBatchImageVersion((v) => v + 1);
+          return current;
+        });
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        setSelectedBatchId((current) => {
+          if (current === loadId) clearBatchPreview();
+          return current;
+        });
+      };
+      img.src = url;
+    },
+    [clearBatchPreview]
+  );
+
+  const singlePreviewFontSize = Math.max(
     8,
     Math.round(fontSize * (previewSize.w / (imgRef.current?.naturalWidth || previewSize.w || 1)))
+  );
+
+  const batchPreviewFontSize = Math.max(
+    8,
+    Math.round(
+      fontSize *
+        (batchPreviewSize.w /
+          (batchImgRef.current?.naturalWidth || batchPreviewSize.w || 1))
+    )
   );
 
   const settingsPanel = (
@@ -311,6 +412,39 @@ export default function ImageWatermark() {
     </div>
   );
 
+  const watermarkDragOverlay = (
+    overlayElRef: React.RefObject<HTMLDivElement | null>,
+    size: { w: number; h: number },
+    overlayFontSize: number
+  ) =>
+    !tile && text.trim() && size.w > 0 ? (
+      <div
+        ref={overlayElRef as React.Ref<HTMLDivElement>}
+        dir="ltr"
+        className="absolute inset-0 touch-none"
+        style={{ width: size.w, height: size.h }}
+        onPointerMove={(e) => onPointerMove(e, overlayElRef.current)}
+        onPointerUp={onPointerUp}
+        onPointerLeave={onPointerUp}
+      >
+        <div
+          className="absolute cursor-move select-none whitespace-nowrap font-bold"
+          style={{
+            left: `${position.xRatio * 100}%`,
+            top: `${position.yRatio * 100}%`,
+            transform: `translate(-50%, -50%) rotate(${rotation}deg)`,
+            fontSize: overlayFontSize,
+            color,
+            opacity,
+            pointerEvents: "auto",
+          }}
+          onPointerDown={(e) => onPointerDownDrag(e, overlayElRef.current, size)}
+        >
+          {text}
+        </div>
+      </div>
+    ) : null;
+
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
@@ -331,7 +465,10 @@ export default function ImageWatermark() {
       ) : null}
 
       {error && (
-        <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300" role="alert">
+        <p
+          className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300"
+          role="alert"
+        >
           {error}
         </p>
       )}
@@ -345,33 +482,7 @@ export default function ImageWatermark() {
                 ref={canvasRef}
                 className="block max-w-full rounded-lg border border-gray-200 dark:border-gray-700"
               />
-              {!tile && text.trim() && previewSize.w > 0 && (
-                <div
-                  ref={overlayRef}
-                  dir="ltr"
-                  className="absolute inset-0 touch-none"
-                  style={{ width: previewSize.w, height: previewSize.h }}
-                  onPointerMove={onPointerMove}
-                  onPointerUp={onPointerUp}
-                  onPointerLeave={onPointerUp}
-                >
-                  <div
-                    className="absolute cursor-move select-none whitespace-nowrap font-bold"
-                    style={{
-                      left: `${position.xRatio * 100}%`,
-                      top: `${position.yRatio * 100}%`,
-                      transform: `translate(-50%, -50%) rotate(${rotation}deg)`,
-                      fontSize: previewFontSize,
-                      color,
-                      opacity,
-                      pointerEvents: "auto",
-                    }}
-                    onPointerDown={onPointerDownDrag}
-                  >
-                    {text}
-                  </div>
-                </div>
-              )}
+              {watermarkDragOverlay(overlayRef, previewSize, singlePreviewFontSize)}
             </div>
             {!tile && text.trim() && (
               <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{t.dragHint}</p>
@@ -380,7 +491,11 @@ export default function ImageWatermark() {
 
           {settingsPanel}
 
-          <button type="button" onClick={() => void exportImage()} className="btn-primary inline-flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => void exportImage()}
+            className="btn-primary inline-flex items-center gap-2"
+          >
             <Download className="h-4 w-4" />
             {common.download}
           </button>
@@ -390,12 +505,40 @@ export default function ImageWatermark() {
       {mode === "batch" && (
         <>
           <div className="rounded-lg border border-[var(--line)] bg-[var(--surface)] p-4 space-y-3">
-            <p className="text-sm font-medium text-[var(--text)]">Watermark Settings</p>
+            <p className="text-sm font-medium text-[var(--text)]">{t.settingsTitle}</p>
             {settingsPanel}
           </div>
+
+          <p className="text-xs text-[var(--muted)]">{t.batchClickHint}</p>
+
+          {selectedBatchId && (
+            <div className="space-y-2 rounded-lg border border-[var(--line)] bg-[var(--surface)] p-4">
+              <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <h3 className="text-sm font-medium text-[var(--text)]">{t.batchPreviewTitle}</h3>
+                {selectedBatchName && (
+                  <p className="truncate text-xs text-[var(--muted)] max-w-[min(100%,16rem)]">
+                    {selectedBatchName}
+                  </p>
+                )}
+              </div>
+              <div className="relative mx-auto inline-block max-w-full">
+                <canvas
+                  ref={batchCanvasRef}
+                  className="block max-w-full rounded-lg border border-gray-200 dark:border-gray-700"
+                />
+                {watermarkDragOverlay(batchOverlayRef, batchPreviewSize, batchPreviewFontSize)}
+              </div>
+              {!tile && text.trim() && (
+                <p className="text-xs text-gray-500 dark:text-gray-400">{t.dragHint}</p>
+              )}
+            </div>
+          )}
+
           <BatchUploader
             accept="image/*"
             processFile={processFile}
+            onSelectFile={onSelectBatchFile}
+            selectedFileId={selectedBatchId}
           />
         </>
       )}

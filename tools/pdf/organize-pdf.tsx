@@ -5,6 +5,8 @@ import { useEffect, useRef, useState, type DragEvent } from "react";
 import { Download, FileText, GripVertical, Loader2, Undo2, X } from "lucide-react";
 import PdfPreviewPane from "@/components/pdf/PdfPreviewPane";
 import PdfWorkbenchLayout from "@/components/pdf/PdfWorkbenchLayout";
+import ProgressIndicator from "@/components/tools/ProgressIndicator";
+import { useBatchLabels } from "@/lib/i18n/use-batch-labels";
 import { usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
 import {
   getPdfPageCount,
@@ -13,6 +15,7 @@ import {
   renderPdfPageThumb,
 } from "@/lib/pdf/thumbnails";
 import { bytesForPdfLoad, pdfBytesToBlob, readPdfFileBytes } from "@/lib/pdf/bytes";
+import { loadPdfLibDocument } from "@/lib/pdf/load-pdf-lib";
 import { useUnsavedWork } from "@/lib/unsaved-work";
 
 function loadPdfLib() {
@@ -44,6 +47,7 @@ function downloadBlob(blob: Blob, filename: string) {
 
 export default function OrganizePdf() {
   const t = usePdfToolLabels("organizePdf");
+  const batchLabels = useBatchLabels();
   const [file, setFile] = useState<File | null>(null);
   const [pages, setPages] = useState<PageItem[]>([]);
   const [loading, setLoading] = useState(false);
@@ -136,7 +140,7 @@ export default function OrganizePdf() {
     try {
       const { PDFDocument } = await getPdfLib();
       const sourceBytes = await readPdfFileBytes(file);
-      const sourcePdf = await PDFDocument.load(bytesForPdfLoad(sourceBytes));
+      const sourcePdf = await loadPdfLibDocument(bytesForPdfLoad(sourceBytes));
       const outPdf = await PDFDocument.create();
       const indices = kept.map((p) => p.sourceIndex);
       const copied = await outPdf.copyPages(sourcePdf, indices);
@@ -174,10 +178,7 @@ export default function OrganizePdf() {
       )}
 
       {loading && (
-        <p className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-          <Loader2 className="h-4 w-4 animate-spin" />
-          …
-        </p>
+        <ProgressIndicator label={batchLabels.processing} />
       )}
 
       {error && (
@@ -185,6 +186,8 @@ export default function OrganizePdf() {
           {error}
         </p>
       )}
+
+      <ProgressIndicator active={exporting} label={t.organizing} />
 
       <button
         type="button"

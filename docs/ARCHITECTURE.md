@@ -133,7 +133,7 @@ page.tsx (server) → ToolLayout (server: breadcrumbs, SEO, how-to, FAQ, related
 
 ## 10. Ads
 
-- Provider: **Adsterra banners only** (desktop 728×90, mobile 300×100) — never popunders/social bar/push. Keys in `lib/ads-config.ts`.
+- Provider: **Adsterra banners only** (desktop 728×90, mobile 160×300) — never popunders/social bar/push. Keys in `lib/ads-config.ts`.
 - One ad per tool page, inside the labeled ad frame (`<aside>`: caption "هذا الإعلان يساعدنا نقدّم كل الأدوات مجاناً 💙" + reserved min-height = zero CLS). Ads don't load on localhost.
 - Legal pages reference "third-party advertising partners (currently Adsterra)".
 - AdSense: rejected once (low value). Re-application planned after indexing/traffic matures; block Gambling/Adult categories in Adsterra before any review window. NEVER click own ads.

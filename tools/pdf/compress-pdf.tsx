@@ -13,9 +13,13 @@ import {
   renderPdfPageThumb,
 } from "@/lib/pdf/thumbnails";
 import { bytesForPdfLoad, clonePdfBytes, pdfBytesToBlob, readPdfFileBytes } from "@/lib/pdf/bytes";
+import { loadPdfLibDocument } from "@/lib/pdf/load-pdf-lib";
+import { localizePdfError, rethrowLocalizedPdfError } from "@/lib/pdf/pdf-errors";
+import { pdfjsGetDocumentParams } from "@/lib/pdf/pdfjs-options";
 import { useUnsavedWork } from "@/lib/unsaved-work";
 import ToolModeToggle from "@/components/tools/ToolModeToggle";
 import BatchUploader, { type ToolMode, type BatchOutput } from "@/components/tools/BatchUploader";
+import ProgressIndicator from "@/components/tools/ProgressIndicator";
 
 function loadPdfLib() {
   return import("pdf-lib");
@@ -140,8 +144,7 @@ async function renderPageJpeg(
 }
 
 async function compressOptimize(sourceBytes: Uint8Array): Promise<Uint8Array> {
-  const { PDFDocument } = await getPdfLib();
-  const pdf = await PDFDocument.load(bytesForPdfLoad(sourceBytes));
+  const pdf = await loadPdfLibDocument(bytesForPdfLoad(sourceBytes));
   return pdf.save({ useObjectStreams: true });
 }
 
@@ -149,7 +152,7 @@ async function loadPdfjsDocument(file: File) {
   const pdfjs = await import("pdfjs-dist");
   pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
   const data = await file.arrayBuffer();
-  return pdfjs.getDocument({ data }).promise;
+  return pdfjs.getDocument(pdfjsGetDocumentParams(data)).promise;
 }
 
 async function preflightStrong(
@@ -256,18 +259,17 @@ export default function CompressPdf() {
     clearRunState();
     try {
       const bytes = await readPdfFileBytes(pdfFile);
-      const { PDFDocument } = await getPdfLib();
-      await PDFDocument.load(bytesForPdfLoad(bytes));
+      await loadPdfLibDocument(bytesForPdfLoad(bytes));
       originalBytesRef.current = bytes;
       setFile(pdfFile);
       await loadPdfDocument(pdfFile);
       const thumb = await renderPdfPageThumb(pdfFile, 0, { scale: 0.45 });
       setPreviewSrc(thumb);
       setCompressedPreviewSrc(null);
-    } catch {
+    } catch (err) {
       setFile(null);
       originalBytesRef.current = null;
-      setError(t.errReadFailed);
+      setError(localizePdfError(err, { errEncrypted: t.errEncrypted, fallback: t.errReadFailed }));
     }
   };
 
@@ -337,8 +339,13 @@ export default function CompressPdf() {
 
       const newBytes = await compressStrong(file, q, gray, setProgress);
       await finishStrongResult(newBytes, originalSize);
-    } catch {
-      setError(t.errCompressFailed);
+    } catch (err) {
+      setError(
+        localizePdfError(err, {
+          errEncrypted: t.errEncrypted,
+          fallback: t.errCompressFailed,
+        })
+      );
     } finally {
       setCompressing(false);
     }
@@ -352,21 +359,28 @@ export default function CompressPdf() {
 
   const processFile = useCallback(
     async (pdfFile: File): Promise<BatchOutput> => {
-      const bytes = await readPdfFileBytes(pdfFile);
-      let newBytes: Uint8Array;
-      if (mode === "optimize") {
-        newBytes = clonePdfBytes(await compressOptimize(bytes));
-      } else {
-        newBytes = await compressStrong(pdfFile, quality, grayscale, () => {});
-        newBytes = clonePdfBytes(newBytes);
+      try {
+        const bytes = await readPdfFileBytes(pdfFile);
+        let newBytes: Uint8Array;
+        if (mode === "optimize") {
+          newBytes = clonePdfBytes(await compressOptimize(bytes));
+        } else {
+          newBytes = await compressStrong(pdfFile, quality, grayscale, () => {});
+          newBytes = clonePdfBytes(newBytes);
+        }
+        // If the compressed version is larger, return original
+        const outputBytes = newBytes.length < bytes.length ? newBytes : new Uint8Array(bytes);
+        const blob = pdfBytesToBlob(outputBytes);
+        const baseName = pdfFile.name.replace(/\.pdf$/i, "") || "document";
+        return { blob, name: `${baseName}-compressed.pdf` };
+      } catch (err) {
+        rethrowLocalizedPdfError(err, {
+          errEncrypted: t.errEncrypted,
+          fallback: t.errCompressFailed,
+        });
       }
-      // If the compressed version is larger, return original
-      const outputBytes = newBytes.length < bytes.length ? newBytes : new Uint8Array(bytes);
-      const blob = pdfBytesToBlob(outputBytes);
-      const baseName = pdfFile.name.replace(/\.pdf$/i, "") || "document";
-      return { blob, name: `${baseName}-compressed.pdf` };
     },
-    [mode, quality, grayscale]
+    [mode, quality, grayscale, t.errEncrypted, t.errCompressFailed]
   );
 
   const savedPct =
@@ -480,13 +494,7 @@ export default function CompressPdf() {
 
       {compressing && (
         <div className="space-y-2">
-          <div className="h-2 overflow-hidden rounded-full bg-[var(--surface-2)]">
-            <div
-              className="h-full bg-[var(--cat-pdf)] transition-all"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-          <p className="text-center text-xs text-[var(--muted)]">{t.progress(progress)}</p>
+          <ProgressIndicator label={t.compressing} value={progress} />
           {estimateLabel && (
             <p className="text-center text-xs text-[var(--muted)]">{estimateLabel}</p>
           )}

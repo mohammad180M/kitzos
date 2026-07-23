@@ -1,3 +1,6 @@
+import { pdfjsGetDocumentParams } from "@/lib/pdf/pdfjs-options";
+import { promotePdfEncryptedError } from "@/lib/pdf/pdf-errors";
+
 type PdfJsModule = typeof import("pdfjs-dist");
 type PDFDocumentProxy = import("pdfjs-dist").PDFDocumentProxy;
 
@@ -26,9 +29,13 @@ export async function loadPdfDocument(file: File): Promise<PDFDocumentProxy> {
 
   const pdfjs = await getPdfjs();
   const data = await file.arrayBuffer();
-  const doc = await pdfjs.getDocument({ data }).promise;
-  docCache.set(key, { doc });
-  return doc;
+  try {
+    const doc = await pdfjs.getDocument(pdfjsGetDocumentParams(data)).promise;
+    docCache.set(key, { doc });
+    return doc;
+  } catch (err) {
+    promotePdfEncryptedError(err);
+  }
 }
 
 function disposePdfDocument(doc: PDFDocumentProxy): void {
@@ -81,6 +88,35 @@ export async function renderPdfPageThumb(
   return canvas.toDataURL("image/jpeg", 0.75);
 }
 
+/**
+ * First-page thumb that does NOT touch the shared document cache.
+ * Safe for BatchUploader previews alongside live tool previews of the same File.
+ */
+export async function renderPdfPageThumbEphemeral(
+  file: File,
+  pageIndex: number,
+  options: ThumbOptions = {}
+): Promise<string> {
+  const scale = options.scale ?? 0.35;
+  const rotation = options.rotation ?? 0;
+  const pdfjs = await getPdfjs();
+  const data = await file.arrayBuffer();
+  const doc = await pdfjs.getDocument(pdfjsGetDocumentParams(data)).promise;
+  try {
+    const page = await doc.getPage(pageIndex + 1);
+    const viewport = page.getViewport({ scale, rotation });
+    const canvas = document.createElement("canvas");
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) throw new Error("Canvas not supported.");
+    await page.render({ canvasContext: ctx, viewport, canvas }).promise;
+    return canvas.toDataURL("image/jpeg", 0.75);
+  } finally {
+    disposePdfDocument(doc);
+  }
+}
+
 export async function renderPdfBytesPageThumb(
   bytes: Uint8Array,
   pageIndex: number,
@@ -89,7 +125,7 @@ export async function renderPdfBytesPageThumb(
   const scale = options.scale ?? 0.35;
   const rotation = options.rotation ?? 0;
   const pdfjs = await getPdfjs();
-  const doc = await pdfjs.getDocument({ data: bytes.slice() }).promise;
+  const doc = await pdfjs.getDocument(pdfjsGetDocumentParams(bytes.slice())).promise;
   const page = await doc.getPage(pageIndex + 1);
   const viewport = page.getViewport({ scale, rotation });
   const canvas = document.createElement("canvas");

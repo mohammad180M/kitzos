@@ -10,6 +10,8 @@ import {
 import { useUnsavedWork } from "@/lib/unsaved-work";
 import ToolModeToggle from "@/components/tools/ToolModeToggle";
 import BatchUploader, { type ToolMode, type BatchOutput } from "@/components/tools/BatchUploader";
+import ProgressIndicator from "@/components/tools/ProgressIndicator";
+import { useBatchLabels } from "@/lib/i18n/use-batch-labels";
 
 function formatBytes(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
@@ -62,9 +64,64 @@ function loadImageFromFile(file: File): Promise<LoadedImage> {
   });
 }
 
+/** Cache decoded images across estimate passes (quality slider) and Process All. */
+const loadedImageCache = new Map<string, Promise<LoadedImage>>();
+
+function fileCacheKey(file: File): string {
+  return `${file.name}:${file.size}:${file.lastModified}`;
+}
+
+function getCachedLoadedImage(file: File): Promise<LoadedImage> {
+  const key = fileCacheKey(file);
+  let pending = loadedImageCache.get(key);
+  if (!pending) {
+    pending = loadImageFromFile(file).catch((err) => {
+      loadedImageCache.delete(key);
+      throw err;
+    });
+    loadedImageCache.set(key, pending);
+  }
+  return pending;
+}
+
+/**
+ * Same compression path as Process All / single-file preview.
+ * Returns the final blob that would be downloaded (original if compression
+ * does not shrink the file).
+ */
+async function compressImageBlob(
+  file: File,
+  quality: number,
+  convertPngToJpeg: boolean
+): Promise<Blob> {
+  const loaded = await getCachedLoadedImage(file);
+  const outputJpeg =
+    !loaded.isPng || (loaded.isPng && convertPngToJpeg && !loaded.hasAlpha);
+  const mimeType = outputJpeg ? "image/jpeg" : "image/png";
+  const qualityValue = outputJpeg ? quality / 100 : undefined;
+
+  const canvas = document.createElement("canvas");
+  canvas.width = loaded.img.width;
+  canvas.height = loaded.img.height;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("canvas");
+  ctx.drawImage(loaded.img, 0, 0);
+
+  const blob = await new Promise<Blob>((resolve, reject) => {
+    canvas.toBlob(
+      (b) => (b ? resolve(b) : reject(new Error("toBlob"))),
+      mimeType,
+      qualityValue
+    );
+  });
+
+  return blob.size >= file.size ? file : blob;
+}
+
 export default function CompressImage() {
   const shared = useImageToolsSharedLabels();
   const t = useImageToolsExtraLabels("compressImage");
+  const batchLabels = useBatchLabels();
   const [mode, setMode] = useState<ToolMode>("single");
   const [originalFile, setOriginalFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -186,6 +243,7 @@ export default function CompressImage() {
       try {
         const loaded = await loadImageFromFile(file);
         loadedRef.current = loaded;
+        loadedImageCache.set(fileCacheKey(file), Promise.resolve(loaded));
         setHasAlpha(loaded.hasAlpha);
         setConvertPngToJpeg(loaded.isPng && !loaded.hasAlpha);
         scheduleCompress(file, quality, loaded.isPng && !loaded.hasAlpha, true);
@@ -219,36 +277,32 @@ export default function CompressImage() {
 
   const processFile = useCallback(
     async (file: File): Promise<BatchOutput> => {
-      const loaded = await loadImageFromFile(file);
-      const outputJpeg = !loaded.isPng || (loaded.isPng && convertPngToJpeg && !loaded.hasAlpha);
-      const mimeType = outputJpeg ? "image/jpeg" : "image/png";
-      const qualityValue = outputJpeg ? quality / 100 : undefined;
-
-      const canvas = document.createElement("canvas");
-      canvas.width = loaded.img.width;
-      canvas.height = loaded.img.height;
-      const ctx = canvas.getContext("2d");
-      if (!ctx) throw new Error(shared.canvasNotSupported);
-      ctx.drawImage(loaded.img, 0, 0);
-
-      const blob = await new Promise<Blob>((resolve, reject) => {
-        canvas.toBlob(
-          (b) => (b ? resolve(b) : reject(new Error(t.errCompressionFailed))),
-          mimeType,
-          qualityValue
-        );
-      });
-
-      const finalBlob = blob.size >= file.size ? file : blob;
-      const isUsingOrig = blob.size >= file.size;
-      const ext = finalBlob.type === "image/jpeg" ? "jpg" : "png";
-      const baseName = file.name.replace(/\.[^.]+$/, "");
-      const outputName = isUsingOrig ? file.name : `${baseName}-compressed.${ext}`;
-
-      return { blob: finalBlob, name: outputName };
+      try {
+        const finalBlob = await compressImageBlob(file, quality, convertPngToJpeg);
+        const isUsingOrig = finalBlob === file || finalBlob.size >= file.size;
+        const ext = finalBlob.type === "image/jpeg" ? "jpg" : "png";
+        const baseName = file.name.replace(/\.[^.]+$/, "");
+        const outputName = isUsingOrig ? file.name : `${baseName}-compressed.${ext}`;
+        return { blob: finalBlob, name: outputName };
+      } catch (err) {
+        if (err instanceof Error && err.message === "canvas") {
+          throw new Error(shared.canvasNotSupported);
+        }
+        throw new Error(t.errCompressionFailed);
+      }
     },
     [quality, convertPngToJpeg, shared.canvasNotSupported, t.errCompressionFailed]
   );
+
+  const estimateOutputSize = useCallback(
+    async (file: File): Promise<number> => {
+      const blob = await compressImageBlob(file, quality, convertPngToJpeg);
+      return blob.size;
+    },
+    [quality, convertPngToJpeg]
+  );
+
+  const estimateKey = `${quality}:${convertPngToJpeg ? 1 : 0}`;
 
   const isPng = originalFile?.type === "image/png";
   const showQualitySlider = mode === "batch" || !isPng || (isPng && convertPngToJpeg && !hasAlpha);
@@ -314,6 +368,7 @@ export default function CompressImage() {
                   </div>
                 </div>
                 <div className="flex-1 space-y-3">
+                  <ProgressIndicator active={compressing} label={batchLabels.processing} />
                   <div className="rounded-lg bg-gray-50 p-4 dark:bg-gray-800/50">
                     <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                       <ImageIcon className="h-4 w-4 shrink-0" aria-hidden="true" />
@@ -416,7 +471,7 @@ export default function CompressImage() {
         <>
           <div className="rounded-lg border border-[var(--line)] bg-[var(--surface)] p-4 space-y-4">
             <h3 className="text-sm font-medium text-[var(--text)]">Compression Settings</h3>
-            
+
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
               <label className="flex cursor-pointer items-start gap-2 text-sm flex-1">
                 <input
@@ -453,6 +508,8 @@ export default function CompressImage() {
           <BatchUploader
             accept="image/jpeg,image/png,image/jpg"
             processFile={processFile}
+            estimateOutputSize={estimateOutputSize}
+            estimateKey={estimateKey}
           />
         </>
       )}

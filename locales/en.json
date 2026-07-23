@@ -34,7 +34,8 @@
       "statusProcessing": "Processing",
       "statusDone": "Done",
       "statusError": "Error",
-      "noFiles": "Add files to start batch processing"
+      "noFiles": "Add files to start batch processing",
+      "estimatingSize": "Calculating…"
     }
   },
   "header": {

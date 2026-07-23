@@ -9,6 +9,8 @@ export const pdfToolsEn = {
     showingPages: (shown: number, total: number) => `Showing ${shown} of ${total} pages`,
     pageLabel: (n: number) => `${n} ${n === 1 ? "page" : "pages"}`,
     encryptedNote: "Output will be password-encrypted",
+    errEncrypted:
+      "This PDF is password-protected. Please remove the password first, or use a PDF that isn't encrypted.",
   },
   mergePdf: {
     dropHint: "Drop PDF files here or click to upload",
@@ -146,6 +148,12 @@ export const pdfToolsEn = {
   rotatePdf: {
     uploadHint: "Upload a PDF to rotate",
     rotateAll: "Rotate all 90°",
+    rotate90Step: "Rotate 90°",
+    rotationAngle: "Rotation",
+    angle0: "0°",
+    angle90: "90°",
+    angle180: "180°",
+    angle270: "270°",
     pagesGridAria: "PDF page thumbnails",
     rotatePage: (n: number) => `Rotate page ${n} 90°`,
     pageThumb: (n: number) => `Page ${n}`,
@@ -231,6 +239,8 @@ export const pdfToolsAr = {
     showingPages: (shown: number, total: number) => `عرض ${shown} من ${total} صفحة`,
     pageLabel: (n: number) => `${n} ${n === 1 ? "صفحة" : "صفحات"}`,
     encryptedNote: "سيُشفَّر المخرج بكلمة مرور",
+    errEncrypted:
+      "هذا الملف PDF محمي بكلمة مرور. أزل كلمة المرور أولاً، أو استخدم ملفاً غير مشفّر.",
   },
   mergePdf: {
     dropHint: "أسقط ملفات PDF هنا أو انقر للرفع",
@@ -368,6 +378,12 @@ export const pdfToolsAr = {
   rotatePdf: {
     uploadHint: "ارفع PDF للتدوير",
     rotateAll: "تدوير الكل 90°",
+    rotate90Step: "تدوير 90°",
+    rotationAngle: "التدوير",
+    angle0: "0°",
+    angle90: "90°",
+    angle180: "180°",
+    angle270: "270°",
     pagesGridAria: "صور مصغرة لصفحات PDF",
     rotatePage: (n: number) => `تدوير الصفحة ${n} بمقدار 90°`,
     pageThumb: (n: number) => `صفحة ${n}`,

@@ -14,7 +14,7 @@ export const howTo: HowToStep[] = [
   {
     title: "Preview and download",
     description:
-      "Scan the live preview with your phone, then download PNG (with logo) or SVG (vector styling).",
+      "Scan the live preview with your phone, then download PNG or SVG — both include your logo when one is set.",
   },
 ];
 
@@ -32,7 +32,7 @@ export const faq: FaqItem[] = [
   {
     question: "What is the difference between PNG and SVG?",
     answer:
-      "PNG is a raster image and includes an embedded logo when you add one. SVG is a vector export of the stylized modules and frame; logos are omitted from SVG for reliability.",
+      "PNG is a raster image. SVG is a vector export of the stylized modules and frame. Both include an embedded center logo when you add one (SVG embeds it as a base64 image).",
   },
   {
     question: "Is my data uploaded?",

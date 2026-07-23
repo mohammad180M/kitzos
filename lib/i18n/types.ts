@@ -41,6 +41,7 @@ export interface Dictionary {
       statusDone: string;
       statusError: string;
       noFiles: string;
+      estimatingSize: string;
     };
   };
   header: {

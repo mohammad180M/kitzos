@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Loader2 } from "lucide-react";
 import FileDropZone from "@/components/FileDropZone";
+import ProgressIndicator from "@/components/tools/ProgressIndicator";
+import { useBatchLabels } from "@/lib/i18n/use-batch-labels";
 import {
   decodeAudioFile,
   downloadBlob,
@@ -19,6 +20,7 @@ type OutputFormat = "mp3" | "wav";
 
 export default function AudioConverter() {
   const t = useAudioToolLabels("audioConverter");
+  const batchLabels = useBatchLabels();
   const [file, setFile] = useState<File | null>(null);
   const [output, setOutput] = useState<OutputFormat>("mp3");
   const [processing, setProcessing] = useState(false);
@@ -96,12 +98,13 @@ export default function AudioConverter() {
             accept="audio/*,video/webm,.webm,.mp3,.wav,.m4a,.ogg,.opus,.flac"
             label={t.uploadHint}
             disabled={processing}
-            icon={processing ? <Loader2 className="h-8 w-8 animate-spin text-[var(--muted)]" /> : undefined}
             onFiles={(files) => {
               const f = files[0];
               if (f) void convert(f);
             }}
           />
+
+          <ProgressIndicator active={processing} label={batchLabels.processing} />
 
           {file && !processing && (
             <p className="text-sm text-gray-500 dark:text-gray-400">

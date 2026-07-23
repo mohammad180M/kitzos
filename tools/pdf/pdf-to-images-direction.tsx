@@ -5,12 +5,15 @@ import { Download, FileText, Loader2 } from "lucide-react";
 import FileDropZone from "@/components/FileDropZone";
 import PdfPreviewPane, { type PreviewPage } from "@/components/pdf/PdfPreviewPane";
 import PdfWorkbenchLayout from "@/components/pdf/PdfWorkbenchLayout";
+import BatchUploader, { type BatchOutput } from "@/components/tools/BatchUploader";
+import ProgressIndicator from "@/components/tools/ProgressIndicator";
 import { usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
 import {
   loadPdfDocument,
   releasePdfDocument,
   renderPdfPageThumb,
 } from "@/lib/pdf/thumbnails";
+import { localizePdfError, rethrowLocalizedPdfError } from "@/lib/pdf/pdf-errors";
 
 function loadJSZipModule() {
   return import("jszip");
@@ -56,9 +59,10 @@ async function renderPageToJpeg(
 
 interface PdfToImagesDirectionProps {
   onDirtyChange: (dirty: boolean) => void;
+  toolMode?: "single" | "batch";
 }
 
-export default function PdfToImagesDirection({ onDirtyChange }: PdfToImagesDirectionProps) {
+export default function PdfToImagesDirection({ onDirtyChange, toolMode = "single" }: PdfToImagesDirectionProps) {
   const t = usePdfToolLabels("pdfToJpg");
   const [file, setFile] = useState<File | null>(null);
   const [pageCount, setPageCount] = useState(0);
@@ -106,13 +110,18 @@ export default function PdfToImagesDirection({ onDirtyChange }: PdfToImagesDirec
         const blob = await getPageBlob(pageNum);
         const baseName = fileRef.current.name.replace(/\.pdf$/i, "") || "document";
         downloadBlob(blob, `${baseName}-page-${pageNum}.jpg`);
-      } catch {
-        setError(t.errConvertFailed);
+      } catch (err) {
+        setError(
+          localizePdfError(err, {
+            errEncrypted: t.errEncrypted,
+            fallback: t.errConvertFailed,
+          })
+        );
       } finally {
         setPageBusy(null);
       }
     },
-    [getPageBlob, t.errConvertFailed]
+    [getPageBlob, t.errConvertFailed, t.errEncrypted]
   );
 
   const previewPages = useMemo((): PreviewPage[] => {
@@ -144,10 +153,10 @@ export default function PdfToImagesDirection({ onDirtyChange }: PdfToImagesDirec
       const doc = await loadPdfDocument(pdfFile);
       setFile(pdfFile);
       setPageCount(doc.numPages);
-    } catch {
+    } catch (err) {
       setFile(null);
       setPageCount(0);
-      setError(t.errReadFailed);
+      setError(localizePdfError(err, { errEncrypted: t.errEncrypted, fallback: t.errReadFailed }));
     }
   };
 
@@ -165,14 +174,50 @@ export default function PdfToImagesDirection({ onDirtyChange }: PdfToImagesDirec
       }
       const zipBlob = await zip.generateAsync({ type: "blob" });
       downloadBlob(zipBlob, `${baseName}-pages.zip`);
-    } catch {
-      setError(t.errConvertFailed);
+    } catch (err) {
+      setError(
+        localizePdfError(err, {
+          errEncrypted: t.errEncrypted,
+          fallback: t.errConvertFailed,
+        })
+      );
     } finally {
       setZipping(false);
     }
   };
 
   const busy = zipping || pageBusy !== null;
+
+  const processFile = useCallback(
+    async (pdfFile: File, onProgress?: (pct: number) => void): Promise<BatchOutput[]> => {
+      try {
+        const doc = await loadPdfDocument(pdfFile);
+        const baseName = pdfFile.name.replace(/\.pdf$/i, "") || "document";
+        const outputs: BatchOutput[] = [];
+
+        for (let i = 1; i <= doc.numPages; i++) {
+          const blob = await renderPageToJpeg(doc, i);
+          outputs.push({ blob, name: `${baseName}-page-${i}.jpg` });
+          onProgress?.(Math.round((i / doc.numPages) * 100));
+        }
+
+        releasePdfDocument(pdfFile);
+        return outputs;
+      } catch (err) {
+        rethrowLocalizedPdfError(err, {
+          errEncrypted: t.errEncrypted,
+          fallback: t.errConvertFailed,
+        });
+      }
+    },
+    [t.errEncrypted, t.errConvertFailed]
+  );
+
+  if (toolMode === "batch") {
+    return (
+      <BatchUploader accept=".pdf,application/pdf" processFile={processFile} />
+    );
+  }
 
   const controls = (
     <>
@@ -203,6 +248,8 @@ export default function PdfToImagesDirection({ onDirtyChange }: PdfToImagesDirec
           {error}
         </p>
       )}
+
+      <ProgressIndicator active={busy} label={t.converting} />
 
       {file && pageCount > 0 && (
         <div className="flex flex-wrap gap-2">

@@ -11,6 +11,8 @@ import {
 import { useUnsavedWork } from "@/lib/unsaved-work";
 import ToolModeToggle from "@/components/tools/ToolModeToggle";
 import BatchUploader, { type ToolMode, type BatchOutput } from "@/components/tools/BatchUploader";
+import ProgressIndicator from "@/components/tools/ProgressIndicator";
+import { useBatchLabels } from "@/lib/i18n/use-batch-labels";
 
 function loadJSZipModule() {
   return import("jszip");
@@ -79,6 +81,7 @@ function convertImage(
 export default function ImageConverter() {
   const shared = useImageToolsSharedLabels();
   const t = useImageToolsExtraLabels("imageConverter");
+  const batchLabels = useBatchLabels();
   const [mode, setMode] = useState<ToolMode>("single");
   const [originalFile, setOriginalFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -253,6 +256,8 @@ export default function ImageConverter() {
               </div>
 
               {settingsPanel}
+
+              <ProgressIndicator active={converting} label={batchLabels.processing} />
 
               <button
                 type="button"

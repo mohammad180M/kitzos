@@ -396,6 +396,8 @@ export default function QrCodeGenerator() {
         moduleStyle,
         finderOuter,
         finderInner,
+        logo: logoImg,
+        logoScale,
         frame,
         frameLabel,
       });
@@ -985,9 +987,6 @@ export default function QrCodeGenerator() {
               {t.downloadSvg}
             </button>
           </div>
-          {logoImg && (
-            <p className="text-xs text-gray-500 dark:text-gray-400">{t.svgNoLogoHint}</p>
-          )}
         </aside>
       </div>
     </div>

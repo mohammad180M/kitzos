@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Download, Loader2, ShieldAlert } from "lucide-react";
 import FileDropZone from "@/components/FileDropZone";
+import ProgressIndicator from "@/components/tools/ProgressIndicator";
 import { downloadBlob } from "@/lib/download";
 import {
   parseExifFields,
@@ -285,17 +286,7 @@ export default function ExifRemover() {
                 : t.removeSelected(active?.selected.size ?? 0)}
           </button>
 
-          {cleaning && (
-            <div className="space-y-1">
-              <div className="h-2 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
-                <div
-                  className="h-full rounded-full bg-primary-500 transition-all duration-200"
-                  style={{ width: `${progress}%` }}
-                />
-              </div>
-              <p className="text-xs text-gray-500">{progress}%</p>
-            </div>
-          )}
+          {cleaning && <ProgressIndicator label={t.cleaning} value={progress} />}
         </div>
       )}
 

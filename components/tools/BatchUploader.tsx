@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { useBatchLabels } from "@/lib/i18n/use-batch-labels";
 import { downloadBlob } from "@/lib/download";
+import ProgressIndicator from "@/components/tools/ProgressIndicator";
 
 export type ToolMode = "single" | "batch";
 
@@ -31,16 +32,72 @@ export interface BatchFile {
   progress: number;
   error?: string;
   outputs?: BatchOutput[];
+  /** Object URL (images) or data URL (PDF page preview). */
   thumbnailUrl?: string;
+  /** True while a PDF first-page preview is generating. */
+  thumbnailLoading?: boolean;
+  /** Live output-size preview (bytes); independent of Process All. */
+  estimatedBytes?: number;
+  /** True while a new estimate is pending (keep prior bytes greyed out). */
+  estimateStale?: boolean;
 }
 
 export interface BatchUploaderProps {
   accept: string;
-  processFile: (
+  /**
+   * Per-file independent processing (default). Each file becomes its own
+   * output(s); results can be downloaded individually or as a ZIP.
+   */
+  processFile?: (
     file: File,
     onProgress?: (pct: number) => void
   ) => Promise<BatchOutput | BatchOutput[]>;
+  /**
+   * Combine all uploaded files into one output (e.g. many images → one PDF).
+   * When set, Process All runs once over every file in order — no ZIP of
+   * per-file results.
+   */
+  processCombined?: (
+    files: File[],
+    onProgress?: (pct: number) => void
+  ) => Promise<BatchOutput>;
   onClear?: () => void;
+  /**
+   * Optional CSS preview rotation for thumbnails (e.g. rotate-pdf batch angle).
+   * Visual only — does not re-render or re-process files.
+   */
+  thumbnailRotateDeg?: number;
+  /**
+   * Optional target frame for thumbnail CSS aspect preview (e.g. image-resizer
+   * width×height). Visual only — container aspect updates live; no re-encode.
+   */
+  thumbnailAspect?: { width: number; height: number } | null;
+  /**
+   * Optional CSS flip preview for thumbnails (e.g. flip-image batch).
+   * Visual only — scaleX/scaleY; does not re-process files.
+   */
+  thumbnailFlip?: { horizontal?: boolean; vertical?: boolean } | null;
+  /** Fired whenever the batch file list changes (add / remove / clear). */
+  onFilesChange?: (files: File[]) => void;
+  /**
+   * Optional live output-size estimator (e.g. compress-image quality preview).
+   * Must be cheap and side-effect free — never writes batch outputs.
+   * Returns the expected final output size in bytes for the current settings.
+   */
+  estimateOutputSize?: (file: File) => Promise<number>;
+  /**
+   * When this key changes (e.g. quality slider), re-run estimates after debounce.
+   * Ignored unless `estimateOutputSize` is set.
+   */
+  estimateKey?: string | number;
+  /**
+   * Optional: clicking a file row selects it (e.g. image-resizer live preview).
+   * Pass `null, null` when the selection is cleared (remove / clear all).
+   * Remove / download buttons still stop propagation.
+   */
+  onSelectFile?: (file: File | null, id: string | null) => void;
+  /** Highlights the selected row when `onSelectFile` is used. */
+  selectedFileId?: string | null;
 }
 
 function formatBytes(bytes: number): string {
@@ -68,10 +125,220 @@ function isAccepted(file: File, acceptString: string): boolean {
   return false;
 }
 
+function isPdfFile(file: File): boolean {
+  return (
+    file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf")
+  );
+}
+
+function revokeThumbUrl(url?: string) {
+  if (url?.startsWith("blob:")) URL.revokeObjectURL(url);
+}
+
+const PDF_THUMB_CONCURRENCY = 2;
+const PDF_THUMB_SCALE = 0.28;
+const ESTIMATE_DEBOUNCE_MS = 250;
+
+/** Yield so UI / thumbnails stay responsive while estimating many files. */
+function yieldForEstimate(): Promise<void> {
+  return new Promise((resolve) => {
+    if (typeof requestIdleCallback !== "undefined") {
+      requestIdleCallback(() => resolve(), { timeout: 120 });
+    } else {
+      setTimeout(resolve, 16);
+    }
+  });
+}
+
+function SizeEstimateLine({
+  original,
+  estimated,
+  stale,
+  calculatingLabel,
+}: {
+  original: number;
+  estimated?: number;
+  stale?: boolean;
+  calculatingLabel: string;
+}) {
+  if (estimated == null) {
+    return (
+      <p className="text-[10px] text-[var(--muted)]" aria-live="polite">
+        {stale ? calculatingLabel : formatBytes(original)}
+      </p>
+    );
+  }
+
+  const pct =
+    original > 0 ? Math.round(((estimated - original) / original) * 100) : 0;
+  const pctLabel = pct > 0 ? `(+${pct}%)` : `(${pct}%)`;
+  const pctClass = stale
+    ? "text-[var(--muted)]"
+    : pct < 0
+      ? "text-emerald-600 dark:text-emerald-400"
+      : pct > 0
+        ? "text-red-600 dark:text-red-400"
+        : "text-[var(--muted)]";
+
+  return (
+    <p
+      className={`text-[10px] tabular-nums transition-opacity ${
+        stale ? "opacity-50" : ""
+      }`}
+      aria-live="polite"
+    >
+      <span className="text-[var(--muted)]">
+        {formatBytes(original)} → {formatBytes(estimated)}
+        {"  "}
+      </span>
+      <span className={pctClass}>{pctLabel}</span>
+    </p>
+  );
+}
+
+/** Long/short sides for portrait thumb slot; swap on 90°/270° CSS preview. */
+const THUMB_LONG = 40;
+const THUMB_SHORT = 30;
+/** Max edge when sizing thumbs to a custom target aspect (image-resizer). */
+const THUMB_ASPECT_MAX = 48;
+
+function normalizeDegrees(deg: number): number {
+  return ((Math.round(deg) % 360) + 360) % 360;
+}
+
+function frameSizeForAspect(
+  targetW: number,
+  targetH: number
+): { width: number; height: number } {
+  const ar = targetW / targetH;
+  if (ar >= 1) {
+    return {
+      width: THUMB_ASPECT_MAX,
+      height: Math.max(14, Math.round(THUMB_ASPECT_MAX / ar)),
+    };
+  }
+  return {
+    width: Math.max(14, Math.round(THUMB_ASPECT_MAX * ar)),
+    height: THUMB_ASPECT_MAX,
+  };
+}
+
+function BatchThumbPreview({
+  loading,
+  url,
+  rotateDeg = 0,
+  aspectFrame,
+  flip,
+}: {
+  loading: boolean;
+  url?: string;
+  rotateDeg?: number;
+  aspectFrame?: { width: number; height: number } | null;
+  flip?: { horizontal?: boolean; vertical?: boolean } | null;
+}) {
+  const useAspect =
+    aspectFrame != null && aspectFrame.width > 0 && aspectFrame.height > 0;
+
+  const deg = normalizeDegrees(rotateDeg);
+  const quarter = !useAspect && (deg === 90 || deg === 270);
+  const flipH = Boolean(flip?.horizontal);
+  const flipV = Boolean(flip?.vertical);
+  const flipTransform =
+    flipH || flipV
+      ? `scaleX(${flipH ? -1 : 1}) scaleY(${flipV ? -1 : 1})`
+      : "";
+
+  let frameW = THUMB_SHORT;
+  let frameH = THUMB_LONG;
+  if (useAspect) {
+    const sized = frameSizeForAspect(aspectFrame.width, aspectFrame.height);
+    frameW = sized.width;
+    frameH = sized.height;
+  } else if (quarter) {
+    frameW = THUMB_LONG;
+    frameH = THUMB_SHORT;
+  }
+
+  const dimLabel = useAspect
+    ? `${Math.round(aspectFrame.width)} × ${Math.round(aspectFrame.height)}px`
+    : null;
+
+  const imgTransform = useAspect
+    ? flipTransform || undefined
+    : [
+        quarter || deg
+          ? `rotate(${deg}deg)`
+          : "",
+        flipTransform,
+      ]
+        .filter(Boolean)
+        .join(" ") || undefined;
+
+  return (
+    <div className="flex shrink-0 flex-col items-center gap-0.5">
+      <div
+        className="overflow-hidden rounded border border-[var(--line)] bg-[var(--surface-2)] flex items-center justify-center transition-[width,height] duration-200 ease-out motion-reduce:transition-none"
+        style={{ width: frameW, height: frameH }}
+      >
+        {loading ? (
+          <div
+            className="h-full w-full animate-pulse bg-[var(--line)] motion-reduce:animate-none"
+            aria-hidden="true"
+          />
+        ) : url ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={url}
+            alt=""
+            className={
+              useAspect
+                ? "h-full w-full object-cover transition-transform duration-200 ease-out motion-reduce:transition-none"
+                : "object-contain transition-transform duration-200 ease-out motion-reduce:transition-none"
+            }
+            style={
+              useAspect
+                ? imgTransform
+                  ? { transform: imgTransform }
+                  : undefined
+                : quarter
+                  ? {
+                      width: THUMB_SHORT,
+                      height: THUMB_LONG,
+                      transform: imgTransform,
+                    }
+                  : {
+                      width: "100%",
+                      height: "100%",
+                      transform: imgTransform,
+                    }
+            }
+          />
+        ) : (
+          <FileIcon className="h-5 w-5 text-[var(--muted)]" />
+        )}
+      </div>
+      {dimLabel && (
+        <span className="max-w-[4.5rem] truncate text-center text-[9px] tabular-nums text-[var(--muted)] leading-tight">
+          {dimLabel}
+        </span>
+      )}
+    </div>
+  );
+}
+
 export default function BatchUploader({
   accept,
   processFile,
+  processCombined,
   onClear,
+  thumbnailRotateDeg = 0,
+  thumbnailAspect = null,
+  thumbnailFlip = null,
+  onFilesChange,
+  estimateOutputSize,
+  estimateKey,
+  onSelectFile,
+  selectedFileId = null,
 }: BatchUploaderProps) {
   const labels = useBatchLabels();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -81,7 +348,77 @@ export default function BatchUploader({
   const [processing, setProcessing] = useState(false);
   const [dragActive, setDragActive] = useState(false);
   const [folderSupported, setFolderSupported] = useState(false);
+  const [combinedOutput, setCombinedOutput] = useState<BatchOutput | null>(null);
   const dragDepth = useRef(0);
+  const combineMode = Boolean(processCombined);
+  const filesRef = useRef(files);
+  filesRef.current = files;
+  const thumbInFlight = useRef(new Set<string>());
+  const thumbActiveCount = useRef(0);
+  const thumbWaitQueue = useRef<Array<() => void>>([]);
+  const estimateGenRef = useRef(0);
+  const estimateDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const estimateFnRef = useRef(estimateOutputSize);
+  estimateFnRef.current = estimateOutputSize;
+
+  const acquireThumbSlot = useCallback((): Promise<void> => {
+    if (thumbActiveCount.current < PDF_THUMB_CONCURRENCY) {
+      thumbActiveCount.current += 1;
+      return Promise.resolve();
+    }
+    return new Promise((resolve) => {
+      thumbWaitQueue.current.push(() => {
+        thumbActiveCount.current += 1;
+        resolve();
+      });
+    });
+  }, []);
+
+  const releaseThumbSlot = useCallback(() => {
+    thumbActiveCount.current = Math.max(0, thumbActiveCount.current - 1);
+    const next = thumbWaitQueue.current.shift();
+    if (next) next();
+  }, []);
+
+  const startPdfThumbnail = useCallback(
+    (id: string, file: File) => {
+      if (thumbInFlight.current.has(id)) return;
+      thumbInFlight.current.add(id);
+
+      void (async () => {
+        await acquireThumbSlot();
+        try {
+          // Lazy-load pdf.js helpers only when a PDF preview is needed.
+          // Use ephemeral render so we never destroy the shared doc cache
+          // that live tool previews (e.g. watermark) rely on.
+          const { renderPdfPageThumbEphemeral } = await import("@/lib/pdf/thumbnails");
+          const url = await renderPdfPageThumbEphemeral(file, 0, {
+            scale: PDF_THUMB_SCALE,
+          });
+          setFiles((prev) => {
+            if (!prev.some((f) => f.id === id)) return prev;
+            return prev.map((f) =>
+              f.id === id
+                ? { ...f, thumbnailUrl: url, thumbnailLoading: false }
+                : f
+            );
+          });
+        } catch {
+          // Encrypted / corrupt PDFs: keep generic icon; processing errors stay separate.
+          setFiles((prev) => {
+            if (!prev.some((f) => f.id === id)) return prev;
+            return prev.map((f) =>
+              f.id === id ? { ...f, thumbnailLoading: false } : f
+            );
+          });
+        } finally {
+          releaseThumbSlot();
+          thumbInFlight.current.delete(id);
+        }
+      })();
+    },
+    [acquireThumbSlot, releaseThumbSlot]
+  );
 
   // Check webkitdirectory support
   useEffect(() => {
@@ -91,14 +428,89 @@ export default function BatchUploader({
     }
   }, []);
 
-  // Cleanup object URLs on unmount
+  // Revoke blob thumbnails only on unmount (per-remove/clear already revoke).
   useEffect(() => {
     return () => {
-      files.forEach((f) => {
-        if (f.thumbnailUrl) URL.revokeObjectURL(f.thumbnailUrl);
-      });
+      filesRef.current.forEach((f) => revokeThumbUrl(f.thumbnailUrl));
     };
-  }, [files]);
+  }, []);
+
+  // Notify parent only when the file identity list changes — not on thumbnail
+  // progress updates (those rewrite `files` and would spam parent setState).
+  const filesIdentityKey = files
+    .map((f) => `${f.file.name}:${f.file.size}:${f.file.lastModified}`)
+    .join("\0");
+  const onFilesChangeRef = useRef(onFilesChange);
+  onFilesChangeRef.current = onFilesChange;
+  const prevFilesIdentityKey = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (prevFilesIdentityKey.current === filesIdentityKey) return;
+    prevFilesIdentityKey.current = filesIdentityKey;
+    onFilesChangeRef.current?.(files.map((f) => f.file));
+  }, [files, filesIdentityKey]);
+
+  // Live output-size estimates (compress-image quality preview, etc.).
+  // Debounced + idle-chunked so slider drag stays smooth; independent of Process All.
+  // Function identity is read via ref — only estimateKey / file list should re-trigger.
+  const hasSizeEstimator = Boolean(estimateOutputSize);
+  useEffect(() => {
+    if (!hasSizeEstimator) return;
+
+    setFiles((prev) => {
+      if (prev.length === 0) return prev;
+      let changed = false;
+      const next = prev.map((f) => {
+        if (f.estimateStale) return f;
+        changed = true;
+        return { ...f, estimateStale: true };
+      });
+      return changed ? next : prev;
+    });
+
+    if (estimateDebounceRef.current) clearTimeout(estimateDebounceRef.current);
+
+    estimateDebounceRef.current = setTimeout(() => {
+      const gen = ++estimateGenRef.current;
+      const snapshot = filesRef.current.map((f) => ({ id: f.id, file: f.file }));
+
+      void (async () => {
+        for (const item of snapshot) {
+          if (gen !== estimateGenRef.current) return;
+          if (!filesRef.current.some((f) => f.id === item.id)) continue;
+
+          const estimateFn = estimateFnRef.current;
+          if (!estimateFn) return;
+
+          try {
+            const bytes = await estimateFn(item.file);
+            if (gen !== estimateGenRef.current) return;
+            setFiles((prev) =>
+              prev.map((f) =>
+                f.id === item.id
+                  ? { ...f, estimatedBytes: bytes, estimateStale: false }
+                  : f
+              )
+            );
+          } catch {
+            if (gen !== estimateGenRef.current) return;
+            setFiles((prev) =>
+              prev.map((f) =>
+                f.id === item.id ? { ...f, estimateStale: false } : f
+              )
+            );
+          }
+
+          await yieldForEstimate();
+        }
+      })();
+    }, ESTIMATE_DEBOUNCE_MS);
+
+    return () => {
+      if (estimateDebounceRef.current) clearTimeout(estimateDebounceRef.current);
+      estimateGenRef.current += 1;
+    };
+  }, [hasSizeEstimator, estimateKey, filesIdentityKey]);
 
   const addFilesToList = useCallback(
     (newFiles: File[]) => {
@@ -108,12 +520,14 @@ export default function BatchUploader({
       newFiles.forEach((file) => {
         if (isAccepted(file, accept)) {
           const isImage = file.type.startsWith("image/");
+          const isPdf = isPdfFile(file);
           validFiles.push({
             id: `${file.name}-${file.size}-${file.lastModified}-${Math.random()}`,
             file,
             status: "queued",
             progress: 0,
             thumbnailUrl: isImage ? URL.createObjectURL(file) : undefined,
+            thumbnailLoading: isPdf,
           });
         } else {
           skipped++;
@@ -124,9 +538,33 @@ export default function BatchUploader({
         setSkippedCount((prev) => prev + skipped);
       }
 
-      setFiles((prev) => [...prev, ...validFiles]);
+      if (validFiles.length === 0) return;
+
+      setCombinedOutput(null);
+      setFiles((prev) => {
+        // New files invalidate a prior combined result — re-queue finished items.
+        const resetPrev = combineMode
+          ? prev.map((f) =>
+              f.status === "done"
+                ? { ...f, status: "queued" as const, progress: 0 }
+                : f
+            )
+          : prev;
+        return [...resetPrev, ...validFiles];
+      });
+
+      validFiles.forEach((item) => {
+        if (item.thumbnailLoading) {
+          startPdfThumbnail(item.id, item.file);
+        }
+      });
+
+      // Auto-select first new file when nothing is selected (resize preview, etc.).
+      if (onSelectFile && !selectedFileId) {
+        onSelectFile(validFiles[0].file, validFiles[0].id);
+      }
     },
-    [accept]
+    [accept, combineMode, startPdfThumbnail, onSelectFile, selectedFileId]
   );
 
   // Read folder recursively
@@ -232,25 +670,97 @@ export default function BatchUploader({
   const triggerFolderSelect = () => folderInputRef.current?.click();
 
   const removeFile = (id: string) => {
+    setCombinedOutput(null);
     setFiles((prev) => {
       const fileToRemove = prev.find((f) => f.id === id);
-      if (fileToRemove?.thumbnailUrl) {
-        URL.revokeObjectURL(fileToRemove.thumbnailUrl);
+      revokeThumbUrl(fileToRemove?.thumbnailUrl);
+      const next = prev
+        .filter((f) => f.id !== id)
+        .map((f) =>
+          combineMode && f.status === "done"
+            ? { ...f, status: "queued" as const, progress: 0 }
+            : f
+        );
+
+      if (onSelectFile && selectedFileId === id) {
+        const fallback = next[0];
+        // Defer so we don't setState in another component during this updater.
+        queueMicrotask(() => {
+          if (fallback) onSelectFile(fallback.file, fallback.id);
+          else onSelectFile(null, null);
+        });
       }
-      return prev.filter((f) => f.id !== id);
+
+      return next;
     });
   };
 
   const clearAll = () => {
-    files.forEach((f) => {
-      if (f.thumbnailUrl) URL.revokeObjectURL(f.thumbnailUrl);
-    });
+    files.forEach((f) => revokeThumbUrl(f.thumbnailUrl));
     setFiles([]);
     setSkippedCount(0);
+    setCombinedOutput(null);
+    onSelectFile?.(null, null);
     if (onClear) onClear();
   };
 
+  const runCombined = async () => {
+    if (!processCombined) return;
+    const ordered = files.slice();
+    if (ordered.length === 0) return;
+
+    setProcessing(true);
+    setCombinedOutput(null);
+    setFiles((prev) =>
+      prev.map((f) => ({
+        ...f,
+        status: "processing" as const,
+        progress: 0,
+        error: undefined,
+        outputs: undefined,
+      }))
+    );
+
+    try {
+      const output = await processCombined(
+        ordered.map((f) => f.file),
+        (pct) => {
+          setFiles((prev) =>
+            prev.map((f) => ({ ...f, progress: pct, status: "processing" }))
+          );
+        }
+      );
+
+      setCombinedOutput(output);
+      setFiles((prev) =>
+        prev.map((f) => ({
+          ...f,
+          status: "done" as const,
+          progress: 100,
+        }))
+      );
+      downloadBlob(output.blob, output.name);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Error";
+      setFiles((prev) =>
+        prev.map((f) => ({
+          ...f,
+          status: "error" as const,
+          error: message,
+        }))
+      );
+    } finally {
+      setProcessing(false);
+    }
+  };
+
   const runQueue = async () => {
+    if (combineMode) {
+      await runCombined();
+      return;
+    }
+    if (!processFile) return;
+
     const toProcess = files.filter(
       (f) => f.status === "queued" || f.status === "error"
     );
@@ -347,7 +857,20 @@ export default function BatchUploader({
   };
 
   const doneCount = files.filter((f) => f.status === "done").length;
-  const hasOutputs = doneCount > 0;
+  const hasOutputs = combineMode ? Boolean(combinedOutput) : doneCount > 0;
+  const canProcess = combineMode
+    ? files.length > 0 && !processing
+    : !processing && files.some((f) => f.status === "queued" || f.status === "error");
+  const overallPct =
+    files.length === 0
+      ? 0
+      : Math.round(
+          files.reduce((sum, f) => {
+            if (f.status === "done") return sum + 100;
+            if (f.status === "processing") return sum + f.progress;
+            return sum;
+          }, 0) / files.length
+        );
 
   return (
     <div className="space-y-4">
@@ -430,6 +953,11 @@ export default function BatchUploader({
         </div>
       )}
 
+      {/* Overall batch progress */}
+      {processing && files.length > 0 && (
+        <ProgressIndicator label={labels.processing} value={overallPct} />
+      )}
+
       {/* File List */}
       {files.length > 0 && (
         <div className="rounded-lg border border-[var(--line)] bg-[var(--surface)] overflow-hidden">
@@ -449,89 +977,137 @@ export default function BatchUploader({
           </div>
 
           <div className="max-h-[350px] overflow-y-auto divide-y divide-[var(--line)]">
-            {files.map((item) => (
+            {files.map((item) => {
+              const selectable = Boolean(onSelectFile);
+              const selected = selectable && selectedFileId === item.id;
+              return (
               <div
                 key={item.id}
-                className="flex items-center gap-3 p-3 text-sm hover:bg-[var(--surface-2)]/50 transition-colors"
+                role={selectable ? "button" : undefined}
+                tabIndex={selectable ? 0 : undefined}
+                onClick={
+                  selectable
+                    ? () => onSelectFile?.(item.file, item.id)
+                    : undefined
+                }
+                onKeyDown={
+                  selectable
+                    ? (e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          onSelectFile?.(item.file, item.id);
+                        }
+                      }
+                    : undefined
+                }
+                className={[
+                  "p-3 text-sm transition-colors",
+                  selectable
+                    ? "cursor-pointer hover:bg-[var(--surface-2)]/80"
+                    : "hover:bg-[var(--surface-2)]/50",
+                  selected
+                    ? "bg-[var(--cat-image)]/10 ring-1 ring-inset ring-[var(--cat-image)]/40"
+                    : "",
+                ].join(" ")}
               >
-                {/* File Thumbnail or Icon */}
-                <div className="h-10 w-10 shrink-0 rounded border border-[var(--line)] bg-[var(--surface-2)] overflow-hidden flex items-center justify-center">
-                  {item.thumbnailUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={item.thumbnailUrl}
-                      alt="Thumbnail"
-                      className="h-full w-full object-cover"
-                    />
-                  ) : (
-                    <FileIcon className="h-5 w-5 text-[var(--muted)]" />
-                  )}
-                </div>
+                <div className="flex items-center gap-3">
+                  {/* File Thumbnail or Icon */}
+                  <BatchThumbPreview
+                    loading={Boolean(item.thumbnailLoading)}
+                    url={item.thumbnailUrl}
+                    rotateDeg={thumbnailRotateDeg}
+                    aspectFrame={thumbnailAspect}
+                    flip={thumbnailFlip}
+                  />
 
-                {/* File Info */}
-                <div className="min-w-0 flex-1">
-                  <p className="truncate font-medium text-[var(--text)] text-xs">
-                    {item.file.name}
-                  </p>
-                  <p className="text-[10px] text-[var(--muted)]">
-                    {formatBytes(item.file.size)}
-                  </p>
-                </div>
+                  {/* File Info */}
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-medium text-[var(--text)] text-xs">
+                      {item.file.name}
+                    </p>
+                    {estimateOutputSize ? (
+                      <SizeEstimateLine
+                        original={item.file.size}
+                        estimated={item.estimatedBytes}
+                        stale={item.estimateStale}
+                        calculatingLabel={labels.estimatingSize}
+                      />
+                    ) : (
+                      <p className="text-[10px] text-[var(--muted)]">
+                        {formatBytes(item.file.size)}
+                      </p>
+                    )}
+                  </div>
 
-                {/* Status Indicator / Progress */}
-                <div className="flex items-center gap-3 shrink-0">
-                  {item.status === "queued" && (
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-[var(--surface-2)] text-[var(--muted)] border border-[var(--line)]">
-                      {labels.statusQueued}
-                    </span>
-                  )}
-                  {item.status === "processing" && (
-                    <div className="flex items-center gap-2">
-                      <span className="text-[10px] text-[var(--accent)] font-medium flex items-center gap-1">
-                        <Loader2 className="h-3 w-3 animate-spin" />
-                        {labels.statusProcessing} ({item.progress}%)
+                  {/* Status Indicator / Progress */}
+                  <div className="flex items-center gap-3 shrink-0">
+                    {item.status === "queued" && (
+                      <span className="text-[10px] px-2 py-0.5 rounded bg-[var(--surface-2)] text-[var(--muted)] border border-[var(--line)]">
+                        {labels.statusQueued}
                       </span>
-                    </div>
-                  )}
-                  {item.status === "done" && (
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center gap-1">
-                      <CheckCircle2 className="h-3.5 w-3.5" />
-                      {labels.statusDone}
-                    </span>
-                  )}
-                  {item.status === "error" && (
-                    <span
-                      title={item.error}
-                      className="text-[10px] px-2 py-0.5 rounded bg-red-500/10 text-red-500 border border-red-500/20 flex items-center gap-1 cursor-help"
-                    >
-                      <XCircle className="h-3.5 w-3.5" />
-                      {labels.statusError}
-                    </span>
-                  )}
+                    )}
+                    {item.status === "processing" && (
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] text-[var(--accent)] font-medium flex items-center gap-1">
+                          <Loader2 className="h-3 w-3 animate-spin" />
+                          {labels.statusProcessing} ({item.progress}%)
+                        </span>
+                      </div>
+                    )}
+                    {item.status === "done" && (
+                      <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center gap-1">
+                        <CheckCircle2 className="h-3.5 w-3.5" />
+                        {labels.statusDone}
+                      </span>
+                    )}
+                    {item.status === "error" && (
+                      <span className="text-[10px] px-2 py-0.5 rounded bg-red-500/10 text-red-500 border border-red-500/20 flex items-center gap-1">
+                        <XCircle className="h-3.5 w-3.5" />
+                        {labels.statusError}
+                      </span>
+                    )}
 
-                  {/* Action Buttons */}
-                  {item.status === "done" && item.outputs && (
+                    {/* Action Buttons — per-file download only in independent mode */}
+                    {!combineMode && item.status === "done" && item.outputs && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          downloadOne(item);
+                        }}
+                        title={labels.downloadFile}
+                        className="p-1 text-[var(--muted)] hover:text-[var(--text)] rounded hover:bg-[var(--surface-2)] transition-colors"
+                      >
+                        <Download className="h-4 w-4" />
+                      </button>
+                    )}
+
                     <button
                       type="button"
-                      onClick={() => downloadOne(item)}
-                      title={labels.downloadFile}
-                      className="p-1 text-[var(--muted)] hover:text-[var(--text)] rounded hover:bg-[var(--surface-2)] transition-colors"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeFile(item.id);
+                      }}
+                      className="p-1 text-[var(--muted)] hover:text-red-500 rounded hover:bg-[var(--surface-2)] transition-colors"
+                      disabled={processing}
                     >
-                      <Download className="h-4 w-4" />
+                      <X className="h-4 w-4" />
                     </button>
-                  )}
-
-                  <button
-                    type="button"
-                    onClick={() => removeFile(item.id)}
-                    className="p-1 text-[var(--muted)] hover:text-red-500 rounded hover:bg-[var(--surface-2)] transition-colors"
-                    disabled={processing}
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
+                  </div>
                 </div>
+
+                {/* Visible error text — not tooltip-only (mobile / discoverability) */}
+                {item.status === "error" && item.error && (
+                  <p
+                    className="mt-2 text-xs leading-snug text-red-600 dark:text-red-400"
+                    role="alert"
+                  >
+                    {item.error}
+                  </p>
+                )}
               </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* Action buttons footer */}
@@ -540,7 +1116,7 @@ export default function BatchUploader({
               type="button"
               onClick={runQueue}
               className="btn-primary text-xs py-2 px-4 flex items-center gap-2"
-              disabled={processing || files.every((f) => f.status === "done")}
+              disabled={!canProcess}
             >
               {processing ? (
                 <>
@@ -555,7 +1131,7 @@ export default function BatchUploader({
               )}
             </button>
 
-            {hasOutputs && (
+            {hasOutputs && !combineMode && (
               <button
                 type="button"
                 onClick={downloadZip}
@@ -563,6 +1139,19 @@ export default function BatchUploader({
               >
                 <Download className="h-3.5 w-3.5" />
                 {labels.downloadZip}
+              </button>
+            )}
+
+            {hasOutputs && combineMode && combinedOutput && (
+              <button
+                type="button"
+                onClick={() =>
+                  downloadBlob(combinedOutput.blob, combinedOutput.name)
+                }
+                className="btn-secondary text-xs py-2 px-4 flex items-center gap-2"
+              >
+                <Download className="h-3.5 w-3.5" />
+                {labels.downloadFile}
               </button>
             )}
           </div>

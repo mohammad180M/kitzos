@@ -1,4 +1,5 @@
 import { bytesForPdfLoad, pdfBytesToBlob, readPdfFileBytes } from "@/lib/pdf/bytes";
+import { loadPdfLibDocument } from "@/lib/pdf/load-pdf-lib";
 import {
   createImageStampBitmap,
   createTextStampBitmap,
@@ -37,10 +38,6 @@ export interface ApplyWatermarkOptions {
     intrinsicW: number;
     intrinsicH: number;
   };
-}
-
-function loadPdfLib() {
-  return import("pdf-lib");
 }
 
 export async function prepareLogoBytes(
@@ -101,9 +98,8 @@ export async function applyPdfWatermark(
   file: File,
   options: ApplyWatermarkOptions
 ): Promise<Blob> {
-  const { PDFDocument } = await loadPdfLib();
   const pdfBytes = await readPdfFileBytes(file);
-  const pdfDoc = await PDFDocument.load(bytesForPdfLoad(pdfBytes));
+  const pdfDoc = await loadPdfLibDocument(bytesForPdfLoad(pdfBytes));
   const pages = pdfDoc.getPages();
   const placement = normalizePlacement(options.placement);
 

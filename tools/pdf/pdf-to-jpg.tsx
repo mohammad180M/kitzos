@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { DirectionPair } from "@/components/DirectionArrow";
 import UnsavedWorkDialog from "@/components/UnsavedWorkDialog";
+import ToolModeToggle from "@/components/tools/ToolModeToggle";
+import type { ToolMode } from "@/components/tools/BatchUploader";
 import ImagesToPdfDirection from "@/tools/pdf/images-to-pdf-direction";
 import PdfToImagesDirection from "@/tools/pdf/pdf-to-images-direction";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
@@ -19,6 +21,7 @@ export default function PdfToJpg() {
   const [dirty, setDirty] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [pendingDirection, setPendingDirection] = useState<ConverterDirection | null>(null);
+  const [toolMode, setToolMode] = useState<ToolMode>("single");
 
   useUnsavedWork(dirty);
 
@@ -85,10 +88,22 @@ export default function PdfToJpg() {
         ))}
       </div>
 
+      <div className="flex items-center justify-between">
+        <ToolModeToggle mode={toolMode} onChange={setToolMode} />
+      </div>
+
       {direction === "to-images" ? (
-        <PdfToImagesDirection key={`to-images-${panelKey}`} onDirtyChange={onDirtyChange} />
+        <PdfToImagesDirection
+          key={`to-images-${panelKey}`}
+          onDirtyChange={onDirtyChange}
+          toolMode={toolMode}
+        />
       ) : (
-        <ImagesToPdfDirection key={`to-pdf-${panelKey}`} onDirtyChange={onDirtyChange} />
+        <ImagesToPdfDirection
+          key={`to-pdf-${panelKey}`}
+          onDirtyChange={onDirtyChange}
+          toolMode={toolMode}
+        />
       )}
 
       <UnsavedWorkDialog

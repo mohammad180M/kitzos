@@ -34,7 +34,8 @@
       "statusProcessing": "قيد المعالجة",
       "statusDone": "تم",
       "statusError": "خطأ",
-      "noFiles": "أضف ملفات لبدء المعالجة الدفعية"
+      "noFiles": "أضف ملفات لبدء المعالجة الدفعية",
+      "estimatingSize": "جاري الحساب…"
     }
   },
   "header": {

@@ -17,6 +17,7 @@ import {
 } from "@/lib/i18n/use-image-tools-extra-labels";
 import ToolModeToggle from "@/components/tools/ToolModeToggle";
 import BatchUploader, { type ToolMode, type BatchOutput } from "@/components/tools/BatchUploader";
+import Rotate90Button, { nextQuarterTurn } from "@/components/tools/Rotate90Button";
 
 const MAX_PREVIEW = 600;
 
@@ -67,6 +68,10 @@ export default function ImageRotator() {
     if (hasImage) render();
   }, [hasImage, imageVersion, render]);
 
+  useEffect(() => {
+    setRotation(0);
+  }, [imageVersion]);
+
   const exportPng = async () => {
     const img = imgRef.current;
     if (!img) return;
@@ -94,15 +99,21 @@ export default function ImageRotator() {
     }
   };
 
-  const rotateBy = (deg: number) => setRotation((r) => (r + deg) % 360);
+  const bumpRotation = () => setRotation((r) => nextQuarterTurn(r));
 
   const processFile = useCallback(
     async (file: File): Promise<BatchOutput> => {
       const img = await new Promise<HTMLImageElement>((resolve, reject) => {
         const url = URL.createObjectURL(file);
         const im = new Image();
-        im.onload = () => { URL.revokeObjectURL(url); resolve(im); };
-        im.onerror = () => { URL.revokeObjectURL(url); reject(new Error(shared.loadFailed)); };
+        im.onload = () => {
+          URL.revokeObjectURL(url);
+          resolve(im);
+        };
+        im.onerror = () => {
+          URL.revokeObjectURL(url);
+          reject(new Error(shared.loadFailed));
+        };
         im.src = url;
       });
 
@@ -116,7 +127,13 @@ export default function ImageRotator() {
       ctx.save();
       ctx.translate(outW / 2, outH / 2);
       ctx.rotate(rad);
-      ctx.drawImage(img, -img.naturalWidth / 2, -img.naturalHeight / 2, img.naturalWidth, img.naturalHeight);
+      ctx.drawImage(
+        img,
+        -img.naturalWidth / 2,
+        -img.naturalHeight / 2,
+        img.naturalWidth,
+        img.naturalHeight
+      );
       ctx.restore();
 
       const blob = await canvasToBlob(off);
@@ -126,18 +143,8 @@ export default function ImageRotator() {
     [rotation, shared.loadFailed]
   );
 
-  const rotationButtons = (
-    <div className="flex flex-wrap gap-2">
-      <button type="button" onClick={() => rotateBy(90)} className="btn-secondary text-sm">
-        {t.rotate90}
-      </button>
-      <button type="button" onClick={() => rotateBy(180)} className="btn-secondary text-sm">
-        {t.rotate180}
-      </button>
-      <button type="button" onClick={() => rotateBy(270)} className="btn-secondary text-sm">
-        {t.rotate270}
-      </button>
-    </div>
+  const rotationControl = (
+    <Rotate90Button degrees={rotation} onRotate={bumpRotation} label={t.rotate90Step} />
   );
 
   return (
@@ -158,7 +165,10 @@ export default function ImageRotator() {
           />
 
           {error && (
-            <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300" role="alert">
+            <p
+              className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300"
+              role="alert"
+            >
               {error}
             </p>
           )}
@@ -166,13 +176,22 @@ export default function ImageRotator() {
           {hasImage && (
             <>
               <div>
-                <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">{shared.preview}</p>
-                <canvas ref={canvasRef} className="mx-auto max-w-full rounded-lg border border-gray-200 dark:border-gray-700" />
+                <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                  {shared.preview}
+                </p>
+                <canvas
+                  ref={canvasRef}
+                  className="mx-auto max-w-full rounded-lg border border-gray-200 dark:border-gray-700"
+                />
               </div>
 
-              {rotationButtons}
+              {rotationControl}
 
-              <button type="button" onClick={() => void exportPng()} className="btn-primary inline-flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => void exportPng()}
+                className="btn-primary inline-flex items-center gap-2"
+              >
                 <Download className="h-4 w-4" />
                 {common.download}
               </button>
@@ -182,13 +201,14 @@ export default function ImageRotator() {
       ) : (
         <>
           <div className="rounded-lg border border-[var(--line)] bg-[var(--surface)] p-4 space-y-3">
-            <p className="text-sm font-medium text-[var(--text)]">Rotation</p>
-            {rotationButtons}
+            <p className="text-sm font-medium text-[var(--text)]">{t.rotation}</p>
+            {rotationControl}
           </div>
 
           <BatchUploader
             accept="image/*"
             processFile={processFile}
+            thumbnailRotateDeg={rotation}
           />
         </>
       )}

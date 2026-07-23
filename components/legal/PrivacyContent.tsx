@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { CONTACT_EMAIL, LEGAL_LAST_UPDATED } from "@/lib/site-config";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 
@@ -59,14 +58,17 @@ export default function PrivacyContent() {
 
         <h3>شركاء الإعلان</h3>
         <p>
-          قد نعرض إعلانات عبر شركاء إعلان من أطراف ثالثة عند تفعيل الإعلانات على الموقع. قد يستخدم هؤلاء
+          قد نعرض إعلانات عبر شركاء إعلان من أطراف ثالثة (حالياً Adsterra). قد يستخدم هؤلاء
           الشركاء ملفات تعريف الارتباط وتقنيات مشابهة لعرض الإعلانات وقياس أدائها والحد من
           تكرار العرض. قد يجمعون معلومات مثل عنوان IP ومعرّفات الجهاز وخصائص المتصفح والتفاعل
-          مع الإعلانات وفق سياساتهم الخاصة. عندما لا تكون الإعلانات مفعّلة، لا نحمّل سكربتات إعلانية
-          ولا نشارك بيانات مع شركاء إعلان لهذا الغرض.
+          مع الإعلانات وفق سياساتهم الخاصة.
         </p>
         <p>
-          إذا فعّلنا شريكاً إعلانياً محدداً، سنحدّث هذه السياسة برابط سياسة خصوصيته قبل التفعيل أو عنده.
+          لمزيد من المعلومات، راجع{" "}
+          <a href="https://adsterra.com/privacy-policy/" target="_blank" rel="noopener noreferrer">
+            سياسة خصوصية Adsterra
+          </a>
+          .
         </p>
 
         <h3>Google Analytics</h3>
@@ -83,8 +85,8 @@ export default function PrivacyContent() {
         </p>
         <ul>
           <li>
-            <strong>ملفات إعلانية</strong> — عند تفعيل الإعلانات، قد يستخدم شركاء الإعلان ملفات تعريف
-            ارتباط لعرض الإعلانات وقياسها والحد من التكرار.
+            <strong>ملفات إعلانية</strong> (مثل شركاء الإعلان الحاليين Adsterra) — لعرض الإعلانات
+            وقياسها والحد من التكرار.
           </li>
           <li>
             <strong>ملفات أساسية / بنية تحتية</strong> — قد تستخدم Cloudflare أو مزوّدون مشابهون
@@ -128,7 +130,7 @@ export default function PrivacyContent() {
           بيانات شخصية على أساس المصالح المشروعة (الأمان وتقديم الموقع) أو الموافقة (حيث
           تُطلَب لملفات الإعلان). وبما أن kitzos لا يجمع بيانات شخصية مباشرة عبر الأدوات أو
           الحسابات، فإن معظم الطلبات المتعلقة بالبيانات الشخصية يجب توجيهها للطرف المعني
-          (مثل شريك الإعلان لبيانات الإعلان، إن وُجد).
+          (مثل Adsterra لبيانات الإعلان).
         </p>
         <p>
           حسب موقعك، قد يكون لك حق الوصول والتصحيح والحذف وتقييد المعالجة أو الاعتراض. للاستفسار
@@ -221,16 +223,17 @@ export default function PrivacyContent() {
 
       <h3>Advertising partners</h3>
       <p>
-        We may display advertisements through third-party advertising partners when ads are enabled
-        on the site. These partners may use cookies and similar technologies to serve and measure
+        We may display advertisements through third-party advertising partners (currently
+        Adsterra). These partners may use cookies and similar technologies to serve and measure
         ads, limit repeat impressions, and may collect information such as your IP address, device
         identifiers, browser characteristics, and interactions with ads under their own policies.
-        When ads are not enabled, we do not load advertising scripts or share data with ad partners
-        for that purpose.
       </p>
       <p>
-        If we enable a specific advertising partner, we will update this policy with a link to their
-        privacy policy before or when ads are turned on.
+        For more information, see{" "}
+        <a href="https://adsterra.com/privacy-policy/" target="_blank" rel="noopener noreferrer">
+          Adsterra&apos;s Privacy Policy
+        </a>
+        .
       </p>
 
       <h3>Google Analytics</h3>
@@ -248,8 +251,8 @@ export default function PrivacyContent() {
       </p>
       <ul>
         <li>
-          <strong>Advertising cookies</strong> — when ads are enabled, advertising partners may use
-          cookies to deliver and measure ads, and to limit repeat impressions.
+          <strong>Advertising cookies</strong> (e.g. from current advertising partners such as
+          Adsterra) — used to deliver and measure ads, and to limit repeat impressions.
         </li>
         <li>
           <strong>Essential / infrastructure cookies</strong> — Cloudflare or similar providers may
@@ -294,8 +297,8 @@ export default function PrivacyContent() {
         providers may process personal data on grounds such as legitimate interests (security,
         site delivery) or consent (where required for advertising cookies). Because kitzos does
         not collect personal data directly through tools or accounts, most requests relating to
-        personal data should be directed to the relevant third party (for example, an advertising
-        partner for advertising-related data, if one is active).
+        personal data should be directed to the relevant third party (for example, Adsterra for
+        advertising-related data).
       </p>
       <p>
         Depending on your location, you may have rights to access, correct, delete, or restrict
