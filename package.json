@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "npm run generate:assets && next dev",
+    "dev": "npm run generate:assets && node scripts/run-next-dev.mjs",
     "generate:assets": "tsx scripts/generate-assets.ts",
     "generate:llms": "npm run generate:assets",
     "build": "npm run generate:assets && tsx scripts/validate-i18n-keys.ts && next build && tsx scripts/fix-html-lang.ts",
     "start": "next start",
+    "preview": "npx --yes serve@14 out -l 3000",
     "lint": "next lint"
   },
   "dependencies": {

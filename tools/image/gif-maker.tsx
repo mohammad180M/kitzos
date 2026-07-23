@@ -3,6 +3,7 @@
 import FileDropZone from "@/components/FileDropZone";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowDown, ArrowUp, Download, Loader2, Pause, Play, Trash2 } from "lucide-react";
+import ProgressIndicator from "@/components/tools/ProgressIndicator";
 import { downloadBlob } from "@/lib/download";
 import { encodeGifFromCanvases } from "@/lib/image/gif-encode";
 import {
@@ -410,17 +411,7 @@ export default function GifMaker() {
         </div>
       </div>
 
-      {encoding && (
-        <div className="space-y-2">
-          <div className="h-2 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
-            <div
-              className="h-full bg-primary-600 transition-all dark:bg-primary-400"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-          <p className="text-center text-xs text-muted">{t.progress(progress)}</p>
-        </div>
-      )}
+      {encoding && <ProgressIndicator label={t.encoding} value={progress} />}
 
       <div className="flex flex-wrap gap-2">
         <button

@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Download, FileText, Loader2 } from "lucide-react";
 import PdfPreviewPane, { type PreviewPage } from "@/components/pdf/PdfPreviewPane";
 import PdfWorkbenchLayout from "@/components/pdf/PdfWorkbenchLayout";
+import ProgressIndicator from "@/components/tools/ProgressIndicator";
 import { usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
 import { formatPageSelection, parsePageSelection } from "@/lib/pdf/page-selection";
 import {
@@ -14,6 +15,7 @@ import {
   renderPdfPageThumb,
 } from "@/lib/pdf/thumbnails";
 import { bytesForPdfLoad, pdfBytesToBlob, readPdfFileBytes } from "@/lib/pdf/bytes";
+import { loadPdfLibDocument } from "@/lib/pdf/load-pdf-lib";
 import { useUnsavedWork } from "@/lib/unsaved-work";
 
 function loadPdfLib() {
@@ -157,7 +159,7 @@ export default function ExtractPages() {
     try {
       const { PDFDocument } = await getPdfLib();
       const bytes = await readPdfFileBytes(file);
-      const srcDoc = await PDFDocument.load(bytesForPdfLoad(bytes));
+      const srcDoc = await loadPdfLibDocument(bytesForPdfLoad(bytes));
       const indices = Array.from(selected)
         .sort((a, b) => a - b)
         .map((p) => p - 1);
@@ -266,6 +268,8 @@ export default function ExtractPages() {
           {error}
         </p>
       )}
+
+      <ProgressIndicator active={extracting} label={t.extracting} />
 
       <button
         type="button"

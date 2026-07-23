@@ -4,10 +4,12 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Download, Loader2 } from "lucide-react";
 import FileDropZone from "@/components/FileDropZone";
 import MergePdfOrderList from "@/components/pdf/MergePdfOrderList";
+import ProgressIndicator from "@/components/tools/ProgressIndicator";
 import { downloadBlob } from "@/lib/download";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
 import { usePdfSharedLabels, usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
 import { bytesForPdfLoad, pdfBytesToBlob, readPdfFileBytes } from "@/lib/pdf/bytes";
+import { loadPdfLibDocument } from "@/lib/pdf/load-pdf-lib";
 import {
   getPdfPageCount,
   loadPdfDocument,
@@ -173,7 +175,7 @@ export default function MergePdf() {
       // List order is merge order: top → first, bottom → last.
       for (const pdfFile of files) {
         const fileBytes = await readPdfFileBytes(pdfFile.file);
-        const source = await PDFDocument.load(bytesForPdfLoad(fileBytes));
+        const source = await loadPdfLibDocument(bytesForPdfLoad(fileBytes));
         const indices = source.getPageIndices();
         const pages = await mergedPdf.copyPages(source, indices);
         for (const page of pages) mergedPdf.addPage(page);
@@ -233,6 +235,8 @@ export default function MergePdf() {
             onFilesDrop={(list) => void addFiles(list)}
             dropActiveHint={common.dropFilesHere}
           />
+
+          <ProgressIndicator active={merging} label={t.merging} />
 
           <button
             type="button"

@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Download, FileText, Loader2 } from "lucide-react";
 import PdfPreviewPane, { type PreviewPage } from "@/components/pdf/PdfPreviewPane";
 import PdfWorkbenchLayout from "@/components/pdf/PdfWorkbenchLayout";
+import ProgressIndicator from "@/components/tools/ProgressIndicator";
 import { usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
 import {
   loadPdfDocument,
@@ -12,6 +13,7 @@ import {
   renderPdfPageThumb,
 } from "@/lib/pdf/thumbnails";
 import { bytesForPdfLoad, pdfBytesToBlob, readPdfFileBytes } from "@/lib/pdf/bytes";
+import { loadPdfLibDocument } from "@/lib/pdf/load-pdf-lib";
 import { useUnsavedWork } from "@/lib/unsaved-work";
 
 function loadPdfLib() {
@@ -146,9 +148,8 @@ export default function SplitPdf() {
     setError(null);
     if (file) releasePdfDocument(file);
     try {
-      const { PDFDocument } = await getPdfLib();
       const bytes = await readPdfFileBytes(pdfFile);
-      const pdf = await PDFDocument.load(bytesForPdfLoad(bytes));
+      const pdf = await loadPdfLibDocument(bytesForPdfLoad(bytes));
       const count = pdf.getPageCount();
       setFile(pdfFile);
       setPageCount(count);
@@ -170,7 +171,7 @@ export default function SplitPdf() {
     try {
       const { PDFDocument } = await getPdfLib();
       const sourceBytes = await readPdfFileBytes(file);
-      const sourcePdf = await PDFDocument.load(bytesForPdfLoad(sourceBytes));
+      const sourcePdf = await loadPdfLibDocument(bytesForPdfLoad(sourceBytes));
 
       let groups: { start: number; end: number }[];
 
@@ -294,6 +295,8 @@ export default function SplitPdf() {
           {error}
         </p>
       )}
+
+      <ProgressIndicator active={splitting} label={t.splitting} />
 
       <button
         type="button"

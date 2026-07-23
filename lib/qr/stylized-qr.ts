@@ -1,6 +1,6 @@
 /**
- * Stylized QR render on top of `qrcode` matrix — canvas + SVG (logo optional in PNG).
- * Preview and export share the same draw path for parity.
+ * Stylized QR render on top of `qrcode` matrix — canvas + SVG (optional center logo in both).
+ * Preview and export share the same layout math for parity.
  */
 
 import QRCode from "qrcode";
@@ -558,6 +558,36 @@ function escapeXml(s: string) {
   return s.replace(/[<>&"]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;" })[c]!);
 }
 
+/** Rasterize a canvas image source to a PNG data URI for SVG `<image href>`. */
+export function canvasImageSourceToPngDataUrl(source: CanvasImageSource): string {
+  let w = 0;
+  let h = 0;
+  if (source instanceof HTMLImageElement) {
+    w = source.naturalWidth;
+    h = source.naturalHeight;
+  } else if (source instanceof HTMLCanvasElement) {
+    w = source.width;
+    h = source.height;
+  } else if (typeof ImageBitmap !== "undefined" && source instanceof ImageBitmap) {
+    w = source.width;
+    h = source.height;
+  } else if (source instanceof HTMLVideoElement) {
+    w = source.videoWidth;
+    h = source.videoHeight;
+  } else if (typeof OffscreenCanvas !== "undefined" && source instanceof OffscreenCanvas) {
+    w = source.width;
+    h = source.height;
+  }
+  if (!w || !h) throw new Error("Logo has no dimensions");
+  const c = document.createElement("canvas");
+  c.width = w;
+  c.height = h;
+  const ctx = c.getContext("2d");
+  if (!ctx) throw new Error("Canvas unsupported");
+  ctx.drawImage(source, 0, 0, w, h);
+  return c.toDataURL("image/png");
+}
+
 function moduleSvgMarkup(style: ModuleStyle, x: number, y: number, s: number, fg: string): string {
   const cx = x + s / 2;
   const cy = y + s / 2;
@@ -685,7 +715,7 @@ function finderSvgMarkup(
   return out;
 }
 
-/** SVG without embedded logo (logo is PNG-only for reliability). */
+/** SVG export — same layout as canvas, including optional embedded center logo. */
 export function renderQrToSvg(text: string, options: QrStyleOptions): string {
   const qr = createMatrix(text, options.errorCorrectionLevel);
   const n = qr.modules.size;
@@ -696,10 +726,11 @@ export function renderQrToSvg(text: string, options: QrStyleOptions): string {
   const totalH = size + labelPad;
   const fg = options.foreground;
   const bg = options.background;
+  const logoWin = options.logo ? logoClearWindow(n, options.logoScale) : null;
 
   const parts: string[] = [];
   parts.push(
-    `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${totalH}" viewBox="0 0 ${size} ${totalH}">`
+    `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${size}" height="${totalH}" viewBox="0 0 ${size} ${totalH}">`
   );
   if (options.frame === "rounded") {
     parts.push(`<rect width="${size}" height="${totalH}" rx="${size * 0.04}" fill="${bg}"/>`);
@@ -745,6 +776,7 @@ export function renderQrToSvg(text: string, options: QrStyleOptions): string {
     for (let col = 0; col < n; col++) {
       if (!qr.modules.get(row, col)) continue;
       if (isFinderCell(row, col, n)) continue;
+      if (isInLogoClear(row, col, logoWin)) continue;
       const x = gridOrigin + col * moduleSize;
       const y = gridOrigin + row * moduleSize;
       parts.push(moduleSvgMarkup(options.moduleStyle, x, y, moduleSize, fg));
@@ -759,6 +791,25 @@ export function renderQrToSvg(text: string, options: QrStyleOptions): string {
     const rx = options.frame === "rounded" ? ` rx="${size * 0.035}"` : "";
     parts.push(
       `<rect x="${framePad / 2}" y="${framePad / 2}" width="${size - framePad}" height="${totalH - framePad}" fill="none" stroke="${fg}" stroke-width="${sw}"${dash}${rx}/>`
+    );
+  }
+
+  if (options.logo && logoWin) {
+    const clearPx = logoWin.clearModules * moduleSize;
+    const clearX = gridOrigin + logoWin.start * moduleSize;
+    const clearY = gridOrigin + logoWin.start * moduleSize;
+    const logoPx = logoWin.logoModules * moduleSize;
+    const lx = clearX + logoWin.margin * moduleSize;
+    const ly = clearY + logoWin.margin * moduleSize;
+    const rx = Math.max(2, logoPx * 0.1);
+    const dataUrl = canvasImageSourceToPngDataUrl(options.logo);
+    // Escape only characters that break XML attribute context (&).
+    const href = dataUrl.replace(/&/g, "&amp;");
+
+    parts.push(`<rect x="${clearX}" y="${clearY}" width="${clearPx}" height="${clearPx}" fill="${bg}"/>`);
+    parts.push(`<defs><clipPath id="qr-logo-clip"><rect x="${lx}" y="${ly}" width="${logoPx}" height="${logoPx}" rx="${rx}" ry="${rx}"/></clipPath></defs>`);
+    parts.push(
+      `<image href="${href}" xlink:href="${href}" x="${lx}" y="${ly}" width="${logoPx}" height="${logoPx}" clip-path="url(#qr-logo-clip)" preserveAspectRatio="xMidYMid slice"/>`
     );
   }
 

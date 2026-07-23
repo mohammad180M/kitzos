@@ -9,8 +9,12 @@
 
 # next.js
 /.next/
+/.next-dev/
 /.next/analyze/
 /out/
+
+# PDF.js runtime assets (synced from node_modules by generate:assets)
+/public/pdfjs/
 
 # production
 /build

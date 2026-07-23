@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Download, Loader2 } from "lucide-react";
 import FileDropZone from "@/components/FileDropZone";
+import ProgressIndicator from "@/components/tools/ProgressIndicator";
+import { useBatchLabels } from "@/lib/i18n/use-batch-labels";
 import {
   decodeAudioFile,
   downloadBlob,
@@ -18,6 +20,7 @@ import { useUnsavedWork } from "@/lib/unsaved-work";
 export default function Mp3Cutter() {
   const labels = useCommonLabels();
   const t = useAudioToolLabels("mp3Cutter");
+  const batchLabels = useBatchLabels();
   const [file, setFile] = useState<File | null>(null);
   const [duration, setDuration] = useState(0);
   const [start, setStart] = useState(0);
@@ -174,6 +177,8 @@ export default function Mp3Cutter() {
           {error}
         </p>
       )}
+
+      <ProgressIndicator active={processing} label={batchLabels.processing} />
 
       {file && (
         <div className="flex flex-wrap gap-2">

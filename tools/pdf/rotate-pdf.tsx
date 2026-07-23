@@ -1,10 +1,14 @@
 "use client";
 
 import FileDropZone from "@/components/FileDropZone";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Download, FileText, Loader2, RotateCw } from "lucide-react";
 import PdfPreviewPane from "@/components/pdf/PdfPreviewPane";
 import PdfWorkbenchLayout from "@/components/pdf/PdfWorkbenchLayout";
+import ToolModeToggle from "@/components/tools/ToolModeToggle";
+import BatchUploader, { type ToolMode, type BatchOutput } from "@/components/tools/BatchUploader";
+import Rotate90Button, { nextQuarterTurn } from "@/components/tools/Rotate90Button";
+import ProgressIndicator from "@/components/tools/ProgressIndicator";
 import { usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
 import {
   getPdfPageCount,
@@ -13,6 +17,8 @@ import {
   renderPdfPageThumb,
 } from "@/lib/pdf/thumbnails";
 import { bytesForPdfLoad, pdfBytesToBlob, readPdfFileBytes } from "@/lib/pdf/bytes";
+import { loadPdfLibDocument } from "@/lib/pdf/load-pdf-lib";
+import { localizePdfError, rethrowLocalizedPdfError } from "@/lib/pdf/pdf-errors";
 import { useUnsavedWork } from "@/lib/unsaved-work";
 
 function loadPdfLib() {
@@ -35,14 +41,40 @@ function downloadBlob(blob: Blob, filename: string) {
   URL.revokeObjectURL(url);
 }
 
+async function rotatePdfBytes(
+  sourceBytes: Uint8Array,
+  extraRotation: Record<number, number> | number
+): Promise<Uint8Array> {
+  const { PDFDocument, degrees } = await getPdfLib();
+  const sourcePdf = await loadPdfLibDocument(bytesForPdfLoad(sourceBytes));
+  const outPdf = await PDFDocument.create();
+  const indices = sourcePdf.getPageIndices();
+  const pages = await outPdf.copyPages(sourcePdf, indices);
+
+  pages.forEach((page, i) => {
+    const pageNum = i + 1;
+    const existing = page.getRotation().angle;
+    const extra =
+      typeof extraRotation === "number"
+        ? extraRotation
+        : (extraRotation[pageNum] ?? 0);
+    page.setRotation(degrees((existing + extra) % 360));
+    outPdf.addPage(page);
+  });
+
+  return outPdf.save();
+}
+
 export default function RotatePdf() {
   const t = usePdfToolLabels("rotatePdf");
   const [file, setFile] = useState<File | null>(null);
   const [pageCount, setPageCount] = useState(0);
   const [extraRotation, setExtraRotation] = useState<Record<number, number>>({});
+  const [batchDegrees, setBatchDegrees] = useState(0);
   const [loading, setLoading] = useState(false);
   const [applying, setApplying] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [toolMode, setToolMode] = useState<ToolMode>("single");
   const fileRef = useRef<File | null>(null);
 
   useUnsavedWork(file !== null);
@@ -72,10 +104,10 @@ export default function RotatePdf() {
       await loadPdfDocument(pdfFile);
       setFile(pdfFile);
       setPageCount(count);
-    } catch {
+    } catch (err) {
       setFile(null);
       setPageCount(0);
-      setError(t.errReadFailed);
+      setError(localizePdfError(err, { errEncrypted: t.errEncrypted, fallback: t.errReadFailed }));
     } finally {
       setLoading(false);
     }
@@ -88,14 +120,23 @@ export default function RotatePdf() {
     }));
   };
 
-  const rotateAll = () => {
-    setExtraRotation((prev) => {
-      const next = { ...prev };
-      pageNums.forEach((pageNum) => {
-        next[pageNum] = ((next[pageNum] ?? 0) + 90) % 360;
-      });
-      return next;
+  /** Set every page to an absolute extra rotation (including 0° = original). */
+  const setAllPagesRotation = (deg: number) => {
+    const normalized = ((deg % 360) + 360) % 360;
+    const next: Record<number, number> = {};
+    pageNums.forEach((pageNum) => {
+      next[pageNum] = normalized;
     });
+    setExtraRotation(next);
+  };
+
+  const uniformExtraDegrees = useMemo(() => {
+    if (pageNums.length === 0) return 0;
+    return extraRotation[pageNums[0]] ?? 0;
+  }, [pageNums, extraRotation]);
+
+  const bumpAllPagesRotation = () => {
+    setAllPagesRotation(nextQuarterTurn(uniformExtraDegrees));
   };
 
   const applyRotation = async () => {
@@ -105,30 +146,38 @@ export default function RotatePdf() {
     setError(null);
 
     try {
-      const { PDFDocument, degrees } = await getPdfLib();
       const sourceBytes = await readPdfFileBytes(file);
-      const sourcePdf = await PDFDocument.load(bytesForPdfLoad(sourceBytes));
-      const outPdf = await PDFDocument.create();
-      const indices = sourcePdf.getPageIndices();
-      const pages = await outPdf.copyPages(sourcePdf, indices);
-
-      pages.forEach((page, i) => {
-        const pageNum = i + 1;
-        const existing = page.getRotation().angle;
-        const extra = extraRotation[pageNum] ?? 0;
-        page.setRotation(degrees((existing + extra) % 360));
-        outPdf.addPage(page);
-      });
-
-      const bytes = await outPdf.save();
+      const bytes = await rotatePdfBytes(sourceBytes, extraRotation);
       const baseName = file.name.replace(/\.pdf$/i, "") || "document";
       downloadBlob(pdfBytesToBlob(bytes), `${baseName}-rotated.pdf`);
-    } catch {
-      setError(t.errRotateFailed);
+    } catch (err) {
+      setError(
+        localizePdfError(err, {
+          errEncrypted: t.errEncrypted,
+          fallback: t.errRotateFailed,
+        })
+      );
     } finally {
       setApplying(false);
     }
   };
+
+  const processFile = useCallback(
+    async (pdfFile: File): Promise<BatchOutput> => {
+      try {
+        const sourceBytes = await readPdfFileBytes(pdfFile);
+        const bytes = await rotatePdfBytes(sourceBytes, batchDegrees);
+        const baseName = pdfFile.name.replace(/\.pdf$/i, "") || "document";
+        return { blob: pdfBytesToBlob(bytes), name: `${baseName}-rotated.pdf` };
+      } catch (err) {
+        rethrowLocalizedPdfError(err, {
+          errEncrypted: t.errEncrypted,
+          fallback: t.errRotateFailed,
+        });
+      }
+    },
+    [batchDegrees, t.errEncrypted, t.errRotateFailed]
+  );
 
   const controls = (
     <>
@@ -159,10 +208,14 @@ export default function RotatePdf() {
       )}
 
       {pageCount > 0 && (
-        <button type="button" onClick={rotateAll} className="btn-secondary">
-          <RotateCw className="h-4 w-4" />
-          {t.rotateAll}
-        </button>
+        <div className="space-y-2">
+          <p className="text-sm font-medium text-[var(--text)]">{t.rotationAngle}</p>
+          <Rotate90Button
+            degrees={uniformExtraDegrees}
+            onRotate={bumpAllPagesRotation}
+            label={t.rotate90Step}
+          />
+        </div>
       )}
 
       {error && (
@@ -170,6 +223,8 @@ export default function RotatePdf() {
           {error}
         </p>
       )}
+
+      <ProgressIndicator active={applying} label={t.rotating} />
 
       <button
         type="button"
@@ -193,24 +248,48 @@ export default function RotatePdf() {
   );
 
   return (
-    <PdfWorkbenchLayout
-      active={!!file && pageCount > 0}
-      controls={controls}
-      preview={
-        file && pageCount > 0 ? (
-          <PdfPreviewPane totalCount={pageCount}>
-            <RotatePreviewGrid
-              file={file}
-              pageNums={pageNums}
-              extraRotation={extraRotation}
-              onRotate={rotatePage}
-              pageThumbLabel={t.pageThumb}
-              rotatePageLabel={t.rotatePage}
+    <>
+      <div className="mb-4 flex items-center justify-between">
+        <ToolModeToggle mode={toolMode} onChange={setToolMode} />
+      </div>
+
+      {toolMode === "single" ? (
+        <PdfWorkbenchLayout
+          active={!!file && pageCount > 0}
+          controls={controls}
+          preview={
+            file && pageCount > 0 ? (
+              <PdfPreviewPane totalCount={pageCount}>
+                <RotatePreviewGrid
+                  file={file}
+                  pageNums={pageNums}
+                  extraRotation={extraRotation}
+                  onRotate={rotatePage}
+                  pageThumbLabel={t.pageThumb}
+                  rotatePageLabel={t.rotatePage}
+                />
+              </PdfPreviewPane>
+            ) : null
+          }
+        />
+      ) : (
+        <div className="space-y-4">
+          <div className="space-y-3 rounded-lg border border-[var(--line)] bg-[var(--surface)] p-4">
+            <p className="text-sm font-medium text-[var(--text)]">{t.rotationAngle}</p>
+            <Rotate90Button
+              degrees={batchDegrees}
+              onRotate={() => setBatchDegrees((d) => nextQuarterTurn(d))}
+              label={t.rotate90Step}
             />
-          </PdfPreviewPane>
-        ) : null
-      }
-    />
+          </div>
+          <BatchUploader
+            accept=".pdf,application/pdf"
+            processFile={processFile}
+            thumbnailRotateDeg={batchDegrees}
+          />
+        </div>
+      )}
+    </>
   );
 }
 

@@ -13,6 +13,10 @@ import UnsavedWorkDialog from "@/components/UnsavedWorkDialog";
 import WatermarkFontPicker from "@/components/pdf/WatermarkFontPicker";
 import PdfPreviewPane from "@/components/pdf/PdfPreviewPane";
 import PdfWorkbenchLayout from "@/components/pdf/PdfWorkbenchLayout";
+import ToolModeToggle from "@/components/tools/ToolModeToggle";
+import BatchUploader, { type ToolMode, type BatchOutput } from "@/components/tools/BatchUploader";
+import ProgressIndicator from "@/components/tools/ProgressIndicator";
+import { useBatchLabels } from "@/lib/i18n/use-batch-labels";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
 import {
@@ -26,6 +30,7 @@ import {
   loadPdfDocument,
   releasePdfDocument,
 } from "@/lib/pdf/thumbnails";
+import { localizePdfError, rethrowLocalizedPdfError } from "@/lib/pdf/pdf-errors";
 import {
   containsArabicScript,
   defaultWatermarkFontId,
@@ -44,11 +49,16 @@ type Mode = "text" | "image";
 export default function PdfWatermark() {
   const t = usePdfToolLabels("pdfWatermark");
   const { locale, dir, t: dict } = useLocale();
+  const batchLabels = useBatchLabels();
   const fileRef = useRef<File | null>(null);
+  const batchPreviewRef = useRef<File | null>(null);
   const previewBoxRef = useRef<HTMLDivElement>(null);
 
+  const [toolMode, setToolMode] = useState<ToolMode>("single");
   const [file, setFile] = useState<File | null>(null);
   const [pageCount, setPageCount] = useState(0);
+  const [batchPreviewFile, setBatchPreviewFile] = useState<File | null>(null);
+  const [batchPageCount, setBatchPageCount] = useState(0);
   const [previewPage, setPreviewPage] = useState(1);
   const [mode, setMode] = useState<Mode>("text");
   const [pendingMode, setPendingMode] = useState<Mode | null>(null);
@@ -70,20 +80,31 @@ export default function PdfWatermark() {
   const [error, setError] = useState<string | null>(null);
   const [previewSrc, setPreviewSrc] = useState<string | null>(null);
 
-  const debouncedText = useDebouncedValue(text, 250);
-  const debouncedSize = useDebouncedValue(widthRatio, 250);
-  const debouncedImgSize = useDebouncedValue(imageWidthRatio, 250);
-  const debouncedPlacement = useDebouncedValue(placement, 250);
-  const debouncedFont = useDebouncedValue(fontId, 200);
+  const debouncedText = useDebouncedValue(text, 150);
+  const debouncedSize = useDebouncedValue(widthRatio, 100);
+  const debouncedImgSize = useDebouncedValue(imageWidthRatio, 100);
+  const debouncedFont = useDebouncedValue(fontId, 150);
+  // Debounce placement fields as primitives so preview deps always fire on change
+  // (object-identity debounce can miss updates under concurrent PDF loads).
+  const debouncedOpacity = useDebouncedValue(placement.opacity, 100);
+  const debouncedRotation = useDebouncedValue(placement.rotationDeg, 100);
+  const debouncedCx = useDebouncedValue(placement.centerXRatio, 100);
+  const debouncedCy = useDebouncedValue(placement.centerYRatio, 100);
+  const debouncedTiled = useDebouncedValue(placement.tiled, 100);
+  const previewGenRef = useRef(0);
 
   const dirty =
     file !== null ||
+    batchPreviewFile !== null ||
     logoFile !== null ||
     text !== "CONFIDENTIAL" ||
     placement.tiled ||
     placement.opacity !== DEFAULT_WATERMARK_PLACEMENT.opacity;
 
   useUnsavedWork(dirty);
+
+  const previewFile = toolMode === "batch" ? batchPreviewFile : file;
+  const previewTotalPages = toolMode === "batch" ? batchPageCount : pageCount;
 
   useEffect(() => {
     setFontId(defaultWatermarkFontId(locale));
@@ -94,23 +115,83 @@ export default function PdfWatermark() {
   }, [file]);
 
   useEffect(() => {
+    batchPreviewRef.current = batchPreviewFile;
+  }, [batchPreviewFile]);
+
+  useEffect(() => {
     return () => {
       if (fileRef.current) releasePdfDocument(fileRef.current);
+      if (batchPreviewRef.current) releasePdfDocument(batchPreviewRef.current);
       if (logoUrl) URL.revokeObjectURL(logoUrl);
     };
   }, [logoUrl]);
 
   useEffect(() => {
-    if (!file) {
-      setPreviewSrc(null);
+    if (toolMode !== "batch" || !batchPreviewFile) {
+      if (toolMode === "batch" && !batchPreviewFile) {
+        setBatchPageCount(0);
+        setPreviewSrc(null);
+      }
       return;
     }
     let cancelled = false;
     void (async () => {
       try {
+        const count = await getPdfPageCount(batchPreviewFile);
+        if (cancelled) return;
+        setBatchPageCount(count);
+        setPreviewPage((p) => Math.min(Math.max(1, p), count));
+      } catch {
+        if (!cancelled) {
+          setBatchPageCount(0);
+          setPreviewSrc(null);
+        }
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [toolMode, batchPreviewFile]);
+
+  const handleBatchFilesChange = useCallback((list: File[]) => {
+    const next = list[0] ?? null;
+    setBatchPreviewFile((prev) => {
+      if (prev && next !== prev) {
+        const sameFile =
+          next &&
+          prev.name === next.name &&
+          prev.size === next.size &&
+          prev.lastModified === next.lastModified;
+        if (!sameFile) releasePdfDocument(prev);
+      }
+      return next;
+    });
+    if (!next) {
+      setBatchPageCount(0);
+      setPreviewPage(1);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!previewFile) {
+      setPreviewSrc(null);
+      return;
+    }
+    const gen = ++previewGenRef.current;
+    let cancelled = false;
+    void (async () => {
+      try {
+        const livePlacement = {
+          centerXRatio: debouncedCx,
+          centerYRatio: debouncedCy,
+          rotationDeg: debouncedRotation,
+          opacity: debouncedOpacity,
+          tiled: debouncedTiled,
+        };
+        let url: string;
         if (mode === "text") {
           await ensureWatermarkFontById(debouncedFont);
-          const url = await renderWatermarkPreview(file, previewPage - 1, debouncedPlacement, {
+          url = await renderWatermarkPreview(previewFile, previewPage - 1, livePlacement, {
             mode: "text",
             text: {
               text: debouncedText,
@@ -118,9 +199,8 @@ export default function PdfWatermark() {
               widthRatio: debouncedSize,
             },
           });
-          if (!cancelled) setPreviewSrc(url);
         } else if (logoUrl) {
-          const url = await renderWatermarkPreview(file, previewPage - 1, debouncedPlacement, {
+          url = await renderWatermarkPreview(previewFile, previewPage - 1, livePlacement, {
             mode: "image",
             image: {
               src: logoUrl,
@@ -129,28 +209,35 @@ export default function PdfWatermark() {
               intrinsicH: logoIntrinsic.h,
             },
           });
-          if (!cancelled) setPreviewSrc(url);
-        } else if (!cancelled) {
-          setPreviewSrc(null);
+        } else {
+          return;
+        }
+        if (!cancelled && gen === previewGenRef.current) {
+          setPreviewSrc(url);
         }
       } catch {
-        if (!cancelled) setPreviewSrc(null);
+        // Keep the last good preview frame — don't blank the pane on transient races.
       }
     })();
     return () => {
       cancelled = true;
     };
   }, [
-    file,
+    previewFile,
     previewPage,
     mode,
     debouncedText,
     debouncedFont,
     debouncedSize,
-    debouncedPlacement,
+    debouncedOpacity,
+    debouncedRotation,
+    debouncedCx,
+    debouncedCy,
+    debouncedTiled,
     debouncedImgSize,
     logoUrl,
-    logoIntrinsic,
+    logoIntrinsic.w,
+    logoIntrinsic.h,
   ]);
 
   const onFile = async (f: File) => {
@@ -162,8 +249,15 @@ export default function PdfWatermark() {
       await loadPdfDocument(f);
       setPageCount(count);
       setPreviewPage(1);
-    } catch {
+    } catch (err) {
+      setFile(null);
       setPageCount(0);
+      setError(
+        localizePdfError(err, {
+          errEncrypted: t.errEncrypted,
+          fallback: t.errWatermarkFailed,
+        })
+      );
     }
   };
 
@@ -213,8 +307,13 @@ export default function PdfWatermark() {
 
   const onPreviewPointer = useCallback(
     (e: ReactPointerEvent<HTMLDivElement>) => {
-      if (placement.tiled || !previewBoxRef.current || !previewSrc) return;
-      const rect = previewBoxRef.current.getBoundingClientRect();
+      if (placement.tiled || !previewSrc) return;
+      const box = previewBoxRef.current;
+      if (!box) return;
+      // Map clicks to the actual page image (object-contain), not the padded frame.
+      const img = box.querySelector("img");
+      const rect = (img ?? box).getBoundingClientRect();
+      if (rect.width <= 0 || rect.height <= 0) return;
       const x = clamp01((e.clientX - rect.left) / rect.width);
       const y = clamp01((e.clientY - rect.top) / rect.height);
       setPlacement((p) => ({ ...p, centerXRatio: x, centerYRatio: y }));
@@ -263,24 +362,88 @@ export default function PdfWatermark() {
             : undefined,
       });
       downloadBlob(blob, `watermarked-${file.name}`);
-    } catch {
-      setError(t.errWatermarkFailed);
+    } catch (err) {
+      setError(
+        localizePdfError(err, {
+          errEncrypted: t.errEncrypted,
+          fallback: t.errWatermarkFailed,
+        })
+      );
     } finally {
       setProcessing(false);
     }
   };
 
-  const controls = (
-    <>
-      <FileDropZone
-        accept="application/pdf"
-        label={file ? file.name : t.uploadPdf}
-        onFiles={(files) => {
-          const f = files[0];
-          if (f) void onFile(f);
-        }}
-      />
+  // Must stay above any toolMode-based JSX return — hooks order must be stable.
+  const processFile = useCallback(
+    async (pdfFile: File): Promise<BatchOutput> => {
+      try {
+        if (mode === "text" && containsArabicScript(text)) {
+          const { getWatermarkFont } = await import("@/lib/pdf/watermark-fonts");
+          if (!getWatermarkFont(fontId).arabic) {
+            throw new Error(t.arabicFontRequired);
+          }
+        }
+        if (mode === "image" && !logoBytes) {
+          throw new Error(t.errNeedImage);
+        }
 
+        if (mode === "text") await ensureWatermarkFontById(fontId);
+        const blob = await applyPdfWatermark(pdfFile, {
+          mode,
+          placement,
+          text:
+            mode === "text"
+              ? {
+                  text,
+                  widthRatio,
+                  fontId,
+                  color: "#808080",
+                }
+              : undefined,
+          imageBytes: mode === "image" ? logoBytes! : undefined,
+          imageMeta:
+            mode === "image"
+              ? {
+                  widthRatio: imageWidthRatio,
+                  intrinsicW: logoIntrinsic.w,
+                  intrinsicH: logoIntrinsic.h,
+                }
+              : undefined,
+        });
+        return { blob, name: `watermarked-${pdfFile.name}` };
+      } catch (err) {
+        // Keep already-localized validation errors as-is.
+        if (
+          err instanceof Error &&
+          (err.message === t.arabicFontRequired || err.message === t.errNeedImage)
+        ) {
+          throw err;
+        }
+        rethrowLocalizedPdfError(err, {
+          errEncrypted: t.errEncrypted,
+          fallback: t.errWatermarkFailed,
+        });
+      }
+    },
+    [
+      mode,
+      text,
+      fontId,
+      widthRatio,
+      placement,
+      logoBytes,
+      imageWidthRatio,
+      logoIntrinsic,
+      t.arabicFontRequired,
+      t.errNeedImage,
+      t.errEncrypted,
+      t.errWatermarkFailed,
+    ]
+  );
+
+  const watermarkSettings = (
+    <>
       <div>
         <p className="text-sm font-medium text-[var(--text)]">{t.stampMode}</p>
         <div className="mt-2 inline-flex rounded-lg border border-[var(--line)] bg-[var(--surface)] p-0.5">
@@ -438,12 +601,29 @@ export default function PdfWatermark() {
           <p className="mt-1.5 text-xs text-[var(--muted)]">{t.dragHint}</p>
         )}
       </div>
+    </>
+  );
+
+  const controls = (
+    <>
+      <FileDropZone
+        accept="application/pdf"
+        label={file ? file.name : t.uploadPdf}
+        onFiles={(files) => {
+          const f = files[0];
+          if (f) void onFile(f);
+        }}
+      />
+
+      {watermarkSettings}
 
       {error && (
         <p className="text-sm text-[var(--cat-pdf)]" role="alert">
           {error}
         </p>
       )}
+
+      <ProgressIndicator active={processing} label={batchLabels.processing} />
 
       <button
         type="button"
@@ -461,63 +641,96 @@ export default function PdfWatermark() {
     </>
   );
 
+  const watermarkPreview = previewFile ? (
+    <PdfPreviewPane totalCount={previewTotalPages} singleColumn>
+      <div className="space-y-3">
+        {previewTotalPages > 1 && (
+          <div className="flex items-center justify-center gap-2">
+            <button
+              type="button"
+              className="btn-secondary text-xs"
+              disabled={previewPage <= 1}
+              onClick={() => setPreviewPage((p) => Math.max(1, p - 1))}
+            >
+              ‹
+            </button>
+            <span className="text-xs text-muted">
+              {previewPage} / {previewTotalPages}
+            </span>
+            <button
+              type="button"
+              className="btn-secondary text-xs"
+              disabled={previewPage >= previewTotalPages}
+              onClick={() => setPreviewPage((p) => Math.min(previewTotalPages, p + 1))}
+            >
+              ›
+            </button>
+          </div>
+        )}
+        <div
+          ref={previewBoxRef}
+          onPointerDown={onPreviewPointer}
+          className={`relative overflow-hidden rounded-md border border-[var(--line)] bg-[var(--surface-2)] p-2 ${
+            !placement.tiled ? "cursor-crosshair" : ""
+          }`}
+        >
+          {!previewSrc && (
+            <div className="pdf-preview-shimmer aspect-[3/4] w-full rounded" aria-hidden="true" />
+          )}
+          {previewSrc && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={previewSrc}
+              alt=""
+              className="mx-auto max-h-[min(72vh,36rem)] w-full object-contain"
+              draggable={false}
+            />
+          )}
+        </div>
+      </div>
+    </PdfPreviewPane>
+  ) : null;
+
   return (
     <>
-      <PdfWorkbenchLayout
-        active={!!file}
-        controls={controls}
-        preview={
-          file ? (
-            <PdfPreviewPane totalCount={pageCount} singleColumn>
-              <div className="space-y-3">
-                {pageCount > 1 && (
-                  <div className="flex items-center justify-center gap-2">
-                    <button
-                      type="button"
-                      className="btn-secondary text-xs"
-                      disabled={previewPage <= 1}
-                      onClick={() => setPreviewPage((p) => Math.max(1, p - 1))}
-                    >
-                      ‹
-                    </button>
-                    <span className="text-xs text-muted">
-                      {previewPage} / {pageCount}
-                    </span>
-                    <button
-                      type="button"
-                      className="btn-secondary text-xs"
-                      disabled={previewPage >= pageCount}
-                      onClick={() => setPreviewPage((p) => Math.min(pageCount, p + 1))}
-                    >
-                      ›
-                    </button>
-                  </div>
+      <div className="mb-4 flex items-center justify-between">
+        <ToolModeToggle mode={toolMode} onChange={setToolMode} />
+      </div>
+
+      {toolMode === "single" ? (
+        <PdfWorkbenchLayout
+          active={!!file}
+          controls={controls}
+          preview={watermarkPreview}
+        />
+      ) : (
+        <PdfWorkbenchLayout
+          active={!!batchPreviewFile}
+          controls={
+            <>
+              <div className="space-y-3 rounded-lg border border-[var(--line)] bg-[var(--surface)] p-4">
+                {watermarkSettings}
+                {mode === "image" && !logoBytes && (
+                  <p className="text-sm text-[var(--muted)]" role="status">
+                    {t.errNeedImage}
+                  </p>
                 )}
-                <div
-                  ref={previewBoxRef}
-                  onPointerDown={onPreviewPointer}
-                  className={`relative overflow-hidden rounded-md border border-[var(--line)] bg-[var(--surface-2)] p-2 ${
-                    !placement.tiled ? "cursor-crosshair" : ""
-                  }`}
-                >
-                  {!previewSrc && (
-                    <div className="pdf-preview-shimmer aspect-[3/4] w-full rounded" aria-hidden="true" />
-                  )}
-                  {previewSrc && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={previewSrc}
-                      alt=""
-                      className="mx-auto max-h-80 w-full object-contain"
-                      draggable={false}
-                    />
-                  )}
-                </div>
+                {error && (
+                  <p className="text-sm text-red-600 dark:text-red-400" role="alert">
+                    {error}
+                  </p>
+                )}
               </div>
-            </PdfPreviewPane>
-          ) : null
-        }
-      />
+              <BatchUploader
+                accept=".pdf,application/pdf"
+                processFile={processFile}
+                onFilesChange={handleBatchFilesChange}
+              />
+            </>
+          }
+          preview={watermarkPreview}
+        />
+      )}
 
       <UnsavedWorkDialog
         open={modeDialog}

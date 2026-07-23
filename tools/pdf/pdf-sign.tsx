@@ -3,11 +3,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Download, Loader2, Trash2 } from "lucide-react";
 import FileDropZone from "@/components/FileDropZone";
+import ProgressIndicator from "@/components/tools/ProgressIndicator";
+import { useBatchLabels } from "@/lib/i18n/use-batch-labels";
 import PdfPreviewPane from "@/components/pdf/PdfPreviewPane";
 import SignaturePlacementPreview from "@/components/pdf/SignaturePlacementPreview";
 import PdfWorkbenchLayout from "@/components/pdf/PdfWorkbenchLayout";
 import { downloadBlob } from "@/lib/download";
 import { bytesForPdfLoad, pdfBytesToBlob, readPdfFileBytes } from "@/lib/pdf/bytes";
+import { loadPdfLibDocument } from "@/lib/pdf/load-pdf-lib";
 import { useCommonLabels } from "@/lib/i18n/use-common-labels";
 import { usePdfSharedLabels, usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
 import {
@@ -25,17 +28,6 @@ import {
   renderPdfPageThumb,
 } from "@/lib/pdf/thumbnails";
 import { useUnsavedWork } from "@/lib/unsaved-work";
-
-function loadPdfLib() {
-  return import("pdf-lib");
-}
-
-let pdfLibPromise: ReturnType<typeof loadPdfLib> | undefined;
-
-function getPdfLib() {
-  if (!pdfLibPromise) pdfLibPromise = loadPdfLib();
-  return pdfLibPromise;
-}
 
 const PAD_WIDTH = 400;
 const PAD_HEIGHT = 150;
@@ -96,6 +88,7 @@ function parsePageRange(range: string, totalPages: number): number[] {
 
 export default function PdfSign() {
   const t = usePdfToolLabels("pdfSign");
+  const batchLabels = useBatchLabels();
   const shared = usePdfSharedLabels();
   const labels = useCommonLabels();
 
@@ -356,10 +349,9 @@ export default function PdfSign() {
     setProcessing(true);
     setError(null);
     try {
-      const { PDFDocument } = await getPdfLib();
       const sigBytes = new Uint8Array(await sigBlob.arrayBuffer());
       const pdfBytes = await readPdfFileBytes(pdfFile);
-      const pdfDoc = await PDFDocument.load(bytesForPdfLoad(pdfBytes));
+      const pdfDoc = await loadPdfLibDocument(bytesForPdfLoad(pdfBytes));
       const sigImage = await pdfDoc.embedPng(sigBytes);
       const pageIndices = getTargetPageIndices(pdfDoc.getPageCount());
 
@@ -604,6 +596,8 @@ export default function PdfSign() {
       )}
 
       {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
+
+      <ProgressIndicator active={processing} label={batchLabels.processing} />
 
       <button
         type="button"

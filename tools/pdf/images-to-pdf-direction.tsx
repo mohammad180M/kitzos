@@ -5,6 +5,8 @@ import { useCallback, useEffect, useMemo, useRef, useState, type DragEvent } fro
 import { Download, GripVertical, Loader2, Trash2 } from "lucide-react";
 import PdfPreviewPane, { type PreviewPage } from "@/components/pdf/PdfPreviewPane";
 import PdfWorkbenchLayout from "@/components/pdf/PdfWorkbenchLayout";
+import BatchUploader, { type BatchOutput } from "@/components/tools/BatchUploader";
+import ProgressIndicator from "@/components/tools/ProgressIndicator";
 import { usePdfToolLabels } from "@/lib/i18n/use-pdf-tool-labels";
 import { renderImagePdfPagePreview } from "@/lib/pdf/image-page-preview";
 import { pdfBytesToBlob } from "@/lib/pdf/bytes";
@@ -124,9 +126,10 @@ function downloadBlob(blob: Blob, filename: string) {
 
 interface ImagesToPdfDirectionProps {
   onDirtyChange: (dirty: boolean) => void;
+  toolMode?: "single" | "batch";
 }
 
-export default function ImagesToPdfDirection({ onDirtyChange }: ImagesToPdfDirectionProps) {
+export default function ImagesToPdfDirection({ onDirtyChange, toolMode = "single" }: ImagesToPdfDirectionProps) {
   const t = usePdfToolLabels("pdfToJpg");
   const [images, setImages] = useState<ImageItem[]>([]);
   const [pageSize, setPageSize] = useState<PageSize>("a4");
@@ -211,25 +214,34 @@ export default function ImagesToPdfDirection({ onDirtyChange }: ImagesToPdfDirec
     setDragOverIndex(null);
   };
 
-  const createPdf = async () => {
-    if (images.length === 0) {
-      setError(t.errNeedOne);
-      return;
-    }
+  const buildPdfFromFiles = useCallback(
+    async (
+      imageFiles: File[],
+      onProgress?: (pct: number) => void
+    ): Promise<BatchOutput> => {
+      if (imageFiles.length === 0) {
+        throw new Error(t.errNeedOne);
+      }
 
-    setCreating(true);
-    setError(null);
-
-    try {
       const { PDFDocument } = await getPdfLib();
       const pdf = await PDFDocument.create();
       const marginPt = MARGIN_PT[margin];
+      const total = imageFiles.length;
 
-      for (const item of images) {
-        const { width: imgW, height: imgH, embedBytes, isPng } = await loadImageDimensions(item.file);
-        const { width: pageW, height: pageH } = resolvePageDimensions(pageSize, imgW, imgH, orientation);
+      for (let i = 0; i < total; i++) {
+        const imageFile = imageFiles[i];
+        const { width: imgW, height: imgH, embedBytes, isPng } =
+          await loadImageDimensions(imageFile);
+        const { width: pageW, height: pageH } = resolvePageDimensions(
+          pageSize,
+          imgW,
+          imgH,
+          orientation
+        );
         const page = pdf.addPage([pageW, pageH]);
-        const image = isPng ? await pdf.embedPng(embedBytes) : await pdf.embedJpg(embedBytes);
+        const image = isPng
+          ? await pdf.embedPng(embedBytes)
+          : await pdf.embedJpg(embedBytes);
 
         const maxW = pageW - marginPt * 2;
         const maxH = pageH - marginPt * 2;
@@ -240,10 +252,27 @@ export default function ImagesToPdfDirection({ onDirtyChange }: ImagesToPdfDirec
         const y = (pageH - drawH) / 2;
 
         page.drawImage(image, { x, y, width: drawW, height: drawH });
+        onProgress?.(Math.round(((i + 1) / total) * 100));
       }
 
       const bytes = await pdf.save();
-      downloadBlob(pdfBytesToBlob(bytes), "images.pdf");
+      return { blob: pdfBytesToBlob(bytes), name: "images.pdf" };
+    },
+    [margin, orientation, pageSize, t.errNeedOne]
+  );
+
+  const createPdf = async () => {
+    if (images.length === 0) {
+      setError(t.errNeedOne);
+      return;
+    }
+
+    setCreating(true);
+    setError(null);
+
+    try {
+      const output = await buildPdfFromFiles(images.map((item) => item.file));
+      downloadBlob(output.blob, output.name);
     } catch {
       setError(t.errCreateFailed);
     } finally {
@@ -251,6 +280,21 @@ export default function ImagesToPdfDirection({ onDirtyChange }: ImagesToPdfDirec
     }
   };
 
+  const processCombined = useCallback(
+    async (
+      imageFiles: File[],
+      onProgress?: (pct: number) => void
+    ): Promise<BatchOutput> => {
+      const valid = imageFiles.filter(isImageFile);
+      if (valid.length === 0) {
+        throw new Error(t.errInvalidFiles);
+      }
+      return buildPdfFromFiles(valid, onProgress);
+    },
+    [buildPdfFromFiles, t.errInvalidFiles]
+  );
+
+  // Hooks must run unconditionally — never after a toolMode early return.
   const previewOpts = useMemo(
     () => ({ pageSize, orientation, margin }),
     [pageSize, orientation, margin]
@@ -263,6 +307,66 @@ export default function ImagesToPdfDirection({ onDirtyChange }: ImagesToPdfDirec
       render: () => renderImagePdfPagePreview(img.file, previewOpts),
     }));
   }, [images, previewOpts]);
+
+  if (toolMode === "batch") {
+    return (
+      <div className="space-y-4">
+        <div className="rounded-lg border border-[var(--line)] bg-[var(--surface)] p-4">
+          <div className="grid gap-4 sm:grid-cols-3">
+            <div>
+              <label htmlFor="batch-page-size" className="text-sm font-medium text-[var(--text)]">
+                {t.pageSize}
+              </label>
+              <select
+                id="batch-page-size"
+                value={pageSize}
+                onChange={(e) => setPageSize(e.target.value as PageSize)}
+                className="input-field mt-1"
+              >
+                <option value="a4">{t.sizeA4}</option>
+                <option value="letter">{t.sizeLetter}</option>
+                <option value="fit">{t.sizeFit}</option>
+              </select>
+            </div>
+            <div>
+              <label htmlFor="batch-orientation" className="text-sm font-medium text-[var(--text)]">
+                {t.orientation}
+              </label>
+              <select
+                id="batch-orientation"
+                value={orientation}
+                onChange={(e) => setOrientation(e.target.value as Orientation)}
+                className="input-field mt-1"
+              >
+                <option value="auto">{t.orientAuto}</option>
+                <option value="portrait">{t.orientPortrait}</option>
+                <option value="landscape">{t.orientLandscape}</option>
+              </select>
+            </div>
+            <div>
+              <label htmlFor="batch-margin" className="text-sm font-medium text-[var(--text)]">
+                {t.margin}
+              </label>
+              <select
+                id="batch-margin"
+                value={margin}
+                onChange={(e) => setMargin(e.target.value as Margin)}
+                className="input-field mt-1"
+              >
+                <option value="none">{t.marginNone}</option>
+                <option value="small">{t.marginSmall}</option>
+                <option value="normal">{t.marginNormal}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <BatchUploader
+          accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
+          processCombined={processCombined}
+        />
+      </div>
+    );
+  }
 
   const controls = (
     <>
@@ -331,6 +435,8 @@ export default function ImagesToPdfDirection({ onDirtyChange }: ImagesToPdfDirec
           {error}
         </p>
       )}
+
+      <ProgressIndicator active={creating} label={t.creating} />
 
       {images.length > 0 && (
         <ul className="space-y-2" aria-label={t.imagesListAria}>

@@ -1,12 +1,13 @@
 "use client";
 
-import FileDropZone from "@/components/FileDropZone";
-import DirectionArrow from "@/components/DirectionArrow";
-import { useCallback, useRef, useState } from "react";
-import { Download, Loader2 } from "lucide-react";
+import { Download } from "lucide-react";
 import { downloadBlob } from "@/lib/download";
 import { useImageToolsExtraLabels } from "@/lib/i18n/use-image-tools-extra-labels";
 import { useUnsavedWork } from "@/lib/unsaved-work";
+import ProgressIndicator from "@/components/tools/ProgressIndicator";
+import FileDropZone from "@/components/FileDropZone";
+import DirectionArrow from "@/components/DirectionArrow";
+import { useCallback, useRef, useState } from "react";
 
 function formatBytes(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
@@ -169,12 +170,7 @@ export default function HeicToJpg() {
         </div>
       )}
 
-      {converting && (
-        <p className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-          <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-          {t.converting}
-        </p>
-      )}
+      {converting && <ProgressIndicator label={t.converting} />}
 
       {entries.length > 0 && !converting && (
         <>

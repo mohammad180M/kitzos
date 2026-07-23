@@ -2,7 +2,7 @@
  * Generates favicons, OG images, llms.txt, feed.xml; validates article locale pairs.
  * Run via: npm run generate:assets (also hooked by dev/build).
  */
-import { mkdirSync, writeFileSync } from "fs";
+import { mkdirSync, writeFileSync, cpSync, existsSync, rmSync } from "fs";
 import { join } from "path";
 import sharp from "sharp";
 import { listArticleSlugs, validateArticleLocalePairs } from "../lib/articles";
@@ -16,6 +16,27 @@ import extraToolsAr from "../locales/extra-tools.ar.json";
 const publicDir = join(process.cwd(), "public");
 const ogDir = join(publicDir, "og");
 const sourceIcon = join(publicDir, "icon-512.png");
+const pdfjsSrc = join(process.cwd(), "node_modules", "pdfjs-dist");
+const pdfjsPublic = join(publicDir, "pdfjs");
+
+/** Copy PDF.js cMaps + standard fonts so getDocument can resolve fonts client-side. */
+function syncPdfjsAssets(): void {
+  const cmapsSrc = join(pdfjsSrc, "cmaps");
+  const fontsSrc = join(pdfjsSrc, "standard_fonts");
+  if (!existsSync(cmapsSrc) || !existsSync(fontsSrc)) {
+    throw new Error(
+      "pdfjs-dist cmaps/standard_fonts missing — run npm install and retry generate:assets."
+    );
+  }
+
+  if (existsSync(pdfjsPublic)) {
+    rmSync(pdfjsPublic, { recursive: true, force: true });
+  }
+  mkdirSync(pdfjsPublic, { recursive: true });
+  cpSync(cmapsSrc, join(pdfjsPublic, "cmaps"), { recursive: true });
+  cpSync(fontsSrc, join(pdfjsPublic, "standard_fonts"), { recursive: true });
+  console.log("Synced PDF.js assets to public/pdfjs (cmaps + standard_fonts).");
+}
 
 async function generateFavicons(): Promise<void> {
   const sourceBuffer = await sharp(sourceIcon).toBuffer();
@@ -58,6 +79,7 @@ async function generateOgImage(outputPath: string, sourceBuffer: Buffer): Promis
 
 async function main(): Promise<void> {
   mkdirSync(ogDir, { recursive: true });
+  syncPdfjsAssets();
   const sourceBuffer = await sharp(sourceIcon).toBuffer();
   await generateFavicons();
 

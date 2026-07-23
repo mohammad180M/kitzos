@@ -185,7 +185,6 @@ export const devToolsExtraEn = {
     previewPlaceholder: "Enter content to preview",
     downloadPng: "Download PNG",
     downloadSvg: "Download SVG",
-    svgNoLogoHint: "SVG exports styling without the logo; use PNG if you need the logo embedded.",
   },
   hashGenerator: {
     inputText: "Input text",
@@ -488,7 +487,6 @@ export const devToolsExtraAr = {
     previewPlaceholder: "أدخل محتوى للمعاينة",
     downloadPng: "تنزيل PNG",
     downloadSvg: "تنزيل SVG",
-    svgNoLogoHint: "تصدير SVG يشمل التصميم بدون الشعار؛ استخدم PNG إن احتجت الشعار مضمناً.",
   },
   hashGenerator: {
     inputText: "النص المُدخل",

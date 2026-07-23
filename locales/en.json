@@ -16,7 +16,27 @@
     "popularTools": "Popular tools",
     "emptyStateHint": "Start by pasting or typing — your data stays in your browser.",
     "keyboardHint": "Tip: Ctrl+Enter to run, Esc to clear",
-    "dropFilesHere": "Drop files here"
+    "dropFilesHere": "Drop files here",
+    "batch": {
+      "singleFile": "Single file",
+      "batchMode": "Batch",
+      "dropMultipleOrFolder": "Drop multiple files or a folder here",
+      "selectFiles": "Select files",
+      "selectFolder": "Select folder",
+      "skippedFiles": "{count} file(s) skipped (wrong type)",
+      "processAll": "Process all",
+      "processing": "Processing…",
+      "progress": "{done} of {total} processed",
+      "downloadZip": "Download all as ZIP",
+      "downloadFile": "Download",
+      "clearAll": "Clear all",
+      "statusQueued": "Queued",
+      "statusProcessing": "Processing",
+      "statusDone": "Done",
+      "statusError": "Error",
+      "noFiles": "Add files to start batch processing",
+      "estimatingSize": "Calculating…"
+    }
   },
   "header": {
     "categoriesAria": "Categories",
